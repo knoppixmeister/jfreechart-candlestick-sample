@@ -356,6 +356,8 @@ class BFWebSocketListener extends WebSocketListener {
 		
 		arr = new org.json.JSONArray(text);
 
+		if(arr.get(1) == null) return;
+
 		arr2 = new org.json.JSONArray(arr.get(1).toString().trim());
 
 		//System.out.println(	arr2.length()	);
