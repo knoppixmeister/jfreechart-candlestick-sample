@@ -108,10 +108,22 @@ public class OHLC implements Serializable {
 	public double getVolume() {
 		return volume;
 	}
-	
+
 	public void setVolume(double newVolume) {
     	volume = newVolume;
     }
+
+	public boolean isBullCandle() {
+		return close > open;
+	}
+
+	public boolean isBearCandle() {
+		return close < open;
+	}
+
+	public boolean isDojee() {
+		return open == close;
+	}
 
     /**
      * Tests this instance for equality with an arbitrary object.
