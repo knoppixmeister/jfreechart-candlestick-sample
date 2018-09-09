@@ -1,7 +1,9 @@
+import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
+import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
@@ -28,7 +30,7 @@ public class Test2 {
 		series.addChangeListener(new SeriesChangeListener() {
 			@Override
 			public void seriesChanged(SeriesChangeEvent event) {
-				double close = ((OHLCItem)series.getDataItem(0)).getCloseValue();
+				double close = ((OHLCItem)series.getDataItem(series.getItemCount()-1)).getCloseValue();
 
 				System.out.println("SERIES_CHANGED: CL: "+close);
 			}
@@ -36,18 +38,20 @@ public class Test2 {
 
 		collection.addSeries(series);
 
+		/*
 		collection.addChangeListener(new DatasetChangeListener() {
 			@Override
 			public void datasetChanged(DatasetChangeEvent event) {
-				OHLCItem item = (OHLCItem)collection.getSeries(0).getDataItem(0);
+				OHLCItem item = (OHLCItem)collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1);
 
 				if(item != null) {
-					double val = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getCloseValue();
+					double val = item.getCloseValue();
 
 					System.out.println("COLLECTION_CH_EVENT. CL_VAL: "+val);
 				}
 			}
 		});
+		*/
 
 		long time = System.currentTimeMillis();
 
@@ -65,19 +69,34 @@ public class Test2 {
 				new FixedMillisecond(time+1000),
 				4000,	//open,
 				9000,	//high,
-				6000,	//low,
+				2000,	//low,
 				8000	//close
 			)
 		);
-	
+
 		DateAxis dateAxis = new DateAxis();
 		NumberAxis priceAxis = new NumberAxis();
 
+		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(10);
+		candlestickRenderer.setDrawVolume(true);
+		candlestickRenderer.setSeriesPaint(0, Color.YELLOW);
+		
+		
+		candlestickRenderer.setDefaultOutlinePaint(Color.CYAN);
+		
+		candlestickRenderer.setUpPaint(ChartColor.DARK_GREEN);
+		candlestickRenderer.setDownPaint(ChartColor.DARK_RED);
+		
+		candlestickRenderer.setDefaultFillPaint(Color.BLACK);
+		
+		candlestickRenderer.setSeriesOutlinePaint(0, Color.BLUE);
+		candlestickRenderer.setUseOutlinePaint(false);
+		
 		XYPlot plot = new XYPlot(
 			collection,//dataset,
 			dateAxis,//domainAxis,
 			priceAxis,//rangeAxis,
-			new CandlestickRenderer(3)	//renderer
+			candlestickRenderer	//renderer
 		);
 
 		JFreeChart chart = new JFreeChart(plot);
@@ -99,12 +118,13 @@ public class Test2 {
 				Random r = new Random();
 
 				while(true) {
-					double val = r.nextInt(12000-7500)+7500;
+					double val = r.nextInt(1600-1000)+3500;
 
 					collection.getSeries(0).updatePrice(val);
 
 					//((OHLCItem)series.getDataItem(0)).updatePrice(9000);
 
+					//System.out.println("");
 					System.out.println("UP_VAl: "+val);
 					
 					try {
@@ -113,8 +133,7 @@ public class Test2 {
 					catch(Exception e) {
 						e.printStackTrace();
 					}
-					
-					System.out.println("");
+
 				}
 			}
 		}).start();

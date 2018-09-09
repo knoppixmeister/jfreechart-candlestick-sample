@@ -82,7 +82,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PolarPlot;
 import org.jfree.chart.plot.SpiderWebPlot;
-import org.jfree.chart.plot.ThermometerPlot;
+//import org.jfree.chart.plot.ThermometerPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
 import org.jfree.chart.renderer.category.BarPainter;
@@ -1198,9 +1198,11 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
         else if (plot instanceof MeterPlot) {
             applyToMeterPlot((MeterPlot) plot);
         }
+        /*
         else if (plot instanceof ThermometerPlot) {
             applyToThermometerPlot((ThermometerPlot) plot);
         }
+        */
         else if (plot instanceof SpiderWebPlot) {
             applyToSpiderWebPlot((SpiderWebPlot) plot);
         }
@@ -1444,6 +1446,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @param plot  the plot.
      */
+    /*
     protected void applyToThermometerPlot(ThermometerPlot plot) {
         plot.setValueFont(this.largeFont);
         plot.setThermometerPaint(this.thermometerPaint);
@@ -1452,6 +1455,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
             applyToValueAxis(axis);
         }
     }
+    */
 
     /**
      * Applies the attributes for this theme to a {@link CategoryAxis}.

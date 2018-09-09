@@ -46,7 +46,6 @@ import org.jfree.data.xy.XYDataset;
  */
 
 public class CandlestickRenderer extends AbstractXYItemRenderer implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = 50390395841817121L;
 
     /** The average width method. */
@@ -113,7 +112,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      *
      * @since 1.0.5
      */
-    private boolean useOutlinePaint;
+    private boolean useOutlinePaint = false;
 
     /**
      * Creates a new renderer for candlestick charts.
@@ -157,7 +156,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
         this.upPaint 			=	Color.GREEN;
         this.downPaint			=	Color.RED;
         this.useOutlinePaint	=	false;  // false preserves the old behaviour
-                                       // prior to introducing this flag
+                                       		// prior to introducing this flag
     }
 
     /**
@@ -185,8 +184,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setMaxCandleWidthInMilliseconds(double)
      */
     public void setCandleWidth(double width) {
-        if (width != this.candleWidth) {
+        if(width != this.candleWidth) {
             this.candleWidth = width;
+            
             fireChangeEvent();
         }
     }
@@ -216,6 +216,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      */
     public void setMaxCandleWidthInMilliseconds(double millis) {
         this.maxCandleWidthInMilliseconds = millis;
+        
         fireChangeEvent();
     }
 
@@ -227,7 +228,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setAutoWidthMethod(int)
      */
     public int getAutoWidthMethod() {
-        return this.autoWidthMethod;
+        return autoWidthMethod;
     }
 
     /**
@@ -257,7 +258,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setMaxCandleWidthInMilliseconds(double)
      */
     public void setAutoWidthMethod(int autoWidthMethod) {
-        if (this.autoWidthMethod != autoWidthMethod) {
+        if(this.autoWidthMethod != autoWidthMethod) {
             this.autoWidthMethod = autoWidthMethod;
             fireChangeEvent();
         }
@@ -289,8 +290,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setMaxCandleWidthInMilliseconds(double)
      */
     public void setAutoWidthFactor(double autoWidthFactor) {
-        if (this.autoWidthFactor != autoWidthFactor) {
+        if(this.autoWidthFactor != autoWidthFactor) {
             this.autoWidthFactor = autoWidthFactor;
+            
             fireChangeEvent();
         }
     }
@@ -362,7 +364,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setDownPaint(Paint)
      */
     public Paint getDownPaint() {
-        return this.downPaint;
+        return downPaint;
     }
 
     /**
@@ -374,6 +376,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      */
     public void setDownPaint(Paint paint) {
         this.downPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -401,10 +404,11 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #getDrawVolume()
      */
     public void setDrawVolume(boolean flag) {
-        if (this.drawVolume != flag) {
+    	if(this.drawVolume != flag) {
             this.drawVolume = flag;
+            
             fireChangeEvent();
-        }
+    	}
     }
 
     /**
@@ -467,8 +471,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #getUseOutlinePaint()
      */
     public void setUseOutlinePaint(boolean use) {
-    	if(this.useOutlinePaint != use) {
-            this.useOutlinePaint = use;
+    	if(useOutlinePaint != use) {
+    		useOutlinePaint = use;
+            
             fireChangeEvent();
     	}
     }
@@ -559,35 +564,38 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      */
     @Override
     public void drawItem(
-    		Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) 
+    	Graphics2D g2,
+    	XYItemRendererState state,
+    	Rectangle2D dataArea,
+    	PlotRenderingInfo info,
+    	XYPlot plot,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	XYDataset dataset,
+    	int series,
+    	int item,
+    	CrosshairState crosshairState,
+    	int pass)
     {
     	boolean horiz;
 
     	PlotOrientation orientation = plot.getOrientation();
-    	if(orientation == PlotOrientation.HORIZONTAL) {
-            horiz = true;
-    	}
-    	else if (orientation == PlotOrientation.VERTICAL) {
-            horiz = false;
-        }
+    	
+    	if(orientation == PlotOrientation.HORIZONTAL) horiz = true;
+    	else if(orientation == PlotOrientation.VERTICAL) horiz = false;
         else return;
 
         // setup for collecting optional entity info...
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
-        }
+        if(info != null) entities = info.getOwner().getEntityCollection();
 
-        OHLCDataset highLowData = (OHLCDataset) dataset;
+        OHLCDataset highLowData = (OHLCDataset)dataset;
 
-        double x = highLowData.getXValue(series, item);
-        double yHigh = highLowData.getHighValue(series, item);
-        double yLow = highLowData.getLowValue(series, item);
-        double yOpen = highLowData.getOpenValue(series, item);
-        double yClose = highLowData.getCloseValue(series, item);
+        double x 		= highLowData.getXValue(series, item);
+        double yHigh 	= highLowData.getHighValue(series, item);
+        double yLow 	= highLowData.getLowValue(series, item);
+        double yOpen 	= highLowData.getOpenValue(series, item);
+        double yClose 	= highLowData.getCloseValue(series, item);
 
         RectangleEdge domainEdge = plot.getDomainAxisEdge();
         double xx = domainAxis.valueToJava2D(
@@ -597,32 +605,29 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
         );
 
         RectangleEdge edge = plot.getRangeAxisEdge();
-        double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea, edge);
-        double yyLow = rangeAxis.valueToJava2D(yLow, dataArea, edge);
-        double yyOpen = rangeAxis.valueToJava2D(yOpen, dataArea, edge);
-        double yyClose = rangeAxis.valueToJava2D(yClose, dataArea, edge);
+        double yyHigh 	= rangeAxis.valueToJava2D(yHigh, dataArea, edge);
+        double yyLow 	= rangeAxis.valueToJava2D(yLow, dataArea, edge);
+        double yyOpen 	= rangeAxis.valueToJava2D(yOpen, dataArea, edge);
+        double yyClose 	= rangeAxis.valueToJava2D(yClose, dataArea, edge);
 
         double volumeWidth;
         double stickWidth;
-        if (this.candleWidth > 0) {
+
+        if(candleWidth > 0) {
             // These are deliberately not bounded to minimums/maxCandleWidth to
             //  retain old behaviour.
-            volumeWidth = this.candleWidth;
-            stickWidth = this.candleWidth;
+            volumeWidth =	candleWidth;
+            stickWidth 	=	candleWidth;
         }
         else {
             double xxWidth = 0;
             int itemCount;
-            switch (this.autoWidthMethod) {
-
+            switch(this.autoWidthMethod) {
                 case WIDTHMETHOD_AVERAGE:
                     itemCount = highLowData.getItemCount(series);
-                    if (horiz) {
-                        xxWidth = dataArea.getHeight() / itemCount;
-                    }
-                    else {
-                        xxWidth = dataArea.getWidth() / itemCount;
-                    }
+                    if(horiz) xxWidth = dataArea.getHeight() / itemCount;
+                    else xxWidth = dataArea.getWidth() / itemCount;
+
                     break;
 
                 case WIDTHMETHOD_SMALLEST:
@@ -643,40 +648,42 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
                     break;
 
                 case WIDTHMETHOD_INTERVALDATA:
-                    IntervalXYDataset intervalXYData
-                            = (IntervalXYDataset) dataset;
-                    double startPos = domainAxis.valueToJava2D(
-                            intervalXYData.getStartXValue(series, item),
-                            dataArea, plot.getDomainAxisEdge());
+                    IntervalXYDataset intervalXYData = (IntervalXYDataset) dataset;
+                    double startPos =	domainAxis.valueToJava2D(
+                    						intervalXYData.getStartXValue(series, item),
+                    						dataArea,
+                    						plot.getDomainAxisEdge()
+                    					);
                     double endPos = domainAxis.valueToJava2D(
                             intervalXYData.getEndXValue(series, item),
                             dataArea, plot.getDomainAxisEdge());
                     xxWidth = Math.abs(endPos - startPos);
+                    
                     break;
-
             }
-            xxWidth -= 2 * this.autoWidthGap;
-            xxWidth *= this.autoWidthFactor;
-            xxWidth = Math.min(xxWidth, this.maxCandleWidth);
-            volumeWidth = Math.max(Math.min(1, this.maxCandleWidth), xxWidth);
-            stickWidth = Math.max(Math.min(3, this.maxCandleWidth), xxWidth);
+
+            xxWidth		-=	2 * this.autoWidthGap;
+            xxWidth		*=	this.autoWidthFactor;
+            xxWidth		=	Math.min(xxWidth, this.maxCandleWidth);
+            volumeWidth	=	Math.max(Math.min(1, this.maxCandleWidth), xxWidth);
+            stickWidth	=	Math.max(Math.min(3, this.maxCandleWidth), xxWidth);
         }
 
         Paint p = getItemPaint(series, item);
         Paint outlinePaint = null;
-        if (this.useOutlinePaint) {
+        if(useOutlinePaint) {
             outlinePaint = getItemOutlinePaint(series, item);
         }
         Stroke s = getItemStroke(series, item);
 
         g2.setStroke(s);
 
-        if (this.drawVolume) {
-            int volume = (int) highLowData.getVolumeValue(series, item);
-            double volumeHeight = volume / this.maxVolume;
+        if(drawVolume) {
+            int volume = (int)highLowData.getVolumeValue(series, item);
+            double volumeHeight = volume / maxVolume;
 
             double min, max;
-            if (horiz) {
+            if(horiz) {
                 min = dataArea.getMinX();
                 max = dataArea.getMaxX();
             }
@@ -691,9 +698,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
             Composite originalComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 
-            if(horiz) {
-                g2.fill(new Rectangle2D.Double(min, xx - volumeWidth / 2, zzVolume, volumeWidth));
-            }
+            if(horiz) g2.fill(new Rectangle2D.Double(min, xx - volumeWidth / 2, zzVolume, volumeWidth));
             else {
                 g2.fill(new Rectangle2D.Double(xx - volumeWidth / 2, max - zzVolume, volumeWidth, zzVolume));
             }
@@ -701,77 +706,78 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
             g2.setComposite(originalComposite);
         }
 
-        if(this.useOutlinePaint) {
-            g2.setPaint(outlinePaint);
-        }
+        if(useOutlinePaint) g2.setPaint(outlinePaint);
         else g2.setPaint(p);
 
-        double yyMaxOpenClose = Math.max(yyOpen, yyClose);
-        double yyMinOpenClose = Math.min(yyOpen, yyClose);
-        double maxOpenClose = Math.max(yOpen, yClose);
-        double minOpenClose = Math.min(yOpen, yClose);
+        double yyMaxOpenClose 	= Math.max(yyOpen, yyClose);
+        double yyMinOpenClose 	= Math.min(yyOpen, yyClose);
+        double maxOpenClose 	= Math.max(yOpen, yClose);
+        double minOpenClose 	= Math.min(yOpen, yClose);
 
-        // draw the upper shadow
-        if (yHigh > maxOpenClose) {
-            if (horiz) {
-                g2.draw(new Line2D.Double(yyHigh, xx, yyMaxOpenClose, xx));
-            }
-            else {
-                g2.draw(new Line2D.Double(xx, yyHigh, xx, yyMaxOpenClose));
-            }
+        //System.out.println("yOpen: "+yOpen+"; yClose: "+yClose+"; yHigh: "+yHigh+"; maxOpenClose: "+maxOpenClose);
+        
+        //draw the upper shadow
+        if(yClose > yOpen) {
+        	g2.setPaint(getUpPaint());
+        }
+        else g2.setPaint(getDownPaint());
+        
+        if(yHigh > maxOpenClose) {	
+            if(horiz) g2.draw(new Line2D.Double(yyHigh, xx, yyMaxOpenClose, xx));
+            else g2.draw(new Line2D.Double(xx, yyHigh, xx, yyMaxOpenClose));
         }
 
+        //-----------------------------------------------------------------------------------------------------------------
+       
+        //System.out.println("yLow: "+yLow+"; minOpenClose: "+minOpenClose);
+        
         // draw the lower shadow
-        if (yLow < minOpenClose) {
+        if(yLow < minOpenClose) {
             if(horiz) g2.draw(new Line2D.Double(yyLow, xx, yyMinOpenClose, xx));
             else {
                 g2.draw(new Line2D.Double(xx, yyLow, xx, yyMinOpenClose));
             }
         }
 
+        //--------------------------------------------------------------------------------------------------------------------
+
         // draw the body
         Rectangle2D body;
         Rectangle2D hotspot;
         double length = Math.abs(yyHigh - yyLow);
         double base = Math.min(yyHigh, yyLow);
-        if (horiz) {
-            body = new Rectangle2D.Double(yyMinOpenClose, xx - stickWidth / 2,
-                    yyMaxOpenClose - yyMinOpenClose, stickWidth);
-            hotspot = new Rectangle2D.Double(base, xx - stickWidth / 2,
-                    length, stickWidth);
+        if(horiz) {
+            body 	= new Rectangle2D.Double(yyMinOpenClose, xx - stickWidth / 2, yyMaxOpenClose - yyMinOpenClose, stickWidth);
+            hotspot = new Rectangle2D.Double(base, xx - stickWidth / 2, length, stickWidth);
         }
         else {
-            body = new Rectangle2D.Double(xx - stickWidth / 2, yyMinOpenClose,
-                    stickWidth, yyMaxOpenClose - yyMinOpenClose);
-            hotspot = new Rectangle2D.Double(xx - stickWidth / 2,
-                    base, stickWidth, length);
+            body 	= new Rectangle2D.Double(xx - stickWidth / 2, yyMinOpenClose, stickWidth, yyMaxOpenClose - yyMinOpenClose);
+            hotspot = new Rectangle2D.Double(xx - stickWidth / 2, base, stickWidth, length);
         }
-        if (yClose > yOpen) {
-            if (this.upPaint != null) {
-                g2.setPaint(this.upPaint);
-            }
-            else {
-                g2.setPaint(p);
-            }
+
+        if(yClose > yOpen) {
+            if(upPaint != null) g2.setPaint(upPaint);
+            else g2.setPaint(p);
+
             g2.fill(body);
         }
         else {
-            if (this.downPaint != null) {
-                g2.setPaint(this.downPaint);
-            }
-            else {
-                g2.setPaint(p);
-            }
+            if(downPaint != null) g2.setPaint(downPaint);
+            else g2.setPaint(p);
+
             g2.fill(body);
         }
 
-        if(this.useOutlinePaint) g2.setPaint(outlinePaint);
-        else g2.setPaint(p);
+        if(useOutlinePaint) {
+        	g2.setPaint(outlinePaint);
+        	g2.draw(body);
+        }
+        //else g2.setPaint(p);
 
-        g2.draw(body);
+        //g2.draw(body);
 
         // add an entity for the item...
-        if (entities != null) {
+        if(entities != null) {
             addEntity(entities, hotspot, dataset, series, item, 0.0, 0.0);
         }
     }

@@ -139,7 +139,7 @@ public class CrosshairDemo2 extends ApplicationFrame {
          * @param event  the event.
          */
         public void chartChanged(ChartChangeEvent event) {
-        	System.out.println("BBBB");
+        	//System.out.println("BBBB");
         	
             if(this.chartPanel != null) {
                 JFreeChart chart = this.chartPanel.getChart();

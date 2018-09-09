@@ -45,6 +45,8 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class Test {
+	public static double oldPrice = 0;
+
 	public static void main(String[] args) {
 		JFrame fr = new JFrame("");
 		
@@ -95,7 +97,7 @@ public class Test {
 		});
 
 		collection.addSeries(series);
-	
+
 		DateAxis dateAxis = new DateAxis();
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
@@ -106,7 +108,9 @@ public class Test {
 			null
 			//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"))
 		);
-		//candlestickRenderer.setUseOutlinePaint(true);
+		candlestickRenderer.setUseOutlinePaint(false);
+		candlestickRenderer.setUpPaint(Color.decode("#238853"));
+		candlestickRenderer.setDownPaint(Color.decode("#dc5538"));
 		//candlestickRenderer.setDefaultOutlinePaint(Color.CYAN);
 
 		XYPlot plot = new XYPlot(
@@ -130,13 +134,14 @@ public class Test {
 		priceLine.setLabel(7000+"");
 		priceLine.setPaint(ChartColor.DARK_RED);
 		priceLine.setLabelFont(new Font("Sans Serial", Font.BOLD, 11));
-		priceLine.setLabelPaint(ChartColor.LIGHT_RED);
+		priceLine.setLabelPaint(ChartColor.WHITE);
 		priceLine.setLabelBackgroundColor(Color.WHITE);
 		priceLine.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
         priceLine.setLabelTextAnchor(TextAnchor.BOTTOM_RIGHT);
 		plot.addRangeMarker(priceLine);
 		//----------------------------------------------------------------------
 
+		/*
 		series.addChangeListener(new SeriesChangeListener() {
 			@Override
 			public void seriesChanged(SeriesChangeEvent event) {
@@ -144,23 +149,35 @@ public class Test {
 
 				System.out.println("SERIES CHANGED. VAL: "+val);
 				
-				fr.setTitle(val+"");
+				fr.setTitle(	String.format("%.1f", val)	);
 				
 				priceLine.setValue(val);
-				priceLine.setLabel(	String.format("%.2f", val)	);
+				priceLine.setLabel(	String.format("%.1f", val)	);
 			}
 		});
+		*/
 		collection.addChangeListener(new DatasetChangeListener() {
 			@Override
 			public void datasetChanged(DatasetChangeEvent event) {
 				double val = ((OHLCItem)collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getYValue();
 				
+				if(val > oldPrice) {
+					priceLine.setLabelBackgroundColor(Color.decode("#238853"));
+					priceLine.setPaint(Color.decode("#238853"));
+				}
+				else {
+					priceLine.setLabelBackgroundColor(Color.decode("#dc5538"));
+					priceLine.setPaint(Color.decode("#dc5538"));
+				}
+				
+				oldPrice = val;
+					
 				System.out.println("DS_CH_LISTENER ....VAl: "+val);
 				
-				
+				fr.setTitle(	String.format("%.1f", val)	);
 				
 				priceLine.setValue(val);
-				priceLine.setLabel(	String.format("%.2f", val)	);
+				priceLine.setLabel(" "+	String.format("%.1f", val) +" "	);
 			}
 		});
 		
