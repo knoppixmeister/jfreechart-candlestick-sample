@@ -32,7 +32,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      * Creates a new instance of {@code OHLCSeriesCollection}.
      */
     public OHLCSeriesCollection() {
-        this.data = new java.util.ArrayList();
+    	data = new java.util.ArrayList();
     }
 
     /**
@@ -150,15 +150,17 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     protected synchronized long getX(RegularTimePeriod period) {
         long result = 0L;
-        if (this.xPosition == TimePeriodAnchor.START) {
+        
+        if(this.xPosition == TimePeriodAnchor.START) {
             result = period.getFirstMillisecond();
         }
-        else if (this.xPosition == TimePeriodAnchor.MIDDLE) {
+        else if(this.xPosition == TimePeriodAnchor.MIDDLE) {
             result = period.getMiddleMillisecond();
         }
-        else if (this.xPosition == TimePeriodAnchor.END) {
+        else if(this.xPosition == TimePeriodAnchor.END) {
             result = period.getLastMillisecond();
         }
+        
         return result;
     }
 
@@ -172,9 +174,9 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getXValue(int series, int item) {
-        OHLCSeries s = (OHLCSeries) this.data.get(series);
-        OHLCItem di = (OHLCItem) s.getDataItem(item);
-        RegularTimePeriod period = di.getPeriod();
+        OHLCSeries s 				= (OHLCSeries) data.get(series);
+        OHLCItem di 				= (OHLCItem) s.getDataItem(item);
+        RegularTimePeriod period 	= di.getPeriod();
         
         return getX(period);
     }
@@ -362,6 +364,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     public void removeSeries(int index) {
         OHLCSeries series = getSeries(index);
+        
         if(series != null) removeSeries(series);
     }
 
@@ -379,7 +382,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
     public boolean removeSeries(OHLCSeries series) {
         Args.nullNotPermitted(series, "series");
         
-        boolean removed = this.data.remove(series);
+        boolean removed = data.remove(series);
         if(removed) {
             series.removeChangeListener(this);
             
@@ -396,9 +399,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      * @since 1.0.14
      */
     public void removeAllSeries() {
-        if(this.data.isEmpty()) {
-            return;  // nothing to do
-        }
+        if(data.isEmpty()) return;  // nothing to do
 
         // deregister the collection as a change listener to each series in the
         // collection

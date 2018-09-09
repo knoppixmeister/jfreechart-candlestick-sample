@@ -53,6 +53,7 @@ public class JfreeCandlestickChart extends JPanel {
 
 		chartPanel.setMouseZoomable(true);
 		chartPanel.setMouseWheelEnabled(true);
+		chartPanel.setDoubleBuffered(true);
 
 		add(chartPanel, BorderLayout.CENTER);
 	}
@@ -65,9 +66,11 @@ public class JfreeCandlestickChart extends JPanel {
 		OHLCSeriesCollection candlestickDataset = new OHLCSeriesCollection();
 		ohlcSeries = new OHLCSeries("Price");
 		candlestickDataset.addSeries(ohlcSeries);
+		
 		// Create candlestick chart priceAxis
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
+		
 		// Create candlestick chart renderer
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
 			CandlestickRenderer.WIDTHMETHOD_AVERAGE,
@@ -84,43 +87,69 @@ public class JfreeCandlestickChart extends JPanel {
 		 */
 		// creates TimeSeriesCollection as a volume dataset for volume chart
 		TimeSeriesCollection volumeDataset = new TimeSeriesCollection();
-		volumeSeries = new TimeSeries("Volume");
+		volumeSeries = new TimeSeries("");
 		volumeDataset.addSeries(volumeSeries);
 		// Create volume chart volumeAxis
-		NumberAxis volumeAxis = new NumberAxis("Volume");
+		NumberAxis volumeAxis = new NumberAxis("");
 		volumeAxis.setAutoRangeIncludesZero(false);
+		
 		// Set to no decimal
 		volumeAxis.setNumberFormatOverride(new DecimalFormat("0"));
+		
 		// Create volume chart renderer
 		XYBarRenderer timeRenderer = new XYBarRenderer();
+		//timeRenderer.setMargin(-3);
 		timeRenderer.setShadowVisible(false);
-		/*
-		timeRenderer.setBaseToolTipGenerator(
+		timeRenderer.setDefaultToolTipGenerator(
 			new StandardXYToolTipGenerator("Volume--> Time={1} Size={2}", new SimpleDateFormat("kk:mm"), new DecimalFormat("0"))
 		);
-		*/
+
+
 		// Create volumeSubplot
-		XYPlot volumeSubplot = new XYPlot(volumeDataset, null, volumeAxis, timeRenderer);
-		volumeSubplot.setBackgroundPaint(Color.white);
+		XYPlot volumeSubplot = new XYPlot(
+			volumeDataset,
+			null,
+			volumeAxis,
+			timeRenderer
+		);
+		//volumeSubplot.setBackgroundPaint(Color.WHITE);
+		
+		XYPlot rsiSubPlot = new XYPlot(
+			null,
+			null,
+			null,
+			null
+		);
 
 		/**
 		 * Create chart main plot with two subplots (candlestickSubplot,
 		 * volumeSubplot) and one common dateAxis
 		 */
 		// Creating charts common dateAxis
-		DateAxis dateAxis = new DateAxis("Time");
+		DateAxis dateAxis = new DateAxis("");
 		dateAxis.setDateFormatOverride(new SimpleDateFormat("kk:mm"));
 		// reduce the default left/right margin from 0.05 to 0.02
 		dateAxis.setLowerMargin(0.02);
 		dateAxis.setUpperMargin(0.02);
+
 		// Create mainPlot
 		CombinedDomainXYPlot mainPlot = new CombinedDomainXYPlot(dateAxis);
-		mainPlot.setGap(10.0);
-		mainPlot.add(candlestickSubplot, 3);
-		mainPlot.add(volumeSubplot, 1);
-		mainPlot.setOrientation(PlotOrientation.VERTICAL);
 
-		JFreeChart chart = new JFreeChart(chartTitle, JFreeChart.DEFAULT_TITLE_FONT, mainPlot, true);
+		mainPlot.setGap(0.0);
+		mainPlot.add(candlestickSubplot, 5);
+		mainPlot.add(volumeSubplot, 1);
+		mainPlot.add(rsiSubPlot, 1);
+		mainPlot.setDomainPannable(true);
+		mainPlot.setRangePannable(true);
+
+		//mainPlot.setOrientation(PlotOrientation.VERTICAL);
+
+		JFreeChart chart = new JFreeChart(
+			chartTitle,
+			JFreeChart.DEFAULT_TITLE_FONT,
+			mainPlot,
+			true
+		);
 		chart.removeLegend();
 
 		return chart;

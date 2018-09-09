@@ -1,52 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * --------------------------
- * DefaultHighLowDataset.java
- * --------------------------
- * (C) Copyright 2002-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 21-Mar-2002 : Version 1 (DG);
- * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 06-May-2004 : Now extends AbstractXYDataset and added new methods from
- *               HighLowDataset (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 28-Nov-2006 : Added equals() method override (DG);
- * 22-Apr-2008 : Implemented PublicCloneable (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.data.xy;
 
 import java.util.Arrays;
@@ -59,10 +10,10 @@ import org.jfree.chart.util.PublicCloneable;
  * the {@link DefaultOHLCDataset} class, which provides another implementation
  * that is very similar.
  */
-public class DefaultHighLowDataset extends AbstractXYDataset
-        implements OHLCDataset, PublicCloneable {
+public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCDataset, PublicCloneable {
+	private static final long serialVersionUID = 3347366314917421341L;
 
-    /** The series key. */
+	/** The series key. */
     private Comparable seriesKey;
 
     /** Storage for the dates. */
@@ -98,12 +49,18 @@ public class DefaultHighLowDataset extends AbstractXYDataset
      * @param close  the close values ({@code null} not permitted).
      * @param volume  the volume values ({@code null} not permitted).
      */
-    public DefaultHighLowDataset(Comparable seriesKey, Date[] date,
-            double[] high, double[] low, double[] open, double[] close,
-            double[] volume) {
-
+    public DefaultHighLowDataset(
+    	Comparable seriesKey,
+    	Date[] date,
+    	double[] high,
+    	double[] low,
+    	double[] open,
+    	double[] close,
+    	double[] volume)
+    {
         Args.nullNotPermitted(seriesKey, "seriesKey");
         Args.nullNotPermitted(date, "date");
+        
         this.seriesKey = seriesKey;
         this.date = date;
         this.high = createNumberArray(high);
@@ -111,7 +68,6 @@ public class DefaultHighLowDataset extends AbstractXYDataset
         this.open = createNumberArray(open);
         this.close = createNumberArray(close);
         this.volume = createNumberArray(volume);
-
     }
 
     /**
@@ -124,7 +80,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset
      */
     @Override
     public Comparable getSeriesKey(int series) {
-        return this.seriesKey;
+        return seriesKey;
     }
 
     /**
@@ -437,7 +393,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset
         for (int i = 0; i < data.length; i++) {
             result[i] = new Double(data[i]);
         }
+        
         return result;
     }
-
 }

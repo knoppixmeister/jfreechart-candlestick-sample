@@ -53,9 +53,7 @@ import org.jfree.chart.util.PublicCloneable;
  * A simple implementation of the {@link OHLCDataset} interface.  This
  * implementation supports only one series.
  */
-public class DefaultOHLCDataset extends AbstractXYDataset
-        implements OHLCDataset, PublicCloneable {
-
+public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset, PublicCloneable {
     /** The series key. */
     private Comparable key;
 
@@ -152,6 +150,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset
         if (high != null) {
             result = high.doubleValue();
         }
+        
         return result;
     }
 
@@ -184,6 +183,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset
         if (low != null) {
             result = low.doubleValue();
         }
+        
         return result;
     }
 
@@ -197,7 +197,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset
      */
     @Override
     public Number getOpen(int series, int item) {
-        return this.data[item].getOpen();
+        return data[item].getOpen();
     }
 
     /**
@@ -216,6 +216,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset
         if (open != null) {
             result = open.doubleValue();
         }
+        
         return result;
     }
 

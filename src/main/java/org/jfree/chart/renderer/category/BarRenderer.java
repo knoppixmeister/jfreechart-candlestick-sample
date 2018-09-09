@@ -143,9 +143,7 @@ import org.jfree.data.category.CategoryDataset;
  * <img src="../../../../../images/BarRendererSample.png"
  * alt="BarRendererSample.png">
  */
-public class BarRenderer extends AbstractCategoryItemRenderer
-        implements Cloneable, PublicCloneable, Serializable {
-
+public class BarRenderer extends AbstractCategoryItemRenderer implements Cloneable, PublicCloneable, Serializable {
     /** For serialization. */
     private static final long serialVersionUID = 6000649414965887481L;
 

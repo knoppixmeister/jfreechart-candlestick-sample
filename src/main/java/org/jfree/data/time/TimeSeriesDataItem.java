@@ -97,6 +97,7 @@ public class TimeSeriesDataItem implements Cloneable, Comparable, Serializable {
      */
     public TimeSeriesDataItem(RegularTimePeriod period, Number value) {
         Args.nullNotPermitted(period, "period");
+        
         this.period = period;
         this.value = value;
     }

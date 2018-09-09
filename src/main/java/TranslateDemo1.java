@@ -92,7 +92,7 @@ public class TranslateDemo1 extends ApplicationFrame {
              * @return The item count.
              */
             public int getItemCount(int series) {
-                return this.underlying.getItemCount(series);
+                return underlying.getItemCount(series);
             }
 
             /**
@@ -104,7 +104,7 @@ public class TranslateDemo1 extends ApplicationFrame {
              * @return The x-value.
              */
             public double getXValue(int series, int item) {
-                return this.underlying.getXValue(series, item) + this.translate;
+                return underlying.getXValue(series, item) + this.translate;
             }
 
             /**

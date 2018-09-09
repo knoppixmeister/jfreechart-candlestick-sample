@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.io.InvalidObjectException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
@@ -38,6 +40,8 @@ import org.jfree.data.time.ohlc.OHLCItem;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 
+import com.fx.jfree.chart.candlestick.CustomHighLowItemLabelGenerator;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -64,7 +68,7 @@ public class Test {
 
 		//-------------------------------------------------------
 
-		SlidingCategoryDataset slidingDataset = new SlidingCategoryDataset(null, 0, 100);
+		//SlidingCategoryDataset slidingDataset = new SlidingCategoryDataset(null, 0, 100);
 		
 		Crosshair crosshair2 = new Crosshair(0);
 		crosshair2.setPaint(Color.GRAY);
@@ -101,13 +105,20 @@ public class Test {
 		DateAxis dateAxis = new DateAxis();
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
+		//priceAxis.setVisible(false);
 
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
-			3,//CandlestickRenderer.WIDTHMETHOD_AVERAGE,
-			true,
-			null
-			//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"))
+			3,		//CandlestickRenderer.WIDTHMETHOD_AVERAGE,
+			true,	
+			//null
+			new CustomHighLowItemLabelGenerator(
+				new SimpleDateFormat("kk:mm"),
+				new DecimalFormat("0.0")
+			)
 		);
+
+		//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"));
+	
 		candlestickRenderer.setUseOutlinePaint(false);
 		candlestickRenderer.setUpPaint(Color.decode("#238853"));
 		candlestickRenderer.setDownPaint(Color.decode("#dc5538"));
@@ -119,8 +130,8 @@ public class Test {
 			priceAxis,			//rangeAxis,
 			candlestickRenderer	//renderer
 		);
-		plot.setAxisOffset(new RectangleInsets(-4, -7, 0, 0));
-		
+		plot.setAxisOffset(new RectangleInsets(-4, -7, 0, 0));//-8
+
 		plot.setDomainCrosshairVisible(true);
 		//plot.setDomainCrosshairLockedOnData(false);
 		//plot.setRangeCrosshairVisible(false);
@@ -169,11 +180,11 @@ public class Test {
 					priceLine.setLabelBackgroundColor(Color.decode("#dc5538"));
 					priceLine.setPaint(Color.decode("#dc5538"));
 				}
-				
+
 				oldPrice = val;
-					
-				System.out.println("DS_CH_LISTENER ....VAl: "+val);
-				
+
+				//System.out.println("DS_CH_LISTENER ....VAl: "+val);
+
 				fr.setTitle(	String.format("%.1f", val)	);
 				
 				priceLine.setValue(val);
@@ -366,6 +377,21 @@ class BFWebSocketListener extends WebSocketListener {
 	}
 
 	@Override
+	public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+		t.printStackTrace();
+	}
+
+	@Override
+	public void onClosing(WebSocket webSocket, int code, String reason) {
+		System.out.println("BF_SOCKET_CLOSING. CODE: "+code+" "+reason);
+	}
+
+	@Override
+	public void onClosed(WebSocket webSocket, int code, String reason) {
+		System.out.println("BF_SOCKET_CLOSED. CODE: "+code+" "+reason);
+	}
+
+	@Override
 	public void onMessage(WebSocket socket, String text) {
 		System.out.println("BF_ON_MESSAGE. "+text);
 
@@ -380,6 +406,10 @@ class BFWebSocketListener extends WebSocketListener {
 		//System.out.println(	arr2.length()	);
 
 		if(arr2.length() > 6) {//add first data
+			//OHLCSeriesCollection col = new OHLCSeriesCollection();
+			OHLCSeries ser = new OHLCSeries("");
+			//col.addSeries(ser);
+			
 			for(int i=0; i<arr2.length(); i++) {
 				arr3 = new org.json.JSONArray(arr2.get(i).toString().trim());
 
@@ -393,7 +423,16 @@ class BFWebSocketListener extends WebSocketListener {
 				);
 
 				collection.getSeries(0).add(ohlcItem);
+				
+				//ser.add(ohlcItem);
 			}
+			
+			/*
+			if(ser.getItemCount() > 0) {
+				collection.removeAllSeries();
+				collection.addSeries(ser);
+			}
+			*/
 		}
 		else {//update last data
 			System.out.println("6_items: "+	arr2.toString().trim()	);

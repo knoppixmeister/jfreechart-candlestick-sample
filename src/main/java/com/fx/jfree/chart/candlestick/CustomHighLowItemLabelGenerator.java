@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.fx.jfree.chart.candlestick;
 
 import java.text.DateFormat;
@@ -17,8 +14,6 @@ import org.jfree.data.xy.XYDataset;
  */
 @SuppressWarnings("serial")
 public class CustomHighLowItemLabelGenerator extends HighLowItemLabelGenerator {
-
-	/** The date formatter. */
 	private DateFormat dateFormatter;
 
 	/** The number formatter. */
@@ -33,12 +28,12 @@ public class CustomHighLowItemLabelGenerator extends HighLowItemLabelGenerator {
 	 *            the number formatter (<code>null</code> not permitted).
 	 */
 	public CustomHighLowItemLabelGenerator(DateFormat dateFormatter, NumberFormat numberFormatter) {
-		if (dateFormatter == null) {
-			throw new IllegalArgumentException("Null 'dateFormatter' argument.");
-		}
-		if (numberFormatter == null) {
+		if(dateFormatter == null) throw new IllegalArgumentException("Null 'dateFormatter' argument.");
+
+		if(numberFormatter == null) {
 			throw new IllegalArgumentException("Null 'numberFormatter' argument.");
 		}
+		
 		this.dateFormatter = dateFormatter;
 		this.numberFormatter = numberFormatter;
 	}
@@ -57,10 +52,9 @@ public class CustomHighLowItemLabelGenerator extends HighLowItemLabelGenerator {
 	 */
 	@Override
 	public String generateToolTip(XYDataset dataset, int series, int item) {
-
 		String result = null;
 
-		if (dataset instanceof OHLCDataset) {
+		if(dataset instanceof OHLCDataset) {
 			OHLCDataset d = (OHLCDataset) dataset;
 			Number high = d.getHigh(series, item);
 			Number low = d.getLow(series, item);
@@ -72,25 +66,24 @@ public class CustomHighLowItemLabelGenerator extends HighLowItemLabelGenerator {
 
 			if (x != null) {
 				Date date = new Date(x.longValue());
-				result = result + "--> Time=" + this.dateFormatter.format(date);
+				
+				result = result + "Time=" + this.dateFormatter.format(date);
+				
 				if (high != null) {
-					result = result + " High=" + this.numberFormatter.format(high.doubleValue());
+					result = result + ". High=" + numberFormatter.format(high.doubleValue());
 				}
 				if (low != null) {
-					result = result + " Low=" + this.numberFormatter.format(low.doubleValue());
+					result = result + ". Low=" + this.numberFormatter.format(low.doubleValue());
 				}
 				if (open != null) {
-					result = result + " Open=" + this.numberFormatter.format(open.doubleValue());
+					result = result + ". Open=" + this.numberFormatter.format(open.doubleValue());
 				}
 				if (close != null) {
-					result = result + " Close=" + this.numberFormatter.format(close.doubleValue());
+					result = result + ". Close=" + this.numberFormatter.format(close.doubleValue());
 				}
 			}
-
 		}
 
 		return result;
-
 	}
-
 }

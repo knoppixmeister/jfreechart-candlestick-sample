@@ -9,7 +9,6 @@ import org.jfree.chart.util.UnitType;
  * terms. This class is immutable.
  */
 public class RectangleInsets implements Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = 1902273207559319996L;
     
     /**
@@ -63,11 +62,9 @@ public class RectangleInsets implements Serializable {
      * @param bottom  the bottom insets.
      * @param right  the right insets.
      */
-    public RectangleInsets(UnitType unitType, double top, double left, 
-            double bottom, double right) {
-        if (unitType == null) {
-            throw new IllegalArgumentException("Null 'unitType' argument.");
-        }
+    public RectangleInsets(UnitType unitType, double top, double left, double bottom, double right) {
+        if(unitType == null) throw new IllegalArgumentException("Null 'unitType' argument.");
+
         this.unitType = unitType;
         this.top = top;
         this.bottom = bottom;
@@ -82,7 +79,7 @@ public class RectangleInsets implements Serializable {
      * @return The unit type (never {@code null}).
      */
     public UnitType getUnitType() {
-        return this.unitType;
+        return unitType;
     }
   
     /**
@@ -91,7 +88,7 @@ public class RectangleInsets implements Serializable {
      * @return The top insets.
      */
     public double getTop() {
-        return this.top;
+        return top;
     }
     
     /**
@@ -100,7 +97,7 @@ public class RectangleInsets implements Serializable {
      * @return The bottom insets.
      */
     public double getBottom() {
-        return this.bottom;
+        return bottom;
     }
     
     /**
@@ -109,7 +106,7 @@ public class RectangleInsets implements Serializable {
      * @return The left insets.
      */
     public double getLeft() {
-        return this.left;
+        return left;
     }
     
     /**
@@ -118,7 +115,7 @@ public class RectangleInsets implements Serializable {
      * @return The right insets.
      */
     public double getRight() {
-        return this.right;
+        return right;
     }
     
     /**
@@ -173,6 +170,7 @@ public class RectangleInsets implements Serializable {
         result = 29 * result + (int) (temp ^ (temp >>> 32));
         temp = this.right != +0.0d ? Double.doubleToLongBits(this.right) : 0L;
         result = 29 * result + (int) (temp ^ (temp >>> 32));
+        
         return result;
     }
 
@@ -184,8 +182,7 @@ public class RectangleInsets implements Serializable {
      */
     @Override
     public String toString() {
-        return "RectangleInsets[t=" + this.top + ",l=" + this.left
-                + ",b=" + this.bottom + ",r=" + this.right + "]";
+        return "RectangleInsets[t=" + this.top + ",l=" + this.left+ ",b=" + this.bottom + ",r=" + this.right + "]";
     }
     
     /**

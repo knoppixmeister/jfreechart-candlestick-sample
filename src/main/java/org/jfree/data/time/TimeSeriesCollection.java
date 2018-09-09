@@ -118,11 +118,7 @@ import org.jfree.data.xy.XYRangeInfo;
  * {@link IntervalXYDataset} interface.  This makes it a convenient dataset for
  * use with the {@link org.jfree.chart.plot.XYPlot} class.
  */
-public class TimeSeriesCollection extends AbstractIntervalXYDataset
-        implements XYDataset, IntervalXYDataset, DomainInfo, XYDomainInfo,
-        XYRangeInfo, VetoableChangeListener, Serializable {
-
-    /** For serialization. */
+public class TimeSeriesCollection extends AbstractIntervalXYDataset implements XYDataset, IntervalXYDataset, DomainInfo, XYDomainInfo, XYRangeInfo, VetoableChangeListener, Serializable {
     private static final long serialVersionUID = 834149929022371137L;
 
     /** Storage for the time series. */

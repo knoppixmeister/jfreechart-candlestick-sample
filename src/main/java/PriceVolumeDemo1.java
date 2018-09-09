@@ -26,8 +26,9 @@ import org.jfree.ui.RefineryUtilities;
  * A demonstration application showing how to create a price-volume chart.
  */
 public class PriceVolumeDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = 8382665736644843686L;
 
-    /**
+	/**
      * Constructs a new demonstration application.
      *
      * @param title  the frame title.
@@ -98,7 +99,6 @@ public class PriceVolumeDemo1 extends ApplicationFrame {
      * @return A sample dataset.
      */
     private static XYDataset createPriceDataset() {
-
         // create dataset 1...
         TimeSeries series1 = new TimeSeries("Price");
 
@@ -639,6 +639,7 @@ public class PriceVolumeDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart();
+        
         return new ChartPanel(chart);
     }
 
@@ -648,13 +649,9 @@ public class PriceVolumeDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-
-        PriceVolumeDemo1 demo = new PriceVolumeDemo1(
-                "JFreeChart: PriceVolumeChartDemo1.java");
+        PriceVolumeDemo1 demo = new PriceVolumeDemo1("JFreeChart: PriceVolumeChartDemo1.java");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
-
     }
-
 }

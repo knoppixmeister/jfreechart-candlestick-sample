@@ -145,10 +145,9 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator, XYToolTi
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof HighLowItemLabelGenerator)) {
+        if(obj == this) return true;
+
+        if(!(obj instanceof HighLowItemLabelGenerator)) {
             return false;
         }
         HighLowItemLabelGenerator generator = (HighLowItemLabelGenerator) obj;
@@ -158,6 +157,7 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator, XYToolTi
         if (!this.numberFormatter.equals(generator.numberFormatter)) {
             return false;   
         }
+        
         return true;
     }
     
@@ -171,6 +171,7 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator, XYToolTi
         int result = 127;
         result = HashUtils.hashCode(result, this.dateFormatter);
         result = HashUtils.hashCode(result, this.numberFormatter);
+        
         return result;
     }
 }

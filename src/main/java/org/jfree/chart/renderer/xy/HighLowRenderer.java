@@ -72,6 +72,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      */
     public HighLowRenderer() {
         super();
+        
         this.drawOpenTicks = true;
         this.drawCloseTicks = true;
         this.tickLength = 2.0;
@@ -86,7 +87,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #setDrawOpenTicks(boolean)
      */
     public boolean getDrawOpenTicks() {
-        return this.drawOpenTicks;
+        return drawOpenTicks;
     }
 
     /**
@@ -98,7 +99,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #getDrawOpenTicks()
      */
     public void setDrawOpenTicks(boolean draw) {
-        this.drawOpenTicks = draw;
+    	drawOpenTicks = draw;
+        
         fireChangeEvent();
     }
 
@@ -111,7 +113,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #setDrawCloseTicks(boolean)
      */
     public boolean getDrawCloseTicks() {
-        return this.drawCloseTicks;
+        return drawCloseTicks;
     }
 
     /**
@@ -123,7 +125,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #getDrawCloseTicks()
      */
     public void setDrawCloseTicks(boolean draw) {
-        this.drawCloseTicks = draw;
+    	drawCloseTicks = draw;
+        
         fireChangeEvent();
     }
 
@@ -136,7 +139,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #setOpenTickPaint(Paint)
      */
     public Paint getOpenTickPaint() {
-        return this.openTickPaint;
+        return openTickPaint;
     }
 
     /**
@@ -150,7 +153,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #getOpenTickPaint()
      */
     public void setOpenTickPaint(Paint paint) {
-        this.openTickPaint = paint;
+    	openTickPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -163,7 +167,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #setCloseTickPaint(Paint)
      */
     public Paint getCloseTickPaint() {
-        return this.closeTickPaint;
+        return closeTickPaint;
     }
 
     /**
@@ -178,6 +182,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      */
     public void setCloseTickPaint(Paint paint) {
         this.closeTickPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -191,7 +196,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #setTickLength(double)
      */
     public double getTickLength() {
-        return this.tickLength;
+        return tickLength;
     }
 
     /**
@@ -205,7 +210,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @see #getTickLength()
      */
     public void setTickLength(double length) {
-        this.tickLength = length;
+    	tickLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -218,15 +224,11 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @return The range ({@code null} if the dataset is {@code null}
      *         or empty).
      */
-    @Override
-    public Range findRangeBounds(XYDataset dataset) {
-        if (dataset != null) {
-            return DatasetUtils.findRangeBounds(dataset, true);
-        }
-        else {
-            return null;
-        }
-    }
+	@Override
+	public Range findRangeBounds(XYDataset dataset) {
+		if(dataset != null) return DatasetUtils.findRangeBounds(dataset, true);
+		else return null;
+	}
 
     /**
      * Draws the visual representation of a single data item.
@@ -247,24 +249,30 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @param pass  the pass index.
      */
     @Override
-    public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
-
+    public void drawItem(
+    	Graphics2D g2,
+    	XYItemRendererState state,
+    	Rectangle2D dataArea,
+    	PlotRenderingInfo info,
+    	XYPlot plot,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	XYDataset dataset,
+    	int series,
+    	int item,
+    	CrosshairState crosshairState,
+    	int pass)
+    {
         double x = dataset.getXValue(series, item);
         if (!domainAxis.getRange().contains(x)) {
             return;    // the x value is not within the axis range
         }
-        double xx = domainAxis.valueToJava2D(x, dataArea,
-                plot.getDomainAxisEdge());
+        double xx = domainAxis.valueToJava2D(x, dataArea, plot.getDomainAxisEdge());
 
         // setup for collecting optional entity info...
         Shape entityArea = null;
         EntityCollection entities = null;
-        if (info != null) {
-            entities = info.getOwner().getEntityCollection();
-        }
+        if(info != null) entities = info.getOwner().getEntityCollection();
 
         PlotOrientation orientation = plot.getOrientation();
         RectangleEdge location = plot.getRangeAxisEdge();
@@ -274,56 +282,51 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
         g2.setPaint(itemPaint);
         g2.setStroke(itemStroke);
 
-        if (dataset instanceof OHLCDataset) {
+        if(dataset instanceof OHLCDataset) {
             OHLCDataset hld = (OHLCDataset) dataset;
 
             double yHigh = hld.getHighValue(series, item);
             double yLow = hld.getLowValue(series, item);
-            if (!Double.isNaN(yHigh) && !Double.isNaN(yLow)) {
-                double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea,
-                        location);
-                double yyLow = rangeAxis.valueToJava2D(yLow, dataArea,
-                        location);
-                if (orientation == PlotOrientation.HORIZONTAL) {
+            
+            if(!Double.isNaN(yHigh) && !Double.isNaN(yLow)) {
+                double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea, location);
+                double yyLow = rangeAxis.valueToJava2D(yLow, dataArea, location);
+                
+                if(orientation == PlotOrientation.HORIZONTAL) {
                     g2.draw(new Line2D.Double(yyLow, xx, yyHigh, xx));
-                    entityArea = new Rectangle2D.Double(Math.min(yyLow, yyHigh),
-                            xx - 1.0, Math.abs(yyHigh - yyLow), 2.0);
+                    entityArea = new Rectangle2D.Double(Math.min(yyLow, yyHigh), xx - 1.0, Math.abs(yyHigh - yyLow), 2.0);
                 }
                 else if (orientation == PlotOrientation.VERTICAL) {
                     g2.draw(new Line2D.Double(xx, yyLow, xx, yyHigh));
-                    entityArea = new Rectangle2D.Double(xx - 1.0,
-                            Math.min(yyLow, yyHigh), 2.0,
-                            Math.abs(yyHigh - yyLow));
+                    entityArea = new Rectangle2D.Double(xx - 1.0, Math.min(yyLow, yyHigh), 2.0, Math.abs(yyHigh - yyLow));
                 }
             }
 
             double delta = getTickLength();
-            if (domainAxis.isInverted()) {
-                delta = -delta;
-            }
-            if (getDrawOpenTicks()) {
+            
+            if(domainAxis.isInverted()) delta = -delta;
+
+            if(getDrawOpenTicks()) {
                 double yOpen = hld.getOpenValue(series, item);
-                if (!Double.isNaN(yOpen)) {
-                    double yyOpen = rangeAxis.valueToJava2D(yOpen, dataArea,
-                            location);
-                    if (this.openTickPaint != null) {
+                if(!Double.isNaN(yOpen)) {
+                    double yyOpen = rangeAxis.valueToJava2D(yOpen, dataArea, location);
+                    if(this.openTickPaint != null) {
                         g2.setPaint(this.openTickPaint);
                     }
                     else {
                         g2.setPaint(itemPaint);
                     }
-                    if (orientation == PlotOrientation.HORIZONTAL) {
-                        g2.draw(new Line2D.Double(yyOpen, xx + delta, yyOpen,
-                                xx));
+                    
+                    if(orientation == PlotOrientation.HORIZONTAL) {
+                        g2.draw(new Line2D.Double(yyOpen, xx + delta, yyOpen, xx));
                     }
-                    else if (orientation == PlotOrientation.VERTICAL) {
-                        g2.draw(new Line2D.Double(xx - delta, yyOpen, xx,
-                                yyOpen));
+                    else if(orientation == PlotOrientation.VERTICAL) {
+                        g2.draw(new Line2D.Double(xx - delta, yyOpen, xx, yyOpen));
                     }
                 }
             }
 
-            if (getDrawCloseTicks()) {
+            if(getDrawCloseTicks()) {
                 double yClose = hld.getCloseValue(series, item);
                 if (!Double.isNaN(yClose)) {
                     double yyClose = rangeAxis.valueToJava2D(
@@ -347,6 +350,8 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
 
         }
         else {
+        	System.out.println("AAAA");
+        	
             // not a HighLowDataset, so just draw a line connecting this point
             // with the previous point...
             if (item > 0) {
@@ -432,9 +437,9 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
+        
         this.openTickPaint = SerialUtils.readPaint(stream);
         this.closeTickPaint = SerialUtils.readPaint(stream);
     }
@@ -451,5 +456,4 @@ public class HighLowRenderer extends AbstractXYItemRenderer implements XYItemRen
         SerialUtils.writePaint(this.openTickPaint, stream);
         SerialUtils.writePaint(this.closeTickPaint, stream);
     }
-
 }

@@ -1,44 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------------------
- * GradientXYBarPainter.java
- * -------------------------
- * (C) Copyright 2008-2017, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes:
- * --------
- * 19-Jun-2008 : Version 1 (DG);
- * 22-Feb-2009 : Fixed bug drawing outlines (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.Color;
@@ -60,8 +19,9 @@ import org.jfree.chart.ui.RectangleEdge;
  * @since 1.0.11
  */
 public class GradientXYBarPainter implements XYBarPainter, Serializable {
+	private static final long serialVersionUID = 1707760758351857925L;
 
-    /** The division point between the first and second gradient regions. */
+	/** The division point between the first and second gradient regions. */
     private double g1;
 
     /** The division point between the second and third gradient regions. */
@@ -102,18 +62,17 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      *              bar.
      */
     @Override
-    public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base) {
-
+    public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row, int column, RectangularShape bar, RectangleEdge base) {
         Paint itemPaint = renderer.getItemPaint(row, column);
 
         Color c0, c1;
-        if (itemPaint instanceof Color) {
+        
+        if(itemPaint instanceof Color) {
             c0 = (Color) itemPaint;
             c1 = c0.brighter();
         }
-        else if (itemPaint instanceof GradientPaint) {
-            GradientPaint gp = (GradientPaint) itemPaint;
+        else if(itemPaint instanceof GradientPaint) {
+            GradientPaint gp = (GradientPaint)itemPaint;
             c0 = gp.getColor1();
             c1 = gp.getColor2();
         }
@@ -124,70 +83,57 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
 
         // as a special case, if the bar colour has alpha == 0, we draw
         // nothing.
-        if (c0.getAlpha() == 0) {
-            return;
-        }
+        if(c0.getAlpha() == 0) return;
 
-        if (base == RectangleEdge.TOP || base == RectangleEdge.BOTTOM) {
-            Rectangle2D[] regions = splitVerticalBar(bar, this.g1, this.g2,
-                    this.g3);
-            GradientPaint gp = new GradientPaint((float) regions[0].getMinX(),
-                    0.0f, c0, (float) regions[0].getMaxX(), 0.0f, Color.WHITE);
+        if(base == RectangleEdge.TOP || base == RectangleEdge.BOTTOM) {
+            Rectangle2D[] regions = splitVerticalBar(bar, this.g1, this.g2, this.g3);
+            GradientPaint gp = new GradientPaint((float) regions[0].getMinX(), 0.0f, c0, (float) regions[0].getMaxX(), 0.0f, Color.WHITE);
             g2.setPaint(gp);
             g2.fill(regions[0]);
 
-            gp = new GradientPaint((float) regions[1].getMinX(), 0.0f,
-                    Color.WHITE, (float) regions[1].getMaxX(), 0.0f, c0);
+            gp = new GradientPaint((float) regions[1].getMinX(), 0.0f, Color.WHITE, (float) regions[1].getMaxX(), 0.0f, c0);
             g2.setPaint(gp);
             g2.fill(regions[1]);
 
-            gp = new GradientPaint((float) regions[2].getMinX(), 0.0f, c0,
-                    (float) regions[2].getMaxX(), 0.0f, c1);
+            gp = new GradientPaint((float) regions[2].getMinX(), 0.0f, c0, (float) regions[2].getMaxX(), 0.0f, c1);
             g2.setPaint(gp);
             g2.fill(regions[2]);
 
-            gp = new GradientPaint((float) regions[3].getMinX(), 0.0f, c1,
-                     (float) regions[3].getMaxX(), 0.0f, c0);
+            gp = new GradientPaint((float) regions[3].getMinX(), 0.0f, c1, (float) regions[3].getMaxX(), 0.0f, c0);
             g2.setPaint(gp);
             g2.fill(regions[3]);
         }
-        else if (base == RectangleEdge.LEFT || base == RectangleEdge.RIGHT) {
-            Rectangle2D[] regions = splitHorizontalBar(bar, this.g1, this.g2,
-                    this.g3);
+        else if(base == RectangleEdge.LEFT || base == RectangleEdge.RIGHT) {
+            Rectangle2D[] regions = splitHorizontalBar(bar, this.g1, this.g2, this.g3);
             GradientPaint gp = new GradientPaint(0.0f,
                     (float) regions[0].getMinY(), c0, 0.0f,
                     (float) regions[0].getMaxX(), Color.WHITE);
             g2.setPaint(gp);
             g2.fill(regions[0]);
 
-            gp = new GradientPaint(0.0f, (float) regions[1].getMinY(),
-                    Color.WHITE, 0.0f, (float) regions[1].getMaxY(), c0);
+            gp = new GradientPaint(0.0f, (float) regions[1].getMinY(), Color.WHITE, 0.0f, (float) regions[1].getMaxY(), c0);
             g2.setPaint(gp);
             g2.fill(regions[1]);
 
-            gp = new GradientPaint(0.0f, (float) regions[2].getMinY(), c0,
-                    0.0f, (float) regions[2].getMaxY(), c1);
+            gp = new GradientPaint(0.0f, (float) regions[2].getMinY(), c0, 0.0f, (float) regions[2].getMaxY(), c1);
             g2.setPaint(gp);
             g2.fill(regions[2]);
 
-            gp = new GradientPaint(0.0f, (float) regions[3].getMinY(), c1,
-                     0.0f, (float) regions[3].getMaxY(), c0);
+            gp = new GradientPaint(0.0f, (float) regions[3].getMinY(), c1, 0.0f, (float) regions[3].getMaxY(), c0);
             g2.setPaint(gp);
             g2.fill(regions[3]);
-
         }
 
         // draw the outline...
-        if (renderer.isDrawBarOutline()) {
+        if(renderer.isDrawBarOutline()) {
             Stroke stroke = renderer.getItemOutlineStroke(row, column);
             Paint paint = renderer.getItemOutlinePaint(row, column);
-            if (stroke != null && paint != null) {
+            if(stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
                 g2.draw(bar);
             }
         }
-
     }
 
     /**
@@ -203,22 +149,24 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      * @param pegShadow  peg the shadow to the base of the bar?
      */
     @Override
-    public void paintBarShadow(Graphics2D g2, XYBarRenderer renderer, int row,
-            int column, RectangularShape bar, RectangleEdge base,
-            boolean pegShadow) {
-
-        // handle a special case - if the bar colour has alpha == 0, it is
+    public void paintBarShadow(
+    	Graphics2D g2,
+    	XYBarRenderer renderer,
+    	int row,
+    	int column,
+    	RectangularShape bar,
+    	RectangleEdge base,
+    	boolean pegShadow)
+    {
+        // handle a spcial case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
         Paint itemPaint = renderer.getItemPaint(row, column);
-        if (itemPaint instanceof Color) {
+        if(itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
-            if (c.getAlpha() == 0) {
-                return;
-            }
+            if(c.getAlpha() == 0) return;
         }
 
-        RectangularShape shadow = createShadow(bar, renderer.getShadowXOffset(),
-                renderer.getShadowYOffset(), base, pegShadow);
+        RectangularShape shadow = createShadow(bar, renderer.getShadowXOffset(), renderer.getShadowYOffset(), base, pegShadow);
         g2.setPaint(Color.GRAY);
         g2.fill(shadow);
 
@@ -235,18 +183,17 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      *
      * @return A rectangle for the shadow.
      */
-    private Rectangle2D createShadow(RectangularShape bar, double xOffset,
-            double yOffset, RectangleEdge base, boolean pegShadow) {
+    private Rectangle2D createShadow(RectangularShape bar, double xOffset, double yOffset, RectangleEdge base, boolean pegShadow) {
         double x0 = bar.getMinX();
         double x1 = bar.getMaxX();
         double y0 = bar.getMinY();
         double y1 = bar.getMaxY();
-        if (base == RectangleEdge.TOP) {
+        
+        if(base == RectangleEdge.TOP) {
             x0 += xOffset;
             x1 += xOffset;
-            if (!pegShadow) {
-                y0 += yOffset;
-            }
+            if(!pegShadow) y0 += yOffset;
+
             y1 += yOffset;
         }
         else if (base == RectangleEdge.BOTTOM) {
@@ -273,6 +220,7 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
             y0 += yOffset;
             y1 += yOffset;
         }
+        
         return new Rectangle2D.Double(x0, y0, (x1 - x0), (y1 - y0));
     }
 
@@ -287,21 +235,17 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      *
      * @return An array containing four subregions.
      */
-    private Rectangle2D[] splitVerticalBar(RectangularShape bar, double a,
-            double b, double c) {
+    private Rectangle2D[] splitVerticalBar(RectangularShape bar, double a, double b, double c) {
         Rectangle2D[] result = new Rectangle2D[4];
         double x0 = bar.getMinX();
         double x1 = Math.rint(x0 + (bar.getWidth() * a));
         double x2 = Math.rint(x0 + (bar.getWidth() * b));
         double x3 = Math.rint(x0 + (bar.getWidth() * c));
-        result[0] = new Rectangle2D.Double(bar.getMinX(), bar.getMinY(),
-                x1 - x0, bar.getHeight());
-        result[1] = new Rectangle2D.Double(x1, bar.getMinY(), x2 - x1,
-                bar.getHeight());
-        result[2] = new Rectangle2D.Double(x2, bar.getMinY(), x3 - x2,
-                bar.getHeight());
-        result[3] = new Rectangle2D.Double(x3, bar.getMinY(),
-                bar.getMaxX() - x3, bar.getHeight());
+        result[0] = new Rectangle2D.Double(bar.getMinX(), bar.getMinY(), x1 - x0, bar.getHeight());
+        result[1] = new Rectangle2D.Double(x1, bar.getMinY(), x2 - x1, bar.getHeight());
+        result[2] = new Rectangle2D.Double(x2, bar.getMinY(), x3 - x2, bar.getHeight());
+        result[3] = new Rectangle2D.Double(x3, bar.getMinY(), bar.getMaxX() - x3, bar.getHeight());
+        
         return result;
     }
 
@@ -316,13 +260,13 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
      *
      * @return An array containing four subregions.
      */
-    private Rectangle2D[] splitHorizontalBar(RectangularShape bar, double a,
-            double b, double c) {
+    private Rectangle2D[] splitHorizontalBar(RectangularShape bar, double a, double b, double c) {
         Rectangle2D[] result = new Rectangle2D[4];
         double y0 = bar.getMinY();
         double y1 = Math.rint(y0 + (bar.getHeight() * a));
         double y2 = Math.rint(y0 + (bar.getHeight() * b));
         double y3 = Math.rint(y0 + (bar.getHeight() * c));
+        
         result[0] = new Rectangle2D.Double(bar.getMinX(), bar.getMinY(),
                 bar.getWidth(), y1 - y0);
         result[1] = new Rectangle2D.Double(bar.getMinX(), y1, bar.getWidth(),
@@ -331,9 +275,28 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
                 y3 - y2);
         result[3] = new Rectangle2D.Double(bar.getMinX(), y3, bar.getWidth(),
                 bar.getMaxY() - y3);
+        
         return result;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *
@@ -375,5 +338,4 @@ public class GradientXYBarPainter implements XYBarPainter, Serializable {
         hash = HashUtils.hashCode(hash, this.g3);
         return hash;
     }
-
 }

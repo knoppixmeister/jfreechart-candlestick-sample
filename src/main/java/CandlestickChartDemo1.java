@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,48 +6,56 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.HighLowRenderer;
 import org.jfree.data.xy.DefaultHighLowDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 /**
- * A demo showing a high-low-open-close chart.
+ * A demo showing a candlestick chart.
  */
-public class HighLowChartDemo1 extends ApplicationFrame {
-	private static final long serialVersionUID = -5918828983098418319L;
+public class CandlestickChartDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = -6629684582418374238L;
 
 	/**
-     * A demonstration application showing a high-low-open-close chart.
+     * A demonstration application showing a candlestick chart.
      *
      * @param title  the frame title.
      */
-	public HighLowChartDemo1(String title) {
+    public CandlestickChartDemo1(String title) {
         super(title);
-
         JPanel chartPanel = createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        chartPanel.setPreferredSize(new java.awt.Dimension(900, 570));
         setContentPane(chartPanel);
-	}
+    }
 
-	private static JFreeChart createChart(OHLCDataset dataset) {
-        JFreeChart chart = ChartFactory.createHighLowChart("High-Low-Open-Close Demo", "", "", dataset, false);
-        XYPlot plot = (XYPlot) chart.getPlot();
+    /**
+     * Creates a chart.
+     *
+     * @param dataset  the dataset.
+     *
+     * @return The dataset.
+     */
+    private static JFreeChart createChart(OHLCDataset dataset) {
+        JFreeChart chart = ChartFactory.createCandlestickChart(
+            "Candlestick Demo 1",
+            "Time",
+            "Value",
+            dataset,
+            true
+        );
         
-        ((HighLowRenderer)plot.getRenderer()).setTickLength(7);
+        XYPlot plot = (XYPlot)chart.getPlot();
+        plot.setDomainPannable(false);
+        //plot.getRenderer().
         
-        plot.setBackgroundPaint(Color.white);
+        NumberAxis axis = (NumberAxis) plot.getRangeAxis();
+        axis.setAutoRangeIncludesZero(true);
+        axis.setUpperMargin(1.0);
+        axis.setLowerMargin(0.0);
         
-        DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
-        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-        yAxis.setNumberFormatOverride(new DecimalFormat("$0.00"));
-
         return chart;
     }
 
@@ -69,7 +75,7 @@ public class HighLowChartDemo1 extends ApplicationFrame {
     private static Date createDate(int y, int m, int d, int hour, int min) {
         calendar.clear();
         calendar.set(y, m - 1, d, hour, min);
-
+        
         return calendar.getTime();
     }
 
@@ -428,8 +434,10 @@ public class HighLowChartDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart(createDataset());
-
-        return new ChartPanel(chart);
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setMouseWheelEnabled(true);
+        
+        return panel;
     }
 
     /**
@@ -438,9 +446,9 @@ public class HighLowChartDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-    	HighLowChartDemo1 demo = new HighLowChartDemo1("JFreeChart: HighLowChartDemo1.java");
-    	demo.pack();
-    	RefineryUtilities.centerFrameOnScreen(demo);
-    	demo.setVisible(true);
+        CandlestickChartDemo1 demo = new CandlestickChartDemo1("JFreeChart : CandlestickChartDemo1.java");
+        demo.pack();
+        RefineryUtilities.centerFrameOnScreen(demo);
+        demo.setVisible(true);
     }
 }

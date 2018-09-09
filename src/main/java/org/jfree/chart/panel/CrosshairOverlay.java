@@ -37,7 +37,9 @@ import org.jfree.chart.util.PublicCloneable;
  * @since 1.0.13
  */
 public class CrosshairOverlay extends AbstractOverlay implements Overlay, PropertyChangeListener, PublicCloneable, Cloneable, Serializable {
-    /** Storage for the crosshairs along the x-axis. */
+	private static final long serialVersionUID = 7396323857718072061L;
+
+	/** Storage for the crosshairs along the x-axis. */
     protected List<Crosshair> xCrosshairs;
 
     /** Storage for the crosshairs along the y-axis. */
@@ -82,8 +84,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     public void removeDomainCrosshair(Crosshair crosshair) {
         Args.nullNotPermitted(crosshair, "crosshair");
         
-        if (this.xCrosshairs.remove(crosshair)) {
+        if(this.xCrosshairs.remove(crosshair)) {
             crosshair.removePropertyChangeListener(this);
+            
             fireOverlayChanged();
         }
     }
@@ -93,13 +96,15 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * {@link OverlayChangeEvent} to all registered listeners.
      */
     public void clearDomainCrosshairs() {
-        if (this.xCrosshairs.isEmpty()) {
+        if(xCrosshairs.isEmpty()) {
             return;  // nothing to do
         }
-        for (Crosshair c : getDomainCrosshairs()) {
-            this.xCrosshairs.remove(c);
+        
+        for(Crosshair c : getDomainCrosshairs()) {
+        	xCrosshairs.remove(c);
             c.removePropertyChangeListener(this);
         }
+        
         fireOverlayChanged();
     }
 
@@ -137,8 +142,10 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      */
     public void removeRangeCrosshair(Crosshair crosshair) {
         Args.nullNotPermitted(crosshair, "crosshair");
-        if (this.yCrosshairs.remove(crosshair)) {
+        
+        if(yCrosshairs.remove(crosshair)) {
             crosshair.removePropertyChangeListener(this);
+            
             fireOverlayChanged();
         }
     }
@@ -148,13 +155,15 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * {@link OverlayChangeEvent} to all registered listeners.
      */
     public void clearRangeCrosshairs() {
-        if (this.yCrosshairs.isEmpty()) {
+        if(this.yCrosshairs.isEmpty()) {
             return;  // nothing to do
         }
-        for (Crosshair c : getRangeCrosshairs()) {
-            this.yCrosshairs.remove(c);
+        
+        for(Crosshair c : getRangeCrosshairs()) {
+        	yCrosshairs.remove(c);
             c.removePropertyChangeListener(this);
         }
+        
         fireOverlayChanged();
     }
 
@@ -299,7 +308,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     	//System.out.println("vert: X: "+x+"; DA_minX: "+dataArea.getMinX()+"; DA_maxX: "+dataArea.getMaxX());
     	
         if(x >= dataArea.getMinX() && x <= dataArea.getMaxX()) {
-        	System.out.println("VVVVV");
+        	System.out.println("OVERLAY_111");
         	
             Line2D line = new Line2D.Double(x, dataArea.getMinY(), x, dataArea.getMaxY());
             Paint savedPaint = g2.getPaint();
@@ -309,27 +318,24 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
             g2.draw(line);
             
             if(crosshair.isLabelVisible()) {
-            	System.out.println("oooo");
+            	System.out.println("OVERLAY_2222");
             	
                 Font savedFont = g2.getFont();
                 g2.setFont(crosshair.getLabelFont());
-                String label = crosshair.getLabelGenerator().generateLabel(
-                        crosshair);
+                String label = crosshair.getLabelGenerator().generateLabel(crosshair);
                 RectangleAnchor anchor = crosshair.getLabelAnchor();
                 Point2D pt = calculateLabelPoint(line, anchor, 5, 5);
                 float xx = (float) pt.getX();
                 float yy = (float) pt.getY();
                 TextAnchor alignPt = textAlignPtForLabelAnchorV(anchor);
-                Shape hotspot = TextUtils.calculateRotatedStringBounds(
-                        label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
+                Shape hotspot = TextUtils.calculateRotatedStringBounds(label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
                 if (!dataArea.contains(hotspot.getBounds2D())) {
                     anchor = flipAnchorH(anchor);
                     pt = calculateLabelPoint(line, anchor, 5, 5);
                     xx = (float) pt.getX();
                     yy = (float) pt.getY();
                     alignPt = textAlignPtForLabelAnchorV(anchor);
-                    hotspot = TextUtils.calculateRotatedStringBounds(
-                           label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
+                    hotspot = TextUtils.calculateRotatedStringBounds(label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
                 }
                 g2.setPaint(crosshair.getLabelBackgroundPaint());
                 g2.fill(hotspot);
@@ -358,9 +364,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      *
      * @return The anchor point.
      */
-    private Point2D calculateLabelPoint(Line2D line, RectangleAnchor anchor,
-            double deltaX, double deltaY) {
+    private Point2D calculateLabelPoint(Line2D line, RectangleAnchor anchor, double deltaX, double deltaY) {
         double x, y;
+        
         boolean left = (anchor == RectangleAnchor.BOTTOM_LEFT 
                 || anchor == RectangleAnchor.LEFT 
                 || anchor == RectangleAnchor.TOP_LEFT);
@@ -408,6 +414,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                 y = y + deltaY;
             }
         }
+        
         return new Point2D.Double(x, y);
     }
 
@@ -445,6 +452,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         else if (anchor.equals(RectangleAnchor.BOTTOM_RIGHT)) {
             result = TextAnchor.BOTTOM_LEFT;
         }
+        
         return result;
     }
 
@@ -482,6 +490,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         else if (anchor.equals(RectangleAnchor.BOTTOM_RIGHT)) {
             result = TextAnchor.TOP_RIGHT;
         }
+        
         return result;
     }
 
@@ -505,6 +514,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         else if (anchor.equals(RectangleAnchor.BOTTOM_RIGHT)) {
             result = RectangleAnchor.BOTTOM_LEFT;
         }
+        
         return result;
     }
 
@@ -528,6 +538,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         else if (anchor.equals(RectangleAnchor.BOTTOM_RIGHT)) {
             result = RectangleAnchor.TOP_RIGHT;
         }
+        
         return result;
     }
 
@@ -553,6 +564,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         if (!this.yCrosshairs.equals(that.yCrosshairs)) {
             return false;
         }
+        
         return true;
     }
 
@@ -569,7 +581,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         CrosshairOverlay clone = (CrosshairOverlay) super.clone();
         clone.xCrosshairs = (List) ObjectUtils.deepClone(this.xCrosshairs);
         clone.yCrosshairs = (List) ObjectUtils.deepClone(this.yCrosshairs);
+        
         return clone;
     }
-
 }

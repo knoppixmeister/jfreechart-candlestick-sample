@@ -24,13 +24,17 @@ public class JfreeCandlestickChartDemo extends JPanel {
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JfreeCandlestickChart jfreeCandlestickChart = new JfreeCandlestickChart("");
-        new FxMarketPxFeeder(jfreeCandlestickChart, "C:/Users/test/Desktop/jfreecandlestickchart-example-code/twtr.csv", 0).run();
+        new FxMarketPxFeeder(
+        	jfreeCandlestickChart,
+        	"C:/Users/test/Desktop/jfreecandlestickchart-example-code/twtr.csv",
+        	0
+        ).run();
 
         //CBWebSocket socket = new CBWebSocket(jfreeCandlestickChart);
 
         frame.setContentPane(jfreeCandlestickChart);
 
-        frame.setResizable(false);
+        //frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
 

@@ -1,4 +1,3 @@
-import java.awt.Color;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

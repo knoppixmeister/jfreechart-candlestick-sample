@@ -53,7 +53,6 @@ import org.jfree.chart.util.Args;
  * a fixed period (most often one day).
  */
 public class OHLCDataItem implements Comparable, Serializable {
-
     /** For serialization. */
     private static final long serialVersionUID = 7753817154401169901L;
 
@@ -85,9 +84,9 @@ public class OHLCDataItem implements Comparable, Serializable {
      * @param close  the close value.
      * @param volume  the volume.
      */
-    public OHLCDataItem(Date date, double open, double high, double low,
-            double close, double volume) {
+    public OHLCDataItem(Date date, double open, double high, double low, double close, double volume) {
         Args.nullNotPermitted(date, "date");
+        
         this.date = date;
         this.open = new Double(open);
         this.high = new Double(high);
