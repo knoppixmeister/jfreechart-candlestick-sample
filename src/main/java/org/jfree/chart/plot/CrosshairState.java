@@ -1,56 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------------
- * CrosshairState.java
- * -------------------
- * (C) Copyright 2002-2017, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 24-Jan-2002 : Version 1 (DG);
- * 05-Mar-2002 : Added Javadoc comments (DG);
- * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 19-Sep-2003 : Modified crosshair distance calculation (DG);
- * 04-Dec-2003 : Crosshair anchor point now stored outside chart since it is
- *               dependent on the display target (DG);
- * 25-Feb-2004 : Replaced CrosshairInfo --> CrosshairState (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 13-Oct-2006 : Fixed initialisation of CrosshairState - see bug report
- *               1565168 (DG);
- * 06-Feb-2007 : Added new fields and methods to fix bug 1086307 (DG);
- * 26-Jun-2008 : Now tracks dataset index (DG);
- * 18-Feb-2017 : Fix for crosshairs with multiple datasets / axes - see 
- *               bug #36 (DG);
- *
- */
-
 package org.jfree.chart.plot;
 
 import java.awt.geom.Point2D;
@@ -61,7 +8,6 @@ import java.awt.geom.Point2D;
  * JFreeChart - it is not intended for external use.
  */
 public class CrosshairState {
-
     /**
      * A flag that controls whether the distance is calculated in data space
      * or Java2D space.
@@ -129,7 +75,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public double getCrosshairDistance() {
-        return this.distance;
+        return distance;
     }
 
     /**
@@ -156,10 +102,8 @@ public class CrosshairState {
      * @param transY  the y-value in Java2D space.
      * @param orientation  the plot orientation ({@code null} not permitted).
      */
-    public void updateCrosshairPoint(double x, double y, int datasetIndex,
-            double transX, double transY, PlotOrientation orientation) {
-
-        if (this.anchor != null) {
+    public void updateCrosshairPoint(double x, double y, int datasetIndex, double transX, double transY, PlotOrientation orientation) {
+        if(anchor != null) {
             double d = 0.0;
             if (this.calculateDistanceInDataSpace) { 
                 d = (x - this.anchorX) * (x - this.anchorX)
@@ -174,8 +118,7 @@ public class CrosshairState {
                     yy = xx;
                     xx = temp;
                 }
-                d = (transX - xx) * (transX - xx)
-                    + (transY - yy) * (transY - yy);
+                d = (transX - xx) * (transX - xx) + (transY - yy) * (transY - yy);
             }
 
             if (d < this.distance) {
@@ -199,9 +142,8 @@ public class CrosshairState {
      * @since 1.0.20
      */
     public void updateCrosshairX(double x, double transX, int datasetIndex) {
-        if (this.anchor == null) {
-            return;
-        }
+        if(this.anchor == null) return;
+
         double d = Math.abs(transX - this.anchor.getX());
         if (d < this.distance) {
             this.crosshairX = x;
@@ -224,16 +166,14 @@ public class CrosshairState {
      * @since 1.0.20
      */
     public void updateCrosshairY(double candidateY, double transY, int datasetIndex) {
-        if (this.anchor == null) {
-            return;
-        }
+        if(this.anchor == null) return;
+
         double d = Math.abs(transY - this.anchor.getY());
         if (d < this.distance) {
             this.crosshairY = candidateY;
             this.datasetIndex = datasetIndex;
             this.distance = d;
         }
-
     }
 
     /**
@@ -246,7 +186,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public Point2D getAnchor() {
-        return this.anchor;
+        return anchor;
     }
 
     /**
@@ -274,7 +214,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public double getAnchorX() {
-        return this.anchorX;
+        return anchorX;
     }
 
     /**
@@ -287,7 +227,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public void setAnchorX(double x) {
-        this.anchorX = x;
+    	anchorX = x;
     }
 
     /**
@@ -298,7 +238,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public double getAnchorY() {
-        return this.anchorY;
+        return anchorY;
     }
 
     /**

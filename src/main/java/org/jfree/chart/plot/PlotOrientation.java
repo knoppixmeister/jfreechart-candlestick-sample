@@ -52,17 +52,13 @@ import java.io.Serializable;
  * plot has a vertical y-axis).
  */
 public final class PlotOrientation implements Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -2508771828190337782L;
 
     /** For a plot where the range axis is horizontal. */
-    public static final PlotOrientation HORIZONTAL
-            = new PlotOrientation("PlotOrientation.HORIZONTAL");
+    public static final PlotOrientation HORIZONTAL = new PlotOrientation("PlotOrientation.HORIZONTAL");
 
     /** For a plot where the range axis is vertical. */
-    public static final PlotOrientation VERTICAL
-            = new PlotOrientation("PlotOrientation.VERTICAL");
+    public static final PlotOrientation VERTICAL = new PlotOrientation("PlotOrientation.VERTICAL");
 
     /** The name. */
     private String name;

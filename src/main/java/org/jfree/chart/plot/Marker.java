@@ -92,8 +92,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @param paint  the paint ({@code null} not permitted).
      */
     protected Marker(Paint paint) {
-        this(paint, new BasicStroke(0.5f), Color.GRAY, new BasicStroke(0.5f),
-                0.80f);
+        this(paint, new BasicStroke(0.5f), Color.GRAY, new BasicStroke(0.5f), 0.80f);
     }
 
     /**
@@ -110,14 +109,12 @@ public abstract class Marker implements Cloneable, Serializable {
      *     {@code stroke} is {@code null}, or {@code alpha} is
      *     not in the specified range.
      */
-    protected Marker(Paint paint, Stroke stroke, Paint outlinePaint, 
-            Stroke outlineStroke, float alpha) {
-
+    protected Marker(Paint paint, Stroke stroke, Paint outlinePaint, Stroke outlineStroke, float alpha) {
         Args.nullNotPermitted(paint, "paint");
         Args.nullNotPermitted(stroke, "stroke");
+        
         if (alpha < 0.0f || alpha > 1.0f) {
-            throw new IllegalArgumentException(
-                    "The 'alpha' value must be in the range 0.0f to 1.0f");
+            throw new IllegalArgumentException("The 'alpha' value must be in the range 0.0f to 1.0f");
         }
 
         this.paint = paint;
@@ -126,7 +123,7 @@ public abstract class Marker implements Cloneable, Serializable {
         this.outlineStroke = outlineStroke;
         this.alpha = alpha;
 
-        this.labelFont = new Font("SansSerif", Font.PLAIN, 9);
+        this.labelFont = new Font("SansSerif", Font.PLAIN, 10);
         this.labelPaint = Color.BLACK;
         this.labelBackgroundColor = new Color(100, 100, 100, 100);
         this.labelAnchor = RectangleAnchor.TOP_LEFT;
@@ -158,7 +155,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
+        
         this.paint = paint;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -170,7 +169,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setStroke(Stroke)
      */
     public Stroke getStroke() {
-        return this.stroke;
+        return stroke;
     }
 
     /**
@@ -183,7 +182,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
+        
         this.stroke = stroke;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -195,7 +196,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setOutlinePaint(Paint)
      */
     public Paint getOutlinePaint() {
-        return this.outlinePaint;
+        return outlinePaint;
     }
 
     /**
@@ -207,7 +208,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #getOutlinePaint()
      */
     public void setOutlinePaint(Paint paint) {
-        this.outlinePaint = paint;
+    	outlinePaint = paint;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -231,7 +233,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #getOutlineStroke()
      */
     public void setOutlineStroke(Stroke stroke) {
-        this.outlineStroke = stroke;
+    	outlineStroke = stroke;
+    	
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -261,11 +264,11 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #getAlpha()
      */
     public void setAlpha(float alpha) {
-        if (alpha < 0.0f || alpha > 1.0f) {
-            throw new IllegalArgumentException(
-                    "The 'alpha' value must be in the range 0.0f to 1.0f");
+        if(alpha < 0.0f || alpha > 1.0f) {
+            throw new IllegalArgumentException("The 'alpha' value must be in the range 0.0f to 1.0f");
         }
         this.alpha = alpha;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -277,7 +280,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabel(String)
      */
     public String getLabel() {
-        return this.label;
+        return label;
     }
 
     /**
@@ -289,7 +292,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #getLabel()
      */
     public void setLabel(String label) {
-        this.label = label;
+    	this.label = label;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -301,7 +305,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabelFont(Font)
      */
     public Font getLabelFont() {
-        return this.labelFont;
+        return labelFont;
     }
 
     /**
@@ -314,7 +318,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelFont(Font font) {
         Args.nullNotPermitted(font, "font");
-        this.labelFont = font;
+
+        labelFont = font;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -339,7 +345,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.labelPaint = paint;
+        
+        labelPaint = paint;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
     
@@ -364,7 +372,8 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelBackgroundColor(Color color) {
         Args.nullNotPermitted(color, "color");
-        this.labelBackgroundColor = color;
+        
+        labelBackgroundColor = color;
     }
 
     /**
@@ -376,7 +385,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabelAnchor(RectangleAnchor)
      */
     public RectangleAnchor getLabelAnchor() {
-        return this.labelAnchor;
+        return labelAnchor;
     }
 
     /**
@@ -390,7 +399,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelAnchor(RectangleAnchor anchor) {
         Args.nullNotPermitted(anchor, "anchor");
-        this.labelAnchor = anchor;
+        
+        labelAnchor = anchor;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -402,7 +413,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabelOffset(RectangleInsets)
      */
     public RectangleInsets getLabelOffset() {
-        return this.labelOffset;
+        return labelOffset;
     }
 
     /**
@@ -415,7 +426,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelOffset(RectangleInsets offset) {
         Args.nullNotPermitted(offset, "offset");
-        this.labelOffset = offset;
+        
+        labelOffset = offset;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -440,7 +453,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelOffsetType(LengthAdjustmentType adj) {
         Args.nullNotPermitted(adj, "adj");
-        this.labelOffsetType = adj;
+        
+        labelOffsetType = adj;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -452,7 +467,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabelTextAnchor(TextAnchor)
      */
     public TextAnchor getLabelTextAnchor() {
-        return this.labelTextAnchor;
+        return labelTextAnchor;
     }
 
     /**
@@ -465,7 +480,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabelTextAnchor(TextAnchor anchor) {
         Args.nullNotPermitted(anchor, "anchor");
+        
         this.labelTextAnchor = anchor;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -479,7 +496,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public void addChangeListener(MarkerChangeListener listener) {
-        this.listenerList.add(MarkerChangeListener.class, listener);
+    	listenerList.add(MarkerChangeListener.class, listener);
     }
 
     /**
@@ -492,7 +509,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public void removeChangeListener(MarkerChangeListener listener) {
-        this.listenerList.remove(MarkerChangeListener.class, listener);
+    	listenerList.remove(MarkerChangeListener.class, listener);
     }
 
     /**
@@ -503,14 +520,12 @@ public abstract class Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public void notifyListeners(MarkerChangeEvent event) {
-
-        Object[] listeners = this.listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == MarkerChangeListener.class) {
+        Object[] listeners = listenerList.getListenerList();
+        for(int i = listeners.length - 2; i >= 0; i -= 2) {
+            if(listeners[i] == MarkerChangeListener.class) {
                 ((MarkerChangeListener) listeners[i + 1]).markerChanged(event);
             }
         }
-
     }
 
     /**
@@ -523,7 +538,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public EventListener[] getListeners(Class listenerType) {
-        return this.listenerList.getListeners(listenerType);
+        return listenerList.getListeners(listenerType);
     }
 
     /**
@@ -578,9 +593,8 @@ public abstract class Marker implements Cloneable, Serializable {
         if (!ObjectUtils.equal(this.labelOffset, that.labelOffset)) {
             return false;
         }
-        if (!this.labelOffsetType.equals(that.labelOffsetType)) {
-            return false;
-        }
+        if(!this.labelOffsetType.equals(that.labelOffsetType)) return false;
+
         return true;
     }
 
@@ -593,7 +607,7 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    	return super.clone();
     }
 
     /**
@@ -620,8 +634,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.paint = SerialUtils.readPaint(stream);
         this.stroke = SerialUtils.readStroke(stream);
@@ -630,5 +643,4 @@ public abstract class Marker implements Cloneable, Serializable {
         this.labelPaint = SerialUtils.readPaint(stream);
         this.listenerList = new EventListenerList();
     }
-
 }
