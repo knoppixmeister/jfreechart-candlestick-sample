@@ -1,76 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------------
- * XYLineAndShapeRenderer.java
- * ---------------------------
- * (C) Copyright 2004-2017, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes:
- * --------
- * 27-Jan-2004 : Version 1 (DG);
- * 10-Feb-2004 : Minor change to drawItem() method to make cut-and-paste
- *               overriding easier (DG);
- * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState (DG);
- * 25-Aug-2004 : Added support for chart entities (required for tooltips) (DG);
- * 24-Sep-2004 : Added flag to allow whole series to be drawn as a path
- *               (necessary when using a dashed stroke with many data
- *               items) (DG);
- * 04-Oct-2004 : Renamed BooleanUtils --> BooleanUtilities (DG);
- * 11-Nov-2004 : Now uses ShapeUtilities to translate shapes (DG);
- * 27-Jan-2005 : The getLegendItem() method now omits hidden series (DG);
- * 28-Jan-2005 : Added new constructor (DG);
- * 09-Mar-2005 : Added fillPaint settings (DG);
- * 20-Apr-2005 : Use generators for legend tooltips and URLs (DG);
- * 22-Jul-2005 : Renamed defaultLinesVisible --> baseLinesVisible,
- *               defaultShapesVisible --> baseShapesVisible and
- *               defaultShapesFilled --> baseShapesFilled (DG);
- * 29-Jul-2005 : Added code to draw item labels (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 20-Jul-2006 : Set dataset and series indices in LegendItem (DG);
- * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
- * 21-Feb-2007 : Fixed bugs in clone() and equals() (DG);
- * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
- * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
- * 08-Jun-2007 : Fix for bug 1731912 where entities are created even for data
- *               items that are not displayed (DG);
- * 26-Oct-2007 : Deprecated override attributes (DG);
- * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
- * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
- * 19-Sep-2008 : Fixed bug with drawSeriesLineAsPath - patch by Greg Darke (DG);
- * 18-May-2009 : Clip lines in drawPrimaryLine() (DG);
- * 05-Jul-2012 : Removed JDK 1.3.1 code (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- * 18-Feb-2017 : Updates for crosshairs (bug #36) (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.Graphics2D;
@@ -115,7 +42,6 @@ import org.jfree.data.xy.XYDataset;
  *
  */
 public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = -7435246895986425885L;
 
     /**
@@ -198,7 +124,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         this.useOutlinePaint = false;  // use item paint for outlines by
                                        // default, not outline paint
 
-        this.drawSeriesLineAsPath = false;
+        drawSeriesLineAsPath = false;
     }
 
     /**
@@ -210,7 +136,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setDrawSeriesLineAsPath(boolean)
      */
     public boolean getDrawSeriesLineAsPath() {
-        return this.drawSeriesLineAsPath;
+        return drawSeriesLineAsPath;
     }
 
     /**
@@ -223,8 +149,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getDrawSeriesLineAsPath()
      */
     public void setDrawSeriesLineAsPath(boolean flag) {
-        if (this.drawSeriesLineAsPath != flag) {
-            this.drawSeriesLineAsPath = flag;
+        if(drawSeriesLineAsPath != flag) {
+        	drawSeriesLineAsPath = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -254,10 +181,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public boolean getItemLineVisible(int series, int item) {
         Boolean flag = getSeriesLinesVisible(series);
-        if (flag != null) {
-            return flag;
-        }
-        return this.defaultLinesVisible;
+        if(flag != null) return flag;
+
+        return defaultLinesVisible;
     }
 
     /**
@@ -271,7 +197,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setSeriesLinesVisible(int, Boolean)
      */
     public Boolean getSeriesLinesVisible(int series) {
-        return this.seriesLinesVisible.getBoolean(series);
+        return seriesLinesVisible.getBoolean(series);
     }
 
     /**
@@ -284,7 +210,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getSeriesLinesVisible(int)
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
-        this.seriesLinesVisible.setBoolean(series, flag);
+    	seriesLinesVisible.setBoolean(series, flag);
+    	
         fireChangeEvent();
     }
 
@@ -322,6 +249,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setDefaultLinesVisible(boolean flag) {
         this.defaultLinesVisible = flag;
+        
         fireChangeEvent();
     }
 
@@ -346,7 +274,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
+        
         this.legendLine = line;
+        
         fireChangeEvent();
     }
 
@@ -367,10 +297,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public boolean getItemShapeVisible(int series, int item) {
         Boolean flag = getSeriesShapesVisible(series);
-        if (flag != null) {
-            return flag;
-        }
-        return this.defaultShapesVisible;
+        if(flag != null) return flag;
+
+        return defaultShapesVisible;
     }
 
     /**

@@ -1818,10 +1818,15 @@ public abstract class ChartFactory {
      *
      * @return A time series chart.
      */
-    public static JFreeChart createTimeSeriesChart(String title,
-            String timeAxisLabel, String valueAxisLabel, XYDataset dataset,
-            boolean legend, boolean tooltips, boolean urls) {
-
+    public static JFreeChart createTimeSeriesChart(
+    	String title,
+    	String timeAxisLabel,
+    	String valueAxisLabel,
+    	XYDataset dataset,
+    	boolean legend,
+    	boolean tooltips,
+    	boolean urls)
+    {
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         timeAxis.setLowerMargin(0.02);  // reduce the default margins
         timeAxis.setUpperMargin(0.02);
@@ -1830,27 +1835,20 @@ public abstract class ChartFactory {
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
 
         XYToolTipGenerator toolTipGenerator = null;
-        if (tooltips) {
-            toolTipGenerator
-                = StandardXYToolTipGenerator.getTimeSeriesInstance();
-        }
+        if(tooltips) toolTipGenerator = StandardXYToolTipGenerator.getTimeSeriesInstance();
 
         XYURLGenerator urlGenerator = null;
-        if (urls) {
-            urlGenerator = new StandardXYURLGenerator();
-        }
+        if(urls) urlGenerator = new StandardXYURLGenerator();
 
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,
-                false);
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
         renderer.setDefaultToolTipGenerator(toolTipGenerator);
         renderer.setURLGenerator(urlGenerator);
         plot.setRenderer(renderer);
 
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
         currentTheme.apply(chart);
+        
         return chart;
-
     }
 
     /**
@@ -1866,19 +1864,22 @@ public abstract class ChartFactory {
      *
      * @return A candlestick chart.
      */
-    public static JFreeChart createCandlestickChart(String title,
-            String timeAxisLabel, String valueAxisLabel, OHLCDataset dataset,
-            boolean legend) {
-
+    public static JFreeChart createCandlestickChart(
+    	String title,
+    	String timeAxisLabel,
+    	String valueAxisLabel,
+    	OHLCDataset dataset,
+    	boolean showLegend)
+	{
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
         plot.setRenderer(new CandlestickRenderer());
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
-        currentTheme.apply(chart);
-        return chart;
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, showLegend);
 
+        currentTheme.apply(chart);
+
+        return chart;
     }
 
     /**
@@ -1901,9 +1902,10 @@ public abstract class ChartFactory {
         renderer.setDefaultToolTipGenerator(new HighLowItemLabelGenerator());
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        
         currentTheme.apply(chart);
+        
         return chart;
-
     }
 
     /**
@@ -1921,10 +1923,13 @@ public abstract class ChartFactory {
      * 
      * @since 1.0.16
      */
-    public static JFreeChart createBubbleChart(String title, String xAxisLabel,
-            String yAxisLabel, XYZDataset dataset) {
-        return createBubbleChart(title, xAxisLabel, yAxisLabel, dataset,
-                PlotOrientation.VERTICAL, true, true, false);
+    public static JFreeChart createBubbleChart(
+    	String title,
+    	String xAxisLabel,
+    	String yAxisLabel,
+    	XYZDataset dataset)
+    {
+        return createBubbleChart(title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
     }
     
     /**
@@ -1945,11 +1950,19 @@ public abstract class ChartFactory {
      *
      * @return A bubble chart.
      */
-    public static JFreeChart createBubbleChart(String title, String xAxisLabel,
-            String yAxisLabel, XYZDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
-
+    public static JFreeChart createBubbleChart(
+    	String title,
+    	String xAxisLabel,
+    	String yAxisLabel,
+    	XYZDataset dataset,
+    	PlotOrientation orientation,
+    	boolean legend,
+    	boolean tooltips,
+    	boolean urls
+    )
+    {
         Args.nullNotPermitted(orientation, "orientation");
+        
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);
@@ -1968,11 +1981,11 @@ public abstract class ChartFactory {
         plot.setRenderer(renderer);
         plot.setOrientation(orientation);
 
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        
         currentTheme.apply(chart);
+        
         return chart;
-
     }
     
     /**
@@ -1988,10 +2001,13 @@ public abstract class ChartFactory {
      * 
      * @since 1.0.20
      */
-    public static JFreeChart createHistogram(String title,
-            String xAxisLabel, String yAxisLabel, IntervalXYDataset dataset) {
-        return createHistogram(title, xAxisLabel, yAxisLabel, dataset,
-                PlotOrientation.VERTICAL, true, true, false);
+    public static JFreeChart createHistogram(
+    	String title,
+    	String xAxisLabel,
+    	String yAxisLabel,
+    	IntervalXYDataset dataset)
+    {
+        return createHistogram(title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
     }
 
     /**
@@ -2014,30 +2030,28 @@ public abstract class ChartFactory {
     public static JFreeChart createHistogram(String title,
             String xAxisLabel, String yAxisLabel, IntervalXYDataset dataset,
             PlotOrientation orientation, boolean legend, boolean tooltips,
-            boolean urls) {
-
+            boolean urls)
+	{
         Args.nullNotPermitted(orientation, "orientation");
+        
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         ValueAxis yAxis = new NumberAxis(yAxisLabel);
 
         XYItemRenderer renderer = new XYBarRenderer();
-        if (tooltips) {
-            renderer.setDefaultToolTipGenerator(new StandardXYToolTipGenerator());
-        }
-        if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
-        }
+        if(tooltips) renderer.setDefaultToolTipGenerator(new StandardXYToolTipGenerator());
+
+        if(urls) renderer.setURLGenerator(new StandardXYURLGenerator());
 
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
         plot.setOrientation(orientation);
         plot.setDomainZeroBaselineVisible(true);
         plot.setRangeZeroBaselineVisible(true);
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        
         currentTheme.apply(chart);
+        
         return chart;
-
     }
 
     /**
@@ -2056,10 +2070,13 @@ public abstract class ChartFactory {
      *
      * @since 1.0.4
      */
-    public static JFreeChart createBoxAndWhiskerChart(String title,
-            String categoryAxisLabel, String valueAxisLabel,
-            BoxAndWhiskerCategoryDataset dataset, boolean legend) {
-
+    public static JFreeChart createBoxAndWhiskerChart(
+    	String title,
+    	String categoryAxisLabel,
+    	String valueAxisLabel,
+    	BoxAndWhiskerCategoryDataset dataset,
+    	boolean legend)
+    {
         CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         valueAxis.setAutoRangeIncludesZero(false);
@@ -2067,11 +2084,11 @@ public abstract class ChartFactory {
         BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
         renderer.setDefaultToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
 
-        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis,
-                renderer);
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
+        CategoryPlot plot = new CategoryPlot(dataset, categoryAxis, valueAxis, renderer);
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        
         currentTheme.apply(chart);
+        
         return chart;
     }
 
@@ -2088,20 +2105,23 @@ public abstract class ChartFactory {
      *
      * @return A box and whisker chart.
      */
-    public static JFreeChart createBoxAndWhiskerChart(String title,
-            String timeAxisLabel, String valueAxisLabel,
-            BoxAndWhiskerXYDataset dataset, boolean legend) {
-
+    public static JFreeChart createBoxAndWhiskerChart(
+    	String title,
+    	String timeAxisLabel,
+    	String valueAxisLabel,
+    	BoxAndWhiskerXYDataset dataset,
+    	boolean legend)
+    {
         ValueAxis timeAxis = new DateAxis(timeAxisLabel);
         NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
         valueAxis.setAutoRangeIncludesZero(false);
         XYBoxAndWhiskerRenderer renderer = new XYBoxAndWhiskerRenderer(10.0);
         XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, renderer);
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
-        currentTheme.apply(chart);
-        return chart;
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
 
+        currentTheme.apply(chart);
+
+        return chart;
     }
 
     /**
@@ -2156,9 +2176,10 @@ public abstract class ChartFactory {
      */
     public static JFreeChart createWaferMapChart(String title,
             WaferMapDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
-
+            boolean legend, boolean tooltips, boolean urls)
+    {
         Args.nullNotPermitted(orientation, "orientation");
+        
         WaferMapPlot plot = new WaferMapPlot(dataset);
         WaferMapRenderer renderer = new WaferMapRenderer();
         plot.setRenderer(renderer);
@@ -2168,5 +2189,4 @@ public abstract class ChartFactory {
         currentTheme.apply(chart);
         return chart;
     }
-
 }

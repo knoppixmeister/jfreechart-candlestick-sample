@@ -150,7 +150,6 @@ public class MultipleAxisDemo1 extends ApplicationFrame {
         dataset.addSeries(series);
 
         return dataset;
-
     }
 
     /**

@@ -1,49 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------
- * TickUnit.java
- * -------------
- * (C) Copyright 2001-2008, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 19-Dec-2001 : Added standard header (DG);
- * 01-May-2002 : Changed the unit size from Number to double (DG);
- * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 05-Sep-2005 : Implemented hashCode(), thanks to Thomas Morgner (DG);
- * 02-Aug-2007 : Added minorTickCount attribute (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.io.Serializable;
@@ -61,8 +15,6 @@ import java.io.Serializable;
  * @see ValueAxis
  */
 public abstract class TickUnit implements Comparable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = 510179855057013974L;
 
     /** The size of the tick unit. */
@@ -94,6 +46,7 @@ public abstract class TickUnit implements Comparable, Serializable {
      */
     public TickUnit(double size, int minorTickCount) {
         this.size = size;
+        
         this.minorTickCount = minorTickCount;
     }
 
@@ -103,7 +56,7 @@ public abstract class TickUnit implements Comparable, Serializable {
      * @return The size of the tick unit.
      */
     public double getSize() {
-        return this.size;
+        return size;
     }
 
     /**
@@ -114,7 +67,7 @@ public abstract class TickUnit implements Comparable, Serializable {
      * @since 1.0.7
      */
     public int getMinorTickCount() {
-        return this.minorTickCount;
+        return minorTickCount;
     }
 
     /**
@@ -130,6 +83,18 @@ public abstract class TickUnit implements Comparable, Serializable {
         return String.valueOf(value);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Compares this tick unit to an arbitrary object.
      *
@@ -141,7 +106,6 @@ public abstract class TickUnit implements Comparable, Serializable {
      */
     @Override
     public int compareTo(Object object) {
-
         if (object instanceof TickUnit) {
             TickUnit other = (TickUnit) object;
             if (this.size > other.getSize()) {

@@ -1,141 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------
- * DateAxis.java
- * -------------
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert;
- * Contributor(s):   Jonathan Nash;
- *                   David Li;
- *                   Michael Rauch;
- *                   Bill Kelemen;
- *                   Pawel Pabis;
- *                   Chris Boek;
- *                   Peter Kolb (patches 1934255 and 2603321);
- *                   Andrew Mickish (patch 1870189);
- *                   Fawad Halim (bug 2201869);
- *
- * Changes (from 23-Jun-2001)
- * --------------------------
- * 23-Jun-2001 : Modified to work with null data source (DG);
- * 18-Sep-2001 : Updated header (DG);
- * 27-Nov-2001 : Changed constructors from public to protected, updated Javadoc
- *               comments (DG);
- * 16-Jan-2002 : Added an optional crosshair, based on the implementation by
- *               Jonathan Nash (DG);
- * 26-Feb-2002 : Updated import statements (DG);
- * 22-Apr-2002 : Added a setRange() method (DG);
- * 25-Jun-2002 : Removed redundant local variable (DG);
- * 25-Jul-2002 : Changed order of parameters in ValueAxis constructor (DG);
- * 21-Aug-2002 : The setTickUnit() method now turns off auto-tick unit
- *               selection (fix for bug id 528885) (DG);
- * 05-Sep-2002 : Updated the constructors to reflect changes in the Axis
- *               class (DG);
- * 18-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 25-Sep-2002 : Added new setRange() methods, and deprecated
- *               setAxisRange() (DG);
- * 04-Oct-2002 : Changed auto tick selection to parallel number axis
- *               classes (DG);
- * 24-Oct-2002 : Added a date format override (DG);
- * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
- * 14-Jan-2003 : Changed autoRangeMinimumSize from Number --> double, moved
- *               crosshair settings to the plot (DG);
- * 15-Jan-2003 : Removed anchor date (DG);
- * 20-Jan-2003 : Removed unnecessary constructors (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 02-May-2003 : Added additional units to createStandardDateTickUnits()
- *               method, as suggested by mhilpert in bug report 723187 (DG);
- * 13-May-2003 : Merged HorizontalDateAxis and VerticalDateAxis (DG);
- * 24-May-2003 : Added support for underlying timeline for
- *               SegmentedTimeline (BK);
- * 16-Jul-2003 : Applied patch from Pawel Pabis to fix overlapping dates (DG);
- * 22-Jul-2003 : Applied patch from Pawel Pabis for monthly ticks (DG);
- * 25-Jul-2003 : Fixed bug 777561 and 777586 (DG);
- * 13-Aug-2003 : Implemented Cloneable and added equals() method (DG);
- * 02-Sep-2003 : Fixes for bug report 790506 (DG);
- * 04-Sep-2003 : Fixed tick label alignment when axis appears at the top (DG);
- * 10-Sep-2003 : Fixes for segmented timeline (DG);
- * 17-Sep-2003 : Fixed a layout bug when multiple domain axes are used (DG);
- * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
- * 07-Nov-2003 : Modified to use new tick classes (DG);
- * 12-Nov-2003 : Modified tick labelling to use roll unit from DateTickUnit
- *               when a calculated tick value is hidden (which can occur in
- *               segmented date axes) (DG);
- * 24-Nov-2003 : Fixed some problems with the auto tick unit selection, and
- *               fixed bug 846277 (labels missing for inverted axis) (DG);
- * 30-Dec-2003 : Fixed bug in refreshTicksHorizontal() when start of time unit
- *               (ex. 1st of month) was hidden, causing infinite loop (BK);
- * 13-Jan-2004 : Fixed bug in previousStandardDate() method (fix by Richard
- *               Wardle) (DG);
- * 21-Jan-2004 : Renamed translateJava2DToValue --> java2DToValue, and
- *               translateValueToJava2D --> valueToJava2D (DG);
- * 12-Mar-2004 : Fixed bug where date format override is ignored for vertical
- *               axis (DG);
- * 16-Mar-2004 : Added plotState to draw() method (DG);
- * 07-Apr-2004 : Changed string width calculation (DG);
- * 21-Apr-2004 : Fixed bug in estimateMaximumTickLabelWidth() method (bug id
- *               939148) (DG);
- * 11-Jan-2005 : Removed deprecated methods in preparation for 1.0.0
- *               release (DG);
- * 13-Jan-2005 : Fixed bug (see
- *               http://www.jfree.org/forum/viewtopic.php?t=11330) (DG);
- * 21-Apr-2005 : Replaced Insets with RectangleInsets, removed redundant
- *               argument from selectAutoTickUnit() (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 10-Feb-2006 : Added some API doc comments in respect of bug 821046 (DG);
- * 19-Apr-2006 : Fixed bug 1472942 in equals() method (DG);
- * 25-Sep-2006 : Fixed bug 1564977 missing tick labels (DG);
- * 15-Jan-2007 : Added get/setTimeZone() suggested by 'skunk' (DG);
- * 18-Jan-2007 : Fixed bug 1638678, time zone for calendar in
- *               previousStandardDate() (DG);
- * 04-Apr-2007 : Use time zone in date calculations (CB);
- * 19-Apr-2007 : Fix exceptions in setMinimum/MaximumDate() (DG);
- * 03-May-2007 : Fixed minor bugs in previousStandardDate(), with new JUnit
- *               tests (DG);
- * 21-Nov-2007 : Fixed warnings from FindBugs (DG);
- * 01-Sep-2008 : Use new methods from DateRange, added fix for bug
- *               2078057 (DG);
- * 18-Sep-2008 : Added locale to go with timezone (DG);
- * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
- * 25-Nov-2008 : Added bug fix 2201869 by Fawad Halim (DG);
- * 21-Jan-2009 : Check tickUnit for minor tick count (DG);
- * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
- * 08-Feb-2012 : Bugfix for endless-loop, bug 3484403 by rbrabe (MH);
- * 25-Jul-2013 : Update event notification to use fireChangeEvent() (DG);
- * 01-Aug-2013 : Added attributedLabel override to support superscripts,
- *               subscripts and more (DG);
- * 12-Sep-2013 : Prevent exception when zooming in below 1 millisecond (DG);
- * 23-Nov-2013 : Deprecated DEFAULT_DATE_TICK_UNIT to fix bug #977 (DG);
- * 10-Mar-2014 : Add get/setLocale() methods (DG);
- * 29-Aug-2016 : Fix for previousStandardDate - bug #25 (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.awt.Font;
@@ -182,16 +44,13 @@ import org.jfree.data.time.Year;
  * working days.
  */
 public class DateAxis extends ValueAxis implements Cloneable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -1013460999649007604L;
 
     /** The default axis range. */
     public static final DateRange DEFAULT_DATE_RANGE = new DateRange();
 
     /** The default minimum auto range size. */
-    public static final double
-            DEFAULT_AUTO_RANGE_MINIMUM_SIZE_IN_MILLISECONDS = 2.0;
+    public static final double DEFAULT_AUTO_RANGE_MINIMUM_SIZE_IN_MILLISECONDS = 2.0;
 
     /** The default anchor date. */
     public static final Date DEFAULT_ANCHOR_DATE = new Date();
@@ -212,19 +71,20 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * A timeline that includes all milliseconds (as defined by
      * {@code java.util.Date}) in the real time line.
      */
-    private static class DefaultTimeline implements Timeline, Serializable {
+	private static class DefaultTimeline implements Timeline, Serializable {
+		private static final long serialVersionUID = 47414600920924168L;
 
-        /**
+		/**
          * Converts a millisecond into a timeline value.
          *
          * @param millisecond  the millisecond.
          *
          * @return The timeline value.
          */
-        @Override
+		@Override
         public long toTimelineValue(long millisecond) {
-            return millisecond;
-        }
+			return millisecond;
+		}
 
         /**
          * Converts a date into a timeline value.
@@ -312,20 +172,19 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
          *
          * @return A boolean.
          */
+
+
         @Override
         public boolean equals(Object object) {
-            if (object == null) {
-                return false;
-            }
-            if (object == this) {
-                return true;
-            }
-            if (object instanceof DefaultTimeline) {
-                return true;
-            }
+            if(object == null) return false;
+
+            if(object == this)return true;
+
+            if(object instanceof DefaultTimeline) return true;
+
             return false;
         }
-    }
+	}
 
     /** A static default timeline shared by all standard DateAxis */
     private static final Timeline DEFAULT_TIMELINE = new DefaultTimeline();
@@ -346,9 +205,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     /**
      * Creates a date axis with no label.
      */
-    public DateAxis() {
-        this(null);
-    }
+	public DateAxis() {
+		this(null);
+	}
 
     /**
      * Creates a date axis with the specified label.
@@ -370,15 +229,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public DateAxis(String label, TimeZone zone, Locale locale) {
         super(label, DateAxis.createStandardDateTickUnits(zone, locale));
-        this.tickUnit = new DateTickUnit(DateTickUnitType.DAY, 1, 
-                new SimpleDateFormat());
-        setAutoRangeMinimumSize(
-                DEFAULT_AUTO_RANGE_MINIMUM_SIZE_IN_MILLISECONDS);
+        
+        tickUnit = new DateTickUnit(DateTickUnitType.DAY, 1, new SimpleDateFormat());
+        setAutoRangeMinimumSize(DEFAULT_AUTO_RANGE_MINIMUM_SIZE_IN_MILLISECONDS);
         setRange(DEFAULT_DATE_RANGE, false, false);
-        this.dateFormatOverride = null;
+        dateFormatOverride = null;
         this.timeZone = zone;
         this.locale = locale;
-        this.timeline = DEFAULT_TIMELINE;
+        timeline = DEFAULT_TIMELINE;
     }
 
     /**
@@ -390,9 +248,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @see #setTimeZone(TimeZone)
      */
-    public TimeZone getTimeZone() {
-        return this.timeZone;
-    }
+	public TimeZone getTimeZone() {
+		return timeZone;
+	}
 
     /**
      * Sets the time zone for the axis and sends an {@link AxisChangeEvent} to
@@ -405,9 +263,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @see #getTimeZone()
      */
     public void setTimeZone(TimeZone zone) {
-        Args.nullNotPermitted(zone, "zone");
-        this.timeZone = zone;
+    	Args.nullNotPermitted(zone, "zone");
+    	
+    	timeZone = zone;
         setStandardTickUnits(createStandardDateTickUnits(zone, this.locale));
+        
         fireChangeEvent();
     }
     
@@ -419,9 +279,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @since 1.0.18
      */
     public Locale getLocale() {
-        return this.locale;
+        return locale;
     }
-    
+
     /**
      * Sets the locale for the axis and sends a change event to all registered 
      * listeners.
@@ -430,9 +290,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public void setLocale(Locale locale) {
         Args.nullNotPermitted(locale, "locale");
+        
         this.locale = locale;
-        setStandardTickUnits(createStandardDateTickUnits(this.timeZone, 
-                this.locale));
+        setStandardTickUnits(createStandardDateTickUnits(timeZone, locale));
+        
         fireChangeEvent();
     }
 
@@ -442,7 +303,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The timeline.
      */
     public Timeline getTimeline() {
-        return this.timeline;
+        return timeline;
     }
 
     /**
@@ -452,9 +313,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param timeline  the timeline.
      */
     public void setTimeline(Timeline timeline) {
-        if (this.timeline != timeline) {
-            this.timeline = timeline;
-            fireChangeEvent();
+        if(this.timeline != timeline) {
+        	this.timeline = timeline;
+
+        	fireChangeEvent();
         }
     }
 
@@ -472,7 +334,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @see ValueAxis#isAutoTickUnitSelection()
      */
     public DateTickUnit getTickUnit() {
-        return this.tickUnit;
+        return tickUnit;
     }
 
     /**
@@ -499,17 +361,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @see #getTickUnit()
      */
-    public void setTickUnit(DateTickUnit unit, boolean notify,
-                            boolean turnOffAutoSelection) {
+    public void setTickUnit(DateTickUnit unit, boolean notify, boolean turnOffAutoSelection) {
+    	tickUnit = unit;
+        if(turnOffAutoSelection) setAutoTickUnitSelection(false, false);
 
-        this.tickUnit = unit;
-        if (turnOffAutoSelection) {
-            setAutoTickUnitSelection(false, false);
-        }
-        if (notify) {
-            fireChangeEvent();
-        }
-
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -519,7 +375,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The formatter (possibly {@code null}).
      */
     public DateFormat getDateFormatOverride() {
-        return this.dateFormatOverride;
+        return dateFormatOverride;
     }
 
     /**
@@ -530,7 +386,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param formatter  the date formatter ({@code null} permitted).
      */
     public void setDateFormatOverride(DateFormat formatter) {
-        this.dateFormatOverride = formatter;
+    	dateFormatOverride = formatter;
+    	
         fireChangeEvent();
     }
 
@@ -558,14 +415,13 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *                notified.
      */
     @Override
-    public void setRange(Range range, boolean turnOffAutoRange,
-                         boolean notify) {
+    public void setRange(Range range, boolean turnOffAutoRange, boolean notify) {
         Args.nullNotPermitted(range, "range");
+        
         // usually the range will be a DateRange, but if it isn't do a
         // conversion...
-        if (!(range instanceof DateRange)) {
-            range = new DateRange(range);
-        }
+        if(!(range instanceof DateRange)) range = new DateRange(range);
+
         super.setRange(range, turnOffAutoRange, notify);
     }
 
@@ -577,9 +433,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param upper  the upper bound for the axis.
      */
     public void setRange(Date lower, Date upper) {
-        if (lower.getTime() >= upper.getTime()) {
+        if(lower.getTime() >= upper.getTime()) {
             throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
         }
+        
         setRange(new DateRange(lower, upper));
     }
 
@@ -592,9 +449,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     @Override
     public void setRange(double lower, double upper) {
-        if (lower >= upper) {
+        if(lower >= upper) {
             throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
         }
+        
         setRange(new DateRange(lower, upper));
     }
 
@@ -609,13 +467,12 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     public Date getMinimumDate() {
         Date result;
         Range range = getRange();
-        if (range instanceof DateRange) {
+        if(range instanceof DateRange) {
             DateRange r = (DateRange) range;
             result = r.getLowerDate();
         }
-        else {
-            result = new Date((long) range.getLowerBound());
-        }
+        else result = new Date((long) range.getLowerBound());
+        
         return result;
     }
 
@@ -633,6 +490,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public void setMinimumDate(Date date) {
         Args.nullNotPermitted(date, "date");
+        
         // check the new minimum date relative to the current maximum date
         Date maxDate = getMaximumDate();
         long maxMillis = maxDate.getTime();
@@ -642,7 +500,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             long length = maxMillis - oldMin.getTime();
             maxDate = new Date(newMinMillis + length);
         }
+        
         setRange(new DateRange(date, maxDate), true, false);
+        
         fireChangeEvent();
     }
 

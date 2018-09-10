@@ -349,7 +349,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      */
     @Override
     public XYURLGenerator getURLGenerator() {
-        return this.urlGenerator;
+        return urlGenerator;
     }
 
     /**
@@ -361,6 +361,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
     @Override
     public void setURLGenerator(XYURLGenerator urlGenerator) {
         this.urlGenerator = urlGenerator;
+        
         fireChangeEvent();
     }
 

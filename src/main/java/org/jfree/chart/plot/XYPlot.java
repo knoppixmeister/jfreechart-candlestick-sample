@@ -1974,7 +1974,8 @@ public class XYPlot extends Plot implements
      * @see #isRangeZeroBaselineVisible()
      */
     public void setRangeZeroBaselineVisible(boolean visible) {
-        this.rangeZeroBaselineVisible = visible;
+    	rangeZeroBaselineVisible = visible;
+        
         fireChangeEvent();
     }
 
@@ -4493,8 +4494,9 @@ public class XYPlot extends Plot implements
      * @see #isRangeCrosshairLockedOnData()
      */
     public void setRangeCrosshairLockedOnData(boolean flag) {
-        if (this.rangeCrosshairLockedOnData != flag) {
-            this.rangeCrosshairLockedOnData = flag;
+        if(rangeCrosshairLockedOnData != flag) {
+        	rangeCrosshairLockedOnData = flag;
+            
             fireChangeEvent();
         }
     }
@@ -4507,7 +4509,7 @@ public class XYPlot extends Plot implements
      * @see #setRangeCrosshairValue(double)
      */
     public double getRangeCrosshairValue() {
-        return this.rangeCrosshairValue;
+        return rangeCrosshairValue;
     }
 
     /**
@@ -4535,10 +4537,9 @@ public class XYPlot extends Plot implements
      * @see #getRangeCrosshairValue()
      */
     public void setRangeCrosshairValue(double value, boolean notify) {
-        this.rangeCrosshairValue = value;
-        if (isRangeCrosshairVisible() && notify) {
-            fireChangeEvent();
-        }
+    	rangeCrosshairValue = value;
+    	
+        if(isRangeCrosshairVisible() && notify) fireChangeEvent();
     }
 
     /**
@@ -4551,7 +4552,7 @@ public class XYPlot extends Plot implements
      * @see #getRangeCrosshairPaint()
      */
     public Stroke getRangeCrosshairStroke() {
-        return this.rangeCrosshairStroke;
+        return rangeCrosshairStroke;
     }
 
     /**

@@ -1,63 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------
- * Millisecond.java
- * ----------------
- * (C) Copyright 2001-2012, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 11-Oct-2001 : Version 1 (DG);
- * 19-Dec-2001 : Added new constructors as suggested by Paul English (DG);
- * 26-Feb-2002 : Added new getStart() and getEnd() methods (DG);
- * 29-Mar-2002 : Fixed bug in getStart(), getEnd() and compareTo() methods (DG);
- * 10-Sep-2002 : Added getSerialIndex() method (DG);
- * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 10-Jan-2003 : Changed base class and method names (DG);
- * 13-Mar-2003 : Moved to com.jrefinery.data.time package and implemented
- *               Serializable (DG);
- * 21-Oct-2003 : Added hashCode() method (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 05-Oct-2006 : Updated API docs (DG);
- * 06-Oct-2006 : Refactored to cache first and last millisecond values (DG);
- * 04-Apr-2007 : In Millisecond(Date, TimeZone), peg milliseconds to the
- *               specified zone (DG);
- * 06-Jun-2008 : Added handling for general RegularTimePeriod in compareTo()
- *               method:
- *               see http://www.jfree.org/phpBB2/viewtopic.php?t=24805 (DG);
- * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
- * 02-Mar-2009 : Added new constructor with Locale (DG);
- * 05-Jul-2012 : Replaced getTime().getTime() with getTimeInMillis() (DG);
- *
- */
-
 package org.jfree.data.time;
 
 import java.io.Serializable;
@@ -71,8 +11,6 @@ import java.util.TimeZone;
  * for all {@link RegularTimePeriod} subclasses.
  */
 public class Millisecond extends RegularTimePeriod implements Serializable {
-
-    /** For serialization. */
     static final long serialVersionUID = -5316836467277638485L;
 
     /** A constant for the first millisecond in a second. */
@@ -134,11 +72,8 @@ public class Millisecond extends RegularTimePeriod implements Serializable {
      * @param month  the month (1-12).
      * @param year  the year (1900-9999).
      */
-    public Millisecond(int millisecond, int second, int minute, int hour,
-                       int day, int month, int year) {
-
+    public Millisecond(int millisecond, int second, int minute, int hour, int day, int month, int year) {
         this(millisecond, new Second(second, minute, hour, day, month, year));
-
     }
 
     /**

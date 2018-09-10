@@ -52,26 +52,31 @@ public class CrosshairDemo2 extends ApplicationFrame {
         	super(new BorderLayout());
 
         	datasets = new TimeSeriesCollection[SERIES_COUNT];
-        	series = new TimeSeries[SERIES_COUNT];
+        	series 	= new TimeSeries[SERIES_COUNT];
 
         	JPanel content = new JPanel(new BorderLayout());
 
             JFreeChart chart = createChart();
             addChart(chart);
+            
             chartPanel = new ChartPanel(chart);
             chartPanel.setPreferredSize(new java.awt.Dimension(900, 470));
-            chartPanel.setDomainZoomable(true);
-            chartPanel.setRangeZoomable(true);
+            //chartPanel.setDomainZoomable(true);
+            //chartPanel.setRangeZoomable(true);
+            
+            /*
             Border border = BorderFactory.createCompoundBorder(
             	BorderFactory.createEmptyBorder(4, 4, 4, 4),
             	BorderFactory.createEtchedBorder()
             );
             chartPanel.setBorder(border);
+            */
+            
             content.add(chartPanel);
 
             JPanel dashboard = new JPanel(new BorderLayout());
             dashboard.setPreferredSize(new Dimension(400, 120));
-            dashboard.setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
+            //dashboard.setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
 
             model = new DemoTableModel(SERIES_COUNT);
             for(int row=0; row < SERIES_COUNT; row++) {
@@ -115,7 +120,7 @@ public class CrosshairDemo2 extends ApplicationFrame {
         	RegularTimePeriod period = start;
         	double value = base;
 
-            for(int i = 0; i < count; i++) {
+            for(int i=0; i<count; i++) {
             	series[index].add(period, value);
                 period = period.next();
                 value = value * (1 + (Math.random() - 0.495) / 10.0);
@@ -134,7 +139,8 @@ public class CrosshairDemo2 extends ApplicationFrame {
                 JFreeChart chart = chartPanel.getChart();
                 
                 if(chart != null) {
-                    XYPlot plot = (XYPlot) chart.getPlot();
+                    XYPlot plot =	chart.getXYPlot();
+                    				//(XYPlot) chart.getPlot();
                     XYDataset dataset = plot.getDataset();
                     Comparable seriesKey = dataset.getSeriesKey(0);
                     
@@ -206,10 +212,10 @@ public class CrosshairDemo2 extends ApplicationFrame {
                 null,
                 true,
                 true,
-                false
+                true
             );
 
-            XYPlot plot = (XYPlot) chart.getPlot();
+            XYPlot plot = (XYPlot)chart.getPlot();
             XYDataset[] datasets = new XYDataset[SERIES_COUNT];
             for(int i = 0; i < SERIES_COUNT; i++) {
                 datasets[i] = createDataset(i, "Series " + i, 100.0 + i * 200.0, new Minute(), 200);
@@ -221,13 +227,15 @@ public class CrosshairDemo2 extends ApplicationFrame {
                     plot.setRenderer(i, new XYLineAndShapeRenderer(true, false));
                 }
             }
-            chart.addChangeListener(this);
+            
+            //chart.addChangeListener(this);
             chart.addProgressListener(this);
-            plot.setOrientation(PlotOrientation.VERTICAL);
+            
+            //plot.setOrientation(PlotOrientation.VERTICAL);
 
-            plot.setDomainCrosshairVisible(true);
-            plot.setDomainCrosshairLockedOnData(false);
-            plot.setRangeCrosshairVisible(false);
+            //plot.setDomainCrosshairVisible(true);
+            //plot.setDomainCrosshairLockedOnData(false);
+            //plot.setRangeCrosshairVisible(false);
             
             //ChartUtils.applyCurrentTheme(chart);
             
@@ -243,7 +251,8 @@ public class CrosshairDemo2 extends ApplicationFrame {
                 JFreeChart c = chartPanel.getChart();
                 
                 if(c != null) {
-                    XYPlot plot = (XYPlot)c.getPlot();
+                    XYPlot plot = 	c.getXYPlot();
+                    				//(XYPlot)c.getPlot();
                     XYDataset dataset = plot.getDataset();
                     Comparable seriesKey = dataset.getSeriesKey(0);
                     double xx = //plot.getDomainCrosshairValue();

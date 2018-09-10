@@ -68,9 +68,9 @@ public class JfreeCandlestickChartDemo extends JPanel {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-	        public void run() {
+			public void run() {
 	        	createAndShowGUI();
-            }
-        });
-    }
+			}
+		});
+	}
 }

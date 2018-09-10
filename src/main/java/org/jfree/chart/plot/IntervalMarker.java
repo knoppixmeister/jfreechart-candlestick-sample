@@ -1,48 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------------
- * IntervalMarker.java
- * -------------------
- * (C) Copyright 2002-2008, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 20-Aug-2002 : Added stroke to constructor in Marker class (DG);
- * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 05-Sep-2006 : Added MarkerChangeEvent notification (DG);
- * 18-Dec-2007 : Added new constructor (DG);
- *
- */
-
 package org.jfree.chart.plot;
 
 import java.awt.BasicStroke;
@@ -60,8 +15,6 @@ import org.jfree.chart.util.ObjectUtils;
  * Represents an interval to be highlighted in some way.
  */
 public class IntervalMarker extends Marker implements Cloneable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -1762344775267627916L;
 
     /** The start value. */
@@ -80,7 +33,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @param end  the end of the interval.
      */
     public IntervalMarker(double start, double end) {
-        this(start, end, Color.gray, new BasicStroke(0.5f), Color.gray, new BasicStroke(0.5f), 0.8f);
+        this(start, end, Color.GRAY, new BasicStroke(0.5f), Color.GRAY, new BasicStroke(0.5f), 0.8f);
     }
 
     /**
@@ -117,8 +70,8 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
         this.startValue = start;
         this.endValue = end;
         this.gradientPaintTransformer = null;
+        
         setLabelOffsetType(LengthAdjustmentType.CONTRACT);
-
     }
 
     /**
@@ -127,7 +80,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @return The start value.
      */
     public double getStartValue() {
-        return this.startValue;
+        return startValue;
     }
 
     /**
@@ -139,7 +92,8 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public void setStartValue(double value) {
-        this.startValue = value;
+    	startValue = value;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -149,7 +103,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @return The end value.
      */
     public double getEndValue() {
-        return this.endValue;
+        return endValue;
     }
 
     /**
@@ -161,7 +115,8 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @since 1.0.3
      */
     public void setEndValue(double value) {
-        this.endValue = value;
+    	endValue = value;
+        
         notifyListeners(new MarkerChangeEvent(this));
     }
 
@@ -171,7 +126,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @return The gradient paint transformer (possibly {@code null}).
      */
     public GradientPaintTransformer getGradientPaintTransformer() {
-        return this.gradientPaintTransformer;
+        return gradientPaintTransformer;
     }
 
     /**
@@ -180,12 +135,21 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      *
      * @param transformer  the transformer ({@code null} permitted).
      */
-    public void setGradientPaintTransformer(
-            GradientPaintTransformer transformer) {
-        this.gradientPaintTransformer = transformer;
+    public void setGradientPaintTransformer(GradientPaintTransformer transformer) {
+    	gradientPaintTransformer = transformer;
+    	
         notifyListeners(new MarkerChangeEvent(this));
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests the marker for equality with an arbitrary object.
      *
@@ -230,5 +194,4 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

@@ -1205,8 +1205,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
             y = frame.getMaxY() - dimensions.height;
         }
 
-        return new Rectangle2D.Double(x, y, dimensions.width,
-                dimensions.height);
+        return new Rectangle2D.Double(x, y, dimensions.width, dimensions.height);
     }
 
     /**
@@ -1223,27 +1222,25 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *
      * @return An entity collection for the title (possibly {@code null}).
      */
-    protected EntityCollection drawTitle(Title t, Graphics2D g2,
-                                         Rectangle2D area, boolean entities) {
-
+    protected EntityCollection drawTitle(Title t, Graphics2D g2, Rectangle2D area, boolean entities) {
         Args.nullNotPermitted(t, "t");
         Args.nullNotPermitted(area, "area");
+        
         Rectangle2D titleArea;
         RectangleEdge position = t.getPosition();
         double ww = area.getWidth();
-        if (ww <= 0.0) {
-            return null;
-        }
+        if(ww <= 0.0) return null;
+
         double hh = area.getHeight();
-        if (hh <= 0.0) {
-            return null;
-        }
+        if(hh <= 0.0) return null;
+
         RectangleConstraint constraint = new RectangleConstraint(ww,
                 new Range(0.0, ww), LengthConstraintType.RANGE, hh,
                 new Range(0.0, hh), LengthConstraintType.RANGE);
         Object retValue = null;
         BlockParams p = new BlockParams();
         p.setGenerateEntities(entities);
+        
         if (position == RectangleEdge.TOP) {
             Size2D size = t.arrange(g2, constraint);
             titleArea = createAlignedRectangle2D(size, area,
@@ -1259,29 +1256,29 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
             retValue = t.draw(g2, titleArea, p);
             area.setRect(area.getX(), area.getY(), area.getWidth(),
                     area.getHeight() - size.height);
-        } else if (position == RectangleEdge.RIGHT) {
+        }
+        else if(position == RectangleEdge.RIGHT) {
             Size2D size = t.arrange(g2, constraint);
             titleArea = createAlignedRectangle2D(size, area,
                     HorizontalAlignment.RIGHT, t.getVerticalAlignment());
             retValue = t.draw(g2, titleArea, p);
             area.setRect(area.getX(), area.getY(), area.getWidth()
                     - size.width, area.getHeight());
-        } else if (position == RectangleEdge.LEFT) {
+        }
+        else if(position == RectangleEdge.LEFT) {
             Size2D size = t.arrange(g2, constraint);
-            titleArea = createAlignedRectangle2D(size, area,
-                    HorizontalAlignment.LEFT, t.getVerticalAlignment());
+            titleArea = createAlignedRectangle2D(size, area, HorizontalAlignment.LEFT, t.getVerticalAlignment());
             retValue = t.draw(g2, titleArea, p);
-            area.setRect(area.getX() + size.width, area.getY(), area.getWidth()
-                    - size.width, area.getHeight());
+            area.setRect(area.getX() + size.width, area.getY(), area.getWidth() - size.width, area.getHeight());
         }
-        else {
-            throw new RuntimeException("Unrecognised title position.");
-        }
+        else throw new RuntimeException("Unrecognised title position.");
+
         EntityCollection result = null;
-        if (retValue instanceof EntityBlockResult) {
+        if(retValue instanceof EntityBlockResult) {
             EntityBlockResult ebr = (EntityBlockResult) retValue;
             result = ebr.getEntityCollection();
         }
+        
         return result;
     }
 
@@ -1307,10 +1304,8 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *
      * @return A buffered image.
      */
-    public BufferedImage createBufferedImage(int width, int height,
-                                             ChartRenderingInfo info) {
-        return createBufferedImage(width, height, BufferedImage.TYPE_INT_ARGB,
-                info);
+    public BufferedImage createBufferedImage(int width, int height, ChartRenderingInfo info) {
+        return createBufferedImage(width, height, BufferedImage.TYPE_INT_ARGB, info);
     }
 
     /**
@@ -1324,12 +1319,12 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *
      * @return A buffered image.
      */
-    public BufferedImage createBufferedImage(int width, int height,
-            int imageType, ChartRenderingInfo info) {
+    public BufferedImage createBufferedImage(int width, int height, int imageType, ChartRenderingInfo info) {
         BufferedImage image = new BufferedImage(width, height, imageType);
         Graphics2D g2 = image.createGraphics();
         draw(g2, new Rectangle2D.Double(0, 0, width, height), null, info);
         g2.dispose();
+        
         return image;
     }
 
@@ -1351,10 +1346,9 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
                                              int imageHeight,
                                              double drawWidth,
                                              double drawHeight,
-                                             ChartRenderingInfo info) {
-
-        BufferedImage image = new BufferedImage(imageWidth, imageHeight,
-                BufferedImage.TYPE_INT_ARGB);
+                                             ChartRenderingInfo info)
+    {
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         double scaleX = imageWidth / drawWidth;
         double scaleY = imageHeight / drawHeight;
@@ -1363,6 +1357,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
         draw(g2, new Rectangle2D.Double(0, 0, drawWidth, drawHeight), null,
                 info);
         g2.dispose();
+        
         return image;
     }
 
@@ -1381,7 +1376,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
     public void handleClick(int x, int y, ChartRenderingInfo info) {
         // pass the click on to the plot...
         // rely on the plot to post a plot change event and redraw the chart...
-        this.plot.handleClick(x, y, info.getPlotInfo());
+    	plot.handleClick(x, y, info.getPlotInfo());
     }
 
     /**
@@ -1393,7 +1388,8 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     public void addChangeListener(ChartChangeListener listener) {
         Args.nullNotPermitted(listener, "listener");
-        this.changeListeners.add(ChartChangeListener.class, listener);
+        
+        changeListeners.add(ChartChangeListener.class, listener);
     }
 
     /**
@@ -1405,7 +1401,8 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     public void removeChangeListener(ChartChangeListener listener) {
         Args.nullNotPermitted(listener, "listener");
-        this.changeListeners.remove(ChartChangeListener.class, listener);
+        
+        changeListeners.remove(ChartChangeListener.class, listener);
     }
 
     /**
@@ -1415,6 +1412,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     public void fireChartChanged() {
         ChartChangeEvent event = new ChartChangeEvent(this);
+        
         notifyListeners(event);
     }
 
@@ -1425,12 +1423,11 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *               notification.
      */
     protected void notifyListeners(ChartChangeEvent event) {
-        if (this.notify) {
-            Object[] listeners = this.changeListeners.getListenerList();
-            for (int i = listeners.length - 2; i >= 0; i -= 2) {
-                if (listeners[i] == ChartChangeListener.class) {
-                    ((ChartChangeListener) listeners[i + 1]).chartChanged(
-                            event);
+        if(notify) {
+            Object[] listeners = changeListeners.getListenerList();
+            for(int i = listeners.length - 2; i >= 0; i -= 2) {
+                if(listeners[i] == ChartChangeListener.class) {
+                    ((ChartChangeListener) listeners[i + 1]).chartChanged(event);
                 }
             }
         }
@@ -1445,7 +1442,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      * @see #removeProgressListener(ChartProgressListener)
      */
     public void addProgressListener(ChartProgressListener listener) {
-        this.progressListeners.add(ChartProgressListener.class, listener);
+    	progressListeners.add(ChartProgressListener.class, listener);
     }
 
     /**
@@ -1456,7 +1453,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      * @see #addProgressListener(ChartProgressListener)
      */
     public void removeProgressListener(ChartProgressListener listener) {
-        this.progressListeners.remove(ChartProgressListener.class, listener);
+    	progressListeners.remove(ChartProgressListener.class, listener);
     }
 
     /**
@@ -1466,9 +1463,9 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *               notification.
      */
     protected void notifyListeners(ChartProgressEvent event) {
-        Object[] listeners = this.progressListeners.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ChartProgressListener.class) {
+        Object[] listeners = progressListeners.getListenerList();
+        for(int i = listeners.length - 2; i >= 0; i -= 2) {
+            if(listeners[i] == ChartProgressListener.class) {
                 ((ChartProgressListener) listeners[i + 1]).chartProgress(event);
             }
         }
@@ -1483,6 +1480,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
     @Override
     public void titleChanged(TitleChangeEvent event) {
         event.setChart(this);
+        
         notifyListeners(event);
     }
 
@@ -1495,6 +1493,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
     @Override
     public void plotChanged(PlotChangeEvent event) {
         event.setChart(this);
+        
         notifyListeners(event);
     }
 
@@ -1507,16 +1506,13 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof JFreeChart)) {
-            return false;
-        }
+        if(obj == this) return true;
+
+        if(!(obj instanceof JFreeChart)) return false;
+
         JFreeChart that = (JFreeChart) obj;
-        if (!this.renderingHints.equals(that.renderingHints)) {
-            return false;
-        }
+        if(!this.renderingHints.equals(that.renderingHints)) return false;
+
         if (this.borderVisible != that.borderVisible) {
             return false;
         }

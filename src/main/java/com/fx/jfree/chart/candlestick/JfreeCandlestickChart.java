@@ -81,6 +81,9 @@ public class JfreeCandlestickChart extends JPanel {
 		// Create candlestickSubplot
 		XYPlot candlestickSubplot = new XYPlot(candlestickDataset, null, priceAxis, candlestickRenderer);
 		candlestickSubplot.setBackgroundPaint(Color.WHITE);
+		
+		candlestickSubplot.setDomainCrosshairVisible(true);
+		candlestickSubplot.setDomainCrosshairLockedOnData(false);
 
 		/**
 		 * Creating volume subplot
@@ -114,6 +117,9 @@ public class JfreeCandlestickChart extends JPanel {
 		);
 		//volumeSubplot.setBackgroundPaint(Color.WHITE);
 		
+		volumeSubplot.setDomainCrosshairVisible(true);
+		volumeSubplot.setDomainCrosshairLockedOnData(false);
+		
 		XYPlot rsiSubPlot = new XYPlot(
 			null,
 			null,
@@ -142,6 +148,9 @@ public class JfreeCandlestickChart extends JPanel {
 		mainPlot.setDomainPannable(true);
 		mainPlot.setRangePannable(true);
 
+		mainPlot.setDomainCrosshairVisible(true);
+		mainPlot.setDomainCrosshairLockedOnData(false);
+		
 		//mainPlot.setOrientation(PlotOrientation.VERTICAL);
 
 		JFreeChart chart = new JFreeChart(

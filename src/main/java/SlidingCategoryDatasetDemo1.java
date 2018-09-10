@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,7 +9,6 @@ import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -23,7 +21,6 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.category.SlidingCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 
 /**
  * A demo for the {@link SlidingCategoryDataset}.  We use a JScrollBar to
@@ -58,13 +55,18 @@ public class SlidingCategoryDatasetDemo1 extends ApplicationFrame {
             addChart(chart);
             ChartPanel cp1 = new ChartPanel(chart);
             cp1.setPreferredSize(new Dimension(900, 500));
+            
+            //cp1.setMouseZoomable(true);
+            //cp1.setMouseWheelEnabled(true);
+    		//cp1.setDoubleBuffered(true);
+            
             scroller = new JScrollBar(SwingConstants.VERTICAL, 0, 20, 0, 50);
             add(cp1);
             scroller.getModel().addChangeListener(this);
             JPanel scrollPanel = new JPanel(new BorderLayout());
             scrollPanel.add(this.scroller);
             scrollPanel.setBorder(BorderFactory.createEmptyBorder(66, 2, 2, 2));
-            scrollPanel.setBackground(Color.white);
+            scrollPanel.setBackground(Color.WHITE);
             add(scrollPanel, BorderLayout.EAST);
         }
 
