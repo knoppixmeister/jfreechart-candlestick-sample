@@ -1,8 +1,7 @@
 package org.jfree.data.time;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
+import java.io.*;
+import java.util.*;
 
 /**
  * Wrapper for a {@code java.util.Date} object that allows it to be used

@@ -1,65 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * --------------------------------
- * DynamicTimeSeriesCollection.java
- * --------------------------------
- * (C) Copyright 2002-2016, by I. H. Thomae and Contributors.
- *
- * Original Author:  I. H. Thomae (ithomae@ists.dartmouth.edu);
- * Contributor(s):   David Gilbert (for Object Refinery Limited);
- *                   Ricardo JL Rufino (patch #310);
- *
- * Changes
- * -------
- * 22-Nov-2002 : Initial version completed
- *    Jan 2003 : Optimized advanceTime(), added implemnt'n of RangeInfo intfc
- *               (using cached values for min, max, and range); also added
- *               getOldestIndex() and getNewestIndex() ftns so client classes
- *               can use this class as the master "index authority".
- * 22-Jan-2003 : Made this class stand on its own, rather than extending
- *               class FastTimeSeriesCollection
- * 31-Jan-2003 : Changed TimePeriod --> RegularTimePeriod (DG);
- * 13-Mar-2003 : Moved to com.jrefinery.data.time package (DG);
- * 29-Apr-2003 : Added small change to appendData method, from Irv Thomae (DG);
- * 19-Sep-2003 : Added new appendData method, from Irv Thomae (DG);
- * 05-May-2004 : Now extends AbstractIntervalXYDataset.  This also required a
- *               change to the return type of the getY() method - I'm slightly
- *               unsure of the implications of this, so it might require some
- *               further amendment (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * 11-Jan-2004 : Removed deprecated code in preparation for the 1.0.0
- *               release (DG);
- * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
- * 01-Jul-2014 : Add millisecond time period - see patch #310 by Ricardo JL
- *               Rufino (DG);
- *
- */
-
 package org.jfree.data.time;
 
 import java.util.Calendar;
@@ -84,10 +22,10 @@ import org.jfree.data.xy.IntervalXYDataset;
  * NOTE:As presented here, all data is assumed &gt;= 0, an assumption which is
  * embodied only in methods associated with interface RangeInfo.
  */
-public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DomainInfo, RangeInfo {
+public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset implements IntervalXYDataset, DomainInfo, RangeInfo {
+	private static final long serialVersionUID = -3491589594018636705L;
 
-    /**
+	/**
      * Useful constant for controlling the x-value returned for a time
      * period.
      */
@@ -123,18 +61,17 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
 
     /**
      * A wrapper for a fixed array of float values.
-     */
-    protected class ValueSequence {
-
-        /** Storage for the float values. */
-        float[] dataPoints;
+	*/
+	protected class ValueSequence {
+		/** Storage for the float values. */
+		float[] dataPoints;
 
         /**
          * Default constructor:
          */
-        public ValueSequence() {
-            this(DynamicTimeSeriesCollection.this.maximumItemCount);
-        }
+		public ValueSequence() {
+			this(DynamicTimeSeriesCollection.this.maximumItemCount);
+		}
 
         /**
          * Creates a sequence with the specified length.
@@ -155,7 +92,7 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
          * @param value  the value.
          */
         public void enterData(int index, float value) {
-            this.dataPoints[index] = value;
+        	dataPoints[index] = value;
         }
 
         /**
@@ -166,7 +103,7 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
          * @return The value.
          */
         public float getData(int index) {
-            return this.dataPoints[index];
+            return dataPoints[index];
         }
     }
 
@@ -230,7 +167,7 @@ public class DynamicTimeSeriesCollection extends AbstractIntervalXYDataset
      */
     public DynamicTimeSeriesCollection(int nSeries, int nMoments) {
         this(nSeries, nMoments, new Millisecond(), TimeZone.getDefault());
-        this.newestAt = nMoments - 1;
+        newestAt = nMoments - 1;
     }
 
     /**

@@ -82,25 +82,19 @@ import org.jfree.chart.util.Args;
  * subclasses.
  */
 public class Day extends RegularTimePeriod implements Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -7082667380758962755L;
 
     /** A standard date formatter. */
-    protected static final DateFormat DATE_FORMAT
-            = new SimpleDateFormat("yyyy-MM-dd");
+    protected static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     /** A date formatter for the default locale. */
-    protected static final DateFormat DATE_FORMAT_SHORT 
-            = DateFormat.getDateInstance(DateFormat.SHORT);
+    protected static final DateFormat DATE_FORMAT_SHORT = DateFormat.getDateInstance(DateFormat.SHORT);
 
     /** A date formatter for the default locale. */
-    protected static final DateFormat DATE_FORMAT_MEDIUM 
-            = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    protected static final DateFormat DATE_FORMAT_MEDIUM = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
     /** A date formatter for the default locale. */
-    protected static final DateFormat DATE_FORMAT_LONG 
-            = DateFormat.getDateInstance(DateFormat.LONG);
+    protected static final DateFormat DATE_FORMAT_LONG = DateFormat.getDateInstance(DateFormat.LONG);
 
     /** The day (uses SerialDate for convenience). */
     private SerialDate serialDate;

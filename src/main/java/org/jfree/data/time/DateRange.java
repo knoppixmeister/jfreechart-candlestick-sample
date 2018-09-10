@@ -55,8 +55,6 @@ import org.jfree.data.Range;
  * Instances of this class are immutable.
  */
 public class DateRange extends Range implements Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -4705682568375418157L;
 
     /** The lower bound for the range. */
@@ -162,11 +160,10 @@ public class DateRange extends Range implements Serializable {
      *
      * @return A string representing the date range.
      */
-    @Override
-    public String toString() {
-        DateFormat df = DateFormat.getDateTimeInstance();
-        return "[" + df.format(getLowerDate()) + " --> "
-                + df.format(getUpperDate()) + "]";
-    }
+	@Override
+	public String toString() {
+		DateFormat df = DateFormat.getDateTimeInstance();
 
+        return "[" + df.format(getLowerDate()) + " --> " + df.format(getUpperDate()) + "]";
+	}
 }
