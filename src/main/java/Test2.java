@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -155,7 +157,10 @@ public class Test2 {
         plot.setDomainCrosshairLockedOnData(false);
         plot.setRangeCrosshairVisible(true);
         plot.setRangeCrosshairLockedOnData(false);
-		
+        
+        plot.setRangePannable(true);
+        plot.setDomainPannable(true);
+
 		JFreeChart chart = new JFreeChart(plot);
 							/*
 							ChartFactory.createCandlestickChart(
@@ -175,7 +180,15 @@ public class Test2 {
 		ChartPanel panel = new ChartPanel(chart);
 		
 		panel.setMouseWheelEnabled(true);
-		
+		panel.setMouseZoomable(true);
+
+		panel.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				System.out.println(e.getWheelRotation());
+				
+			}
+		});
 		chart.addProgressListener(new ChartProgressListener() {
 			@Override
 			public void chartProgress(ChartProgressEvent event) {
@@ -186,7 +199,6 @@ public class Test2 {
 				System.out.println("LLL: "+	panel.getChart().getXYPlot().getDomainCrosshairValue()	);
 			}
 		});
-
 		panel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

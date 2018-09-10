@@ -25,10 +25,10 @@ public class Test3 {
 
 		TimeSeries series1 = new TimeSeries("");
 		TimeSeriesCollection collection2 = new TimeSeriesCollection(series1);
-		
+
 		TimeSeries series2 = new TimeSeries("lines");
         TimeSeries series3 = new TimeSeries("lines");
-		
+
         TimeSeriesCollection collection3 = new TimeSeriesCollection();
         collection3.addSeries(series2);
         collection3.addSeries(series3);
@@ -190,7 +190,7 @@ public class Test3 {
 		fr.setVisible(true);
 		
 		
-		/*
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -205,6 +205,6 @@ public class Test3 {
 				
 			}
 		}).start();
-		*/
+		
 	}
 }

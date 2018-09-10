@@ -2,6 +2,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -63,7 +65,7 @@ public class Test {
 		crosshair1.setLabelVisible(true);
 		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
 		crosshair1.setLabelBackgroundPaint(Color.RED);
-		
+
 		overlay.addDomainCrosshair(crosshair1);
 
 		//-------------------------------------------------------
@@ -133,10 +135,8 @@ public class Test {
 		plot.setAxisOffset(new RectangleInsets(-4, -7, 0, 0));//-8
 
 		plot.setDomainCrosshairVisible(true);
-		//plot.setDomainCrosshairLockedOnData(false);
-		//plot.setRangeCrosshairVisible(false);
-		
 		plot.setDomainCrosshairLockedOnData(true);
+
         //plot.setRangeCrosshairVisible(false);
         //plot.setRangeCrosshairLockedOnData(true);
 
@@ -214,6 +214,7 @@ public class Test {
         //----------------------------------------------------------------------
         
 		plot.setRangePannable(true);
+		plot.setDomainPannable(true);
 		plot.setRangeAxisLocation(0, AxisLocation.BOTTOM_OR_RIGHT);
 		
 		JFreeChart chart = new JFreeChart(plot);
@@ -224,12 +225,17 @@ public class Test {
 
 		panel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
-		
-
 		panel.setMouseZoomable(true);
 		panel.setMouseWheelEnabled(true);
 
-		
+
+		panel.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				System.out.println(		e.getWheelRotation()	);
+				
+			}
+		});
 		
 		panel.addChartMouseListener(new ChartMouseListener() {
 			@Override
