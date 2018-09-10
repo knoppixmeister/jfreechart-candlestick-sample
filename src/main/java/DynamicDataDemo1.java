@@ -25,9 +25,10 @@ public class DynamicDataDemo1 extends ApplicationFrame {
      * @param title  the frame title.
      */
     public DynamicDataDemo1(String title) {
-        super(title);
-        MyDemoPanel demoPanel = new MyDemoPanel();
-        setContentPane(demoPanel);
+    	super(title);
+    	
+    	MyDemoPanel demoPanel = new MyDemoPanel();
+    	setContentPane(demoPanel);
     }
 
 	static class MyDemoPanel extends DemoPanel implements ActionListener {

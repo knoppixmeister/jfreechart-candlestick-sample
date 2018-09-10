@@ -46,7 +46,6 @@ package org.jfree.data.xy;
  * observed at various points in time.
  */
 public interface WindDataset extends XYDataset {
-
     /**
      * Returns the wind direction (should be in the range 0 to 12,
      * corresponding to the positions on an upside-down clock face).
@@ -73,5 +72,4 @@ public interface WindDataset extends XYDataset {
      * @return The wind force.
      */
     public Number getWindForce(int series, int item);
-
 }

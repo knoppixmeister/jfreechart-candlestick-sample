@@ -115,7 +115,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      * @see #getX(int, int)
      */
     public Date getXDate(int series, int item) {
-        return this.date[item];
+        return date[item];
     }
 
     /**
@@ -148,7 +148,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      */
     @Override
     public Number getHigh(int series, int item) {
-        return this.high[item];
+        return high[item];
     }
 
     /**
@@ -166,9 +166,8 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
     public double getHighValue(int series, int item) {
         double result = Double.NaN;
         Number h = getHigh(series, item);
-        if (h != null) {
-            result = h.doubleValue();
-        }
+        if(h != null) result = h.doubleValue();
+
         return result;
     }
 
@@ -184,7 +183,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      */
     @Override
     public Number getLow(int series, int item) {
-        return this.low[item];
+        return low[item];
     }
 
     /**
@@ -202,9 +201,8 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
     public double getLowValue(int series, int item) {
         double result = Double.NaN;
         Number l = getLow(series, item);
-        if (l != null) {
-            result = l.doubleValue();
-        }
+        if(l != null) result = l.doubleValue();
+
         return result;
     }
 
@@ -220,7 +218,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      */
     @Override
     public Number getOpen(int series, int item) {
-        return this.open[item];
+        return open[item];
     }
 
     /**
@@ -238,9 +236,8 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
     public double getOpenValue(int series, int item) {
         double result = Double.NaN;
         Number open = getOpen(series, item);
-        if (open != null) {
-            result = open.doubleValue();
-        }
+        if(open != null) result = open.doubleValue();
+
         return result;
     }
 
@@ -256,7 +253,7 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      */
     @Override
     public Number getClose(int series, int item) {
-        return this.close[item];
+        return close[item];
     }
 
     /**
@@ -274,9 +271,8 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
     public double getCloseValue(int series, int item) {
         double result = Double.NaN;
         Number c = getClose(series, item);
-        if (c != null) {
-            result = c.doubleValue();
-        }
+        if(c != null) result = c.doubleValue();
+
         return result;
     }
 
@@ -290,9 +286,9 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      *
      * @see #getVolumeValue(int, int)
      */
-    @Override
-    public Number getVolume(int series, int item) {
-        return this.volume[item];
+	@Override
+	public Number getVolume(int series, int item) {
+		return volume[item];
     }
 
     /**
@@ -337,9 +333,22 @@ public class DefaultHighLowDataset extends AbstractXYDataset implements OHLCData
      */
     @Override
     public int getItemCount(int series) {
-        return this.date.length;
+        return date.length;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this dataset for equality with an arbitrary instance.
      *

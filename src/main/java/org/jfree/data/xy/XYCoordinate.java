@@ -1,44 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------
- * XYCoordinate.java
- * -----------------
- * (C) Copyright 2007, 2008, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 30-Jan-2007 : Version 1 (DG);
- * 25-May-2007 : Moved from experimental to the main source tree (DG);
- *
- */
-
 package org.jfree.data.xy;
 
 import java.io.Serializable;
@@ -49,8 +8,9 @@ import java.io.Serializable;
  * @since 1.0.6
  */
 public class XYCoordinate implements Comparable, Serializable {
+	private static final long serialVersionUID = 8223833301144654823L;
 
-    /** The x-coordinate. */
+	/** The x-coordinate. */
     private double x;
 
     /** The y-coordinate. */
@@ -59,9 +19,9 @@ public class XYCoordinate implements Comparable, Serializable {
     /**
      * Creates a new coordinate for the point (0.0, 0.0).
      */
-    public XYCoordinate() {
-        this(0.0, 0.0);
-    }
+	public XYCoordinate() {
+		this(0.0, 0.0);
+	}
 
     /**
      * Creates a new coordinate for the point (x, y).
@@ -69,10 +29,10 @@ public class XYCoordinate implements Comparable, Serializable {
      * @param x  the x-coordinate.
      * @param y  the y-coordinate.
      */
-    public XYCoordinate(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
+	public XYCoordinate(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
 
     /**
      * Returns the x-coordinate.
@@ -80,7 +40,7 @@ public class XYCoordinate implements Comparable, Serializable {
      * @return The x-coordinate.
      */
     public double getX() {
-        return this.x;
+        return x;
     }
 
     /**
@@ -89,9 +49,23 @@ public class XYCoordinate implements Comparable, Serializable {
      * @return The y-coordinate.
      */
     public double getY() {
-        return this.y;
+        return y;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this coordinate for equality with an arbitrary object.
      *
@@ -114,6 +88,7 @@ public class XYCoordinate implements Comparable, Serializable {
         if (this.y != that.y) {
             return false;
         }
+        
         return true;
     }
 
@@ -129,6 +104,7 @@ public class XYCoordinate implements Comparable, Serializable {
         result = 37 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(this.y);
         result = 37 * result + (int) (temp ^ (temp >>> 32));
+        
         return result;
     }
 
@@ -152,25 +128,18 @@ public class XYCoordinate implements Comparable, Serializable {
      */
     @Override
     public int compareTo(Object obj) {
-        if (!(obj instanceof XYCoordinate)) {
-            throw new IllegalArgumentException("Incomparable object.");
-        }
+    	if(!(obj instanceof XYCoordinate)) {
+    		throw new IllegalArgumentException("Incomparable object.");
+    	}
+
         XYCoordinate that = (XYCoordinate) obj;
-        if (this.x > that.x) {
-            return 1;
-        }
-        else if (this.x < that.x) {
-            return -1;
-        }
+        if(x > that.x) return 1;
+        else if(x < that.x) return -1;
         else {
-            if (this.y > that.y) {
-                return 1;
-            }
-            else if (this.y < that.y) {
-                return -1;
-            }
+            if(y > that.y) return 1;
+            else if(y < that.y) return -1;
         }
+
         return 0;
     }
-
 }

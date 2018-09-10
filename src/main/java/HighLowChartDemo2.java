@@ -25,13 +25,13 @@ import org.jfree.ui.RefineryUtilities;
  */
 public class HighLowChartDemo2 extends ApplicationFrame {
 	private static final long serialVersionUID = -6748984509924157520L;
-	
+
 	private static final Calendar calendar = Calendar.getInstance();
 
 	public HighLowChartDemo2(String title) {
-        super(title);
-        
-        JPanel chartPanel = createDemoPanel();
+		super(title);
+
+		JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(1000, 470));
         setContentPane(chartPanel);
     }
@@ -48,11 +48,11 @@ public class HighLowChartDemo2 extends ApplicationFrame {
      * @return A date.
      */
     private static Date createDate(int y, int m, int d, int hour, int min) {
-        calendar.clear();
-        calendar.set(y, m - 1, d, hour, min);
-        
+    	calendar.clear();
+    	calendar.set(y, m - 1, d, hour, min);
+
         return calendar.getTime();
-    }
+	}
 
     /**
      * Creates a sample high low dataset.

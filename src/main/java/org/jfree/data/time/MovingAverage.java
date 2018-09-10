@@ -22,7 +22,7 @@ public class MovingAverage {
      *
      * @return A collection of moving average time series.
      */
-	
+
     public static TimeSeriesCollection createMovingAverage(
     	TimeSeriesCollection source,
     	String suffix,
@@ -144,13 +144,13 @@ public class MovingAverage {
 
 		for(int i = 0; i < source.getItemCount(); i++) {
             // get the current data item...
-            TimeSeriesDataItem current = source.getRawDataItem(i);
-            RegularTimePeriod period = current.getPeriod();
+			TimeSeriesDataItem current = source.getRawDataItem(i);
+			RegularTimePeriod period = current.getPeriod();
             
             // FIXME: what if value is null on next line?
             rollingSumForPeriod += current.getValue().doubleValue();
 
-            if(i > pointCount - 1) {
+            if(i > pointCount-1) {
                 // remove the point i-periodCount out of the rolling sum.
                 TimeSeriesDataItem startOfMovingAvg = source.getRawDataItem(i - pointCount);
                 rollingSumForPeriod -= startOfMovingAvg.getValue().doubleValue();
@@ -174,9 +174,9 @@ public class MovingAverage {
      *
      * @return The dataset.
      */
-    public static XYDataset createMovingAverage(XYDataset source, String suffix, long period, long skip) {
-        return createMovingAverage(source, suffix, (double)period, (double)skip);
-    }
+	public static XYDataset createMovingAverage(XYDataset source, String suffix, long period, long skip) {
+    	return createMovingAverage(source, suffix, (double)period, (double)skip);
+	}
 
     /**
      * Creates a new {@link XYDataset} containing the moving averages of each

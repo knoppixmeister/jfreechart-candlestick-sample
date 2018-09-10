@@ -139,6 +139,8 @@ public class Test2 {
 			priceAxis,		//rangeAxis,
 			candlestickRenderer	//renderer
 		);
+		
+		
 
 		plot.setNoDataMessage("Waiting for data ...");
 		plot.setNoDataMessageFont(new Font("Sans Serif", Font.BOLD, 19));

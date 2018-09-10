@@ -620,7 +620,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         if(added) {
             updateBoundsForAddedItem(item);
             // check if this addition will exceed the maximum item count...
-            if (getItemCount() > this.maximumItemCount) {
+            if(getItemCount() > this.maximumItemCount) {
                 TimeSeriesDataItem d = (TimeSeriesDataItem) this.data.remove(0);
                 updateBoundsForRemovedItem(d);
             }
@@ -817,8 +817,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             
             throw new SeriesException(msg);
         }
+        
         TimeSeriesDataItem overwritten = null;
         int index = Collections.binarySearch(data, item);
+        
         if(index >= 0) {
             TimeSeriesDataItem existing = (TimeSeriesDataItem)data.get(index);
             overwritten = (TimeSeriesDataItem) existing.clone();
@@ -869,19 +871,17 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     public void removeAgedItems(boolean notify) {
         // check if there are any values earlier than specified by the history
         // count...
-        if (getItemCount() > 1) {
+        if(getItemCount() > 1) {
             long latest = getTimePeriod(getItemCount() - 1).getSerialIndex();
             boolean removed = false;
-            while ((latest - getTimePeriod(0).getSerialIndex())
-                    > this.maximumItemAge) {
-                this.data.remove(0);
+            while((latest - getTimePeriod(0).getSerialIndex()) > this.maximumItemAge) {
+            	data.remove(0);
                 removed = true;
             }
-            if (removed) {
+            
+            if(removed) {
                 updateMinMaxYByIteration();
-                if (notify) {
-                    fireSeriesChanged();
-                }
+                if(notify) fireSeriesChanged();
             }
         }
     }
@@ -897,18 +897,13 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      *                sent to registered listeners IF any items are removed.
      */
     public void removeAgedItems(long latest, boolean notify) {
-        if (this.data.isEmpty()) {
-            return;  // nothing to do
-        }
+        if(data.isEmpty()) return;  // nothing to do
+
         // find the serial index of the period specified by 'latest'
         long index = Long.MAX_VALUE;
         try {
-            Method m = RegularTimePeriod.class.getDeclaredMethod(
-                    "createInstance", new Class[] {Class.class, Date.class,
-                    TimeZone.class, Locale.class});
-            RegularTimePeriod newest = (RegularTimePeriod) m.invoke(
-                    this.timePeriodClass, new Object[] {this.timePeriodClass,
-                            new Date(latest), TimeZone.getDefault(), Locale.getDefault()});
+            Method m = RegularTimePeriod.class.getDeclaredMethod("createInstance", new Class[] {Class.class, Date.class, TimeZone.class, Locale.class});
+            RegularTimePeriod newest = (RegularTimePeriod) m.invoke(timePeriodClass, new Object[] {this.timePeriodClass, new Date(latest), TimeZone.getDefault(), Locale.getDefault()});
             index = newest.getSerialIndex();
         }
         catch (NoSuchMethodException e) {
@@ -924,16 +919,14 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         // check if there are any values earlier than specified by the history
         // count...
         boolean removed = false;
-        while (getItemCount() > 0 && (index
-                - getTimePeriod(0).getSerialIndex()) > this.maximumItemAge) {
-            this.data.remove(0);
+        while(getItemCount() > 0 && (index - getTimePeriod(0).getSerialIndex()) > this.maximumItemAge) {
+        	data.remove(0);
             removed = true;
         }
-        if (removed) {
+        if(removed) {
             updateMinMaxYByIteration();
-            if (notify) {
-                fireSeriesChanged();
-            }
+            
+            if(notify) fireSeriesChanged();
         }
     }
 
@@ -942,11 +935,12 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * {@link SeriesChangeEvent} to all registered listeners.
      */
     public void clear() {
-        if (this.data.size() > 0) {
-            this.data.clear();
-            this.timePeriodClass = null;
-            this.minY = Double.NaN;
-            this.maxY = Double.NaN;
+        if(data.size() > 0) {
+        	data.clear();
+        	timePeriodClass = null;
+        	minY = Double.NaN;
+        	maxY = Double.NaN;
+        	
             fireSeriesChanged();
         }
     }
@@ -961,13 +955,12 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     public void delete(RegularTimePeriod period) {
         int index = getIndex(period);
-        if (index >= 0) {
-            TimeSeriesDataItem item = (TimeSeriesDataItem) this.data.remove(
-                    index);
+        
+        if(index >= 0) {
+            TimeSeriesDataItem item = (TimeSeriesDataItem) data.remove(index);
             updateBoundsForRemovedItem(item);
-            if (this.data.isEmpty()) {
-                this.timePeriodClass = null;
-            }
+            if(data.isEmpty()) timePeriodClass = null;
+
             fireSeriesChanged();
         }
     }
@@ -992,19 +985,16 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @since 1.0.14
      */
     public void delete(int start, int end, boolean notify) {
-        if (end < start) {
+        if(end < start) {
             throw new IllegalArgumentException("Requires start <= end.");
         }
-        for (int i = 0; i <= (end - start); i++) {
-            this.data.remove(start);
+        for(int i = 0; i <= (end - start); i++) {
+        	data.remove(start);
         }
         updateMinMaxYByIteration();
-        if (this.data.isEmpty()) {
-            this.timePeriodClass = null;
-        }
-        if (notify) {
-            fireSeriesChanged();
-        }
+        if(data.isEmpty()) timePeriodClass = null;
+
+        if(notify) fireSeriesChanged();
     }
 
     /**
@@ -1025,7 +1015,8 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         TimeSeries clone = (TimeSeries) super.clone();
-        clone.data = (List) ObjectUtils.deepClone(this.data);
+        clone.data = (List) ObjectUtils.deepClone(data);
+        
         return clone;
     }
 
@@ -1041,23 +1032,23 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      *
      * @throws CloneNotSupportedException if there is a cloning problem.
      */
-    public TimeSeries createCopy(int start, int end)
-            throws CloneNotSupportedException {
-        if (start < 0) {
+    public TimeSeries createCopy(int start, int end) throws CloneNotSupportedException {
+        if(start < 0) {
             throw new IllegalArgumentException("Requires start >= 0.");
         }
-        if (end < start) {
+        if(end < start) {
             throw new IllegalArgumentException("Requires start <= end.");
         }
         TimeSeries copy = (TimeSeries) super.clone();
         copy.minY = Double.NaN;
         copy.maxY = Double.NaN;
         copy.data = new java.util.ArrayList();
-        if (this.data.size() > 0) {
-            for (int index = start; index <= end; index++) {
-                TimeSeriesDataItem item
-                        = (TimeSeriesDataItem) this.data.get(index);
+        
+        if(data.size() > 0) {
+            for(int index = start; index <= end; index++) {
+                TimeSeriesDataItem item = (TimeSeriesDataItem) data.get(index);
                 TimeSeriesDataItem clone = (TimeSeriesDataItem) item.clone();
+                
                 try {
                     copy.add(clone);
                 }
@@ -1066,6 +1057,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
                 }
             }
         }
+        
         return copy;
     }
 
@@ -1082,15 +1074,14 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      *
      * @throws CloneNotSupportedException if there is a cloning problem.
      */
-    public TimeSeries createCopy(RegularTimePeriod start, RegularTimePeriod end)
-        throws CloneNotSupportedException {
-
+    public TimeSeries createCopy(RegularTimePeriod start, RegularTimePeriod end) throws CloneNotSupportedException {
         Args.nullNotPermitted(start, "start");
         Args.nullNotPermitted(end, "end");
-        if (start.compareTo(end) > 0) {
-            throw new IllegalArgumentException(
-                    "Requires start on or before end.");
+        
+        if(start.compareTo(end) > 0) {
+            throw new IllegalArgumentException("Requires start on or before end.");
         }
+        
         boolean emptyRange = false;
         int startIndex = getIndex(start);
         if (startIndex < 0) {

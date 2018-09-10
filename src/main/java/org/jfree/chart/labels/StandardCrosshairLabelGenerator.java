@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import org.jfree.chart.plot.Crosshair;
-import com.orsonpdf.util.Args;
+//import com.orsonpdf.util.Args;
 
 /**
  * A default label generator.
@@ -76,7 +76,7 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      */
     @Override
     public String generateLabel(Crosshair crosshair) {
-    	Args.nullNotPermitted(crosshair, "crosshair");
+    	//Args.nullNotPermitted(crosshair, "crosshair");
 
     	return " "+MessageFormat.format(labelTemplate, new Object[] {numberFormat.format(crosshair.getValue())})+" ";
 	}

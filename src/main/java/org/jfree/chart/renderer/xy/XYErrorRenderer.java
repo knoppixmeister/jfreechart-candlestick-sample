@@ -1,46 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * --------------------
- * XYErrorRenderer.java
- * --------------------
- * (C) Copyright 2006-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 25-Oct-2006 : Version 1 (DG);
- * 23-Mar-2007 : Check item visibility before drawing error bars - see bug
- *               1686178 (DG);
- * 28-Jan-2009 : Added stroke options for error indicators (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.Graphics2D;
@@ -79,8 +36,6 @@ import org.jfree.data.xy.XYDataset;
  * @since 1.0.3
  */
 public class XYErrorRenderer extends XYLineAndShapeRenderer {
-
-    /** For serialization. */
     static final long serialVersionUID = 5162283570955172424L;
 
     /** A flag that controls whether or not the x-error bars are drawn. */
@@ -111,6 +66,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public XYErrorRenderer() {
         super(false, true);
+        
         this.drawXError = true;
         this.drawYError = true;
         this.errorPaint = null;
@@ -127,7 +83,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #setDrawXError(boolean)
      */
     public boolean getDrawXError() {
-        return this.drawXError;
+        return drawXError;
     }
 
     /**
@@ -140,8 +96,9 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #getDrawXError()
      */
     public void setDrawXError(boolean draw) {
-        if (this.drawXError != draw) {
-            this.drawXError = draw;
+        if(drawXError != draw) {
+        	drawXError = draw;
+        	
             fireChangeEvent();
         }
     }
@@ -155,7 +112,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #setDrawYError(boolean)
      */
     public boolean getDrawYError() {
-        return this.drawYError;
+        return drawYError;
     }
 
     /**
@@ -168,8 +125,9 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #getDrawYError()
      */
     public void setDrawYError(boolean draw) {
-        if (this.drawYError != draw) {
-            this.drawYError = draw;
+        if(drawYError != draw) {
+        	drawYError = draw;
+        	
             fireChangeEvent();
         }
     }
@@ -183,7 +141,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #setCapLength(double)
      */
     public double getCapLength() {
-        return this.capLength;
+        return capLength;
     }
 
     /**
@@ -195,7 +153,8 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #getCapLength()
      */
     public void setCapLength(double length) {
-        this.capLength = length;
+    	capLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -208,7 +167,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #setErrorPaint(Paint)
      */
     public Paint getErrorPaint() {
-        return this.errorPaint;
+        return errorPaint;
     }
 
     /**
@@ -220,7 +179,8 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @see #getErrorPaint()
      */
     public void setErrorPaint(Paint paint) {
-        this.errorPaint = paint;
+    	errorPaint = paint;
+    	
         fireChangeEvent();
     }
 
@@ -236,7 +196,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @since 1.0.13
      */
     public Stroke getErrorStroke() {
-        return this.errorStroke;
+        return errorStroke;
     }
 
     /**
@@ -250,7 +210,8 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @since 1.0.13
      */
     public void setErrorStroke(Stroke stroke) {
-        this.errorStroke = stroke;
+    	errorStroke = stroke;
+    	
         fireChangeEvent();
     }
 
@@ -391,10 +352,20 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                 g2.draw(cap2);
             }
         }
-        super.drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis,
-                dataset, series, item, crosshairState, pass);
+        
+        super.drawItem(g2, state, dataArea, info, plot, domainAxis, rangeAxis, dataset, series, item, crosshairState, pass);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *
@@ -437,9 +408,9 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
+        
         this.errorPaint = SerialUtils.readPaint(stream);
         this.errorStroke = SerialUtils.readStroke(stream);
     }
@@ -456,5 +427,4 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
         SerialUtils.writePaint(this.errorPaint, stream);
         SerialUtils.writeStroke(this.errorStroke, stream);
     }
-
 }

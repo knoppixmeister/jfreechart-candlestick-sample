@@ -1,8 +1,6 @@
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,9 +11,6 @@ import org.jfree.data.xy.OHLCDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
-/**
- * A demo showing a candlestick chart.
- */
 public class CandlestickChartDemo1 extends ApplicationFrame {
 	private static final long serialVersionUID = -6629684582418374238L;
 
@@ -440,15 +435,10 @@ public class CandlestickChartDemo1 extends ApplicationFrame {
         return panel;
     }
 
-    /**
-     * Starting point for the demonstration application.
-     *
-     * @param args  ignored.
-     */
     public static void main(String[] args) {
-        CandlestickChartDemo1 demo = new CandlestickChartDemo1("JFreeChart : CandlestickChartDemo1.java");
-        demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
-        demo.setVisible(true);
+    	CandlestickChartDemo1 demo = new CandlestickChartDemo1("JFreeChart : CandlestickChartDemo1.java");
+    	demo.pack();
+    	RefineryUtilities.centerFrameOnScreen(demo);
+    	demo.setVisible(true);
     }
 }

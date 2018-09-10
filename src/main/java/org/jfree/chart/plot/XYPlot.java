@@ -93,9 +93,7 @@ public class XYPlot extends Plot implements
     private static final long serialVersionUID = 7044148245716569264L;
 
     /** The default grid line stroke. */
-    public static final Stroke DEFAULT_GRIDLINE_STROKE = new BasicStroke(0.5f,
-            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.0f,
-            new float[] {2.0f, 2.0f}, 0.0f);
+    public static final Stroke DEFAULT_GRIDLINE_STROKE = new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.0f, new float[] {2.0f, 2.0f}, 0.0f);
 
     /** The default grid line paint. */
     public static final Paint DEFAULT_GRIDLINE_PAINT = Color.LIGHT_GRAY;
@@ -392,20 +390,20 @@ public class XYPlot extends Plot implements
     public XYPlot(XYDataset dataset, ValueAxis domainAxis, ValueAxis rangeAxis, XYItemRenderer renderer) {
         super();
 
-        this.orientation 	= PlotOrientation.VERTICAL;
-        this.weight 		= 1;  // only relevant when this is a subplot
-        this.axisOffset 	= RectangleInsets.ZERO_INSETS;
+        orientation	=	PlotOrientation.VERTICAL;
+        weight 		=	1;  // only relevant when this is a subplot
+        axisOffset 	=	RectangleInsets.ZERO_INSETS;
 
         // allocate storage for datasets, axes and renderers (all optional)
-        this.domainAxes 				= new HashMap<Integer, ValueAxis>();
-        this.domainAxisLocations 		= new HashMap<Integer, AxisLocation>();
-        this.foregroundDomainMarkers 	= new HashMap();
-        this.backgroundDomainMarkers 	= new HashMap();
+        domainAxes 					= new HashMap<Integer, ValueAxis>();
+        domainAxisLocations 		= new HashMap<Integer, AxisLocation>();
+        foregroundDomainMarkers 	= new HashMap();
+        backgroundDomainMarkers 	= new HashMap();
 
-        this.rangeAxes = new HashMap<Integer, ValueAxis>();
-        this.rangeAxisLocations = new HashMap<Integer, AxisLocation>();
-        this.foregroundRangeMarkers = new HashMap();
-        this.backgroundRangeMarkers = new HashMap();
+        rangeAxes 				= new HashMap<Integer, ValueAxis>();
+        rangeAxisLocations 		= new HashMap<Integer, AxisLocation>();
+        foregroundRangeMarkers 	= new HashMap();
+        backgroundRangeMarkers	 = new HashMap();
 
         datasets = new HashMap<Integer, XYDataset>();
         renderers = new HashMap<Integer, XYItemRenderer>();
@@ -413,7 +411,7 @@ public class XYPlot extends Plot implements
         datasetToDomainAxesMap = new TreeMap();
         datasetToRangeAxesMap = new TreeMap();
 
-        this.annotations = new java.util.ArrayList();
+        annotations = new java.util.ArrayList();
 
         if(dataset != null) {
             dataset.addChangeListener(this);
@@ -447,41 +445,41 @@ public class XYPlot extends Plot implements
         configureDomainAxes();
         configureRangeAxes();
 
-        domainGridlinesVisible = true;
-        domainGridlineStroke = DEFAULT_GRIDLINE_STROKE;
-       	domainGridlinePaint = DEFAULT_GRIDLINE_PAINT;
+        domainGridlinesVisible 	= true;
+        domainGridlineStroke 	= DEFAULT_GRIDLINE_STROKE;
+       	domainGridlinePaint 	= DEFAULT_GRIDLINE_PAINT;
 
        	domainMinorGridlinesVisible = false;
-       	domainMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
-       	domainMinorGridlinePaint = Color.WHITE;
+       	domainMinorGridlineStroke 	= DEFAULT_GRIDLINE_STROKE;
+       	domainMinorGridlinePaint 	= Color.WHITE;
 
-       	domainZeroBaselineVisible = false;
-       	domainZeroBaselinePaint = Color.BLACK;
-       	domainZeroBaselineStroke = new BasicStroke(0.5f);
+       	domainZeroBaselineVisible 	= false;
+       	domainZeroBaselinePaint 	= Color.BLACK;
+       	domainZeroBaselineStroke 	= new BasicStroke(0.5f);
 
-        this.rangeGridlinesVisible = true;
-        this.rangeGridlineStroke = DEFAULT_GRIDLINE_STROKE;
-        this.rangeGridlinePaint = DEFAULT_GRIDLINE_PAINT;
+       	rangeGridlinesVisible = true;
+       	rangeGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+       	rangeGridlinePaint = DEFAULT_GRIDLINE_PAINT;
 
-        this.rangeMinorGridlinesVisible = false;
-        this.rangeMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
-        this.rangeMinorGridlinePaint = Color.WHITE;
+       	rangeMinorGridlinesVisible = false;
+       	rangeMinorGridlineStroke = DEFAULT_GRIDLINE_STROKE;
+       	rangeMinorGridlinePaint = Color.WHITE;
 
-        this.rangeZeroBaselineVisible = false;
-        this.rangeZeroBaselinePaint = Color.BLACK;
-        this.rangeZeroBaselineStroke = new BasicStroke(0.5f);
+       	rangeZeroBaselineVisible = false;
+       	rangeZeroBaselinePaint = Color.BLACK;
+       	rangeZeroBaselineStroke = new BasicStroke(0.5f);
 
-        this.domainCrosshairVisible = false;
-        this.domainCrosshairValue = 0.0;
-        this.domainCrosshairStroke = DEFAULT_CROSSHAIR_STROKE;
-        this.domainCrosshairPaint = DEFAULT_CROSSHAIR_PAINT;
+       	domainCrosshairVisible 	= false;
+       	domainCrosshairValue 	= 0.0;
+       	domainCrosshairStroke 	= DEFAULT_CROSSHAIR_STROKE;
+       	domainCrosshairPaint 	= DEFAULT_CROSSHAIR_PAINT;
 
-        this.rangeCrosshairVisible = false;
-        this.rangeCrosshairValue = 0.0;
-        this.rangeCrosshairStroke = DEFAULT_CROSSHAIR_STROKE;
-        this.rangeCrosshairPaint = DEFAULT_CROSSHAIR_PAINT;
-        this.shadowGenerator = null;
-    }
+       	rangeCrosshairVisible 	= false;
+       	rangeCrosshairValue 	= 0.0;
+       	rangeCrosshairStroke 	= DEFAULT_CROSSHAIR_STROKE;
+       	rangeCrosshairPaint 	= DEFAULT_CROSSHAIR_PAINT;
+       	shadowGenerator 		= null;
+	}
 
     /**
      * Returns the plot type as a string.
@@ -1031,10 +1029,8 @@ public class XYPlot extends Plot implements
      * @see #setRangeAxisLocation(int, AxisLocation)
      */
     public AxisLocation getRangeAxisLocation(int index) {
-        AxisLocation result = this.rangeAxisLocations.get(index);
-        if (result == null) {
-            result = AxisLocation.getOpposite(getRangeAxisLocation());
-        }
+        AxisLocation result = rangeAxisLocations.get(index);
+        if(result == null) result = AxisLocation.getOpposite(getRangeAxisLocation());
         
         return result;
     }
@@ -4791,8 +4787,7 @@ public class XYPlot extends Plot implements
      * @see #zoomRangeAxes(double, PlotRenderingInfo, Point2D)
      */
     @Override
-    public void zoomDomainAxes(double factor, PlotRenderingInfo info,
-                               Point2D source) {
+    public void zoomDomainAxes(double factor, PlotRenderingInfo info, Point2D source) {
         // delegate to other method
         zoomDomainAxes(factor, info, source, false);
     }
@@ -4810,26 +4805,21 @@ public class XYPlot extends Plot implements
      * @since 1.0.7
      */
     @Override
-    public void zoomDomainAxes(double factor, PlotRenderingInfo info,
-                               Point2D source, boolean useAnchor) {
-
+    public void zoomDomainAxes(double factor, PlotRenderingInfo info, Point2D source, boolean useAnchor) {
         // perform the zoom on each domain axis
-        for (ValueAxis xAxis : this.domainAxes.values()) {
-            if (xAxis == null) {
-                continue;
-            }
-            if (useAnchor) {
+        for(ValueAxis xAxis : domainAxes.values()) {
+            if(xAxis == null) continue;
+ 
+            if(useAnchor) {
                 // get the relevant source coordinate given the plot orientation
                 double sourceX = source.getX();
                 if (this.orientation == PlotOrientation.HORIZONTAL) {
                     sourceX = source.getY();
                 }
-                double anchorX = xAxis.java2DToValue(sourceX,
-                        info.getDataArea(), getDomainAxisEdge());
+                double anchorX = xAxis.java2DToValue(sourceX, info.getDataArea(), getDomainAxisEdge());
                 xAxis.resizeRange2(factor, anchorX);
-            } else {
-                xAxis.resizeRange(factor);
-            }
+            } 
+            else xAxis.resizeRange(factor);
         }
     }
 
@@ -4848,12 +4838,9 @@ public class XYPlot extends Plot implements
      * @see #zoomRangeAxes(double, double, PlotRenderingInfo, Point2D)
      */
     @Override
-    public void zoomDomainAxes(double lowerPercent, double upperPercent,
-                               PlotRenderingInfo info, Point2D source) {
-        for (ValueAxis xAxis : this.domainAxes.values()) {
-            if (xAxis != null) {
-                xAxis.zoomRange(lowerPercent, upperPercent);
-            }
+    public void zoomDomainAxes(double lowerPercent, double upperPercent, PlotRenderingInfo info, Point2D source) {
+        for(ValueAxis xAxis : domainAxes.values()) {
+            if(xAxis != null) xAxis.zoomRange(lowerPercent, upperPercent);
         }
     }
 
@@ -4867,8 +4854,7 @@ public class XYPlot extends Plot implements
      * @see #zoomDomainAxes(double, PlotRenderingInfo, Point2D, boolean)
      */
     @Override
-    public void zoomRangeAxes(double factor, PlotRenderingInfo info,
-                              Point2D source) {
+    public void zoomRangeAxes(double factor, PlotRenderingInfo info, Point2D source) {
         // delegate to other method
         zoomRangeAxes(factor, info, source, false);
     }
@@ -4887,26 +4873,20 @@ public class XYPlot extends Plot implements
      * @since 1.0.7
      */
     @Override
-    public void zoomRangeAxes(double factor, PlotRenderingInfo info,
-                              Point2D source, boolean useAnchor) {
+    public void zoomRangeAxes(double factor, PlotRenderingInfo info, Point2D source, boolean useAnchor) {
+    	// perform the zoom on each range axis
+    	for(ValueAxis yAxis : rangeAxes.values()) {
+    		if(yAxis == null) continue;
 
-        // perform the zoom on each range axis
-        for (ValueAxis yAxis : this.rangeAxes.values()) {
-            if (yAxis == null) {
-                continue;
-            }
-            if (useAnchor) {
+    		if(useAnchor) {
                 // get the relevant source coordinate given the plot orientation
                 double sourceY = source.getY();
-                if (this.orientation == PlotOrientation.HORIZONTAL) {
-                    sourceY = source.getX();
-                }
-                double anchorY = yAxis.java2DToValue(sourceY,
-                        info.getDataArea(), getRangeAxisEdge());
+                if(orientation == PlotOrientation.HORIZONTAL) sourceY = source.getX();
+
+                double anchorY = yAxis.java2DToValue(sourceY, info.getDataArea(), getRangeAxisEdge());
                 yAxis.resizeRange2(factor, anchorY);
-            } else {
-                yAxis.resizeRange(factor);
             }
+            else yAxis.resizeRange(factor);
         }
     }
 
@@ -4921,12 +4901,9 @@ public class XYPlot extends Plot implements
      * @see #zoomDomainAxes(double, double, PlotRenderingInfo, Point2D)
      */
     @Override
-    public void zoomRangeAxes(double lowerPercent, double upperPercent,
-                              PlotRenderingInfo info, Point2D source) {
-        for (ValueAxis yAxis : this.rangeAxes.values()) {
-            if (yAxis != null) {
-                yAxis.zoomRange(lowerPercent, upperPercent);
-            }
+    public void zoomRangeAxes(double lowerPercent, double upperPercent, PlotRenderingInfo info, Point2D source) {
+        for(ValueAxis yAxis : rangeAxes.values()) {
+            if(yAxis != null) yAxis.zoomRange(lowerPercent, upperPercent);
         }
     }
 

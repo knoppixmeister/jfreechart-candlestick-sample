@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.annotations.Annotation;
@@ -66,8 +65,6 @@ import org.jfree.data.xy.XYItemKey;
  * implementations.
  */
 public abstract class AbstractXYItemRenderer extends AbstractRenderer implements XYItemRenderer, AnnotationChangeListener, Cloneable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = 8019124836026607990L;
 
     /** The plot. */
@@ -225,7 +222,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      */
     @Override
     public XYItemLabelGenerator getSeriesItemLabelGenerator(int series) {
-        return this.itemLabelGeneratorMap.get(series);
+        return itemLabelGeneratorMap.get(series);
     }
 
     /**

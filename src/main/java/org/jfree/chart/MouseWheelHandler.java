@@ -57,12 +57,12 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        JFreeChart chart = chartPanel.getChart();
-        if(chart == null) return;
+    	JFreeChart chart = chartPanel.getChart();
+    	if(chart == null) return;
 
-        Plot plot = chart.getPlot();
+    	Plot plot = chart.getPlot();
 
-        if(plot instanceof Zoomable) {
+    	if(plot instanceof Zoomable) {
             Zoomable zoomable = (Zoomable)plot;
             handleZoomable(zoomable, e);
         }

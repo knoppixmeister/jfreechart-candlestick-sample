@@ -1,43 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------
- * ItemHandler.java
- * ----------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 23-Jan-2003 : Version 1 (DG);
- *
- */
-
 package org.jfree.data.xml;
 
 import org.xml.sax.Attributes;
@@ -48,7 +8,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * A handler for reading key-value items.
  */
 public class ItemHandler extends DefaultHandler implements DatasetTags {
-
     /** The root handler. */
     private RootHandler root;
 
@@ -70,8 +29,8 @@ public class ItemHandler extends DefaultHandler implements DatasetTags {
     public ItemHandler(RootHandler root, DefaultHandler parent) {
         this.root = root;
         this.parent = parent;
-        this.key = null;
-        this.value = null;
+        key 	= null;
+        value 	= null;
     }
 
     /**
@@ -79,8 +38,8 @@ public class ItemHandler extends DefaultHandler implements DatasetTags {
      *
      * @return The key.
      */
-    public Comparable getKey() {
-        return this.key;
+	public Comparable getKey() {
+        return key;
     }
 
     /**
@@ -98,7 +57,7 @@ public class ItemHandler extends DefaultHandler implements DatasetTags {
      * @return The value.
      */
     public Number getValue() {
-        return this.value;
+        return value;
     }
 
     /**
@@ -121,25 +80,16 @@ public class ItemHandler extends DefaultHandler implements DatasetTags {
      * @throws SAXException for errors.
      */
     @Override
-    public void startElement(String namespaceURI,
-                             String localName,
-                             String qName,
-                             Attributes atts) throws SAXException {
-
-        if (qName.equals(ITEM_TAG)) {
-            KeyHandler subhandler = new KeyHandler(this.root, this);
-            this.root.pushSubHandler(subhandler);
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
+        if(qName.equals(ITEM_TAG)) {
+            KeyHandler subhandler = new KeyHandler(root, this);
+            root.pushSubHandler(subhandler);
         }
         else if (qName.equals(VALUE_TAG)) {
-            ValueHandler subhandler = new ValueHandler(this.root, this);
-            this.root.pushSubHandler(subhandler);
+            ValueHandler subhandler = new ValueHandler(root, this);
+            root.pushSubHandler(subhandler);
         }
-        else {
-            throw new SAXException(
-                "Expected <Item> or <Value>...found " + qName
-            );
-        }
-
+        else throw new SAXException("Expected <Item> or <Value>...found " + qName);
     }
 
     /**
@@ -149,22 +99,17 @@ public class ItemHandler extends DefaultHandler implements DatasetTags {
      * @param localName  the element name.
      * @param qName  the element name.
      */
-    @Override
-    public void endElement(String namespaceURI,
-                           String localName,
-                           String qName) {
-
-        if (this.parent instanceof PieDatasetHandler) {
-            PieDatasetHandler handler = (PieDatasetHandler) this.parent;
+	@Override
+	public void endElement(String namespaceURI, String localName, String qName) {
+        if(parent instanceof PieDatasetHandler) {
+            PieDatasetHandler handler = (PieDatasetHandler)parent;
             handler.addItem(this.key, this.value);
-            this.root.popSubHandler();
+            root.popSubHandler();
         }
-        else if (this.parent instanceof CategorySeriesHandler) {
-            CategorySeriesHandler handler = (CategorySeriesHandler) this.parent;
-            handler.addItem(this.key, this.value);
-            this.root.popSubHandler();
+        else if(parent instanceof CategorySeriesHandler) {
+            CategorySeriesHandler handler = (CategorySeriesHandler)parent;
+            handler.addItem(key, value);
+            root.popSubHandler();
         }
-
     }
-
 }

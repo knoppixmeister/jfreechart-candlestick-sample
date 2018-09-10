@@ -34,9 +34,8 @@ import org.jfree.data.RangeType;
  * The {@code NumberAxis} class has a mechanism for automatically
  * selecting a tick unit that is appropriate for the current axis range.
 */
-
 public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
-    private static final long serialVersionUID = 2805933088476185789L;
+	private static final long serialVersionUID = 2805933088476185789L;
 
     /** The default value for the autoRangeIncludesZero flag. */
     public static final boolean DEFAULT_AUTO_RANGE_INCLUDES_ZERO = true;
@@ -389,7 +388,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 
             setRange(new Range(lower, upper), false, false);
         }
-    }
+	}
 
     /**
      * Converts a data value to a coordinate in Java2D space, assuming that the
@@ -405,16 +404,16 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @see #java2DToValue(double, Rectangle2D, RectangleEdge)
      */
-    @Override
-    public double valueToJava2D(double value, Rectangle2D area, RectangleEdge edge) {
-        Range range = getRange();
+	@Override
+	public double valueToJava2D(double value, Rectangle2D area, RectangleEdge edge) {
+		Range range = getRange();
 
         double axisMin = range.getLowerBound();
         double axisMax = range.getUpperBound();
 
         double min = 0.0;
         double max = 0.0;
-        
+
         if(RectangleEdge.isTopOrBottom(edge)) {
             min = area.getX();
             max = area.getMaxX();
@@ -424,10 +423,9 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             min = area.getMaxY();
         }
 
-        if(isInverted()) {
-        	return max - ((value - axisMin) / (axisMax - axisMin)) * (max - min);
-        }
-        else return min + ((value - axisMin) / (axisMax - axisMin)) * (max - min);
+        return	isInverted() ?
+        		max - ((value - axisMin) / (axisMax - axisMin)) * (max - min) :
+        		min + ((value - axisMin) / (axisMax - axisMin)) * (max - min);
     }
 
     /**
@@ -450,6 +448,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 
         double min = 0.0;
         double max = 0.0;
+
         if(RectangleEdge.isTopOrBottom(edge)) {
             min = area.getX();
             max = area.getMaxX();
@@ -458,12 +457,11 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             min = area.getMaxY();
             max = area.getY();
         }
-        
-        if(isInverted()) {
-            return axisMax - (java2DValue - min) / (max - min) * (axisMax - axisMin);
-        }
-        else return axisMin + (java2DValue - min) / (max - min) * (axisMax - axisMin);
-    }
+
+        return	isInverted() ?
+        		axisMax - (java2DValue - min) / (max - min) * (axisMax - axisMin) :
+        		axisMin + (java2DValue - min) / (max - min) * (axisMax - axisMin);
+	}
 
     /**
      * Calculates the value of the lowest visible tick on the axis.
@@ -472,11 +470,11 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @see #calculateHighestVisibleTickValue()
      */
-    protected double calculateLowestVisibleTickValue() {
-        double unit = getTickUnit().getSize();
-        double index = Math.ceil(getRange().getLowerBound() / unit);
+	protected double calculateLowestVisibleTickValue() {
+		double unit = getTickUnit().getSize();
+		double index = Math.ceil(getRange().getLowerBound() / unit);
         
-        return index * unit;
+		return index * unit;
     }
 
     /**
@@ -487,10 +485,10 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      * @see #calculateLowestVisibleTickValue()
      */
     protected double calculateHighestVisibleTickValue() {
-        double unit = getTickUnit().getSize();
-        double index = Math.floor(getRange().getUpperBound() / unit);
-        
-        return index * unit;
+    	double unit = getTickUnit().getSize();
+    	double index = Math.floor(getRange().getUpperBound() / unit);
+
+    	return index * unit;
     }
 
     /**
@@ -502,7 +500,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
         double unit = getTickUnit().getSize();
         Range range = getRange();
         
-        return (int) (Math.floor(range.getUpperBound() / unit) - Math.ceil(range.getLowerBound() / unit) + 1);
+        return (int)(Math.floor(range.getUpperBound() / unit) - Math.ceil(range.getLowerBound() / unit) + 1);
     }
 
     /**
@@ -538,22 +536,20 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             // gridlines...
             List ticks = refreshTicks(g2, state, dataArea, edge);
             state.setTicks(ticks);
-            
+
             return state;
         }
 
         // draw the tick marks and labels...
         state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
 
-        if(getAttributedLabel() != null) {
-            state = drawAttributedLabel(getAttributedLabel(), g2, plotArea, dataArea, edge, state);
-        }
+        if(getAttributedLabel() != null) state = drawAttributedLabel(getAttributedLabel(), g2, plotArea, dataArea, edge, state);
         else state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
 
         createAndAddEntity(cursor, state, dataArea, edge, plotState);
 
         return state;
-    }
+	}
 
     /**
      * Creates the standard tick units.

@@ -1,48 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------------
- * DefaultOHLCDataset.java
- * -----------------------
- * (C) Copyright 2003-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 03-Dec-2003 : Version 1 (DG);
- * 05-May-2004 : Now extends AbstractXYDataset (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * 29-Apr-2005 : Added equals() method (DG);
- * 22-Apr-2008 : Implemented PublicCloneable, and fixed cloning bug (DG);
- *
- */
-
 package org.jfree.data.xy;
 
 import java.util.Arrays;
@@ -54,7 +9,9 @@ import org.jfree.chart.util.PublicCloneable;
  * implementation supports only one series.
  */
 public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset, PublicCloneable {
-    /** The series key. */
+	private static final long serialVersionUID = 5203155435766595449L;
+
+	/** The series key. */
     private Comparable key;
 
     /** Storage for the data items. */
@@ -80,7 +37,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public Comparable getSeriesKey(int series) {
-        return this.key;
+        return key;
     }
 
     /**
@@ -105,7 +62,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      * @return The x-value as a date.
      */
     public Date getXDate(int series, int item) {
-        return this.data[item].getDate();
+        return data[item].getDate();
     }
 
     /**
@@ -131,7 +88,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public Number getHigh(int series, int item) {
-        return this.data[item].getHigh();
+        return data[item].getHigh();
     }
 
     /**
@@ -147,10 +104,8 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
     public double getHighValue(int series, int item) {
         double result = Double.NaN;
         Number high = getHigh(series, item);
-        if (high != null) {
-            result = high.doubleValue();
-        }
-        
+        if(high != null) result = high.doubleValue();
+
         return result;
     }
 
@@ -164,7 +119,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public Number getLow(int series, int item) {
-        return this.data[item].getLow();
+        return data[item].getLow();
     }
 
     /**
@@ -180,9 +135,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
     public double getLowValue(int series, int item) {
         double result = Double.NaN;
         Number low = getLow(series, item);
-        if (low != null) {
-            result = low.doubleValue();
-        }
+        if(low != null) result = low.doubleValue();
         
         return result;
     }
@@ -213,9 +166,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
     public double getOpenValue(int series, int item) {
         double result = Double.NaN;
         Number open = getOpen(series, item);
-        if (open != null) {
-            result = open.doubleValue();
-        }
+        if(open != null) result = open.doubleValue();
         
         return result;
     }
@@ -230,7 +181,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public Number getClose(int series, int item) {
-        return this.data[item].getClose();
+        return data[item].getClose();
     }
 
     /**
@@ -246,9 +197,8 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
     public double getCloseValue(int series, int item) {
         double result = Double.NaN;
         Number close = getClose(series, item);
-        if (close != null) {
-            result = close.doubleValue();
-        }
+        if(close != null) result = close.doubleValue();
+
         return result;
     }
 
@@ -262,7 +212,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public Number getVolume(int series, int item) {
-        return this.data[item].getVolume();
+        return data[item].getVolume();
     }
 
     /**
@@ -278,9 +228,8 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
     public double getVolumeValue(int series, int item) {
         double result = Double.NaN;
         Number volume = getVolume(series, item);
-        if (volume != null) {
-            result = volume.doubleValue();
-        }
+        if(volume != null) result = volume.doubleValue();
+        
         return result;
     }
 
@@ -303,16 +252,28 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public int getItemCount(int series) {
-        return this.data.length;
+        return data.length;
     }
 
     /**
      * Sorts the data into ascending order by date.
      */
     public void sortDataByDate() {
-        Arrays.sort(this.data);
+    	Arrays.sort(data);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *
@@ -322,19 +283,15 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof DefaultOHLCDataset)) {
-            return false;
-        }
+        if(this == obj) return true;
+
+        if(!(obj instanceof DefaultOHLCDataset)) return false;
+
         DefaultOHLCDataset that = (DefaultOHLCDataset) obj;
-        if (!this.key.equals(that.key)) {
-            return false;
-        }
-        if (!Arrays.equals(this.data, that.data)) {
-            return false;
-        }
+        if(!this.key.equals(that.key)) return false;
+
+        if(!Arrays.equals(this.data, that.data)) return false;
+
         return true;
     }
 
@@ -350,7 +307,7 @@ public class DefaultOHLCDataset extends AbstractXYDataset implements OHLCDataset
         DefaultOHLCDataset clone = (DefaultOHLCDataset) super.clone();
         clone.data = new OHLCDataItem[this.data.length];
         System.arraycopy(this.data, 0, clone.data, 0, this.data.length);
+        
         return clone;
     }
-
 }

@@ -346,9 +346,7 @@ public class ChartPanel extends JPanel implements
     private transient Paint zoomFillPaint;
 
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.LocalizationBundle");
+    protected static ResourceBundle localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle");
 
     /** 
      * Temporary storage for the width and height of the chart 
@@ -886,7 +884,7 @@ public class ChartPanel extends JPanel implements
      * @return The distance (in Java2D units).
      */
     public int getZoomTriggerDistance() {
-        return this.zoomTriggerDistance;
+    	return zoomTriggerDistance;
     }
 
     /**
@@ -1538,40 +1536,41 @@ public class ChartPanel extends JPanel implements
         Plot plot = chart.getPlot();
         
         int mods = e.getModifiers();
-        
-        System.out.println("NNN");
-        
-        if((mods & panMask) == panMask) {
-        	System.out.println("YYYY");
+
+        System.out.println("MOUSE_PRESS");
+
+        //if((mods & panMask) == panMask) {
+        	System.out.println("PANN_YYYY");
         	
-            // can we pan this plot?
+            //can we pan this plot?
             if(plot instanceof Pannable) {
                 Pannable pannable = (Pannable) plot;
-                if (pannable.isDomainPannable() || pannable.isRangePannable()) {
-                    Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
-                    if (screenDataArea != null && screenDataArea.contains(e.getPoint())) {
-                        this.panW = screenDataArea.getWidth();
-                        this.panH = screenDataArea.getHeight();
-                        this.panLast = e.getPoint();
-                        setCursor(Cursor.getPredefinedCursor(
-                                Cursor.MOVE_CURSOR));
+                if(pannable.isDomainPannable() || pannable.isRangePannable()) {
+                	Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
+                    if(screenDataArea != null && screenDataArea.contains(e.getPoint())) {
+                    	panW = screenDataArea.getWidth();
+                    	panH = screenDataArea.getHeight();
+                    	panLast = e.getPoint();
+
+                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                     }
                 }
-                // the actual panning occurs later in the mouseDragged() 
-                // method
+
+                //the actual panning occurs later in the mouseDragged() 
+                //method
             }
+        /*
         }
         else if(zoomRectangle == null) {
-            Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
-            if(screenDataArea != null) {
-            	zoomPoint = getPointInRectangle(e.getX(), e.getY(), screenDataArea);
-            }
+        	Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
+            if(screenDataArea != null) zoomPoint = getPointInRectangle(e.getX(), e.getY(), screenDataArea);
             else zoomPoint = null;
-            
+
             if(e.isPopupTrigger()) {
                 if(popup != null) displayPopupMenu(e.getX(), e.getY());
             }
         }
+        */
 	}
 
     /**
@@ -1585,10 +1584,10 @@ public class ChartPanel extends JPanel implements
      * @return A point within the rectangle.
      */
     private Point2D getPointInRectangle(int x, int y, Rectangle2D area) {
-        double xx = Math.max(area.getMinX(), Math.min(x, area.getMaxX()));
-        double yy = Math.max(area.getMinY(), Math.min(y, area.getMaxY()));
-        
-        return new Point2D.Double(xx, yy);
+    	double xx = Math.max(area.getMinX(), Math.min(x, area.getMaxX()));
+    	double yy = Math.max(area.getMinY(), Math.min(y, area.getMaxY()));
+
+    	return new Point2D.Double(xx, yy);
     }
 
     /**
@@ -1623,54 +1622,48 @@ public class ChartPanel extends JPanel implements
             }
             panLast = e.getPoint();
             chart.getPlot().setNotify(old);
-            
+
             return;
         }
 
         // if no initial zoom point was set, ignore dragging...
         if(zoomPoint == null) return;
 
-        Graphics2D g2 = (Graphics2D) getGraphics();
+        Graphics2D g2 = (Graphics2D)getGraphics();
 
         // erase the previous zoom rectangle (if any).  We only need to do
         // this is we are using XOR mode, which we do when we're not using
         // the buffer (if there is a buffer, then at the end of this method we
         // just trigger a repaint)
-        if (!this.useBuffer) {
-            drawZoomRectangle(g2, true);
-        }
+        if(!useBuffer) drawZoomRectangle(g2, true);
 
         boolean hZoom, vZoom;
-        if (this.orientation == PlotOrientation.HORIZONTAL) {
-            hZoom = this.rangeZoomable;
-            vZoom = this.domainZoomable;
+        if(orientation == PlotOrientation.HORIZONTAL) {
+            hZoom = rangeZoomable;
+            vZoom = domainZoomable;
         }
         else {
-            hZoom = this.domainZoomable;
-            vZoom = this.rangeZoomable;
+            hZoom = domainZoomable;
+            vZoom = rangeZoomable;
         }
-        Rectangle2D scaledDataArea = getScreenDataArea(
-                (int) this.zoomPoint.getX(), (int) this.zoomPoint.getY());
-        if (hZoom && vZoom) {
+
+        Rectangle2D scaledDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
+        if(hZoom && vZoom) {
             // selected rectangle shouldn't extend outside the data area...
-            double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
-            double ymax = Math.min(e.getY(), scaledDataArea.getMaxY());
-            this.zoomRectangle = new Rectangle2D.Double(
-                    this.zoomPoint.getX(), this.zoomPoint.getY(),
-                    xmax - this.zoomPoint.getX(), ymax - this.zoomPoint.getY());
+        	double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
+        	double ymax = Math.min(e.getY(), scaledDataArea.getMaxY());
+
+            zoomRectangle = new Rectangle2D.Double(zoomPoint.getX(), zoomPoint.getY(), xmax - zoomPoint.getX(), ymax - zoomPoint.getY());
         }
-        else if (hZoom) {
+        else if(hZoom) {
             double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
-            
-            zoomRectangle = new Rectangle2D.Double(
-                    this.zoomPoint.getX(), scaledDataArea.getMinY(),
-                    xmax - this.zoomPoint.getX(), scaledDataArea.getHeight());
+
+            zoomRectangle = new Rectangle2D.Double(zoomPoint.getX(), scaledDataArea.getMinY(), xmax - zoomPoint.getX(), scaledDataArea.getHeight());
         }
-        else if (vZoom) {
-            double ymax = Math.min(e.getY(), scaledDataArea.getMaxY());
-            zoomRectangle = new Rectangle2D.Double(
-                    scaledDataArea.getMinX(), this.zoomPoint.getY(),
-                    scaledDataArea.getWidth(), ymax - this.zoomPoint.getY());
+        else if(vZoom) {
+        	double ymax = Math.min(e.getY(), scaledDataArea.getMaxY());
+
+        	zoomRectangle = new Rectangle2D.Double(scaledDataArea.getMinX(), zoomPoint.getY(), scaledDataArea.getWidth(), ymax - zoomPoint.getY());
         }
 
         // Draw the new zoom rectangle...
@@ -1680,9 +1673,9 @@ public class ChartPanel extends JPanel implements
             // chart...
             drawZoomRectangle(g2, true);
         }
-        
+
         g2.dispose();
-    }
+	}
 
     /**
      * Handles a 'mouse released' event.  On Windows, we need to check if this
@@ -1693,94 +1686,80 @@ public class ChartPanel extends JPanel implements
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-
         // if we've been panning, we need to reset now that the mouse is 
         // released...
-        if (this.panLast != null) {
-            this.panLast = null;
+        if(panLast != null) {
+        	panLast = null;
             setCursor(Cursor.getDefaultCursor());
         }
-
-        else if (this.zoomRectangle != null) {
+        else if(zoomRectangle != null) {
             boolean hZoom, vZoom;
-            if (this.orientation == PlotOrientation.HORIZONTAL) {
-                hZoom = this.rangeZoomable;
-                vZoom = this.domainZoomable;
+            
+            if(orientation == PlotOrientation.HORIZONTAL) {
+                hZoom = rangeZoomable;
+                vZoom = domainZoomable;
             }
             else {
-                hZoom = this.domainZoomable;
-                vZoom = this.rangeZoomable;
+                hZoom = domainZoomable;
+                vZoom = rangeZoomable;
             }
 
-            boolean zoomTrigger1 = hZoom && Math.abs(e.getX()
-                - this.zoomPoint.getX()) >= this.zoomTriggerDistance;
-            boolean zoomTrigger2 = vZoom && Math.abs(e.getY()
-                - this.zoomPoint.getY()) >= this.zoomTriggerDistance;
-            if (zoomTrigger1 || zoomTrigger2) {
-                if ((hZoom && (e.getX() < this.zoomPoint.getX()))
-                    || (vZoom && (e.getY() < this.zoomPoint.getY()))) {
+            boolean zoomTrigger1 = hZoom && Math.abs(e.getX() - zoomPoint.getX()) >= zoomTriggerDistance;
+            boolean zoomTrigger2 = vZoom && Math.abs(e.getY() - zoomPoint.getY()) >= zoomTriggerDistance;
+            
+            if(zoomTrigger1 || zoomTrigger2) {
+                if((hZoom && (e.getX() < this.zoomPoint.getX())) || (vZoom && (e.getY() < this.zoomPoint.getY()))) {
                     restoreAutoBounds();
                 }
                 else {
                     double x, y, w, h;
-                    Rectangle2D screenDataArea = getScreenDataArea(
-                            (int) this.zoomPoint.getX(),
-                            (int) this.zoomPoint.getY());
+                    Rectangle2D screenDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
                     double maxX = screenDataArea.getMaxX();
                     double maxY = screenDataArea.getMaxY();
                     // for mouseReleased event, (horizontalZoom || verticalZoom)
                     // will be true, so we can just test for either being false;
                     // otherwise both are true
-                    if (!vZoom) {
-                        x = this.zoomPoint.getX();
+                    
+                    if(!vZoom) {
+                        x = zoomPoint.getX();
                         y = screenDataArea.getMinY();
-                        w = Math.min(this.zoomRectangle.getWidth(),
-                                maxX - this.zoomPoint.getX());
+                        w = Math.min(zoomRectangle.getWidth(), maxX - zoomPoint.getX());
                         h = screenDataArea.getHeight();
                     }
                     else if (!hZoom) {
                         x = screenDataArea.getMinX();
-                        y = this.zoomPoint.getY();
+                        y = zoomPoint.getY();
                         w = screenDataArea.getWidth();
-                        h = Math.min(this.zoomRectangle.getHeight(),
-                                maxY - this.zoomPoint.getY());
+                        h = Math.min(zoomRectangle.getHeight(), maxY - zoomPoint.getY());
                     }
                     else {
-                        x = this.zoomPoint.getX();
-                        y = this.zoomPoint.getY();
-                        w = Math.min(this.zoomRectangle.getWidth(),
-                                maxX - this.zoomPoint.getX());
-                        h = Math.min(this.zoomRectangle.getHeight(),
-                                maxY - this.zoomPoint.getY());
+                        x = zoomPoint.getX();
+                        y = zoomPoint.getY();
+                        w = Math.min(this.zoomRectangle.getWidth(), maxX - zoomPoint.getX());
+                        h = Math.min(this.zoomRectangle.getHeight(), maxY - zoomPoint.getY());
                     }
+                    
                     Rectangle2D zoomArea = new Rectangle2D.Double(x, y, w, h);
                     zoom(zoomArea);
                 }
-                this.zoomPoint = null;
-                this.zoomRectangle = null;
+                
+                zoomPoint = null;
+                zoomRectangle = null;
             }
             else {
                 // erase the zoom rectangle
                 Graphics2D g2 = (Graphics2D) getGraphics();
-                if (this.useBuffer) {
-                    repaint();
-                }
-                else {
-                    drawZoomRectangle(g2, true);
-                }
+                if(useBuffer) repaint();
+                else drawZoomRectangle(g2, true);
+ 
                 g2.dispose();
-                this.zoomPoint = null;
-                this.zoomRectangle = null;
-            }
-
-        }
-
-        else if (e.isPopupTrigger()) {
-            if (this.popup != null) {
-                displayPopupMenu(e.getX(), e.getY());
+                zoomPoint = null;
+                zoomRectangle = null;
             }
         }
-
+        else if(e.isPopupTrigger()) {
+            if(popup != null) displayPopupMenu(e.getX(), e.getY());
+        }
     }
 
     /**
@@ -1868,10 +1847,9 @@ public class ChartPanel extends JPanel implements
      * @param y  the y value (in screen coordinates).
      */
     public void zoomInBoth(double x, double y) {
-        Plot plot = this.chart.getPlot();
-        if (plot == null) {
-            return;
-        }
+        Plot plot = chart.getPlot();
+        if(plot == null) return;
+
         // here we tweak the notify flag on the plot so that only
         // one notification happens even though we update multiple
         // axes...
@@ -1891,20 +1869,18 @@ public class ChartPanel extends JPanel implements
      * @param y  the y-coordinate (in screen coordinates).
      */
     public void zoomInDomain(double x, double y) {
-        Plot plot = this.chart.getPlot();
-        if (plot instanceof Zoomable) {
+    	Plot plot = chart.getPlot();
+        if(plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
             // axes...
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
             Zoomable z = (Zoomable) plot;
-            z.zoomDomainAxes(this.zoomInFactor, this.info.getPlotInfo(),
-                    translateScreenToJava2D(new Point((int) x, (int) y)),
-                    this.zoomAroundAnchor);
+            z.zoomDomainAxes(zoomInFactor, info.getPlotInfo(), translateScreenToJava2D(new Point((int) x, (int) y)), zoomAroundAnchor);
             plot.setNotify(savedNotify);
         }
-    }
+	}
 
     /**
      * Decreases the length of the range axis, centered about the given

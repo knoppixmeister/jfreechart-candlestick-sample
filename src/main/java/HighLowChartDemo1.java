@@ -2,9 +2,7 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -24,36 +22,36 @@ import org.jfree.ui.RefineryUtilities;
 public class HighLowChartDemo1 extends ApplicationFrame {
 	private static final long serialVersionUID = -5918828983098418319L;
 
+	private static final Calendar calendar = Calendar.getInstance();
+
 	/**
      * A demonstration application showing a high-low-open-close chart.
      *
      * @param title  the frame title.
      */
 	public HighLowChartDemo1(String title) {
-        super(title);
+		super(title);
 
-        JPanel chartPanel = createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        setContentPane(chartPanel);
+		JPanel chartPanel = createDemoPanel();
+		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+		setContentPane(chartPanel);
 	}
 
 	private static JFreeChart createChart(OHLCDataset dataset) {
-        JFreeChart chart = ChartFactory.createHighLowChart("High-Low-Open-Close Demo", "", "", dataset, false);
-        XYPlot plot = (XYPlot) chart.getPlot();
-        
-        ((HighLowRenderer)plot.getRenderer()).setTickLength(7);
-        
-        plot.setBackgroundPaint(Color.white);
-        
+		JFreeChart chart = ChartFactory.createHighLowChart("High-Low-Open-Close Demo", "", "", dataset, false);
+		XYPlot plot = (XYPlot) chart.getPlot();
+
+		((HighLowRenderer)plot.getRenderer()).setTickLength(7);
+
+		//plot.setBackgroundPaint(Color.WHITE);
+
         DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setNumberFormatOverride(new DecimalFormat("$0.00"));
 
         return chart;
-    }
-
-    private static final Calendar calendar = Calendar.getInstance();
+	}
 
     /**
      * Returns a date using the default locale and timezone.
@@ -419,18 +417,18 @@ public class HighLowChartDemo1 extends ApplicationFrame {
         volume[46] = 100.0;
 
         return new DefaultHighLowDataset("Series 1", date, high, low, open, close, volume);
-    }
+	}
 
     /**
      * Creates a panel for the demo (used by SuperDemo.java).
      *
      * @return A panel.
      */
-    public static JPanel createDemoPanel() {
-        JFreeChart chart = createChart(createDataset());
+	public static JPanel createDemoPanel() {
+		JFreeChart chart = createChart(createDataset());
 
-        return new ChartPanel(chart);
-    }
+		return new ChartPanel(chart);
+	}
 
     /**
      * Starting point for the demonstration application.

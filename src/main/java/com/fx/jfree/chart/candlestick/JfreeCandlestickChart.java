@@ -66,7 +66,7 @@ public class JfreeCandlestickChart extends JPanel {
 		OHLCSeriesCollection candlestickDataset = new OHLCSeriesCollection();
 		ohlcSeries = new OHLCSeries("Price");
 		candlestickDataset.addSeries(ohlcSeries);
-		
+
 		// Create candlestick chart priceAxis
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
@@ -81,7 +81,7 @@ public class JfreeCandlestickChart extends JPanel {
 		// Create candlestickSubplot
 		XYPlot candlestickSubplot = new XYPlot(candlestickDataset, null, priceAxis, candlestickRenderer);
 		candlestickSubplot.setBackgroundPaint(Color.WHITE);
-		
+
 		candlestickSubplot.setDomainCrosshairVisible(true);
 		candlestickSubplot.setDomainCrosshairLockedOnData(false);
 
@@ -95,10 +95,10 @@ public class JfreeCandlestickChart extends JPanel {
 		// Create volume chart volumeAxis
 		NumberAxis volumeAxis = new NumberAxis("");
 		volumeAxis.setAutoRangeIncludesZero(false);
-		
+
 		// Set to no decimal
 		volumeAxis.setNumberFormatOverride(new DecimalFormat("0"));
-		
+
 		// Create volume chart renderer
 		XYBarRenderer timeRenderer = new XYBarRenderer();
 		//timeRenderer.setMargin(-3);
@@ -131,14 +131,15 @@ public class JfreeCandlestickChart extends JPanel {
 		 * Create chart main plot with two subplots (candlestickSubplot,
 		 * volumeSubplot) and one common dateAxis
 		 */
-		// Creating charts common dateAxis
+		//Creating charts common dateAxis
 		DateAxis dateAxis = new DateAxis("");
 		dateAxis.setDateFormatOverride(new SimpleDateFormat("kk:mm"));
+
 		// reduce the default left/right margin from 0.05 to 0.02
 		dateAxis.setLowerMargin(0.02);
 		dateAxis.setUpperMargin(0.02);
 
-		// Create mainPlot
+		//Create mainPlot
 		CombinedDomainXYPlot mainPlot = new CombinedDomainXYPlot(dateAxis);
 
 		mainPlot.setGap(0.0);

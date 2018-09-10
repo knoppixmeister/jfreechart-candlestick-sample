@@ -7,11 +7,8 @@ import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.event.*;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.ui.RectangleEdge;
-import org.jfree.chart.ui.RectangleInsets;
-import org.jfree.chart.util.ObjectUtils;
-import org.jfree.chart.util.Args;
-import org.jfree.chart.util.ShadowGenerator;
+import org.jfree.chart.ui.*;
+import org.jfree.chart.util.*;
 import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.XYDataset;
@@ -24,7 +21,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     private static final long serialVersionUID = -7765545541261907383L;
 
     /** Storage for the subplot references (possibly empty but never null). */
-    private List<XYPlot> subplots;
+	private List<XYPlot> subplots;
 
     /** The gap between subplots. */
     private double gap = 5.0;
@@ -49,7 +46,8 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         	null,        // no data in the parent plot
         	domainAxis,
         	null,        // no range axis
-        	null);       // no renderer
+        	null
+        );       // no renderer
 
         subplots = new java.util.ArrayList<XYPlot>();
     }
@@ -98,7 +96,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     @Override
     public boolean isRangePannable() {
         for(XYPlot subplot : subplots) {
-            if(subplot.isRangePannable()) return true;
+        	if(subplot.isRangePannable()) return true;
         }
         
         return false;
@@ -143,7 +141,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         setNotify(false);
         
         super.setShadowGenerator(generator);
-        for (XYPlot p : this.subplots) {
+        for(XYPlot p : subplots) {
             p.setShadowGenerator(generator);
         }
         
@@ -165,13 +163,13 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public Range getDataRange(ValueAxis axis) {
-        if (this.subplots == null) {
-            return null;
-        }
+        if(subplots == null) return null;
+
         Range result = null;
-        for (XYPlot p : this.subplots) {
+        for(XYPlot p : subplots) {
             result = Range.combine(result, p.getDataRange(axis));
         }
+
         return result;
     }
 
@@ -302,15 +300,14 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
             totalWeight += sub.getWeight();
         }
         subplotAreas = new Rectangle2D[n];
+        
         double x = adjustedPlotArea.getX();
         double y = adjustedPlotArea.getY();
+        
         double usableSize = 0.0;
-        if(orientation == PlotOrientation.HORIZONTAL) {
-            usableSize = adjustedPlotArea.getWidth() - gap * (n - 1);
-        }
-        else if(orientation == PlotOrientation.VERTICAL) {
-            usableSize = adjustedPlotArea.getHeight() - gap * (n - 1);
-        }
+        
+        if(orientation == PlotOrientation.HORIZONTAL) usableSize = adjustedPlotArea.getWidth() - gap * (n - 1);
+        else if(orientation == PlotOrientation.VERTICAL) usableSize = adjustedPlotArea.getHeight() - gap * (n - 1);
 
         for(int i = 0; i < n; i++) {
             XYPlot plot = (XYPlot)subplots.get(i);
@@ -433,9 +430,10 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     @Override
     public void zoomRangeAxes(double factor, PlotRenderingInfo state, Point2D source, boolean useAnchor) {
         // delegate 'state' and 'source' argument checks...
-        XYPlot subplot = findSubplot(state, source);
-        if(subplot != null) subplot.zoomRangeAxes(factor, state, source, useAnchor);
-        else {
+    	XYPlot subplot = findSubplot(state, source);
+        
+    	if(subplot != null) subplot.zoomRangeAxes(factor, state, source, useAnchor);
+    	else {
             // if the source point doesn't fall within a subplot, we do the
             // zoom on all subplots...
             for(XYPlot p : subplots) {
@@ -456,6 +454,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     public void zoomRangeAxes(double lowerPercent, double upperPercent, PlotRenderingInfo info, Point2D source) {
         // delegate 'info' and 'source' argument checks...
         XYPlot subplot = findSubplot(info, source);
+        
         if(subplot != null) subplot.zoomRangeAxes(lowerPercent, upperPercent, info, source);
         else {
             // if the source point doesn't fall within a subplot, we do the
@@ -477,15 +476,15 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public void panRangeAxes(double panRange, PlotRenderingInfo info, Point2D source) {
-        XYPlot subplot = findSubplot(info, source);
-        if(subplot == null) return;
+    	XYPlot subplot = findSubplot(info, source);
+    	if(subplot == null) return;
 
-        if(!subplot.isRangePannable()) return;
+    	if(!subplot.isRangePannable()) return;
 
-        PlotRenderingInfo subplotInfo = info.getSubplotInfo(info.getSubplotIndex(source));
-        if(subplotInfo == null) return;
+    	PlotRenderingInfo subplotInfo = info.getSubplotInfo(info.getSubplotIndex(source));
+    	if(subplotInfo == null) return;
 
-        for(int i = 0; i < subplot.getRangeAxisCount(); i++) {
+        for(int i=0; i < subplot.getRangeAxisCount(); i++) {
             ValueAxis rangeAxis = subplot.getRangeAxis(i);
             if(rangeAxis != null) rangeAxis.pan(panRange);
         }
@@ -588,17 +587,13 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     public void datasetChanged(DatasetChangeEvent event) {
         super.datasetChanged(event);
         
-        if (this.subplots == null) {
-            return;  // this can happen during plot construction
-        }
+        if(subplots == null) return;  // this can happen during plot construction
+
         XYDataset dataset = null;
-        if (event.getDataset() instanceof XYDataset) {
-            dataset = (XYDataset) event.getDataset();
-        }
-        for (XYPlot subplot : this.subplots) {
-            if (subplot.indexOf(dataset) >= 0) {
-                subplot.configureRangeAxes();
-            }
+        if(event.getDataset() instanceof XYDataset) dataset = (XYDataset) event.getDataset();
+
+        for(XYPlot subplot : subplots) {
+            if(subplot.indexOf(dataset) >= 0) subplot.configureRangeAxes();
         }
     }
 

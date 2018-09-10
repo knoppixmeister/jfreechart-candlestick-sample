@@ -1827,12 +1827,12 @@ public abstract class ChartFactory {
     	boolean tooltips,
     	boolean urls)
     {
-        ValueAxis timeAxis = new DateAxis(timeAxisLabel);
-        timeAxis.setLowerMargin(0.02);  // reduce the default margins
-        timeAxis.setUpperMargin(0.02);
-        NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
-        valueAxis.setAutoRangeIncludesZero(false);  // override default
-        XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
+    	ValueAxis timeAxis = new DateAxis(timeAxisLabel);
+    	timeAxis.setLowerMargin(0.02);  // reduce the default margins
+    	timeAxis.setUpperMargin(0.02);
+    	NumberAxis valueAxis = new NumberAxis(valueAxisLabel);
+    	valueAxis.setAutoRangeIncludesZero(false);  // override default
+    	XYPlot plot = new XYPlot(dataset, timeAxis, valueAxis, null);
 
         XYToolTipGenerator toolTipGenerator = null;
         if(tooltips) toolTipGenerator = StandardXYToolTipGenerator.getTimeSeriesInstance();
@@ -1846,8 +1846,9 @@ public abstract class ChartFactory {
         plot.setRenderer(renderer);
 
         JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
-        currentTheme.apply(chart);
         
+        currentTheme.apply(chart);
+
         return chart;
     }
 
