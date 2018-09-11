@@ -120,7 +120,7 @@ public class Test {
 		);
 
 		//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"));
-	
+
 		candlestickRenderer.setUseOutlinePaint(false);
 		candlestickRenderer.setUpPaint(Color.decode("#238853"));
 		candlestickRenderer.setDownPaint(Color.decode("#dc5538"));
@@ -142,7 +142,7 @@ public class Test {
 
 		//----------------------------------------------------------------------
 		ValueMarker priceLine = new ValueMarker(6200);
-		priceLine.setLabel(7000+"");
+		//priceLine.setLabel(7000+"");
 		priceLine.setPaint(ChartColor.DARK_RED);
 		priceLine.setLabelFont(new Font("Sans Serial", Font.BOLD, 11));
 		priceLine.setLabelPaint(ChartColor.WHITE);
@@ -170,7 +170,12 @@ public class Test {
 		collection.addChangeListener(new DatasetChangeListener() {
 			@Override
 			public void datasetChanged(DatasetChangeEvent event) {
-				double val = ((OHLCItem)collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getYValue();
+				if(collection.getSeriesCount() == 0) return;
+				
+				OHLCSeries ser = collection.getSeries(0);
+				if(ser == null) return;
+				
+				double val = ((OHLCItem)ser.getDataItem(collection.getSeries(0).getItemCount()-1)).getYValue();
 				
 				if(val > oldPrice) {
 					priceLine.setLabelBackgroundColor(Color.decode("#238853"));
@@ -186,13 +191,14 @@ public class Test {
 				//System.out.println("DS_CH_LISTENER ....VAl: "+val);
 
 				fr.setTitle(	String.format("%.1f", val)	);
-				
+
 				priceLine.setValue(val);
-				priceLine.setLabel(" "+	String.format("%.1f", val) +" "	);
+				priceLine.setLabel(" "+	String.format("%.1f", val) + " ");
 			}
 		});
-		
+
 		//----------------------------------------------------------------------
+		/*
 		XYPointerAnnotation pointer = new XYPointerAnnotation("Best Bid ___", System.currentTimeMillis()+100, 6000, 3.0 * Math.PI / 4.0);
         pointer.setBaseRadius(150.0);
         pointer.setTipRadius(0.0);
@@ -200,10 +206,12 @@ public class Test {
         pointer.setPaint(Color.RED);
         pointer.setTextAnchor(TextAnchor.HALF_ASCENT_RIGHT);
         plot.addAnnotation(pointer);
+        */
 		//----------------------------------------------------------------------
-		
-        
+
+
         //----------------------------------------------------------------------
+		/*
         Marker timeVerticalLine = new ValueMarker(System.currentTimeMillis()+100);
         timeVerticalLine.setPaint(ChartColor.DARK_CYAN);
         timeVerticalLine.setLabel("LALAL");
@@ -211,31 +219,41 @@ public class Test {
         timeVerticalLine.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
         timeVerticalLine.setLabelTextAnchor(TextAnchor.BASELINE_CENTER);
         plot.addDomainMarker(timeVerticalLine);
-        //----------------------------------------------------------------------
-        
+        */
+
+		//----------------------------------------------------------------------
+
 		plot.setRangePannable(true);
 		plot.setDomainPannable(true);
 		plot.setRangeAxisLocation(0, AxisLocation.BOTTOM_OR_RIGHT);
-		
+
+
+		plot.setNoDataMessage("Waiting for data ...");
+		plot.setNoDataMessagePaint(ChartColor.DARK_RED);
+		plot.setNoDataMessageFont(new Font("Sans Serif", Font.BOLD, 19));
+
+
 		JFreeChart chart = new JFreeChart(plot);
-	
+		
+		
+
 		chart.removeLegend();
 
 		ChartPanel panel = new ChartPanel(chart);
 
-		panel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		panel.setRegularCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
 		panel.setMouseZoomable(true);
 		panel.setMouseWheelEnabled(true);
 
-
+		/*
 		panel.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				System.out.println(		e.getWheelRotation()	);
-				
+				//System.out.println(		e.getWheelRotation()	);	
 			}
 		});
+		*/
 		
 		panel.addChartMouseListener(new ChartMouseListener() {
 			@Override
@@ -254,6 +272,8 @@ public class Test {
 				
 				//System.out.println(	event.getTrigger().getX()*100/fr.getWidth() + "%"	);
 				
+				
+				/*
 				double percentX = event.getTrigger().getX()*100/fr.getWidth();
 				
 				ValueAxis domainAxis = plot.getDomainAxis();
@@ -273,6 +293,7 @@ public class Test {
 				c = (priceAxis.getLowerBound() + (percentY / 100.0) * range2.getLength());
 				
 				crosshair2.setValue(c);
+				*/
 				
 				//panel.repaint();
 			}
@@ -428,17 +449,17 @@ class BFWebSocketListener extends WebSocketListener {
 					Double.parseDouble(arr3.get(5).toString().trim())	//volume
 				);
 
-				collection.getSeries(0).add(ohlcItem);
+				//collection.getSeries(0).add(ohlcItem);
 				
-				//ser.add(ohlcItem);
+				ser.add(ohlcItem);
 			}
 			
-			/*
+			
 			if(ser.getItemCount() > 0) {
 				collection.removeAllSeries();
 				collection.addSeries(ser);
 			}
-			*/
+			
 		}
 		else {//update last data
 			System.out.println("6_items: "+	arr2.toString().trim()	);
@@ -457,7 +478,7 @@ class BFWebSocketListener extends WebSocketListener {
 					Double.parseDouble(arr3.get(2).toString().trim()),	//close
 					Double.parseDouble(arr3.get(5).toString().trim())	//volume
 				);
-				
+
 				collection.getSeries(0).add(ohlcItem);
 			}
 			else {//update last candle

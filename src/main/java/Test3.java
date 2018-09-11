@@ -1,23 +1,42 @@
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Rectangle2D;
 import java.util.Collections;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.SwingConstants;
 
 import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
+import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
+import org.jfree.chart.ui.RectangleAnchor;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
 
 public class Test3 {
 	public static void main(String[] args) {
+		CrosshairOverlay chOverlay = new CrosshairOverlay();
+
+		Crosshair crosshair1 = new Crosshair(0);
+		crosshair1.setPaint(Color.BLACK);
+
+		crosshair1.setLabelVisible(true);
+		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+		crosshair1.setLabelBackgroundPaint(Color.RED);
+
+		chOverlay.addDomainCrosshair(crosshair1);
+		//chOverlay.addRangeCrosshair(crosshair1);
+
 		//-----------------------------------------------------------
 		OHLCSeriesCollection collection = new OHLCSeriesCollection();
 		OHLCSeries series = new OHLCSeries("");
@@ -64,11 +83,16 @@ public class Test3 {
 			)//renderer
 		);
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
-
+		plot1.setRangePannable(true);
+		
+		plot1.setDomainCrosshairVisible(true);
+		plot1.setRangeCrosshairVisible(true);
+		plot1.setRangeCrosshairValue(4000);
+		
 		XYDataset dataset2 = MovingAverage.createMovingAverage(collection, "-MAVG", 3 * 24 * 60 * 60 * 1000L, 0L);
         plot1.setDataset(1, dataset2);
         plot1.setRenderer(1, new StandardXYItemRenderer());
-
+ 
 		//------------------------------------------------------------
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         
@@ -107,6 +131,8 @@ public class Test3 {
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(0);
 		
+		//combinedPlot.setDomainCrosshairVisible(true);
+		
 		combinedPlot.setDomainPannable(true);
 		combinedPlot.setRangePannable(true);
 		
@@ -115,52 +141,77 @@ public class Test3 {
 		combinedPlot.add(plot3, 1);
 
 		JFreeChart chart = new JFreeChart(combinedPlot);
-		
+
 		ChartPanel panel = new ChartPanel(chart);
+		
+		panel.addOverlay(chOverlay);
 		
 		panel.setMouseWheelEnabled(true);
 		panel.setMouseZoomable(false);
+		
+		JButton b = new JButton("BTN");
+		b.setHorizontalAlignment(SwingConstants.RIGHT);
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("MMMM");
+				
+			}
+		});
+		panel.add(b);
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				System.out.println("AAAAA");
-				
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		panel.addMouseMotionListener(new MouseMotionListener() {
 			@Override
-			public void mouseMoved(MouseEvent arg0) {
+			public void mouseMoved(MouseEvent e) {
+				//panel.getScreenDataArea(x, y);
 				
+				Rectangle2D dataArea = panel.getScreenDataArea((int)e.getX(), (int)e.getY());
+				
+				if(dataArea != null) {
+					//System.out.println(dataArea.getX());
+					
+					double x = dateAxis.java2DToValue(e.getX(), dataArea, plot1.getDomainAxisEdge());
+					double y = priceAxis.java2DToValue(e.getY(), dataArea, plot1.getRangeAxisEdge());
+					
+					//System.out.println("X: "+x);
+					
+					/*
+					plot1.setRangeCrosshairValue(y);
+					plot1.setDomainCrosshairValue(x);
+					
+					plot2.setDomainCrosshairVisible(true);
+					plot2.setDomainCrosshairValue(x);
+					
+					plot3.setDomainCrosshairVisible(true);
+					plot3.setDomainCrosshairValue(x);
+					*/
+				}
 			}
 			
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
-	
 			}
 		});
 		panel.addMouseWheelListener(new MouseWheelListener() {
@@ -176,7 +227,7 @@ public class Test3 {
 
 		JFrame fr = new JFrame();
 
-		fr.setBounds(10, 10, 1500, 800);
+		fr.setBounds(10, 10, 1300, 600);
 
 		fr.add(panel);
 
@@ -190,7 +241,7 @@ public class Test3 {
 		fr.setVisible(true);
 		
 		
-		
+		/*
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -205,6 +256,6 @@ public class Test3 {
 				
 			}
 		}).start();
-		
+		*/
 	}
 }
