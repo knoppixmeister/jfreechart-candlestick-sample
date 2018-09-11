@@ -11,8 +11,7 @@ import org.jfree.chart.entity.ChartEntity;
  * @see ChartMouseListener
  */
 public class ChartMouseEvent extends EventObject implements Serializable {
-    /** For serialization. */
-    private static final long serialVersionUID = -682393837314562149L;
+	private static final long serialVersionUID = -682393837314562149L;
 
     /** The chart that the mouse event relates to. */
     private JFreeChart chart;
@@ -35,9 +34,9 @@ public class ChartMouseEvent extends EventObject implements Serializable {
     public ChartMouseEvent(JFreeChart chart, MouseEvent trigger, ChartEntity entity) {
         super(chart);
 
-        this.chart = chart;
-        this.trigger = trigger;
-        this.entity = entity;
+        this.chart 		= chart;
+        this.trigger 	= trigger;
+        this.entity 	= entity;
     }
 
     /**
@@ -46,7 +45,7 @@ public class ChartMouseEvent extends EventObject implements Serializable {
      * @return The chart (never {@code null}).
      */
     public JFreeChart getChart() {
-        return this.chart;
+        return chart;
     }
 
     /**
@@ -55,7 +54,7 @@ public class ChartMouseEvent extends EventObject implements Serializable {
      * @return The event (never {@code null}).
      */
     public MouseEvent getTrigger() {
-        return this.trigger;
+        return trigger;
     }
 
     /**
@@ -63,7 +62,7 @@ public class ChartMouseEvent extends EventObject implements Serializable {
      *
      * @return The chart entity (possibly {@code null}).
      */
-    public ChartEntity getEntity() {
-        return this.entity;
-    }
+	public ChartEntity getEntity() {
+    	return entity;
+	}
 }

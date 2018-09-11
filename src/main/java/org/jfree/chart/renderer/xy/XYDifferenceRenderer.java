@@ -71,7 +71,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer implements XYIt
      * Creates a new renderer with default attributes.
      */
     public XYDifferenceRenderer() {
-        this(Color.GREEN, Color.RED, false);
+        this(Color.GREEN, Color.LIGHT_GRAY, false);
     }
 
     /**

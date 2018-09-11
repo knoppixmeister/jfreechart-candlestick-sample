@@ -1,54 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ------------------
- * LegendGraphic.java
- * ------------------
- * (C) Copyright 2004-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 26-Oct-2004 : Version 1 (DG);
- * 21-Jan-2005 : Modified return type of RectangleAnchor.coordinates()
- *               method (DG);
- * 20-Apr-2005 : Added new draw() method (DG);
- * 13-May-2005 : Fixed to respect margin, border and padding settings (DG);
- * 01-Sep-2005 : Implemented PublicCloneable (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 13-Dec-2006 : Added fillPaintTransformer attribute, so legend graphics can
- *               display gradient paint correctly, updated equals() and
- *               corrected clone() (DG);
- * 01-Aug-2007 : Updated API docs (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.title;
 
 import java.awt.GradientPaint;
@@ -80,10 +29,7 @@ import org.jfree.chart.util.ShapeUtils;
 /**
  * The graphical item within a legend item.
  */
-public class LegendGraphic extends AbstractBlock
-                           implements Block, PublicCloneable {
-
-    /** For serialization. */
+public class LegendGraphic extends AbstractBlock implements Block, PublicCloneable {
     static final long serialVersionUID = -1338791523854985009L;
 
     /**
@@ -156,13 +102,14 @@ public class LegendGraphic extends AbstractBlock
     public LegendGraphic(Shape shape, Paint fillPaint) {
         Args.nullNotPermitted(shape, "shape");
         Args.nullNotPermitted(fillPaint, "fillPaint");
-        this.shapeVisible = true;
-        this.shape = shape;
-        this.shapeAnchor = RectangleAnchor.CENTER;
-        this.shapeLocation = RectangleAnchor.CENTER;
-        this.shapeFilled = true;
-        this.fillPaint = fillPaint;
-        this.fillPaintTransformer = new StandardGradientPaintTransformer();
+
+        shapeVisible 			= true;
+        this.shape 				= shape;
+        shapeAnchor 			= RectangleAnchor.CENTER;
+        shapeLocation 			= RectangleAnchor.CENTER;
+        shapeFilled 			= true;
+        this.fillPaint 			= fillPaint;
+        fillPaintTransformer 	= new StandardGradientPaintTransformer();
         setPadding(2.0, 2.0, 2.0, 2.0);
     }
 
@@ -175,7 +122,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setShapeVisible(boolean)
      */
     public boolean isShapeVisible() {
-        return this.shapeVisible;
+        return shapeVisible;
     }
 
     /**
@@ -187,7 +134,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #isShapeVisible()
      */
     public void setShapeVisible(boolean visible) {
-        this.shapeVisible = visible;
+    	shapeVisible = visible;
     }
 
     /**
@@ -198,7 +145,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setShape(Shape)
      */
     public Shape getShape() {
-        return this.shape;
+        return shape;
     }
 
     /**
@@ -221,7 +168,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setShapeFilled(boolean)
      */
     public boolean isShapeFilled() {
-        return this.shapeFilled;
+        return shapeFilled;
     }
 
     /**
@@ -233,7 +180,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #isShapeFilled()
      */
     public void setShapeFilled(boolean filled) {
-        this.shapeFilled = filled;
+    	shapeFilled = filled;
     }
 
     /**
@@ -244,7 +191,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setFillPaint(Paint)
      */
     public Paint getFillPaint() {
-        return this.fillPaint;
+        return fillPaint;
     }
 
     /**
@@ -255,7 +202,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #getFillPaint()
      */
     public void setFillPaint(Paint paint) {
-        this.fillPaint = paint;
+    	fillPaint = paint;
     }
 
     /**
@@ -268,9 +215,9 @@ public class LegendGraphic extends AbstractBlock
      *
      * @see #setFillPaintTransformer(GradientPaintTransformer)
      */
-    public GradientPaintTransformer getFillPaintTransformer() {
-        return this.fillPaintTransformer;
-    }
+	public GradientPaintTransformer getFillPaintTransformer() {
+    	return fillPaintTransformer;
+	}
 
     /**
      * Sets the transformer used when the fill paint is an instance of
@@ -284,7 +231,8 @@ public class LegendGraphic extends AbstractBlock
      */
     public void setFillPaintTransformer(GradientPaintTransformer transformer) {
         Args.nullNotPermitted(transformer, "transformer");
-        this.fillPaintTransformer = transformer;
+        
+        fillPaintTransformer = transformer;
     }
 
     /**
@@ -295,7 +243,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setShapeOutlineVisible(boolean)
      */
     public boolean isShapeOutlineVisible() {
-        return this.shapeOutlineVisible;
+        return shapeOutlineVisible;
     }
 
     /**
@@ -307,7 +255,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #isShapeOutlineVisible()
      */
     public void setShapeOutlineVisible(boolean visible) {
-        this.shapeOutlineVisible = visible;
+    	shapeOutlineVisible = visible;
     }
 
     /**
@@ -318,7 +266,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setOutlinePaint(Paint)
      */
     public Paint getOutlinePaint() {
-        return this.outlinePaint;
+        return outlinePaint;
     }
 
     /**
@@ -329,7 +277,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #getOutlinePaint()
      */
     public void setOutlinePaint(Paint paint) {
-        this.outlinePaint = paint;
+    	outlinePaint = paint;
     }
 
     /**
@@ -340,7 +288,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setOutlineStroke(Stroke)
      */
     public Stroke getOutlineStroke() {
-        return this.outlineStroke;
+        return outlineStroke;
     }
 
     /**
@@ -351,7 +299,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #getOutlineStroke()
      */
     public void setOutlineStroke(Stroke stroke) {
-        this.outlineStroke = stroke;
+    	outlineStroke = stroke;
     }
 
     /**
@@ -362,7 +310,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #getShapeAnchor()
      */
     public RectangleAnchor getShapeAnchor() {
-        return this.shapeAnchor;
+        return shapeAnchor;
     }
 
     /**
@@ -373,10 +321,11 @@ public class LegendGraphic extends AbstractBlock
      *
      * @see #setShapeAnchor(RectangleAnchor)
      */
-    public void setShapeAnchor(RectangleAnchor anchor) {
-        Args.nullNotPermitted(anchor, "anchor");
-        this.shapeAnchor = anchor;
-    }
+	public void setShapeAnchor(RectangleAnchor anchor) {
+    	Args.nullNotPermitted(anchor, "anchor");
+        
+    	shapeAnchor = anchor;
+	}
 
     /**
      * Returns the shape location.
@@ -386,7 +335,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setShapeLocation(RectangleAnchor)
      */
     public RectangleAnchor getShapeLocation() {
-        return this.shapeLocation;
+        return shapeLocation;
     }
 
     /**
@@ -399,7 +348,8 @@ public class LegendGraphic extends AbstractBlock
      */
     public void setShapeLocation(RectangleAnchor location) {
         Args.nullNotPermitted(location, "location");
-        this.shapeLocation = location;
+        
+        shapeLocation = location;
     }
 
     /**
@@ -410,7 +360,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setLineVisible(boolean)
      */
     public boolean isLineVisible() {
-        return this.lineVisible;
+        return lineVisible;
     }
 
     /**
@@ -421,7 +371,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #isLineVisible()
      */
     public void setLineVisible(boolean visible) {
-        this.lineVisible = visible;
+    	lineVisible = visible;
     }
 
     /**
@@ -432,7 +382,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setLine(Shape)
      */
     public Shape getLine() {
-        return this.line;
+        return line;
     }
 
     /**
@@ -443,9 +393,9 @@ public class LegendGraphic extends AbstractBlock
      *
      * @see #getLine()
      */
-    public void setLine(Shape line) {
-        this.line = line;
-    }
+	public void setLine(Shape line) {
+		this.line = line;
+	}
 
     /**
      * Returns the line paint.
@@ -455,7 +405,7 @@ public class LegendGraphic extends AbstractBlock
      * @see #setLinePaint(Paint)
      */
     public Paint getLinePaint() {
-        return this.linePaint;
+        return linePaint;
     }
 
     /**
@@ -506,7 +456,8 @@ public class LegendGraphic extends AbstractBlock
         LengthConstraintType w = contentConstraint.getWidthConstraintType();
         LengthConstraintType h = contentConstraint.getHeightConstraintType();
         Size2D contentSize = null;
-        if (w == LengthConstraintType.NONE) {
+        
+        if(w == LengthConstraintType.NONE) {
             if (h == LengthConstraintType.NONE) {
                 contentSize = arrangeNN(g2);
             }
@@ -541,8 +492,8 @@ public class LegendGraphic extends AbstractBlock
             }
         }
         assert contentSize != null;
-        return new Size2D(calculateTotalWidth(contentSize.getWidth()),
-                calculateTotalHeight(contentSize.getHeight()));
+        
+        return new Size2D(calculateTotalWidth(contentSize.getWidth()), calculateTotalHeight(contentSize.getHeight()));
     }
 
     /**
@@ -556,12 +507,10 @@ public class LegendGraphic extends AbstractBlock
      */
     protected Size2D arrangeNN(Graphics2D g2) {
         Rectangle2D contentSize = new Rectangle2D.Double();
-        if (this.line != null) {
-            contentSize.setRect(this.line.getBounds2D());
-        }
-        if (this.shape != null) {
-            contentSize = contentSize.createUnion(this.shape.getBounds2D());
-        }
+        if(line != null) contentSize.setRect(line.getBounds2D());
+
+        if(shape != null) contentSize = contentSize.createUnion(shape.getBounds2D());
+
         return new Size2D(contentSize.getWidth(), contentSize.getHeight());
     }
 
@@ -573,38 +522,36 @@ public class LegendGraphic extends AbstractBlock
      */
     @Override
     public void draw(Graphics2D g2, Rectangle2D area) {
-
         area = trimMargin(area);
         drawBorder(g2, area);
         area = trimBorder(area);
         area = trimPadding(area);
 
-        if (this.lineVisible) {
-            Point2D location = this.shapeLocation.getAnchorPoint(area);
-            Shape aLine = ShapeUtils.createTranslatedShape(getLine(),
-                    this.shapeAnchor, location.getX(), location.getY());
-            g2.setPaint(this.linePaint);
-            g2.setStroke(this.lineStroke);
+        if(lineVisible) {
+            Point2D location = shapeLocation.getAnchorPoint(area);
+            Shape aLine = ShapeUtils.createTranslatedShape(getLine(), shapeAnchor, location.getX(), location.getY());
+            g2.setPaint(linePaint);
+            g2.setStroke(lineStroke);
             g2.draw(aLine);
         }
 
-        if (this.shapeVisible) {
-            Point2D location = this.shapeLocation.getAnchorPoint(area);
+        if(shapeVisible) {
+            Point2D location = shapeLocation.getAnchorPoint(area);
 
-            Shape s = ShapeUtils.createTranslatedShape(this.shape,
-                    this.shapeAnchor, location.getX(), location.getY());
-            if (this.shapeFilled) {
-                Paint p = this.fillPaint;
-                if (p instanceof GradientPaint) {
-                    GradientPaint gp = (GradientPaint) this.fillPaint;
-                    p = this.fillPaintTransformer.transform(gp, s);
+            Shape s = ShapeUtils.createTranslatedShape(shape, shapeAnchor, location.getX(), location.getY());
+            if(shapeFilled) {
+                Paint p = fillPaint;
+                if(p instanceof GradientPaint) {
+                    GradientPaint gp = (GradientPaint) fillPaint;
+                    p = fillPaintTransformer.transform(gp, s);
                 }
                 g2.setPaint(p);
                 g2.fill(s);
             }
-            if (this.shapeOutlineVisible) {
-                g2.setPaint(this.outlinePaint);
-                g2.setStroke(this.outlineStroke);
+            
+            if(shapeOutlineVisible) {
+                g2.setPaint(outlinePaint);
+                g2.setStroke(outlineStroke);
                 g2.draw(s);
             }
         }
@@ -619,12 +566,32 @@ public class LegendGraphic extends AbstractBlock
      *
      * @return Always {@code null}.
      */
-    @Override
-    public Object draw(Graphics2D g2, Rectangle2D area, Object params) {
-        draw(g2, area);
-        return null;
+	@Override
+	public Object draw(Graphics2D g2, Rectangle2D area, Object params) {
+		draw(g2, area);
+
+		return null;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this {@code LegendGraphic} instance for equality with an
      * arbitrary object.
@@ -750,5 +717,4 @@ public class LegendGraphic extends AbstractBlock
         this.linePaint = SerialUtils.readPaint(stream);
         this.lineStroke = SerialUtils.readStroke(stream);
     }
-
 }

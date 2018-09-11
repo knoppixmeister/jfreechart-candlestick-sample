@@ -1,45 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------------------
- * LegendItemBlockContainer.java
- * -----------------------------
- * (C) Copyright 2006-2008, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 20-Jul-2006 : Version 1 (DG);
- * 06-Oct-2006 : Added tooltip and URL text fields (DG);
- * 18-May-2007 : Added seriesKey and dataset fields (DG);
- *
- */
-
 package org.jfree.chart.title;
 
 import java.awt.Graphics2D;
@@ -59,11 +17,11 @@ import org.jfree.data.general.Dataset;
 /**
  * A container that holds all the pieces of a single legend item.
  *
- * @since 1.0.2
  */
 public class LegendItemBlockContainer extends BlockContainer {
+	private static final long serialVersionUID = -9159006257543071109L;
 
-    /**
+	/**
      * The dataset.
      *
      * @since 1.0.6
@@ -98,9 +56,9 @@ public class LegendItemBlockContainer extends BlockContainer {
      *
      * @since 1.0.6
      */
-    public LegendItemBlockContainer(Arrangement arrangement, Dataset dataset,
-            Comparable seriesKey) {
+    public LegendItemBlockContainer(Arrangement arrangement, Dataset dataset, Comparable seriesKey) {
         super(arrangement);
+        
         this.dataset = dataset;
         this.seriesKey = seriesKey;
     }
@@ -113,7 +71,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.6
      */
     public Dataset getDataset() {
-        return this.dataset;
+        return dataset;
     }
 
     /**
@@ -124,7 +82,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.6
      */
     public Comparable getSeriesKey() {
-        return this.seriesKey;
+        return seriesKey;
     }
 
     /**
@@ -133,7 +91,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @return The series index.
      */
     public int getSeriesIndex() {
-        return this.series;
+        return series;
     }
 
     /**
@@ -144,7 +102,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.3
      */
     public String getToolTipText() {
-        return this.toolTipText;
+        return toolTipText;
     }
 
     /**
@@ -155,7 +113,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.3
      */
     public void setToolTipText(String text) {
-        this.toolTipText = text;
+    	toolTipText = text;
     }
 
     /**
@@ -166,7 +124,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.3
      */
     public String getURLText() {
-        return this.urlText;
+        return urlText;
     }
 
     /**
@@ -177,7 +135,7 @@ public class LegendItemBlockContainer extends BlockContainer {
      * @since 1.0.3
      */
     public void setURLText(String text) {
-        this.urlText = text;
+    	urlText = text;
     }
 
     /**
@@ -196,12 +154,11 @@ public class LegendItemBlockContainer extends BlockContainer {
         super.draw(g2, area, null);
         EntityBlockParams ebp;
         BlockResult r = new BlockResult();
-        if (params instanceof EntityBlockParams) {
+        if(params instanceof EntityBlockParams) {
             ebp = (EntityBlockParams) params;
-            if (ebp.getGenerateEntities()) {
+            if(ebp.getGenerateEntities()) {
                 EntityCollection ec = new StandardEntityCollection();
-                LegendItemEntity entity = new LegendItemEntity(
-                        (Shape) area.clone());
+                LegendItemEntity entity = new LegendItemEntity((Shape) area.clone());
                 entity.setSeriesKey(this.seriesKey);
                 entity.setDataset(this.dataset);
                 entity.setToolTipText(getToolTipText());
@@ -210,6 +167,7 @@ public class LegendItemBlockContainer extends BlockContainer {
                 r.setEntityCollection(ec);
             }
         }
+        
         return r;
     }
 }

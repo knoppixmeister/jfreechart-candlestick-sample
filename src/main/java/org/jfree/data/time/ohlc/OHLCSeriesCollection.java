@@ -60,7 +60,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
 	public void setXPosition(TimePeriodAnchor anchor) {
     	Args.nullNotPermitted(anchor, "anchor");
 
-    	this.xPosition = anchor;
+    	xPosition = anchor;
 
     	notifyListeners(new DatasetChangeEvent(this, this));
 	}
@@ -149,18 +149,12 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      * @return The x-value.
      */
     protected synchronized long getX(RegularTimePeriod period) {
-        long result = 0L;
-        
-        if(this.xPosition == TimePeriodAnchor.START) {
-            result = period.getFirstMillisecond();
-        }
-        else if(this.xPosition == TimePeriodAnchor.MIDDLE) {
-            result = period.getMiddleMillisecond();
-        }
-        else if(this.xPosition == TimePeriodAnchor.END) {
-            result = period.getLastMillisecond();
-        }
-        
+    	long result = 0L;
+
+        if(xPosition == TimePeriodAnchor.START) result = period.getFirstMillisecond();
+        else if(xPosition == TimePeriodAnchor.MIDDLE) result = period.getMiddleMillisecond();
+        else if(xPosition == TimePeriodAnchor.END) result = period.getLastMillisecond();
+
         return result;
     }
 
@@ -206,7 +200,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
     public Number getY(int series, int item) {
         OHLCSeries s = (OHLCSeries)data.get(series);
         OHLCItem di = (OHLCItem)s.getDataItem(item);
-        
+
         return new Double(di.getYValue());
     }
 
@@ -249,9 +243,9 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getCloseValue(int series, int item) {
-        OHLCSeries s = (OHLCSeries) this.data.get(series);
+        OHLCSeries s = (OHLCSeries) data.get(series);
         OHLCItem di = (OHLCItem) s.getDataItem(item);
-        
+
         return di.getCloseValue();
     }
 
@@ -278,7 +272,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getHighValue(int series, int item) {
-        OHLCSeries s = (OHLCSeries) this.data.get(series);
+        OHLCSeries s = (OHLCSeries) data.get(series);
         OHLCItem di = (OHLCItem) s.getDataItem(item);
         
         return di.getHighValue();
@@ -307,8 +301,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getLowValue(int series, int item) {
-    	OHLCSeries s = (OHLCSeries)data.get(series);
-    	OHLCItem di = (OHLCItem)s.getDataItem(item);
+    	OHLCSeries s = (OHLCSeries) data.get(series);
+    	OHLCItem di = (OHLCItem) s.getDataItem(item);
 
         return di.getLowValue();
     }
@@ -414,6 +408,21 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
         fireDatasetChanged();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *

@@ -1,65 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------
- * LegendTitle.java
- * ----------------
- * (C) Copyright 2002-2017, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Pierre-Marie Le Biot;
- *
- * Changes
- * -------
- * 25-Nov-2004 : First working version (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
- * 08-Feb-2005 : Updated for changes in RectangleConstraint class (DG);
- * 11-Feb-2005 : Implemented PublicCloneable (DG);
- * 23-Feb-2005 : Replaced chart reference with LegendItemSource (DG);
- * 16-Mar-2005 : Added itemFont attribute (DG);
- * 17-Mar-2005 : Fixed missing fillShape setting (DG);
- * 20-Apr-2005 : Added new draw() method (DG);
- * 03-May-2005 : Modified equals() method to ignore sources (DG);
- * 13-May-2005 : Added settings for legend item label and graphic padding (DG);
- * 09-Jun-2005 : Fixed serialization bug (DG);
- * 01-Sep-2005 : Added itemPaint attribute (PMLB);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 20-Jul-2006 : Use new LegendItemBlockContainer to restore support for
- *               LegendItemEntities (DG);
- * 06-Oct-2006 : Add tooltip and URL text to legend item (DG);
- * 13-Dec-2006 : Added support for GradientPaint in legend items (DG);
- * 16-Mar-2007 : Updated border drawing for changes in AbstractBlock (DG);
- * 18-May-2007 : Pass seriesKey and dataset to legend item block (DG);
- * 15-Aug-2008 : Added getWrapper() method (DG);
- * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
- * 11-Mar-2012 : Added sort-order support - patch 3500621 by Simon Kaczor (MH);
- * 03-Jul-2013 : Use ParamChecks (DG);
- * 
- */
-
 package org.jfree.chart.title;
 
 import java.awt.Color;
@@ -101,7 +39,6 @@ import org.jfree.chart.util.PaintUtils;
 import org.jfree.chart.util.Args;
 import org.jfree.chart.util.SortOrder;
 
-
 /**
  * A chart title that displays a legend for the data in the chart.
  * <P>
@@ -109,15 +46,11 @@ import org.jfree.chart.util.SortOrder;
  * reference to the plot, in which case the legend items will be automatically
  * created to match the dataset(s).
  */
-public class LegendTitle extends Title
-        implements Cloneable, PublicCloneable, Serializable {
-
-    /** For serialization. */
+public class LegendTitle extends Title implements Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = 2644010518533854633L;
 
     /** The default item font. */
-    public static final Font DEFAULT_ITEM_FONT
-            = new Font("SansSerif", Font.PLAIN, 12);
+    public static final Font DEFAULT_ITEM_FONT = new Font("SansSerif", Font.PLAIN, 12);
 
     /** The default item paint. */
     public static final Paint DEFAULT_ITEM_PAINT = Color.BLACK;
@@ -196,13 +129,12 @@ public class LegendTitle extends Title
      * @param vLayout  the vertical item arrangement ({@code null} not
      *                 permitted).
      */
-    public LegendTitle(LegendItemSource source,
-                       Arrangement hLayout, Arrangement vLayout) {
-        this.sources = new LegendItemSource[] {source};
-        this.items = new BlockContainer(hLayout);
+    public LegendTitle(LegendItemSource source, Arrangement hLayout, Arrangement vLayout) {
+    	sources = new LegendItemSource[] {source};
+    	items = new BlockContainer(hLayout);
         this.hLayout = hLayout;
         this.vLayout = vLayout;
-        this.backgroundPaint = null;
+        backgroundPaint = null;
         this.legendItemGraphicEdge = RectangleEdge.LEFT;
         this.legendItemGraphicAnchor = RectangleAnchor.CENTER;
         this.legendItemGraphicLocation = RectangleAnchor.CENTER;
@@ -211,7 +143,7 @@ public class LegendTitle extends Title
         this.itemPaint = DEFAULT_ITEM_PAINT;
         this.itemLabelPadding = new RectangleInsets(2.0, 2.0, 2.0, 2.0);
         this.sortOrder = SortOrder.ASCENDING;
-    }
+	}
 
     /**
      * Returns the legend item sources.
@@ -219,7 +151,7 @@ public class LegendTitle extends Title
      * @return The sources.
      */
     public LegendItemSource[] getSources() {
-        return this.sources;
+    	return sources;
     }
 
     /**
@@ -229,8 +161,10 @@ public class LegendTitle extends Title
      * @param sources  the sources ({@code null} not permitted).
      */
     public void setSources(LegendItemSource[] sources) {
-        Args.nullNotPermitted(sources, "sources");
+    	Args.nullNotPermitted(sources, "sources");
+    	
         this.sources = sources;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -239,9 +173,9 @@ public class LegendTitle extends Title
      *
      * @return The background paint (possibly {@code null}).
      */
-    public Paint getBackgroundPaint() {
-        return this.backgroundPaint;
-    }
+	public Paint getBackgroundPaint() {
+		return backgroundPaint;
+	}
 
     /**
      * Sets the background paint for the legend and sends a
@@ -250,7 +184,8 @@ public class LegendTitle extends Title
      * @param paint  the paint ({@code null} permitted).
      */
     public void setBackgroundPaint(Paint paint) {
-        this.backgroundPaint = paint;
+    	backgroundPaint = paint;
+    	
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -260,7 +195,7 @@ public class LegendTitle extends Title
      * @return The location (never {@code null}).
      */
     public RectangleEdge getLegendItemGraphicEdge() {
-        return this.legendItemGraphicEdge;
+        return legendItemGraphicEdge;
     }
 
     /**
@@ -270,7 +205,9 @@ public class LegendTitle extends Title
      */
     public void setLegendItemGraphicEdge(RectangleEdge edge) {
         Args.nullNotPermitted(edge, "edge");
-        this.legendItemGraphicEdge = edge;
+        
+        legendItemGraphicEdge = edge;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -280,7 +217,7 @@ public class LegendTitle extends Title
      * @return The graphic anchor (never {@code null}).
      */
     public RectangleAnchor getLegendItemGraphicAnchor() {
-        return this.legendItemGraphicAnchor;
+        return legendItemGraphicAnchor;
     }
 
     /**
@@ -290,7 +227,8 @@ public class LegendTitle extends Title
      */
     public void setLegendItemGraphicAnchor(RectangleAnchor anchor) {
         Args.nullNotPermitted(anchor, "anchor");
-        this.legendItemGraphicAnchor = anchor;
+        
+        legendItemGraphicAnchor = anchor;
     }
 
     /**
@@ -299,7 +237,7 @@ public class LegendTitle extends Title
      * @return The location (never {@code null}).
      */
     public RectangleAnchor getLegendItemGraphicLocation() {
-        return this.legendItemGraphicLocation;
+        return legendItemGraphicLocation;
     }
 
     /**
@@ -308,7 +246,7 @@ public class LegendTitle extends Title
      * @param anchor  the anchor ({@code null} not permitted).
      */
     public void setLegendItemGraphicLocation(RectangleAnchor anchor) {
-        this.legendItemGraphicLocation = anchor;
+    	legendItemGraphicLocation = anchor;
     }
 
     /**
@@ -317,7 +255,7 @@ public class LegendTitle extends Title
      * @return The padding (never {@code null}).
      */
     public RectangleInsets getLegendItemGraphicPadding() {
-        return this.legendItemGraphicPadding;
+        return legendItemGraphicPadding;
     }
 
     /**
@@ -328,7 +266,9 @@ public class LegendTitle extends Title
      */
     public void setLegendItemGraphicPadding(RectangleInsets padding) {
         Args.nullNotPermitted(padding, "padding");
-        this.legendItemGraphicPadding = padding;
+        
+        legendItemGraphicPadding = padding;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -338,7 +278,7 @@ public class LegendTitle extends Title
      * @return The font (never {@code null}).
      */
     public Font getItemFont() {
-        return this.itemFont;
+        return itemFont;
     }
 
     /**
@@ -349,7 +289,9 @@ public class LegendTitle extends Title
      */
     public void setItemFont(Font font) {
         Args.nullNotPermitted(font, "font");
-        this.itemFont = font;
+        
+        itemFont = font;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -358,9 +300,9 @@ public class LegendTitle extends Title
      *
      * @return The paint (never {@code null}).
      */
-    public Paint getItemPaint() {
-        return this.itemPaint;
-    }
+	public Paint getItemPaint() {
+		return itemPaint;
+	}
 
     /**
      * Sets the item paint.
@@ -368,8 +310,10 @@ public class LegendTitle extends Title
      * @param paint  the paint ({@code null} not permitted).
      */
     public void setItemPaint(Paint paint) {
-        Args.nullNotPermitted(paint, "paint");
-        this.itemPaint = paint;
+    	Args.nullNotPermitted(paint, "paint");
+    	
+    	itemPaint = paint;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -379,7 +323,7 @@ public class LegendTitle extends Title
      * @return The padding (never {@code null}).
      */
     public RectangleInsets getItemLabelPadding() {
-        return this.itemLabelPadding;
+        return itemLabelPadding;
     }
 
     /**
@@ -389,7 +333,9 @@ public class LegendTitle extends Title
      */
     public void setItemLabelPadding(RectangleInsets padding) {
         Args.nullNotPermitted(padding, "padding");
+        
         this.itemLabelPadding = padding;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -400,7 +346,7 @@ public class LegendTitle extends Title
      * @since 1.0.15
      */
     public SortOrder getSortOrder() {
-        return this.sortOrder;
+        return sortOrder;
     }
 
     /**
@@ -412,7 +358,9 @@ public class LegendTitle extends Title
      */
     public void setSortOrder(SortOrder order) {
         Args.nullNotPermitted(order, "order");
-        this.sortOrder = order;
+        
+        sortOrder = order;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -420,32 +368,26 @@ public class LegendTitle extends Title
      * Fetches the latest legend items.
      */
     protected void fetchLegendItems() {
-        this.items.clear();
+    	items.clear();
         RectangleEdge p = getPosition();
-        if (RectangleEdge.isTopOrBottom(p)) {
-            this.items.setArrangement(this.hLayout);
-        }
-        else {
-            this.items.setArrangement(this.vLayout);
-        }
+        if(RectangleEdge.isTopOrBottom(p)) items.setArrangement(hLayout);
+        else items.setArrangement(vLayout);
 
-        if (this.sortOrder.equals(SortOrder.ASCENDING)) {
-            for (int s = 0; s < this.sources.length; s++) {
-                LegendItemCollection legendItems =
-                    this.sources[s].getLegendItems();
-                if (legendItems != null) {
-                    for (int i = 0; i < legendItems.getItemCount(); i++) {
+        if(this.sortOrder.equals(SortOrder.ASCENDING)) {
+            for(int s = 0; s < this.sources.length; s++) {
+                LegendItemCollection legendItems = sources[s].getLegendItems();
+                if(legendItems != null) {
+                    for(int i = 0; i < legendItems.getItemCount(); i++) {
                         addItemBlock(legendItems.get(i));
                     }
                 }
             }
         }
         else {
-            for (int s = this.sources.length - 1; s >= 0; s--) {
-                LegendItemCollection legendItems =
-                    this.sources[s].getLegendItems();
-                if (legendItems != null) {
-                    for (int i = legendItems.getItemCount()-1; i >= 0; i--) {
+            for(int s = sources.length - 1; s >= 0; s--) {
+                LegendItemCollection legendItems = sources[s].getLegendItems();
+                if(legendItems != null) {
+                    for(int i = legendItems.getItemCount()-1; i >= 0; i--) {
                         addItemBlock(legendItems.get(i));
                     }
                 }
@@ -455,7 +397,7 @@ public class LegendTitle extends Title
 
     private void addItemBlock(LegendItem item) {
         Block block = createLegendItemBlock(item);
-        this.items.add(block);
+        items.add(block);
     }
 
     /**
@@ -467,8 +409,7 @@ public class LegendTitle extends Title
      */
     protected Block createLegendItemBlock(LegendItem item) {
         BlockContainer result;
-        LegendGraphic lg = new LegendGraphic(item.getShape(),
-                item.getFillPaint());
+        LegendGraphic lg = new LegendGraphic(item.getShape(), item.getFillPaint());
         lg.setFillPaintTransformer(item.getFillPaintTransformer());
         lg.setShapeFilled(item.isShapeFilled());
         lg.setLine(item.getLine());
@@ -479,25 +420,24 @@ public class LegendTitle extends Title
         lg.setShapeOutlineVisible(item.isShapeOutlineVisible());
         lg.setOutlinePaint(item.getOutlinePaint());
         lg.setOutlineStroke(item.getOutlineStroke());
-        lg.setPadding(this.legendItemGraphicPadding);
+        lg.setPadding(legendItemGraphicPadding);
 
         LegendItemBlockContainer legendItem = new LegendItemBlockContainer(
-                new BorderArrangement(), item.getDataset(),
-                item.getSeriesKey());
+        	new BorderArrangement(),
+        	item.getDataset(),
+        	item.getSeriesKey()
+        );
         lg.setShapeAnchor(getLegendItemGraphicAnchor());
         lg.setShapeLocation(getLegendItemGraphicLocation());
-        legendItem.add(lg, this.legendItemGraphicEdge);
+        legendItem.add(lg, legendItemGraphicEdge);
         Font textFont = item.getLabelFont();
-        if (textFont == null) {
-            textFont = this.itemFont;
-        }
+        if(textFont == null) textFont = itemFont;
+
         Paint textPaint = item.getLabelPaint();
-        if (textPaint == null) {
-            textPaint = this.itemPaint;
-        }
-        LabelBlock labelBlock = new LabelBlock(item.getLabel(), textFont,
-                textPaint);
-        labelBlock.setPadding(this.itemLabelPadding);
+        if(textPaint == null) textPaint = itemPaint;
+
+        LabelBlock labelBlock = new LabelBlock(item.getLabel(), textFont, textPaint);
+        labelBlock.setPadding(itemLabelPadding);
         legendItem.add(labelBlock);
         legendItem.setToolTipText(item.getToolTipText());
         legendItem.setURLText(item.getURLText());
@@ -514,7 +454,7 @@ public class LegendTitle extends Title
      * @return The container for the legend items.
      */
     public BlockContainer getItemContainer() {
-        return this.items;
+        return items;
     }
 
     /**
@@ -530,17 +470,16 @@ public class LegendTitle extends Title
     public Size2D arrange(Graphics2D g2, RectangleConstraint constraint) {
         Size2D result = new Size2D();
         fetchLegendItems();
-        if (this.items.isEmpty()) {
-            return result;
-        }
-        BlockContainer container = this.wrapper;
-        if (container == null) {
-            container = this.items;
-        }
+        if(items.isEmpty()) return result;
+
+        BlockContainer container = wrapper;
+        if(container == null) container = items;
+
         RectangleConstraint c = toContentConstraint(constraint);
         Size2D size = container.arrange(g2, c);
         result.height = calculateTotalHeight(size.height);
         result.width = calculateTotalWidth(size.width);
+
         return result;
     }
 
@@ -551,10 +490,10 @@ public class LegendTitle extends Title
      * @param g2  the graphics device.
      * @param area  the available area for the title.
      */
-    @Override
-    public void draw(Graphics2D g2, Rectangle2D area) {
-        draw(g2, area, null);
-    }
+	@Override
+	public void draw(Graphics2D g2, Rectangle2D area) {
+		draw(g2, area, null);
+	}
 
     /**
      * Draws the block within the specified area.
@@ -571,32 +510,33 @@ public class LegendTitle extends Title
         Rectangle2D target = (Rectangle2D) area.clone();
         Rectangle2D hotspot = (Rectangle2D) area.clone();
         StandardEntityCollection sec = null;
-        if (params instanceof EntityBlockParams
-                && ((EntityBlockParams) params).getGenerateEntities()) {
-            sec = new StandardEntityCollection();
-            sec.add(new TitleEntity(hotspot, this));
+        if(params instanceof EntityBlockParams && ((EntityBlockParams) params).getGenerateEntities()) {
+        	sec = new StandardEntityCollection();
+        	sec.add(new TitleEntity(hotspot, this));
         }
+        
         target = trimMargin(target);
-        if (this.backgroundPaint != null) {
-            g2.setPaint(this.backgroundPaint);
+        if(backgroundPaint != null) {
+            g2.setPaint(backgroundPaint);
             g2.fill(target);
         }
+        
         BlockFrame border = getFrame();
         border.draw(g2, target);
         border.getInsets().trim(target);
-        BlockContainer container = this.wrapper;
-        if (container == null) {
-            container = this.items;
-        }
+        BlockContainer container = wrapper;
+        if(container == null) container = items;
+
         target = trimPadding(target);
         Object val = container.draw(g2, target, params);
-        if (val instanceof BlockResult) {
+        if(val instanceof BlockResult) {
             EntityCollection ec = ((BlockResult) val).getEntityCollection();
-            if (ec != null && sec != null) {
+            if(ec != null && sec != null) {
                 sec.addAll(ec);
                 ((BlockResult) val).setEntityCollection(sec);
             }
         }
+        
         return val;
     }
 
@@ -608,7 +548,7 @@ public class LegendTitle extends Title
      * @since 1.0.11
      */
     public BlockContainer getWrapper() {
-        return this.wrapper;
+        return wrapper;
     }
 
     /**
@@ -620,6 +560,20 @@ public class LegendTitle extends Title
         this.wrapper = wrapper;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this title for equality with an arbitrary object.
      *
@@ -696,5 +650,4 @@ public class LegendTitle extends Title
         this.backgroundPaint = SerialUtils.readPaint(stream);
         this.itemPaint = SerialUtils.readPaint(stream);
     }
-
 }

@@ -1,49 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------
- * BlockBorder.java
- * ----------------
- * (C) Copyright 2004-2017, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes:
- * --------
- * 22-Oct-2004 : Version 1 (DG);
- * 04-Feb-2005 : Added equals() and implemented Serializable (DG);
- * 23-Feb-2005 : Added attribute for border color (DG);
- * 06-May-2005 : Added new convenience constructors (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 16-Mar-2007 : Implemented BlockFrame (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.block;
 
 import java.awt.Color;
@@ -63,13 +17,10 @@ import org.jfree.chart.util.SerialUtils;
  * A border for a block.  This class is immutable.
  */
 public class BlockBorder implements BlockFrame, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = 4961579220410228283L;
 
     /** An empty border. */
-    public static final BlockBorder NONE = new BlockBorder(
-            RectangleInsets.ZERO_INSETS, Color.WHITE);
+    public static final BlockBorder NONE = new BlockBorder(RectangleInsets.ZERO_INSETS, Color.WHITE);
 
     /** The space reserved for the border. */
     private RectangleInsets insets;
@@ -80,9 +31,9 @@ public class BlockBorder implements BlockFrame, Serializable {
     /**
      * Creates a default border.
      */
-    public BlockBorder() {
+	public BlockBorder() {
         this(Color.BLACK);
-    }
+	}
 
     /**
      * Creates a new border with the specified color.
@@ -114,8 +65,7 @@ public class BlockBorder implements BlockFrame, Serializable {
      * @param right  the width of the right border.
      * @param paint  the border paint ({@code null} not permitted).
      */
-    public BlockBorder(double top, double left, double bottom, double right,
-                       Paint paint) {
+    public BlockBorder(double top, double left, double bottom, double right, Paint paint) {
         this(new RectangleInsets(top, left, bottom, right), paint);
     }
 
@@ -128,6 +78,7 @@ public class BlockBorder implements BlockFrame, Serializable {
     public BlockBorder(RectangleInsets insets, Paint paint) {
         Args.nullNotPermitted(insets, "insets");
         Args.nullNotPermitted(paint, "paint");
+        
         this.insets = insets;
         this.paint = paint;
     }
@@ -139,7 +90,7 @@ public class BlockBorder implements BlockFrame, Serializable {
      */
     @Override
     public RectangleInsets getInsets() {
-        return this.insets;
+        return insets;
     }
 
     /**
@@ -148,7 +99,7 @@ public class BlockBorder implements BlockFrame, Serializable {
      * @return The paint (never {@code null}).
      */
     public Paint getPaint() {
-        return this.paint;
+        return paint;
     }
 
     /**
@@ -161,34 +112,56 @@ public class BlockBorder implements BlockFrame, Serializable {
     public void draw(Graphics2D g2, Rectangle2D area) {
         // this default implementation will just fill the available
         // border space with a single color
-        double t = this.insets.calculateTopInset(area.getHeight());
-        double b = this.insets.calculateBottomInset(area.getHeight());
-        double l = this.insets.calculateLeftInset(area.getWidth());
-        double r = this.insets.calculateRightInset(area.getWidth());
+        double t = insets.calculateTopInset(area.getHeight());
+        double b = insets.calculateBottomInset(area.getHeight());
+        double l = insets.calculateLeftInset(area.getWidth());
+        double r = insets.calculateRightInset(area.getWidth());
         double x = area.getX();
         double y = area.getY();
         double w = area.getWidth();
         double h = area.getHeight();
-        g2.setPaint(this.paint);
+        
+        g2.setPaint(paint);
+        
         Rectangle2D rect = new Rectangle2D.Double();
-        if (t > 0.0) {
+        
+        if(t > 0.0) {
             rect.setRect(x, y, w, t);
             g2.fill(rect);
         }
-        if (b > 0.0) {
+        
+        if(b > 0.0) {
             rect.setRect(x, y + h - b, w, b);
             g2.fill(rect);
         }
-        if (l > 0.0) {
+        
+        if(l > 0.0) {
             rect.setRect(x, y, l, h);
             g2.fill(rect);
         }
-        if (r > 0.0) {
+
+        if(r > 0.0) {
             rect.setRect(x + w - r, y, r, h);
             g2.fill(rect);
         }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this border for equality with an arbitrary instance.
      *
@@ -237,7 +210,6 @@ public class BlockBorder implements BlockFrame, Serializable {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.paint = SerialUtils.readPaint(stream);
+        paint = SerialUtils.readPaint(stream);
     }
-
 }

@@ -33,7 +33,6 @@ import org.jfree.chart.util.SerialUtils;
  * Crosshairs support a property change mechanism which is used by JFreeChart
  * to automatically repaint the overlay whenever a crosshair attribute is 
  * updated.
-
  */
 public class Crosshair implements Cloneable, PublicCloneable, Serializable {
 	private static final long serialVersionUID = 3256699334899814313L;
@@ -128,12 +127,12 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         Args.nullNotPermitted(paint, "paint");
         Args.nullNotPermitted(stroke, "stroke");
         
-        this.visible = true;
+        visible = true;
         this.value = value;
         this.paint = paint;
         this.stroke = stroke;
-        this.labelVisible = false;
-        this.labelGenerator = new StandardCrosshairLabelGenerator();
+        labelVisible = false;
+        labelGenerator = new StandardCrosshairLabelGenerator();
         this.labelAnchor = RectangleAnchor.BOTTOM_LEFT;
         this.labelXOffset = 3.0;
         this.labelYOffset = 3.0;
@@ -156,7 +155,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setVisible(boolean)
      */
     public boolean isVisible() {
-        return this.visible;
+        return visible;
     }
 
     /**
@@ -195,8 +194,10 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setValue(double value) {
         Double oldValue = new Double(this.value);
+        
         this.value = value;
-        this.pcs.firePropertyChange("value", oldValue, new Double(value));
+        
+        pcs.firePropertyChange("value", oldValue, new Double(value));
     }
 
     /**
@@ -207,7 +208,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setPaint(java.awt.Paint)
      */
     public Paint getPaint() {
-        return this.paint;
+        return paint;
     }
 
     /**
@@ -221,7 +222,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setPaint(Paint paint) {
         Paint old = this.paint;
         this.paint = paint;
-        this.pcs.firePropertyChange("paint", old, paint);
+        
+        pcs.firePropertyChange("paint", old, paint);
     }
 
     /**
@@ -232,7 +234,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setStroke(java.awt.Stroke)
      */
     public Stroke getStroke() {
-        return this.stroke;
+        return stroke;
     }
 
     /**
@@ -245,8 +247,10 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setStroke(Stroke stroke) {
         Stroke old = this.stroke;
+        
         this.stroke = stroke;
-        this.pcs.firePropertyChange("stroke", old, stroke);
+        
+        pcs.firePropertyChange("stroke", old, stroke);
     }
 
     /**
@@ -258,7 +262,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelVisible(boolean)
      */
     public boolean isLabelVisible() {
-        return this.labelVisible;
+        return labelVisible;
     }
 
     /**
@@ -271,9 +275,11 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #isLabelVisible()
      */
     public void setLabelVisible(boolean visible) {
-        boolean old = this.labelVisible;
-        this.labelVisible = visible;
-        this.pcs.firePropertyChange("labelVisible", old, visible);
+    	boolean old = labelVisible;
+
+    	labelVisible = visible;
+
+    	pcs.firePropertyChange("labelVisible", old, visible);
     }
 
     /**
@@ -311,7 +317,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelAnchor(org.jfree.chart.ui.RectangleAnchor)
      */
     public RectangleAnchor getLabelAnchor() {
-        return this.labelAnchor;
+        return labelAnchor;
     }
 
     /**
@@ -324,8 +330,9 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setLabelAnchor(RectangleAnchor anchor) {
         RectangleAnchor old = this.labelAnchor;
-        this.labelAnchor = anchor;
-        this.pcs.firePropertyChange("labelAnchor", old, anchor);
+        
+        labelAnchor = anchor;
+        pcs.firePropertyChange("labelAnchor", old, anchor);
     }
 
     /**
@@ -336,7 +343,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelXOffset(double)
      */
     public double getLabelXOffset() {
-        return this.labelXOffset;
+        return labelXOffset;
     }
 
     /**
@@ -350,7 +357,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelXOffset(double offset) {
         Double old = this.labelXOffset;
         this.labelXOffset = offset;
-        this.pcs.firePropertyChange("labelXOffset", old, offset);
+        
+        pcs.firePropertyChange("labelXOffset", old, offset);
     }
 
     /**
@@ -361,7 +369,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelYOffset(double)
      */
     public double getLabelYOffset() {
-        return this.labelYOffset;
+        return labelYOffset;
     }
 
     /**
@@ -375,7 +383,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelYOffset(double offset) {
         Double old = this.labelYOffset;
         this.labelYOffset = offset;
-        this.pcs.firePropertyChange("labelYOffset", old, offset);
+        
+        pcs.firePropertyChange("labelYOffset", old, offset);
     }
 
     /**
@@ -386,7 +395,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelFont(java.awt.Font)
      */
     public Font getLabelFont() {
-        return this.labelFont;
+        return labelFont;
     }
 
     /**
@@ -399,9 +408,10 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setLabelFont(Font font) {
         Args.nullNotPermitted(font, "font");
+        
         Font old = this.labelFont;
         this.labelFont = font;
-        this.pcs.firePropertyChange("labelFont", old, font);
+        pcs.firePropertyChange("labelFont", old, font);
     }
 
     /**
@@ -412,7 +422,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelPaint
      */
     public Paint getLabelPaint() {
-        return this.labelPaint;
+        return labelPaint;
     }
 
     /**
@@ -425,9 +435,10 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setLabelPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
+        
         Paint old = this.labelPaint;
         this.labelPaint = paint;
-        this.pcs.firePropertyChange("labelPaint", old, paint);
+        pcs.firePropertyChange("labelPaint", old, paint);
     }
 
     /**
@@ -438,7 +449,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelBackgroundPaint(java.awt.Paint)
      */
     public Paint getLabelBackgroundPaint() {
-        return this.labelBackgroundPaint;
+        return labelBackgroundPaint;
     }
 
     /**
@@ -452,7 +463,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelBackgroundPaint(Paint paint) {
         Paint old = this.labelBackgroundPaint;
         this.labelBackgroundPaint = paint;
-        this.pcs.firePropertyChange("labelBackgroundPaint", old, paint);
+        pcs.firePropertyChange("labelBackgroundPaint", old, paint);
     }
 
     /**

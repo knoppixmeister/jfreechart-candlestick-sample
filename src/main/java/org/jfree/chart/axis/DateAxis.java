@@ -1631,6 +1631,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 hasRolled = true;
             }
         }
+        
         return result;
     }
 
@@ -1651,36 +1652,38 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The axis state (never {@code null}).
      */
     @Override
-    public AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea,
-            Rectangle2D dataArea, RectangleEdge edge,
-            PlotRenderingInfo plotState) {
-
+    public AxisState draw(
+    	Graphics2D g2,
+    	double cursor,
+    	Rectangle2D plotArea,
+    	Rectangle2D dataArea,
+    	RectangleEdge edge,
+    	PlotRenderingInfo plotState)
+    {
         // if the axis is not visible, don't draw it...
-        if (!isVisible()) {
+        if(!isVisible()) {
             AxisState state = new AxisState(cursor);
             // even though the axis is not visible, we need to refresh ticks in
             // case the grid is being drawn...
             List ticks = refreshTicks(g2, state, dataArea, edge);
             state.setTicks(ticks);
+            
             return state;
         }
 
         // draw the tick marks and labels...
-        AxisState state = drawTickMarksAndLabels(g2, cursor, plotArea,
-                dataArea, edge);
+        AxisState state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
 
         // draw the axis label (note that 'state' is passed in *and*
         // returned)...
-        if (getAttributedLabel() != null) {
-            state = drawAttributedLabel(getAttributedLabel(), g2, plotArea, 
-                    dataArea, edge, state);
-            
-        } else {
-            state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
+        if(getAttributedLabel() != null) {
+            state = drawAttributedLabel(getAttributedLabel(), g2, plotArea, dataArea, edge, state);
         }
-        createAndAddEntity(cursor, state, dataArea, edge, plotState);
-        return state;
+        else state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);
 
+        createAndAddEntity(cursor, state, dataArea, edge, plotState);
+
+        return state;
     }
 
     /**
@@ -1692,32 +1695,47 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     @Override
     public void zoomRange(double lowerPercent, double upperPercent) {
-        double start = this.timeline.toTimelineValue(
-                (long) getRange().getLowerBound());
-        double end = this.timeline.toTimelineValue(
-                (long) getRange().getUpperBound());
+        double start 	= timeline.toTimelineValue((long) getRange().getLowerBound());
+        double end 		= timeline.toTimelineValue((long) getRange().getUpperBound());
         double length = end - start;
         Range adjusted;
         long adjStart, adjEnd;
-        if (isInverted()) {
-            adjStart = (long) (start + (length * (1 - upperPercent)));
-            adjEnd = (long) (start + (length * (1 - lowerPercent)));
+
+        if(isInverted()) {
+            adjStart 	= (long) (start + (length * (1 - upperPercent)));
+            adjEnd 		= (long) (start + (length * (1 - lowerPercent)));
         }
         else {
-            adjStart = (long) (start + length * lowerPercent);
-            adjEnd = (long) (start + length * upperPercent);
+            adjStart 	= (long) (start + length * lowerPercent);
+            adjEnd 		= (long) (start + length * upperPercent);
         }
         // when zooming to sub-millisecond ranges, it can be the case that
         // adjEnd == adjStart...and we can't have an axis with zero length
         // so we apply this instead:
-        if (adjEnd <= adjStart) {
-            adjEnd = adjStart + 1L;
-        } 
-        adjusted = new DateRange(this.timeline.toMillisecond(adjStart),
-               this.timeline.toMillisecond(adjEnd));
+        if(adjEnd <= adjStart) adjEnd = adjStart + 1L;
+
+        adjusted = new DateRange(timeline.toMillisecond(adjStart), timeline.toMillisecond(adjEnd));
+
         setRange(adjusted);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this axis for equality with an arbitrary object.
      *
@@ -1754,6 +1772,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         if (!ObjectUtils.equal(this.timeline, that.timeline)) {
             return false;
         }
+        
         return super.equals(obj);
     }
 
@@ -1776,15 +1795,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *         not support cloning.
      */
     @Override
-    public Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
         DateAxis clone = (DateAxis) super.clone();
         // 'dateTickUnit' is immutable : no need to clone
-        if (this.dateFormatOverride != null) {
-            clone.dateFormatOverride
-                = (DateFormat) this.dateFormatOverride.clone();
+        if(dateFormatOverride != null) {
+            clone.dateFormatOverride = (DateFormat) this.dateFormatOverride.clone();
         }
         // 'tickMarkPosition' is immutable : no need to clone
+        
         return clone;
-    }
-
+	}
 }

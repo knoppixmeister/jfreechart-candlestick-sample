@@ -7,7 +7,6 @@ import java.io.Serializable;
  * containing a mechanism for registering change listeners.
  */
 public abstract class AbstractSeriesDataset extends AbstractDataset implements SeriesDataset, SeriesChangeListener, Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = -6074996219705033171L;
 
     /**
@@ -49,22 +48,21 @@ public abstract class AbstractSeriesDataset extends AbstractDataset implements S
      */
     @Override
     public int indexOf(Comparable seriesKey) {
-        int seriesCount = getSeriesCount();
-        for (int s = 0; s < seriesCount; s++) {
-           if (getSeriesKey(s).equals(seriesKey)) {
-               return s;
-           }
-        }
-        return -1;
-    }
+    	int seriesCount = getSeriesCount();
+    	for(int s = 0; s < seriesCount; s++) {
+    		if(getSeriesKey(s).equals(seriesKey)) return s;
+    	}
+
+    	return -1;
+	}
 
     /**
      * Called when a series belonging to the dataset changes.
      *
      * @param event  information about the change.
      */
-    @Override
-    public void seriesChanged(SeriesChangeEvent event) {
-        fireDatasetChanged();
-    }
+	@Override
+	public void seriesChanged(SeriesChangeEvent event) {
+		fireDatasetChanged();
+	}
 }

@@ -343,7 +343,9 @@ public class PeriodAxis extends ValueAxis
      */
     public void setAutoRangeTimePeriodClass(Class c) {
         Args.nullNotPermitted(c, "c");
+        
         this.autoRangeTimePeriodClass = c;
+        
         fireChangeEvent();
     }
 
@@ -353,7 +355,7 @@ public class PeriodAxis extends ValueAxis
      * @return The class (never {@code null}).
      */
     public Class getMajorTickTimePeriodClass() {
-        return this.majorTickTimePeriodClass;
+        return majorTickTimePeriodClass;
     }
 
     /**
@@ -365,7 +367,9 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMajorTickTimePeriodClass(Class c) {
         Args.nullNotPermitted(c, "c");
+        
         this.majorTickTimePeriodClass = c;
+        
         fireChangeEvent();
     }
 
@@ -377,7 +381,7 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public boolean isMinorTickMarksVisible() {
-        return this.minorTickMarksVisible;
+        return minorTickMarksVisible;
     }
 
     /**
@@ -389,7 +393,8 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public void setMinorTickMarksVisible(boolean visible) {
-        this.minorTickMarksVisible = visible;
+    	minorTickMarksVisible = visible;
+    	
         fireChangeEvent();
     }
 
@@ -399,7 +404,7 @@ public class PeriodAxis extends ValueAxis
      * @return The class (never {@code null}).
      */
     public Class getMinorTickTimePeriodClass() {
-        return this.minorTickTimePeriodClass;
+        return minorTickTimePeriodClass;
     }
 
     /**
@@ -411,7 +416,9 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickTimePeriodClass(Class c) {
         Args.nullNotPermitted(c, "c");
-        this.minorTickTimePeriodClass = c;
+        
+        minorTickTimePeriodClass = c;
+        
         fireChangeEvent();
     }
 
@@ -422,7 +429,7 @@ public class PeriodAxis extends ValueAxis
      * @return A stroke (never {@code null}).
      */
     public Stroke getMinorTickMarkStroke() {
-        return this.minorTickMarkStroke;
+        return minorTickMarkStroke;
     }
 
     /**
@@ -434,7 +441,9 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarkStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
-        this.minorTickMarkStroke = stroke;
+        
+        minorTickMarkStroke = stroke;
+        
         fireChangeEvent();
     }
 
@@ -445,7 +454,7 @@ public class PeriodAxis extends ValueAxis
      * @return A paint (never {@code null}).
      */
     public Paint getMinorTickMarkPaint() {
-        return this.minorTickMarkPaint;
+        return minorTickMarkPaint;
     }
 
     /**
@@ -457,7 +466,9 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarkPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.minorTickMarkPaint = paint;
+
+        minorTickMarkPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -468,7 +479,7 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public float getMinorTickMarkInsideLength() {
-        return this.minorTickMarkInsideLength;
+        return minorTickMarkInsideLength;
     }
 
     /**
@@ -479,7 +490,8 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public void setMinorTickMarkInsideLength(float length) {
-        this.minorTickMarkInsideLength = length;
+    	minorTickMarkInsideLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -490,7 +502,7 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public float getMinorTickMarkOutsideLength() {
-        return this.minorTickMarkOutsideLength;
+        return minorTickMarkOutsideLength;
     }
 
     /**
@@ -501,7 +513,8 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public void setMinorTickMarkOutsideLength(float length) {
-        this.minorTickMarkOutsideLength = length;
+    	minorTickMarkOutsideLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -511,7 +524,7 @@ public class PeriodAxis extends ValueAxis
      * @return An array.
      */
     public PeriodAxisLabelInfo[] getLabelInfo() {
-        return this.labelInfo;
+        return labelInfo;
     }
 
     /**
@@ -521,7 +534,8 @@ public class PeriodAxis extends ValueAxis
      * @param info  the info.
      */
     public void setLabelInfo(PeriodAxisLabelInfo[] info) {
-        this.labelInfo = info;
+    	labelInfo = info;
+    	
         fireChangeEvent();
     }
 
@@ -537,17 +551,20 @@ public class PeriodAxis extends ValueAxis
      *                notified.
      */
     @Override
-    public void setRange(Range range, boolean turnOffAutoRange, 
-            boolean notify) {
+    public void setRange(Range range, boolean turnOffAutoRange, boolean notify) {
         long upper = Math.round(range.getUpperBound());
         long lower = Math.round(range.getLowerBound());
-        this.first = createInstance(this.autoRangeTimePeriodClass,
-                new Date(lower), this.timeZone, this.locale);
-        this.last = createInstance(this.autoRangeTimePeriodClass,
-                new Date(upper), this.timeZone, this.locale);
-        super.setRange(new Range(this.first.getFirstMillisecond(),
-                this.last.getLastMillisecond() + 1.0), turnOffAutoRange,
-                notify);
+
+        first 	= createInstance(autoRangeTimePeriodClass, new Date(lower), timeZone, locale);
+        last 	= createInstance(autoRangeTimePeriodClass, new Date(upper), timeZone, locale);
+        super.setRange(
+        	new Range(
+        		first.getFirstMillisecond(),
+        		last.getLastMillisecond() + 1.0
+        	),
+        	turnOffAutoRange,
+        	notify
+        );
     }
 
     /**
@@ -556,9 +573,7 @@ public class PeriodAxis extends ValueAxis
      */
     @Override
     public void configure() {
-        if (this.isAutoRange()) {
-            autoAdjustRange();
-        }
+    	if(isAutoRange()) autoAdjustRange();
     }
 
     /**
@@ -575,55 +590,52 @@ public class PeriodAxis extends ValueAxis
      *         space).
      */
     @Override
-    public AxisSpace reserveSpace(Graphics2D g2, Plot plot, 
-            Rectangle2D plotArea, RectangleEdge edge, AxisSpace space) {
+    public AxisSpace reserveSpace(
+    	Graphics2D g2,
+    	Plot plot, 
+    	Rectangle2D plotArea,
+    	RectangleEdge edge,
+    	AxisSpace space)
+    {
         // create a new space object if one wasn't supplied...
-        if (space == null) {
-            space = new AxisSpace();
-        }
+        if(space == null) space = new AxisSpace();
 
         // if the axis is not visible, no additional space is required...
-        if (!isVisible()) {
-            return space;
-        }
+        if(!isVisible()) return space;
 
         // if the axis has a fixed dimension, return it...
         double dimension = getFixedDimension();
-        if (dimension > 0.0) {
-            space.ensureAtLeast(dimension, edge);
-        }
+        if(dimension > 0.0) space.ensureAtLeast(dimension, edge);
 
         // get the axis label size and update the space object...
         Rectangle2D labelEnclosure = getLabelEnclosure(g2, edge);
         double labelHeight, labelWidth;
         double tickLabelBandsDimension = 0.0;
 
-        for (int i = 0; i < this.labelInfo.length; i++) {
-            PeriodAxisLabelInfo info = this.labelInfo[i];
+        for(int i = 0; i < labelInfo.length; i++) {
+            PeriodAxisLabelInfo info = labelInfo[i];
             FontMetrics fm = g2.getFontMetrics(info.getLabelFont());
-            tickLabelBandsDimension
-                += info.getPadding().extendHeight(fm.getHeight());
+            tickLabelBandsDimension += info.getPadding().extendHeight(fm.getHeight());
         }
 
-        if (RectangleEdge.isTopOrBottom(edge)) {
+        if(RectangleEdge.isTopOrBottom(edge)) {
             labelHeight = labelEnclosure.getHeight();
             space.add(labelHeight + tickLabelBandsDimension, edge);
         }
-        else if (RectangleEdge.isLeftOrRight(edge)) {
+        else if(RectangleEdge.isLeftOrRight(edge)) {
             labelWidth = labelEnclosure.getWidth();
             space.add(labelWidth + tickLabelBandsDimension, edge);
         }
 
         // add space for the outer tick labels, if any...
         double tickMarkSpace = 0.0;
-        if (isTickMarksVisible()) {
-            tickMarkSpace = getTickMarkOutsideLength();
-        }
-        if (this.minorTickMarksVisible) {
-            tickMarkSpace = Math.max(tickMarkSpace,
-                    this.minorTickMarkOutsideLength);
+        if(isTickMarksVisible()) tickMarkSpace = getTickMarkOutsideLength();
+
+        if(minorTickMarksVisible) {
+            tickMarkSpace = Math.max(tickMarkSpace, minorTickMarkOutsideLength);
         }
         space.add(tickMarkSpace, edge);
+        
         return space;
     }
 
@@ -642,32 +654,31 @@ public class PeriodAxis extends ValueAxis
      * @return The axis state (never {@code null}).
      */
     @Override
-    public AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea,
-            Rectangle2D dataArea, RectangleEdge edge,
-            PlotRenderingInfo plotState) {
-
+    public AxisState draw(
+    	Graphics2D g2,
+    	double cursor,
+    	Rectangle2D plotArea,
+    	Rectangle2D dataArea,
+    	RectangleEdge edge,
+    	PlotRenderingInfo plotState)
+    {
         AxisState axisState = new AxisState(cursor);
-        if (isAxisLineVisible()) {
-            drawAxisLine(g2, cursor, dataArea, edge);
-        }
-        if (isTickMarksVisible()) {
-            drawTickMarks(g2, axisState, dataArea, edge);
-        }
-        if (isTickLabelsVisible()) {
-            for (int band = 0; band < this.labelInfo.length; band++) {
-                axisState = drawTickLabels(band, g2, axisState, dataArea, edge);
+        if(isAxisLineVisible()) drawAxisLine(g2, cursor, dataArea, edge);
+
+        if(isTickMarksVisible()) drawTickMarks(g2, axisState, dataArea, edge);
+
+        if(isTickLabelsVisible()) {
+            for(int band = 0; band < labelInfo.length; band++) {
+            	axisState = drawTickLabels(band, g2, axisState, dataArea, edge);
             }
         }
 
-        if (getAttributedLabel() != null) {
-            axisState = drawAttributedLabel(getAttributedLabel(), g2, plotArea, 
-                    dataArea, edge, axisState);
-        } else {
-            axisState = drawLabel(getLabel(), g2, plotArea, dataArea, edge, 
-                    axisState);
+        if(getAttributedLabel() != null) {
+            axisState = drawAttributedLabel(getAttributedLabel(), g2, plotArea, dataArea, edge, axisState);
         } 
-        return axisState;
+        else axisState = drawLabel(getLabel(), g2, plotArea, dataArea, edge, axisState);
 
+        return axisState;
     }
 
     /**

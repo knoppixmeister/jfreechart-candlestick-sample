@@ -18,8 +18,7 @@ import org.jfree.chart.util.Args;
  * mechanism for registering change listeners.
  */
 public abstract class AbstractDataset implements Dataset, Cloneable, Serializable, ObjectInputValidation {
-    /** For serialization. */
-    private static final long serialVersionUID = 1918768939869230744L;
+	private static final long serialVersionUID = 1918768939869230744L;
 
     /** The group that the dataset belongs to. */
     private DatasetGroup group;
@@ -38,9 +37,9 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * group.
      */
     protected AbstractDataset() {
-        this.group = new DatasetGroup();
-        this.listenerList = new EventListenerList();
-        this.notify = true;
+    	group = new DatasetGroup();
+    	listenerList = new EventListenerList();
+    	notify = true;
     }
 
     /**
@@ -52,7 +51,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     @Override
     public DatasetGroup getGroup() {
-        return this.group;
+        return group;
     }
 
     /**
@@ -65,7 +64,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
     @Override
     public void setGroup(DatasetGroup group) {
         Args.nullNotPermitted(group, "group");
-        
+
         this.group = group;
     }
 
@@ -80,7 +79,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @since 1.0.17
      */
     public boolean getNotify() {
-        return this.notify;
+        return notify;
     }
     
     /**
@@ -95,9 +94,8 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     public void setNotify(boolean notify) {
         this.notify = notify;
-        if (notify) {
-            fireDatasetChanged();
-        }    
+        
+        if(notify) fireDatasetChanged();    
     }
     
     /**
@@ -109,7 +107,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     @Override
     public void addChangeListener(DatasetChangeListener listener) {
-        this.listenerList.add(DatasetChangeListener.class, listener);
+    	listenerList.add(DatasetChangeListener.class, listener);
     }
 
     /**
@@ -122,7 +120,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     @Override
     public void removeChangeListener(DatasetChangeListener listener) {
-        this.listenerList.remove(DatasetChangeListener.class, listener);
+    	listenerList.remove(DatasetChangeListener.class, listener);
     }
 
     /**
@@ -138,7 +136,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @see #removeChangeListener(DatasetChangeListener)
      */
     public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(this.listenerList.getListenerList());
+        List list = Arrays.asList(listenerList.getListenerList());
         
         return list.contains(listener);
     }
@@ -151,7 +149,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @see #addChangeListener(DatasetChangeListener)
      */
     protected void fireDatasetChanged() {
-    	if(this.notify) notifyListeners(new DatasetChangeEvent(this, this));
+    	if(notify) notifyListeners(new DatasetChangeEvent(this, this));
     }
 
     /**
@@ -164,7 +162,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @see #removeChangeListener(DatasetChangeListener)
      */
     protected void notifyListeners(DatasetChangeEvent event) {
-        Object[] listeners = this.listenerList.getListenerList();
+        Object[] listeners = listenerList.getListenerList();
         
         for(int i = listeners.length - 2; i >= 0; i -= 2) {
             if(listeners[i] == DatasetChangeListener.class) {
@@ -173,6 +171,46 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
         }
     }
 
+    /**
+     * Validates the object. We use this opportunity to call listeners who have
+     * registered during the deserialization process, as listeners are not
+     * serialized. This method is called by the serialization system after the
+     * entire graph is read.
+     *
+     * This object has registered itself to the system with a priority of 10.
+     * Other callbacks may register with a higher priority number to be called
+     * before this object, or with a lower priority number to be called after
+     * the listeners were notified.
+     *
+     * All listeners are supposed to have register by now, either in their
+     * readObject or validateObject methods. Notify them that this dataset has
+     * changed.
+     *
+     * @exception InvalidObjectException If the object cannot validate itself.
+     */
+    @Override
+    public void validateObject() throws InvalidObjectException {
+        fireDatasetChanged();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Returns a clone of the dataset. The cloned dataset will NOT include the
      * {@link DatasetChangeListener} references that have been registered with
@@ -218,25 +256,5 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
                                               // 10 in validateObject()
     }
 
-    /**
-     * Validates the object. We use this opportunity to call listeners who have
-     * registered during the deserialization process, as listeners are not
-     * serialized. This method is called by the serialization system after the
-     * entire graph is read.
-     *
-     * This object has registered itself to the system with a priority of 10.
-     * Other callbacks may register with a higher priority number to be called
-     * before this object, or with a lower priority number to be called after
-     * the listeners were notified.
-     *
-     * All listeners are supposed to have register by now, either in their
-     * readObject or validateObject methods. Notify them that this dataset has
-     * changed.
-     *
-     * @exception InvalidObjectException If the object cannot validate itself.
-     */
-    @Override
-    public void validateObject() throws InvalidObjectException {
-        fireDatasetChanged();
-    }
+    
 }

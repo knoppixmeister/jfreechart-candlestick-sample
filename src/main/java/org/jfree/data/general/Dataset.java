@@ -39,5 +39,4 @@ public interface Dataset {
      * @param group  the dataset group.
      */
     public void setGroup(DatasetGroup group);
-
 }

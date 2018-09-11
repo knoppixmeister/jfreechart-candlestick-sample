@@ -1037,9 +1037,8 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
     protected void drawNoDataMessage(Graphics2D g2, Rectangle2D area) {
     	Shape savedClip = g2.getClip();
     	g2.clip(area);
-    	String message = noDataMessage;
-        
-        if(message != null) {
+
+        if(noDataMessage != null) {
             g2.setFont(noDataMessageFont);
             g2.setPaint(noDataMessagePaint);
             TextBlock block = TextUtils.createTextBlock(

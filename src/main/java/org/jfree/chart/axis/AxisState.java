@@ -76,7 +76,7 @@ public class AxisState {
      */
     public AxisState(double cursor) {
         this.cursor = cursor;
-        this.ticks = new java.util.ArrayList();
+        ticks = new java.util.ArrayList();
     }
 
     /**
@@ -85,7 +85,7 @@ public class AxisState {
      * @return The cursor position.
      */
     public double getCursor() {
-        return this.cursor;
+        return cursor;
     }
 
     /**
@@ -103,19 +103,11 @@ public class AxisState {
      * @param units  the units.
      * @param edge  the edge.
      */
-    public void moveCursor(double units, RectangleEdge edge) {
-        if (edge == RectangleEdge.TOP) {
-            cursorUp(units);
-        }
-        else if (edge == RectangleEdge.BOTTOM) {
-            cursorDown(units);
-        }
-        else if (edge == RectangleEdge.LEFT) {
-            cursorLeft(units);
-        }
-        else if (edge == RectangleEdge.RIGHT) {
-            cursorRight(units);
-        }
+	public void moveCursor(double units, RectangleEdge edge) {
+        if(edge == RectangleEdge.TOP) cursorUp(units);
+        else if(edge == RectangleEdge.BOTTOM) cursorDown(units);
+        else if(edge == RectangleEdge.LEFT) cursorLeft(units);
+        else if (edge == RectangleEdge.RIGHT) cursorRight(units);
     }
 
     /**
@@ -151,7 +143,7 @@ public class AxisState {
      * @param units  the units.
      */
     public void cursorRight(double units) {
-        this.cursor = this.cursor + units;
+    	cursor = cursor + units;
     }
 
     /**
@@ -160,7 +152,7 @@ public class AxisState {
      * @return The list of ticks.
      */
     public List getTicks() {
-        return this.ticks;
+        return ticks;
     }
 
     /**

@@ -51,8 +51,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     public CrosshairOverlay() {
         super();
 
-        this.xCrosshairs = new java.util.ArrayList<Crosshair>();
-        this.yCrosshairs = new java.util.ArrayList<Crosshair>();
+        xCrosshairs = new java.util.ArrayList<Crosshair>();
+        yCrosshairs = new java.util.ArrayList<Crosshair>();
     }
 
     /**
@@ -65,10 +65,10 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * @see #addRangeCrosshair(org.jfree.chart.plot.Crosshair)
      */
     public void addDomainCrosshair(Crosshair crosshair) {
-        Args.nullNotPermitted(crosshair, "crosshair");
+    	Args.nullNotPermitted(crosshair, "crosshair");
 
-        this.xCrosshairs.add(crosshair);
-        crosshair.addPropertyChangeListener(this);
+    	xCrosshairs.add(crosshair);
+    	crosshair.addPropertyChangeListener(this);
 
         fireOverlayChanged();
 	}
@@ -82,9 +82,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * @see #addDomainCrosshair(org.jfree.chart.plot.Crosshair)
      */
     public void removeDomainCrosshair(Crosshair crosshair) {
-        Args.nullNotPermitted(crosshair, "crosshair");
-        
-        if(this.xCrosshairs.remove(crosshair)) {
+    	Args.nullNotPermitted(crosshair, "crosshair");
+
+    	if(xCrosshairs.remove(crosshair)) {
             crosshair.removePropertyChangeListener(this);
             
             fireOverlayChanged();
@@ -96,10 +96,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * {@link OverlayChangeEvent} to all registered listeners.
      */
     public void clearDomainCrosshairs() {
-        if(xCrosshairs.isEmpty()) {
-            return;  // nothing to do
-        }
-        
+        if(xCrosshairs.isEmpty()) return;  // nothing to do
+
         for(Crosshair c : getDomainCrosshairs()) {
         	xCrosshairs.remove(c);
             c.removePropertyChangeListener(this);
@@ -113,9 +111,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      *
      * @return A list of crosshairs.
      */
-    public List<Crosshair> getDomainCrosshairs() {
-        return new ArrayList<Crosshair>(this.xCrosshairs);
-    }
+	public List<Crosshair> getDomainCrosshairs() {
+    	return new ArrayList<Crosshair>(xCrosshairs);
+	}
 
     /**
      * Adds a crosshair against the range axis and sends an
@@ -155,10 +153,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * {@link OverlayChangeEvent} to all registered listeners.
      */
     public void clearRangeCrosshairs() {
-        if(this.yCrosshairs.isEmpty()) {
-            return;  // nothing to do
-        }
-        
+        if(this.yCrosshairs.isEmpty()) return;  // nothing to do
+
         for(Crosshair c : getRangeCrosshairs()) {
         	yCrosshairs.remove(c);
             c.removePropertyChangeListener(this);
@@ -172,9 +168,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      *
      * @return A list of crosshairs.
      */
-    public List<Crosshair> getRangeCrosshairs() {
-        return new ArrayList<Crosshair>(this.yCrosshairs);
-    }
+	public List<Crosshair> getRangeCrosshairs() {
+    	return new ArrayList<Crosshair>(yCrosshairs);
+	}
 
     /**
      * Receives a property change event (typically a change in one of the
@@ -182,10 +178,10 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      *
      * @param e  the event.
      */
-    @Override
-    public void propertyChange(PropertyChangeEvent e) {
-        fireOverlayChanged();
-    }
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+    	fireOverlayChanged();
+	}
 
     /**
      * Renders the crosshairs in the overlay on top of the chart that has just
@@ -218,20 +214,21 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                 else drawHorizontalCrosshair(g2, dataArea, xx, ch);
             }
         }
+        
         ValueAxis yAxis = plot.getRangeAxis();
         RectangleEdge yAxisEdge = plot.getRangeAxisEdge();
-        for (Crosshair ch : getRangeCrosshairs()) {
+        
+        for(Crosshair ch : getRangeCrosshairs()) {
             if (ch.isVisible()) {
                 double y = ch.getValue();
                 double yy = yAxis.valueToJava2D(y, dataArea, yAxisEdge);
                 if (plot.getOrientation() == PlotOrientation.VERTICAL) {
                     drawHorizontalCrosshair(g2, dataArea, yy, ch);
                 }
-                else {
-                    drawVerticalCrosshair(g2, dataArea, yy, ch);
-                }
+                else drawVerticalCrosshair(g2, dataArea, yy, ch);
             }
         }
+        
         g2.setClip(savedClip);
     }
 

@@ -1,64 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------
- * Title.java
- * ----------
- * (C) Copyright 2000-2016, by David Berry and Contributors.
- *
- * Original Author:  David Berry;
- * Contributor(s):   David Gilbert (for Object Refinery Limited);
- *                   Nicolas Brodu;
- *
- * Changes (from 21-Aug-2001)
- * --------------------------
- * 21-Aug-2001 : Added standard header (DG);
- * 18-Sep-2001 : Updated header (DG);
- * 14-Nov-2001 : Package com.jrefinery.common.ui.* changed to
- *               com.jrefinery.ui.* (DG);
- * 07-Feb-2002 : Changed blank space around title from Insets --> Spacer, to
- *               allow for relative or absolute spacing (DG);
- * 25-Jun-2002 : Removed unnecessary imports (DG);
- * 01-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 14-Oct-2002 : Changed the event listener storage structure (DG);
- * 11-Sep-2003 : Took care of listeners while cloning (NB);
- * 22-Sep-2003 : Spacer cannot be null. Added nullpointer checks for this (TM);
- * 08-Jan-2003 : Renamed AbstractTitle --> Title and moved to separate
- *               package (DG);
- * 26-Oct-2004 : Refactored to implement Block interface, and removed redundant
- *               constants (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0
- *               release (DG);
- * 02-Feb-2005 : Changed Spacer --> RectangleInsets for padding (DG);
- * 03-May-2005 : Fixed problem in equals() method (DG);
- * 19-Sep-2008 : Added visibility flag (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.title;
 
 import java.awt.Graphics2D;
@@ -88,26 +27,20 @@ import org.jfree.chart.util.Args;
  * Concrete implementations of this class will render text and images, and
  * hence do the actual work of drawing titles.
  */
-public abstract class Title extends AbstractBlock
-            implements Block, Cloneable, Serializable {
-
-    /** For serialization. */
+public abstract class Title extends AbstractBlock implements Block, Cloneable, Serializable {
     private static final long serialVersionUID = -6675162505277817221L;
 
     /** The default title position. */
     public static final RectangleEdge DEFAULT_POSITION = RectangleEdge.TOP;
 
     /** The default horizontal alignment. */
-    public static final HorizontalAlignment
-            DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.CENTER;
+    public static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.CENTER;
 
     /** The default vertical alignment. */
-    public static final VerticalAlignment
-            DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.CENTER;
+    public static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.CENTER;
 
     /** Default title padding. */
-    public static final RectangleInsets DEFAULT_PADDING = new RectangleInsets(
-            1, 1, 1, 1);
+    public static final RectangleInsets DEFAULT_PADDING = new RectangleInsets(1, 1, 1, 1);
 
     /**
      * A flag that controls whether or not the title is visible.
@@ -137,9 +70,7 @@ public abstract class Title extends AbstractBlock
      * Creates a new title, using default attributes where necessary.
      */
     protected Title() {
-        this(Title.DEFAULT_POSITION,
-                Title.DEFAULT_HORIZONTAL_ALIGNMENT,
-                Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
+        this(Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT, Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
     }
 
     /**
@@ -154,11 +85,9 @@ public abstract class Title extends AbstractBlock
      */
     protected Title(RectangleEdge position,
                     HorizontalAlignment horizontalAlignment,
-                    VerticalAlignment verticalAlignment) {
-
-        this(position, horizontalAlignment, verticalAlignment,
-                Title.DEFAULT_PADDING);
-
+                    VerticalAlignment verticalAlignment)
+    {
+        this(position, horizontalAlignment, verticalAlignment, Title.DEFAULT_PADDING);
     }
 
     /**
@@ -175,22 +104,21 @@ public abstract class Title extends AbstractBlock
      * @param padding  the amount of space to leave around the outside of the
      *                 title ({@code null} not permitted).
      */
-    protected Title(RectangleEdge position, 
-            HorizontalAlignment horizontalAlignment, 
-            VerticalAlignment verticalAlignment, RectangleInsets padding) {
-
+    protected Title(RectangleEdge position, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, RectangleInsets padding) {
         Args.nullNotPermitted(position, "position");
         Args.nullNotPermitted(horizontalAlignment, "horizontalAlignment");
         Args.nullNotPermitted(verticalAlignment, "verticalAlignment");
         Args.nullNotPermitted(padding, "padding");
 
-        this.visible = true;
+        visible = true;
         this.position = position;
         this.horizontalAlignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
+        
         setPadding(padding);
-        this.listenerList = new EventListenerList();
-        this.notify = true;
+        
+        listenerList = new EventListenerList();
+        notify = true;
     }
 
     /**
@@ -204,7 +132,7 @@ public abstract class Title extends AbstractBlock
      * @since 1.0.11
      */
     public boolean isVisible() {
-        return this.visible;
+        return visible;
     }
 
     /**
@@ -219,6 +147,7 @@ public abstract class Title extends AbstractBlock
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
+        
         notifyListeners(new TitleChangeEvent(this));
     }
 
@@ -228,7 +157,7 @@ public abstract class Title extends AbstractBlock
      * @return The title position (never {@code null}).
      */
     public RectangleEdge getPosition() {
-        return this.position;
+        return position;
     }
 
     /**
@@ -239,8 +168,10 @@ public abstract class Title extends AbstractBlock
      */
     public void setPosition(RectangleEdge position) {
         Args.nullNotPermitted(position, "position");
-        if (this.position != position) {
+        
+        if(this.position != position) {
             this.position = position;
+            
             notifyListeners(new TitleChangeEvent(this));
         }
     }
@@ -251,7 +182,7 @@ public abstract class Title extends AbstractBlock
      * @return The horizontal alignment (never {@code null}).
      */
     public HorizontalAlignment getHorizontalAlignment() {
-        return this.horizontalAlignment;
+        return horizontalAlignment;
     }
 
     /**
@@ -263,8 +194,10 @@ public abstract class Title extends AbstractBlock
      */
     public void setHorizontalAlignment(HorizontalAlignment alignment) {
         Args.nullNotPermitted(alignment, "alignment");
-        if (this.horizontalAlignment != alignment) {
-            this.horizontalAlignment = alignment;
+        
+        if(horizontalAlignment != alignment) {
+        	horizontalAlignment = alignment;
+        	
             notifyListeners(new TitleChangeEvent(this));
         }
     }
@@ -275,7 +208,7 @@ public abstract class Title extends AbstractBlock
      * @return The vertical alignment (never {@code null}).
      */
     public VerticalAlignment getVerticalAlignment() {
-        return this.verticalAlignment;
+        return verticalAlignment;
     }
 
     /**
@@ -287,8 +220,10 @@ public abstract class Title extends AbstractBlock
      */
     public void setVerticalAlignment(VerticalAlignment alignment) {
         Args.nullNotPermitted(alignment, "alignment");
-        if (this.verticalAlignment != alignment) {
-            this.verticalAlignment = alignment;
+        
+        if(verticalAlignment != alignment) {
+        	verticalAlignment = alignment;
+        	
             notifyListeners(new TitleChangeEvent(this));
         }
     }
@@ -300,7 +235,7 @@ public abstract class Title extends AbstractBlock
      * @return The flag.
      */
     public boolean getNotify() {
-        return this.notify;
+        return notify;
     }
 
     /**
@@ -311,10 +246,9 @@ public abstract class Title extends AbstractBlock
      * @param flag  the new value of the flag.
      */
     public void setNotify(boolean flag) {
-        this.notify = flag;
-        if (flag) {
-            notifyListeners(new TitleChangeEvent(this));
-        }
+    	notify = flag;
+    	
+        if(flag) notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -344,6 +278,7 @@ public abstract class Title extends AbstractBlock
     public Object clone() throws CloneNotSupportedException {
         Title duplicate = (Title) super.clone();
         duplicate.listenerList = new EventListenerList();
+        
         // RectangleInsets is immutable => same reference in clone OK
         return duplicate;
     }
@@ -354,7 +289,7 @@ public abstract class Title extends AbstractBlock
      * @param listener  the object that is being registered.
      */
     public void addChangeListener(TitleChangeListener listener) {
-        this.listenerList.add(TitleChangeListener.class, listener);
+    	listenerList.add(TitleChangeListener.class, listener);
     }
 
     /**
@@ -363,7 +298,7 @@ public abstract class Title extends AbstractBlock
      * @param listener  the object that is being unregistered.
      */
     public void removeChangeListener(TitleChangeListener listener) {
-        this.listenerList.remove(TitleChangeListener.class, listener);
+    	listenerList.remove(TitleChangeListener.class, listener);
     }
 
     /**
@@ -374,17 +309,32 @@ public abstract class Title extends AbstractBlock
      *               the title.
      */
     protected void notifyListeners(TitleChangeEvent event) {
-        if (this.notify) {
-            Object[] listeners = this.listenerList.getListenerList();
-            for (int i = listeners.length - 2; i >= 0; i -= 2) {
-                if (listeners[i] == TitleChangeListener.class) {
-                    ((TitleChangeListener) listeners[i + 1]).titleChanged(
-                            event);
+        if(notify) {
+            Object[] listeners = listenerList.getListenerList();
+            for(int i = listeners.length - 2; i >= 0; i -= 2) {
+                if(listeners[i] == TitleChangeListener.class) {
+                    ((TitleChangeListener) listeners[i + 1]).titleChanged(event);
                 }
             }
         }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests an object for equality with this title.
      *
