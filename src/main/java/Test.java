@@ -2,19 +2,26 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYPointerAnnotation;
 import org.jfree.chart.axis.AxisLocation;
@@ -24,8 +31,10 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.Marker;
+import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.renderer.xy.CandlestickRenderer;
 import org.jfree.chart.ui.RectangleAnchor;
 import org.jfree.chart.ui.RectangleInsets;
@@ -54,6 +63,22 @@ public class Test {
 	public static double oldPrice = 0;
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+
 		JFrame fr = new JFrame("");
 		
 	//--------------------------------------------------------------------------------------------
@@ -107,6 +132,8 @@ public class Test {
 		DateAxis dateAxis = new DateAxis();
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
+		priceAxis.setAxisLineVisible(false);
+		priceAxis.setAxisLinePaint(ChartColor.DARK_RED);
 		//priceAxis.setVisible(false);
 
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
@@ -227,15 +254,11 @@ public class Test {
 		plot.setDomainPannable(true);
 		plot.setRangeAxisLocation(0, AxisLocation.BOTTOM_OR_RIGHT);
 
-
 		plot.setNoDataMessage("Waiting for data ...");
 		plot.setNoDataMessagePaint(ChartColor.DARK_RED);
 		plot.setNoDataMessageFont(new Font("Sans Serif", Font.BOLD, 19));
 
-
 		JFreeChart chart = new JFreeChart(plot);
-		
-		
 
 		chart.removeLegend();
 
@@ -246,6 +269,17 @@ public class Test {
 		panel.setMouseZoomable(true);
 		panel.setMouseWheelEnabled(true);
 
+		JButton b = new JButton("Btn");
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("BTN_CLK");
+
+				
+			}
+		});
+		panel.add(b);
+
 		/*
 		panel.addMouseWheelListener(new MouseWheelListener() {
 			@Override
@@ -253,7 +287,7 @@ public class Test {
 				//System.out.println(		e.getWheelRotation()	);	
 			}
 		});
-		*/
+		 */
 		
 		panel.addChartMouseListener(new ChartMouseListener() {
 			@Override
@@ -319,7 +353,7 @@ public class Test {
 
         //System.out.println(domainAxis.getLowerBound()+" : "+range.getLength());
 
-        double c = domainAxis.getLowerBound() + (20 / 100.0) * range.getLength();
+        double c = domainAxis.getLowerBound() + (20.0 / 100.0) * range.getLength();
 
         //System.out.println("C: "+c);
 
@@ -371,6 +405,7 @@ public class Test {
 		//--------------------------------------------------------------------------------------------------------------
 
 		OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
+														.retryOnConnectionFailure(true)
 														.build();
 
 		client.newWebSocket(

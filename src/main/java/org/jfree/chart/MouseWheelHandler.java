@@ -53,17 +53,19 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
      * @param e  the event.
      */
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {    	
+    public void mouseWheelMoved(MouseWheelEvent e) {    
+    	System.out.println("MOUSE_WHEEL_ROLLED");
+    	
     	JFreeChart chart = chartPanel.getChart();
     	if(chart == null) return;
 
     	Plot plot = chart.getPlot();
 
-    	if(plot instanceof Zoomable) {
+    	if(plot != null && plot instanceof Zoomable) {
             Zoomable zoomable = (Zoomable)plot;
             handleZoomable(zoomable, e);
     	}
-    	else if(plot instanceof PiePlot) {
+    	else if(plot != null &&	plot instanceof PiePlot) {
             PiePlot pp = (PiePlot) plot;
             pp.handleMouseWheelRotation(e.getWheelRotation());
     	}
@@ -75,15 +77,13 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
      * @param zoomable  the zoomable plot.
      * @param e  the mouse wheel event.
 	*/
+    // don't zoom unless the mouse pointer is in the plot's data area
 	private void handleZoomable(Zoomable zoomable, MouseWheelEvent e) {
-        // don't zoom unless the mouse pointer is in the plot's data area
 		ChartRenderingInfo info = chartPanel.getChartRenderingInfo();
 		PlotRenderingInfo plotRenderingInfo = info.getPlotInfo();
 		Point2D p = chartPanel.translateScreenToJava2D(e.getPoint());
 
-        if(!plotRenderingInfo.getDataArea().contains(p)) {     	
-        	return;
-        }
+        if(!plotRenderingInfo.getDataArea().contains(p)) return;
 
         Plot plot = (Plot)zoomable;
         // do not notify while zooming each axis

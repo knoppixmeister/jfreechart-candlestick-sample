@@ -616,7 +616,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setAxisLineVisible(boolean)
      */
     public boolean isAxisLineVisible() {
-        return this.axisLineVisible;
+        return axisLineVisible;
     }
 
     /**
@@ -630,7 +630,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setAxisLineStroke(Stroke)
      */
     public void setAxisLineVisible(boolean visible) {
-        this.axisLineVisible = visible;
+    	axisLineVisible = visible;
+    	
         fireChangeEvent();
     }
 
@@ -642,7 +643,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setAxisLinePaint(Paint)
      */
     public Paint getAxisLinePaint() {
-        return this.axisLinePaint;
+        return axisLinePaint;
     }
 
     /**
@@ -655,7 +656,9 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setAxisLinePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.axisLinePaint = paint;
+        
+        axisLinePaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -667,7 +670,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setAxisLineStroke(Stroke)
      */
     public Stroke getAxisLineStroke() {
-        return this.axisLineStroke;
+        return axisLineStroke;
     }
 
     /**
@@ -680,9 +683,11 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setAxisLineStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
-        this.axisLineStroke = stroke;
+        
+        axisLineStroke = stroke;
+        
         fireChangeEvent();
-    }
+	}
 
     /**
      * Returns a flag indicating whether or not the tick labels are visible.
@@ -694,7 +699,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickLabelsVisible(boolean)
      */
     public boolean isTickLabelsVisible() {
-        return this.tickLabelsVisible;
+        return tickLabelsVisible;
     }
 
     /**
@@ -709,12 +714,11 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickLabelPaint(Paint)
      */
     public void setTickLabelsVisible(boolean flag) {
+    	if(flag != tickLabelsVisible) {
+    		tickLabelsVisible = flag;
 
-        if (flag != this.tickLabelsVisible) {
-            this.tickLabelsVisible = flag;
-            fireChangeEvent();
+    		fireChangeEvent();
         }
-
     }
 
     /**
@@ -729,7 +733,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public boolean isMinorTickMarksVisible() {
-        return this.minorTickMarksVisible;
+        return minorTickMarksVisible;
     }
 
     /**
@@ -744,8 +748,9 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public void setMinorTickMarksVisible(boolean flag) {
-        if (flag != this.minorTickMarksVisible) {
-            this.minorTickMarksVisible = flag;
+        if(flag != minorTickMarksVisible) {
+        	minorTickMarksVisible = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -758,7 +763,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickLabelFont(Font)
      */
     public Font getTickLabelFont() {
-        return this.tickLabelFont;
+        return tickLabelFont;
     }
 
     /**
@@ -771,8 +776,10 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickLabelFont(Font font) {
         Args.nullNotPermitted(font, "font");
-        if (!this.tickLabelFont.equals(font)) {
-            this.tickLabelFont = font;
+        
+        if(!tickLabelFont.equals(font)) {
+        	tickLabelFont = font;
+        	
             fireChangeEvent();
         }
     }
@@ -785,7 +792,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickLabelPaint(Paint)
      */
     public Paint getTickLabelPaint() {
-        return this.tickLabelPaint;
+        return tickLabelPaint;
     }
 
     /**
@@ -798,7 +805,9 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickLabelPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.tickLabelPaint = paint;
+        
+        tickLabelPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -810,7 +819,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickLabelInsets(RectangleInsets)
      */
     public RectangleInsets getTickLabelInsets() {
-        return this.tickLabelInsets;
+        return tickLabelInsets;
     }
 
     /**
@@ -823,8 +832,10 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickLabelInsets(RectangleInsets insets) {
         Args.nullNotPermitted(insets, "insets");
-        if (!this.tickLabelInsets.equals(insets)) {
-            this.tickLabelInsets = insets;
+        
+        if(!tickLabelInsets.equals(insets)) {
+        	tickLabelInsets = insets;
+        	
             fireChangeEvent();
         }
     }
@@ -839,7 +850,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickMarksVisible(boolean)
      */
     public boolean isTickMarksVisible() {
-        return this.tickMarksVisible;
+        return tickMarksVisible;
     }
 
     /**
@@ -851,8 +862,9 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #isTickMarksVisible()
      */
     public void setTickMarksVisible(boolean flag) {
-        if (flag != this.tickMarksVisible) {
-            this.tickMarksVisible = flag;
+        if(flag != tickMarksVisible) {
+        	tickMarksVisible = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -866,7 +878,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickMarkInsideLength(float)
      */
     public float getTickMarkInsideLength() {
-        return this.tickMarkInsideLength;
+        return tickMarkInsideLength;
     }
 
     /**
@@ -1090,10 +1102,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @return The space required to draw the axis (including pre-reserved
      *         space).
      */
-    public abstract AxisSpace reserveSpace(Graphics2D g2, Plot plot,
-                                           Rectangle2D plotArea,
-                                           RectangleEdge edge,
-                                           AxisSpace space);
+    public abstract AxisSpace reserveSpace(Graphics2D g2, Plot plot, Rectangle2D plotArea, RectangleEdge edge, AxisSpace space);
 
     /**
      * Draws the axis on a Java 2D graphics device (such as the screen or a
@@ -1109,9 +1118,7 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return The axis state (never {@code null}).
      */
-    public abstract AxisState draw(Graphics2D g2, double cursor,
-            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge,
-            PlotRenderingInfo plotState);
+    public abstract AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState);
 
     /**
      * Calculates the positions of the ticks for the axis, storing the results
@@ -1124,8 +1131,7 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return The list of ticks.
      */
-    public abstract List refreshTicks(Graphics2D g2, AxisState state,
-            Rectangle2D dataArea, RectangleEdge edge);
+    public abstract List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge);
 
     /**
      * Created an entity for the axis.
@@ -1140,10 +1146,7 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @since 1.0.13
      */
-    protected void createAndAddEntity(double cursor, AxisState state,
-            Rectangle2D dataArea, RectangleEdge edge,
-            PlotRenderingInfo plotState) {
-
+    protected void createAndAddEntity(double cursor, AxisState state, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState) {
         if (plotState == null || plotState.getOwner() == null) {
             return;  // no need to create entity if we can't save it anyways...
         }
@@ -1163,13 +1166,10 @@ public abstract class Axis implements Cloneable, Serializable {
                     dataArea.getHeight());
         }
         else if (edge.equals(RectangleEdge.RIGHT)) {
-            hotspot = new Rectangle2D.Double(cursor, dataArea.getY(),
-                    state.getCursor() - cursor, dataArea.getHeight());
+            hotspot = new Rectangle2D.Double(cursor, dataArea.getY(), state.getCursor() - cursor, dataArea.getHeight());
         }
         EntityCollection e = plotState.getOwner().getEntityCollection();
-        if (e != null) {
-            e.add(new AxisEntity(hotspot, this));
-        }
+        if(e != null) e.add(new AxisEntity(hotspot, this));
     }
 
     /**
@@ -1180,7 +1180,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #removeChangeListener(AxisChangeListener)
      */
     public void addChangeListener(AxisChangeListener listener) {
-        this.listenerList.add(AxisChangeListener.class, listener);
+    	listenerList.add(AxisChangeListener.class, listener);
     }
 
     /**
@@ -1191,7 +1191,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #addChangeListener(AxisChangeListener)
      */
     public void removeChangeListener(AxisChangeListener listener) {
-        this.listenerList.remove(AxisChangeListener.class, listener);
+    	listenerList.remove(AxisChangeListener.class, listener);
     }
 
     /**
@@ -1204,7 +1204,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @return A boolean.
      */
     public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(this.listenerList.getListenerList());
+        List list = Arrays.asList(listenerList.getListenerList());
+        
         return list.contains(listener);
     }
 
@@ -1215,11 +1216,9 @@ public abstract class Axis implements Cloneable, Serializable {
      * @param event  information about the change to the axis.
      */
     protected void notifyListeners(AxisChangeEvent event) {
-        Object[] listeners = this.listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == AxisChangeListener.class) {
-                ((AxisChangeListener) listeners[i + 1]).axisChanged(event);
-            }
+    	Object[] listeners = listenerList.getListenerList();
+    	for(int i=listeners.length-2; i >= 0; i -= 2) {
+    		if(listeners[i] == AxisChangeListener.class) ((AxisChangeListener) listeners[i + 1]).axisChanged(event);
         }
     }
 
@@ -1244,51 +1243,46 @@ public abstract class Axis implements Cloneable, Serializable {
     protected Rectangle2D getLabelEnclosure(Graphics2D g2, RectangleEdge edge) {
         Rectangle2D result = new Rectangle2D.Double();
         Rectangle2D bounds = null;
-        if (this.attributedLabel != null) {
-            TextLayout layout = new TextLayout(
-                    this.attributedLabel.getIterator(), 
-                    g2.getFontRenderContext());
+        
+        if(this.attributedLabel != null) {
+            TextLayout layout = new TextLayout(this.attributedLabel.getIterator(), g2.getFontRenderContext());
             bounds = layout.getBounds();
-        } else {
+        }
+        else {
             String axisLabel = getLabel();
-            if (axisLabel != null && !axisLabel.equals("")) {
+            if(axisLabel != null && !axisLabel.equals("")) {
                 FontMetrics fm = g2.getFontMetrics(getLabelFont());
                 bounds = TextUtils.getTextBounds(axisLabel, g2, fm);
             }
         }
-        if (bounds != null) {
+        
+        if(bounds != null) {
             RectangleInsets insets = getLabelInsets();
             bounds = insets.createOutsetRectangle(bounds);
             double angle = getLabelAngle();
-            if (edge == RectangleEdge.LEFT || edge == RectangleEdge.RIGHT) {
-                angle = angle - Math.PI / 2.0;
-            }
+            if(edge == RectangleEdge.LEFT || edge == RectangleEdge.RIGHT) angle = angle - Math.PI / 2.0;
+
             double x = bounds.getCenterX();
             double y = bounds.getCenterY();
-            AffineTransform transformer
-                = AffineTransform.getRotateInstance(angle, x, y);
+            AffineTransform transformer = AffineTransform.getRotateInstance(angle, x, y);
             Shape labelBounds = transformer.createTransformedShape(bounds);
             result = labelBounds.getBounds2D();
         }
+        
         return result;
     }
 
-    protected double labelLocationX(AxisLabelLocation location, 
-            Rectangle2D dataArea) {
-        if (location.equals(AxisLabelLocation.HIGH_END)) {
-            return dataArea.getMaxX();
-        }
-        if (location.equals(AxisLabelLocation.MIDDLE)) {
-            return dataArea.getCenterX();
-        }
-        if (location.equals(AxisLabelLocation.LOW_END)) {
-            return dataArea.getMinX();
-        }
+    protected double labelLocationX(AxisLabelLocation location, Rectangle2D dataArea) {
+        if(location.equals(AxisLabelLocation.HIGH_END)) return dataArea.getMaxX();
+
+        if(location.equals(AxisLabelLocation.MIDDLE)) return dataArea.getCenterX();
+
+        if(location.equals(AxisLabelLocation.LOW_END)) return dataArea.getMinX();
+
         throw new RuntimeException("Unexpected AxisLabelLocation: " + location);
     }
     
-    protected double labelLocationY(AxisLabelLocation location, 
-            Rectangle2D dataArea) {
+    protected double labelLocationY(AxisLabelLocation location, Rectangle2D dataArea) {
         if (location.equals(AxisLabelLocation.HIGH_END)) {
             return dataArea.getMinY();
         }

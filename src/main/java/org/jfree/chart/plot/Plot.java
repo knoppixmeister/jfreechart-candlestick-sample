@@ -442,8 +442,9 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
     public void setInsets(RectangleInsets insets, boolean notify) {
     	Args.nullNotPermitted(insets, "insets");
 
-    	if(!this.insets.equals(insets)) {
+    	if(!insets.equals(insets)) {
         	this.insets = insets;
+        	
             if(notify) fireChangeEvent();
         }
     }
@@ -471,6 +472,7 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
 		if(paint == null) {
             if(backgroundPaint != null) {
             	backgroundPaint = null;
+            	
                 fireChangeEvent();
             }
         }
@@ -562,6 +564,7 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
      */
     public void setDrawingSupplier(DrawingSupplier supplier, boolean notify) {
     	drawingSupplier = supplier;
+    	
     	if(notify) fireChangeEvent();
 	}
 

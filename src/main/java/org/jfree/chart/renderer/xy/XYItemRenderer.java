@@ -1179,8 +1179,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The number of passes the renderer requires.
      */
-    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
-            XYPlot plot, XYDataset dataset, PlotRenderingInfo info);
+    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea, XYPlot plot, XYDataset dataset, PlotRenderingInfo info);
 
     /**
      * Called for each item to be plotted.
@@ -1219,8 +1218,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param start  the start value.
      * @param end  the end value.
      */
-    public void fillDomainGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
-            Rectangle2D dataArea, double start, double end);
+    public void fillDomainGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis, Rectangle2D dataArea, double start, double end);
 
     /**
      * Fills a band between two values on the range axis.  This can be used to
@@ -1233,8 +1231,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param start  the start value.
      * @param end  the end value.
      */
-    public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
-            Rectangle2D dataArea, double start, double end);
+    public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis, Rectangle2D dataArea, double start, double end);
 
     /**
      * Draws a grid line against the domain axis.
@@ -1247,8 +1244,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param paint  the paint ({@code null} not permitted).
      * @param stroke  the stroke ({@code null} not permitted).
      */
-    public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
-            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
+    public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis, Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
 
     /**
      * Draws a line perpendicular to the range axis.
@@ -1261,8 +1257,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param paint  the paint ({@code null} not permitted).
      * @param stroke  the stroke ({@code null} not permitted).
      */
-    public void drawRangeLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
-            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
+    public void drawRangeLine(Graphics2D g2, XYPlot plot, ValueAxis axis, Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
 
     /**
      * Draws the specified {@code marker} against the domain axis.
@@ -1273,8 +1268,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param marker  the marker.
      * @param dataArea  the axis data area.
      */
-    public void drawDomainMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
-            Marker marker, Rectangle2D dataArea);
+    public void drawDomainMarker(Graphics2D g2, XYPlot plot, ValueAxis axis, Marker marker, Rectangle2D dataArea);
 
     /**
      * Draws a horizontal line across the chart to represent a 'range marker'.

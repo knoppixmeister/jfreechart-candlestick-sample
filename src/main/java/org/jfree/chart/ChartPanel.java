@@ -70,6 +70,7 @@ import org.jfree.chart.plot.Pannable;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.util.Args;
 import org.jfree.chart.util.ResourceBundleWrapper;
@@ -354,8 +355,11 @@ public class ChartPanel extends JPanel implements
      */
 	private double panW, panH;
 
-    /** The last mouse position during panning. */
+	/** The last mouse position during panning. */
 	private Point panLast;
+
+	private Point panRangeAxisLast;
+	private Point panDomainAxisLast;
 
     /**
      * The mask for mouse events to trigger panning.
@@ -371,9 +375,12 @@ public class ChartPanel extends JPanel implements
      */
 	private List<Overlay> overlays;
 
-	private Cursor regularCursor 	= Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+	private Cursor defaultCursor 	= Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 	private Cursor startMoveCursor 	= Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 	private Cursor moveCursor		= Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+
+	private Cursor panDomainAxisCursor = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
+	private Cursor panRangeAxisCursor = Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
 
     /**
      * Constructs a panel that displays the specified chart.
@@ -615,12 +622,13 @@ public class ChartPanel extends JPanel implements
 
         overlays = new java.util.ArrayList<Overlay>();
         
-        setCursor(regularCursor);
+        setCursor(defaultCursor);
     }
 
     public void setRegularCursor(Cursor cursor) {
-    	regularCursor = cursor;
-    	setCursor(regularCursor);
+    	defaultCursor = cursor;
+    	
+    	setCursor(defaultCursor);
     }
 
     /**
@@ -877,14 +885,14 @@ public class ChartPanel extends JPanel implements
      * @param flag  {@code true} enables zooming if possible.
      */
     public void setDomainZoomable(boolean flag) {
-        if(flag) {
+    	if(flag) {
             Plot plot = chart.getPlot();
             if(plot instanceof Zoomable) {
                 Zoomable z = (Zoomable) plot;
                 domainZoomable = flag && (z.isDomainZoomable());
             }
-        }
-        else domainZoomable = false;
+    	}
+    	else domainZoomable = false;
     }
 
     /**
@@ -1523,10 +1531,9 @@ public class ChartPanel extends JPanel implements
         else if (command.equals(ZOOM_RESET_DOMAIN_COMMAND)) {
             restoreAutoDomainBounds();
         }
-        else if (command.equals(ZOOM_RESET_RANGE_COMMAND)) {
+        else if(command.equals(ZOOM_RESET_RANGE_COMMAND)) {
             restoreAutoRangeBounds();
         }
-
     }
 
     /**
@@ -1573,7 +1580,7 @@ public class ChartPanel extends JPanel implements
 
             ownToolTipDelaysActive = false;
         }
-    }
+	}
 
     /**
      * Handles a 'mouse pressed' event.
@@ -1585,46 +1592,85 @@ public class ChartPanel extends JPanel implements
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        if(chart == null) return;
+    	if(chart == null) return;
 
-        Plot plot = chart.getPlot();
+    	Plot plot = chart.getPlot();
 
-        //int mods = e.getModifiers();
+    	//int mods = e.getModifiers();
 
         System.out.println("MOUSE_PRESS");
-        
-        System.out.println(SwingUtilities.isRightMouseButton(e));
-        System.out.println(e.isPopupTrigger());
-        
+
+        System.out.println("IS_RGT_MOUSE: "+SwingUtilities.isRightMouseButton(e));
+        System.out.println("POPUP_TRG: "+e.isPopupTrigger());
+
         if(SwingUtilities.isRightMouseButton(e)) {//&& e.isPopupTrigger()
         	if(popup != null) displayPopupMenu(e.getX(), e.getY());
         }
         else {
-        
+
 
         //if((mods & panMask) == panMask) {
         	System.out.println("PANN_YYYY");
-        	
-            //can we pan this plot?
-            if(plot instanceof Pannable) {
-                Pannable pannable = (Pannable) plot;
-                if(pannable.isDomainPannable() || pannable.isRangePannable()) {
-                	Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
-                    if(screenDataArea != null && screenDataArea.contains(e.getPoint())) {
-                    	panW = screenDataArea.getWidth();
-                    	panH = screenDataArea.getHeight();
-                    	panLast = e.getPoint();
+
+        	//can we pan this plot?
+        	if(plot instanceof Pannable) {
+        		Pannable pannable = (Pannable) plot;
+        		if(pannable.isDomainPannable() || pannable.isRangePannable()) {
+        			Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
+	        		if(screenDataArea != null && screenDataArea.contains(e.getPoint())) {
+                    	panW	=	screenDataArea.getWidth();
+                    	panH	=	screenDataArea.getHeight();
+                    	panLast	=	e.getPoint();
 
                     	//System.out.println(	getScreenDataArea()	);
-                    	
+
                         //setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                     	setCursor(startMoveCursor);
                     }
-                }
+                    else {
+                    	//System.out.println("222222");
 
-                //the actual panning occurs later in the mouseDragged() 
-                //method
-            }
+                    	setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+                    	//setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+                    	
+                    	//System.out.println(	"PANNABLE: "+((Pannable) plot).isRangePannable()	);
+                    	
+                    	System.out.println("X: "+e.getX()+"; SCDA_W: "+screenDataArea.getWidth() + "; FW: "+getWidth());
+                    	System.out.println("Y: "+e.getY()+"; SCDA_H: "+screenDataArea.getHeight() + "; FH: "+getHeight());
+                    	
+                    	if(	e.getX() > screenDataArea.getWidth() && e.getX() < getWidth() &&
+                    		e.getY() < screenDataArea.getHeight())
+                    	{
+                    		setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+
+                    		panRangeAxisLast = e.getPoint();
+                    		panDomainAxisLast = null;
+                    		panLast = null;
+                    	}
+                    	else if(
+                    		e.getY() > screenDataArea.getHeight() && e.getY() < getHeight() &&
+                    		e.getX() < screenDataArea.getWidth()
+                    	)
+                    	{
+                    		setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+
+                    		panDomainAxisLast = e.getPoint();
+                    		panRangeAxisLast = null;
+                    		panLast = null;
+                    	}
+                    	else {
+                    		setCursor(defaultCursor);
+
+                    		panDomainAxisLast = null;
+                    		panRangeAxisLast = null;
+                    		panLast = null;
+                    	}
+                    }
+        		}
+
+        		//the actual panning occurs later in the mouseDragged() 
+        	}
+            else System.out.println("NO_PANN");
         }
 
         /*
@@ -1651,12 +1697,12 @@ public class ChartPanel extends JPanel implements
      *
      * @return A point within the rectangle.
      */
-    private Point2D getPointInRectangle(int x, int y, Rectangle2D area) {
-    	double xx = Math.max(area.getMinX(), Math.min(x, area.getMaxX()));
-    	double yy = Math.max(area.getMinY(), Math.min(y, area.getMaxY()));
+	private Point2D getPointInRectangle(int x, int y, Rectangle2D area) {
+		double xx = Math.max(area.getMinX(), Math.min(x, area.getMaxX()));
+		double yy = Math.max(area.getMinY(), Math.min(y, area.getMaxY()));
 
-    	return new Point2D.Double(xx, yy);
-    }
+		return new Point2D.Double(xx, yy);
+	}
 
     /**
      * Handles a 'mouse dragged' event.
@@ -1667,52 +1713,120 @@ public class ChartPanel extends JPanel implements
     public void mouseDragged(MouseEvent e) {
     	System.out.println("M_DRG");
 
-        //if the popup menu has already been triggered, then ignore dragging...
-        if(popup != null && popup.isShowing()) return;
+    	//if the popup menu has already been triggered, then ignore dragging...
+    	if(popup != null && popup.isShowing()) return;
 
-        //handle panning if we have a start point
-        if(panLast != null) {
+    	//handle panning if we have a start point
+    	if(panLast != null) {
         	setCursor(moveCursor);
-        	
-            double dx = e.getX() - panLast.getX();
-            double dy = e.getY() - panLast.getY();
 
-            if(dx == 0.0 && dy == 0.0) return;
+        	double dx = e.getX() - panLast.getX();
+        	double dy = e.getY() - panLast.getY();
 
-            double wPercent = -dx / panW;
-            double hPercent = dy / panH;
-            boolean old = chart.getPlot().isNotify();
+        	if(dx == 0.0 && dy == 0.0) return;
+
+        	double wPercent = -dx / panW;
+        	double hPercent = dy / panH;
+        	boolean old = chart.getPlot().isNotify();
 
             chart.getPlot().setNotify(false);
-            
-            Pannable p = (Pannable) chart.getPlot();
+
+            Pannable p = (Pannable)chart.getPlot();
             if(p.getOrientation() == PlotOrientation.VERTICAL) {
                 p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
                 p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
             else {
-                p.panDomainAxes(hPercent, info.getPlotInfo(), panLast);
-                p.panRangeAxes(wPercent, info.getPlotInfo(), panLast);
+            	p.panDomainAxes(hPercent, info.getPlotInfo(), panLast);
+            	p.panRangeAxes(wPercent, info.getPlotInfo(), panLast);
             }
+
             panLast = e.getPoint();
             chart.getPlot().setNotify(old);
 
             return;
-        }
+    	}
+    	else if(panRangeAxisLast != null || panDomainAxisLast != null) {
+    		System.out.println("PAN AXES");
 
-        // if no initial zoom point was set, ignore dragging...
-        if(zoomPoint == null) return;
+    		Zoomable zoomable = (Zoomable)getChart().getPlot();
+			PlotRenderingInfo plotRenderingInfo = getChartRenderingInfo().getPlotInfo();
+   
+    		if(panRangeAxisLast != null) {
+    			System.out.println("PAN RANGE AXIS");
+    			
+    			setCursor(panRangeAxisCursor);
 
-        Graphics2D g2 = (Graphics2D)getGraphics();
+    			double dy = e.getY()-panRangeAxisLast.getY();
+
+    			if(dy == 0.0) return;
+ 
+    			System.out.println("DY: "+dy);
+
+    			if(dy > 0) {
+    				zoomable.zoomRangeAxes(
+    					1.1,
+    					plotRenderingInfo,
+    					null,
+    					false
+    				);
+    			}
+    			else {
+    				zoomable.zoomRangeAxes(
+    					0.9,
+        				plotRenderingInfo,
+        				null,
+        				false
+        			);
+    			}
+
+    			panRangeAxisLast = e.getPoint();
+    		}
+
+    		if(panDomainAxisLast != null) {
+    			System.out.println("PAN DOMAIN AXIS");
+    			
+    			setCursor(panDomainAxisCursor);
+    			
+    			double dx = e.getX()-panDomainAxisLast.getX();
+    			if(dx == 0) return;
+    			
+    			if(dx > 0) {
+    				zoomable.zoomDomainAxes(
+    					0.9,
+    					plotRenderingInfo,
+    					null,
+    					false
+    				);
+    			}
+    			else {
+    				zoomable.zoomDomainAxes(
+    					1.1,
+    					plotRenderingInfo,
+    					null,
+    					false
+    				);
+    			}
+
+    			panDomainAxisLast = e.getPoint();
+    		}
+
+    		return;
+    	}
+
+    	// if no initial zoom point was set, ignore dragging...
+    	if(zoomPoint == null) return;
+
+    	Graphics2D g2 = (Graphics2D)getGraphics();
 
         // erase the previous zoom rectangle (if any).  We only need to do
         // this is we are using XOR mode, which we do when we're not using
         // the buffer (if there is a buffer, then at the end of this method we
         // just trigger a repaint)
-        if(!useBuffer) drawZoomRectangle(g2, true);
+    	if(!useBuffer) drawZoomRectangle(g2, true);
 
-        boolean hZoom, vZoom;
-        if(orientation == PlotOrientation.HORIZONTAL) {
+    	boolean hZoom, vZoom;
+    	if(orientation == PlotOrientation.HORIZONTAL) {
         	hZoom = rangeZoomable;
         	vZoom = domainZoomable;
         }
@@ -1721,8 +1835,8 @@ public class ChartPanel extends JPanel implements
         	vZoom = rangeZoomable;
         }
 
-        Rectangle2D scaledDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
-        if(hZoom && vZoom) {
+    	Rectangle2D scaledDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
+    	if(hZoom && vZoom) {
             // selected rectangle shouldn't extend outside the data area...
         	double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
         	double ymax = Math.min(e.getY(), scaledDataArea.getMaxY());
@@ -1735,9 +1849,9 @@ public class ChartPanel extends JPanel implements
             );
         }
         else if(hZoom) {
-            double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
+        	double xmax = Math.min(e.getX(), scaledDataArea.getMaxX());
 
-            zoomRectangle = new Rectangle2D.Double(
+        	zoomRectangle = new Rectangle2D.Double(
             	zoomPoint.getX(),
             	scaledDataArea.getMinY(),
             	xmax - zoomPoint.getX(),
@@ -1756,14 +1870,14 @@ public class ChartPanel extends JPanel implements
         }
 
         //Draw the new zoom rectangle...
-        if(useBuffer) repaint();
-        else {
+    	if(useBuffer) repaint();
+    	else {
             // with no buffer, we use XOR to draw the rectangle "over" the
             // chart...
-            drawZoomRectangle(g2, true);
-        }
+        	drawZoomRectangle(g2, true);
+    	}
 
-        g2.dispose();
+    	g2.dispose();
 	}
 
     /**
@@ -1777,12 +1891,22 @@ public class ChartPanel extends JPanel implements
     public void mouseReleased(MouseEvent e) {
         //if we've been panning, we need to reset now that the mouse is 
         //released...
-        if(panLast != null) {
+
+    	if(panLast != null || panRangeAxisLast != null || panDomainAxisLast != null) {
         	panLast = null;
 
-            //setCursor(Cursor.getDefaultCursor());
-        	setCursor(regularCursor);
+        	panDomainAxisLast = null;
+        	panRangeAxisLast = null;
+
+        	//setCursor(Cursor.getDefaultCursor());
+        	setCursor(defaultCursor);
         }
+    	/*
+        else if(panRangeAxisLast != null && panDomainAxisLast != null) {
+        	panRangeAxisLast = null;
+        	panDomainAxisLast = null;
+        }
+        */
         else if(zoomRectangle != null) {
         	boolean hZoom, vZoom;
 
@@ -1799,14 +1923,12 @@ public class ChartPanel extends JPanel implements
             boolean zoomTrigger2 = vZoom && Math.abs(e.getY() - zoomPoint.getY()) >= zoomTriggerDistance;
             
             if(zoomTrigger1 || zoomTrigger2) {
-                if((hZoom && (e.getX() < zoomPoint.getX())) || (vZoom && (e.getY() < zoomPoint.getY()))) {
-                    restoreAutoBounds();
-                }
+                if((hZoom && (e.getX() < zoomPoint.getX())) || (vZoom && (e.getY() < zoomPoint.getY()))) restoreAutoBounds();
                 else {
-                    double x, y, w, h;
-                    Rectangle2D screenDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
-                    double maxX = screenDataArea.getMaxX();
-                    double maxY = screenDataArea.getMaxY();
+                	double x, y, w, h;
+                	Rectangle2D screenDataArea = getScreenDataArea((int)zoomPoint.getX(), (int)zoomPoint.getY());
+                	double maxX = screenDataArea.getMaxX();
+                	double maxY = screenDataArea.getMaxY();
                     // for mouseReleased event, (horizontalZoom || verticalZoom)
                     // will be true, so we can just test for either being false;
                     // otherwise both are true
@@ -1863,9 +1985,14 @@ public class ChartPanel extends JPanel implements
 	public void mouseClicked(MouseEvent event) {
 		System.out.println("MS_CLK: CNT: "+event.getClickCount());
 
+		if(event.getClickCount() == 2) {
+			restoreAutoRangeBounds();
+			restoreAutoDomainBounds();
+		}
+
 		Insets insets = getInsets();
-		int x = (int) ((event.getX() - insets.left) / scaleX);
-		int y = (int) ((event.getY() - insets.top) / scaleY);
+		final int x = (int) ((event.getX() - insets.left) / scaleX);
+		final int y = (int) ((event.getY() - insets.top) / scaleY);
 
         anchor = new Point2D.Double(x, y);
         if(chart == null) return;
@@ -1882,7 +2009,7 @@ public class ChartPanel extends JPanel implements
         }
 
         ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), event, entity);
-        for(int i = listeners.length - 1; i >= 0; i -= 1) {
+        for(int i = listeners.length-1; i >= 0; i -= 1) {
             ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
         }
 	}
@@ -1914,7 +2041,7 @@ public class ChartPanel extends JPanel implements
         // (see bug report 1556951)
 		if(chart != null) {
             ChartMouseEvent event = new ChartMouseEvent(getChart(), e, entity);
-            for(int i = listeners.length - 1; i >= 0; i -= 1) {
+            for(int i = listeners.length-1; i >= 0; i -= 1) {
                 ((ChartMouseListener) listeners[i]).chartMouseMoved(event);
             }
         }
@@ -1938,7 +2065,7 @@ public class ChartPanel extends JPanel implements
         zoomInDomain(x, y);
         zoomInRange(x, y);
         plot.setNotify(savedNotify);
-    }
+	}
 
     /**
      * Decreases the length of the domain axis, centered about the given
@@ -1950,6 +2077,7 @@ public class ChartPanel extends JPanel implements
      */
     public void zoomInDomain(double x, double y) {
     	Plot plot = chart.getPlot();
+    	
         if(plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
@@ -1957,7 +2085,12 @@ public class ChartPanel extends JPanel implements
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
             Zoomable z = (Zoomable) plot;
-            z.zoomDomainAxes(zoomInFactor, info.getPlotInfo(), translateScreenToJava2D(new Point((int) x, (int) y)), zoomAroundAnchor);
+            z.zoomDomainAxes(
+            	zoomInFactor,
+            	info.getPlotInfo(),
+            	translateScreenToJava2D(new Point((int)x, (int)y)),
+            	zoomAroundAnchor
+            );
             plot.setNotify(savedNotify);
         }
 	}
@@ -1971,17 +2104,22 @@ public class ChartPanel extends JPanel implements
      * @param y  the y coordinate (in screen coordinates).
      */
     public void zoomInRange(double x, double y) {
-        Plot plot = chart.getPlot();
-        if(plot instanceof Zoomable) {
+    	Plot plot = chart.getPlot();
+
+    	if(plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
             // axes...
-            boolean savedNotify = plot.isNotify();
-            plot.setNotify(false);
-            Zoomable z = (Zoomable) plot;
-            z.zoomRangeAxes(this.zoomInFactor, this.info.getPlotInfo(),
-                    translateScreenToJava2D(new Point((int) x, (int) y)),
-                    this.zoomAroundAnchor);
+
+    		boolean savedNotify = plot.isNotify();
+    		plot.setNotify(false);
+    		Zoomable z = (Zoomable)plot;
+            z.zoomRangeAxes(
+            	zoomInFactor,
+            	info.getPlotInfo(),
+            	translateScreenToJava2D(new Point((int)x, (int)y)),
+            	zoomAroundAnchor
+            );
             plot.setNotify(savedNotify);
         }
     }
@@ -2016,19 +2154,17 @@ public class ChartPanel extends JPanel implements
      */
     public void zoomOutDomain(double x, double y) {
         Plot plot = chart.getPlot();
-        if(plot instanceof Zoomable) {
+        if(plot != null && plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
             // axes...
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
             Zoomable z = (Zoomable) plot;
-            z.zoomDomainAxes(this.zoomOutFactor, this.info.getPlotInfo(),
-                    translateScreenToJava2D(new Point((int) x, (int) y)),
-                    this.zoomAroundAnchor);
+            z.zoomDomainAxes(zoomOutFactor, info.getPlotInfo(), translateScreenToJava2D(new Point((int)x, (int)y)), zoomAroundAnchor);
             plot.setNotify(savedNotify);
         }
-    }
+	}
 
     /**
      * Increases the length the range axis, centered about the given
@@ -2144,18 +2280,18 @@ public class ChartPanel extends JPanel implements
     /**
      * Restores the auto-range calculation on the range axis.
      */
-    public void restoreAutoRangeBounds() {
-        Plot plot = chart.getPlot();
-        
-        if(plot instanceof Zoomable) {
-            Zoomable z = (Zoomable) plot;
+	public void restoreAutoRangeBounds() {
+		Plot plot = chart.getPlot();
+
+		if(plot != null && plot instanceof Zoomable) {
+			Zoomable z = (Zoomable) plot;
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
             // axes...
-            
+
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
-            
+
             // we need to guard against this.zoomPoint being null
             Point2D zp = (zoomPoint != null ? zoomPoint : new Point());
             z.zoomRangeAxes(0.0, info.getPlotInfo(), zp);
@@ -2205,7 +2341,7 @@ public class ChartPanel extends JPanel implements
 
             result = scale(plotInfo.getSubplotInfo(subplotIndex).getDataArea());
         }
-        
+
         return result;
     }
 
@@ -2217,7 +2353,7 @@ public class ChartPanel extends JPanel implements
      * @see javax.swing.ToolTipManager#getInitialDelay()
      */
     public int getInitialDelay() {
-        return this.ownToolTipInitialDelay;
+        return ownToolTipInitialDelay;
     }
 
     /**
@@ -2228,7 +2364,7 @@ public class ChartPanel extends JPanel implements
      * @see javax.swing.ToolTipManager#getReshowDelay()
      */
     public int getReshowDelay() {
-        return this.ownToolTipReshowDelay;
+        return ownToolTipReshowDelay;
     }
 
     /**
@@ -2240,7 +2376,7 @@ public class ChartPanel extends JPanel implements
      * @see javax.swing.ToolTipManager#getDismissDelay()
      */
     public int getDismissDelay() {
-        return this.ownToolTipDismissDelay;
+        return ownToolTipDismissDelay;
     }
 
     /**
@@ -2287,7 +2423,7 @@ public class ChartPanel extends JPanel implements
      * @see #setZoomInFactor(double)
      */
     public double getZoomInFactor() {
-        return this.zoomInFactor;
+        return zoomInFactor;
     }
 
     /**
@@ -2298,7 +2434,7 @@ public class ChartPanel extends JPanel implements
      * @see #getZoomInFactor()
      */
     public void setZoomInFactor(double factor) {
-        this.zoomInFactor = factor;
+    	zoomInFactor = factor;
     }
 
     /**
@@ -2309,7 +2445,7 @@ public class ChartPanel extends JPanel implements
      * @see #setZoomOutFactor(double)
      */
     public double getZoomOutFactor() {
-        return this.zoomOutFactor;
+    	return zoomOutFactor;
     }
 
     /**
@@ -2320,7 +2456,7 @@ public class ChartPanel extends JPanel implements
      * @see #getZoomOutFactor()
      */
     public void setZoomOutFactor(double factor) {
-        this.zoomOutFactor = factor;
+    	zoomOutFactor = factor;
     }
 
     /**
@@ -2334,9 +2470,7 @@ public class ChartPanel extends JPanel implements
      * @param xor  use XOR for drawing?
      */
     private void drawZoomRectangle(Graphics2D g2, boolean xor) {
-    	
-    	
-        if(zoomRectangle != null) {
+    	if(zoomRectangle != null) {
             if(xor) {
                  // Set XOR mode to draw the zoom rectangle
                 g2.setXORMode(Color.GRAY);
@@ -2782,7 +2916,7 @@ public class ChartPanel extends JPanel implements
             pngItem.addActionListener(this);
             saveSubMenu.add(pngItem);
             
-            if (ChartUtils.isJFreeSVGAvailable()) {
+            if(ChartUtils.isJFreeSVGAvailable()) {
                 JMenuItem svgItem = new JMenuItem(localizationResources.getString(
                         "SVG..."));
                 svgItem.setActionCommand("SAVE_AS_SVG");
@@ -2801,10 +2935,9 @@ public class ChartPanel extends JPanel implements
             separator = true;
         }
 
-        if (print) {
-            if (separator) {
-                result.addSeparator();
-            }
+        if(print) {
+            if(separator) result.addSeparator();
+
             JMenuItem printItem = new JMenuItem(
                     localizationResources.getString("Print..."));
             printItem.setActionCommand(PRINT_COMMAND);
@@ -2813,27 +2946,22 @@ public class ChartPanel extends JPanel implements
             separator = true;
         }
 
-        if (zoom) {
-            if (separator) {
-                result.addSeparator();
-            }
+        if(zoom) {
+            if(separator) result.addSeparator();
 
-            JMenu zoomInMenu = new JMenu(
-                    localizationResources.getString("Zoom_In"));
+            JMenu zoomInMenu = new JMenu(localizationResources.getString("Zoom_In"));
 
-            this.zoomInBothMenuItem = new JMenuItem(
-                    localizationResources.getString("All_Axes"));
-            this.zoomInBothMenuItem.setActionCommand(ZOOM_IN_BOTH_COMMAND);
-            this.zoomInBothMenuItem.addActionListener(this);
-            zoomInMenu.add(this.zoomInBothMenuItem);
+            zoomInBothMenuItem = new JMenuItem(localizationResources.getString("All_Axes"));
+            zoomInBothMenuItem.setActionCommand(ZOOM_IN_BOTH_COMMAND);
+            zoomInBothMenuItem.addActionListener(this);
+            zoomInMenu.add(zoomInBothMenuItem);
 
             zoomInMenu.addSeparator();
 
-            this.zoomInDomainMenuItem = new JMenuItem(
-                    localizationResources.getString("Domain_Axis"));
-            this.zoomInDomainMenuItem.setActionCommand(ZOOM_IN_DOMAIN_COMMAND);
-            this.zoomInDomainMenuItem.addActionListener(this);
-            zoomInMenu.add(this.zoomInDomainMenuItem);
+            zoomInDomainMenuItem = new JMenuItem(localizationResources.getString("Domain_Axis"));
+            zoomInDomainMenuItem.setActionCommand(ZOOM_IN_DOMAIN_COMMAND);
+            zoomInDomainMenuItem.addActionListener(this);
+            zoomInMenu.add(zoomInDomainMenuItem);
 
             this.zoomInRangeMenuItem = new JMenuItem(
                     localizationResources.getString("Range_Axis"));
@@ -2843,8 +2971,7 @@ public class ChartPanel extends JPanel implements
 
             result.add(zoomInMenu);
 
-            JMenu zoomOutMenu = new JMenu(
-                    localizationResources.getString("Zoom_Out"));
+            JMenu zoomOutMenu = new JMenu(localizationResources.getString("Zoom_Out"));
 
             this.zoomOutBothMenuItem = new JMenuItem(
                     localizationResources.getString("All_Axes"));
@@ -2869,34 +2996,26 @@ public class ChartPanel extends JPanel implements
 
             result.add(zoomOutMenu);
 
-            JMenu autoRangeMenu = new JMenu(
-                    localizationResources.getString("Auto_Range"));
+            JMenu autoRangeMenu = new JMenu(localizationResources.getString("Auto_Range"));
 
-            this.zoomResetBothMenuItem = new JMenuItem(
-                    localizationResources.getString("All_Axes"));
-            this.zoomResetBothMenuItem.setActionCommand(
-                    ZOOM_RESET_BOTH_COMMAND);
+            this.zoomResetBothMenuItem = new JMenuItem(localizationResources.getString("All_Axes"));
+            this.zoomResetBothMenuItem.setActionCommand(ZOOM_RESET_BOTH_COMMAND);
             this.zoomResetBothMenuItem.addActionListener(this);
             autoRangeMenu.add(this.zoomResetBothMenuItem);
 
             autoRangeMenu.addSeparator();
-            this.zoomResetDomainMenuItem = new JMenuItem(
-                    localizationResources.getString("Domain_Axis"));
-            this.zoomResetDomainMenuItem.setActionCommand(
-                    ZOOM_RESET_DOMAIN_COMMAND);
+            this.zoomResetDomainMenuItem = new JMenuItem(localizationResources.getString("Domain_Axis"));
+            this.zoomResetDomainMenuItem.setActionCommand(ZOOM_RESET_DOMAIN_COMMAND);
             this.zoomResetDomainMenuItem.addActionListener(this);
             autoRangeMenu.add(this.zoomResetDomainMenuItem);
 
-            this.zoomResetRangeMenuItem = new JMenuItem(
-                    localizationResources.getString("Range_Axis"));
-            this.zoomResetRangeMenuItem.setActionCommand(
-                    ZOOM_RESET_RANGE_COMMAND);
-            this.zoomResetRangeMenuItem.addActionListener(this);
+            zoomResetRangeMenuItem = new JMenuItem(localizationResources.getString("Range_Axis"));
+            zoomResetRangeMenuItem.setActionCommand(ZOOM_RESET_RANGE_COMMAND);
+            zoomResetRangeMenuItem.addActionListener(this);
             autoRangeMenu.add(this.zoomResetRangeMenuItem);
 
             result.addSeparator();
             result.add(autoRangeMenu);
-
         }
 
         return result;
@@ -2910,24 +3029,21 @@ public class ChartPanel extends JPanel implements
      * @param y  vertical position of the popup.
      */
     protected void displayPopupMenu(int x, int y) {
-
-        if (this.popup == null) {
-            return;
-        }
+        if(this.popup == null) return;
 
         // go through each zoom menu item and decide whether or not to
         // enable it...
         boolean isDomainZoomable = false;
         boolean isRangeZoomable = false;
-        Plot plot = (this.chart != null ? this.chart.getPlot() : null);
-        if (plot instanceof Zoomable) {
+        Plot plot = chart != null ? chart.getPlot() : null;
+        if(plot instanceof Zoomable) {
             Zoomable z = (Zoomable) plot;
             isDomainZoomable = z.isDomainZoomable();
             isRangeZoomable = z.isRangeZoomable();
         }
 
-        if (this.zoomInDomainMenuItem != null) {
-            this.zoomInDomainMenuItem.setEnabled(isDomainZoomable);
+        if(zoomInDomainMenuItem != null) {
+        	zoomInDomainMenuItem.setEnabled(isDomainZoomable);
         }
         if (this.zoomOutDomainMenuItem != null) {
             this.zoomOutDomainMenuItem.setEnabled(isDomainZoomable);
@@ -2960,8 +3076,7 @@ public class ChartPanel extends JPanel implements
                     && isRangeZoomable);
         }
 
-        this.popup.show(this, x, y);
-
+        popup.show(this, x, y);
     }
 
     /**
@@ -2971,12 +3086,24 @@ public class ChartPanel extends JPanel implements
     public void updateUI() {
         // here we need to update the UI for the popup menu, if the panel
         // has one...
-        if (this.popup != null) {
-            SwingUtilities.updateComponentTreeUI(this.popup);
-        }
+    	if(popup != null) SwingUtilities.updateComponentTreeUI(popup);
+        
         super.updateUI();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Provides serialization support.
      *

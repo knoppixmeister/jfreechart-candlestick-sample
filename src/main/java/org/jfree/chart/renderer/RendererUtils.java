@@ -256,17 +256,14 @@ public class RendererUtils {
      *
      * @return The indices of the boundary items.
      */
-    public static int[] findLiveItems(XYDataset dataset, int series,
-            double xLow, double xHigh) {
+    public static int[] findLiveItems(XYDataset dataset, int series, double xLow, double xHigh) {
         // here we could probably be a little faster by searching for both
         // indices simultaneously, but I'll look at that later if it seems
         // like it matters...
         int i0 = findLiveItemsLowerBound(dataset, series, xLow, xHigh);
         int i1 = findLiveItemsUpperBound(dataset, series, xLow, xHigh);
-        if (i0 > i1) {
-            i0 = i1;
-        }
+        if(i0 > i1) i0 = i1;
+
         return new int[] {i0, i1};
     }
-
 }
