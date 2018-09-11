@@ -19,6 +19,7 @@ import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
@@ -115,7 +116,7 @@ public class Test3 {
 		plot2.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot2.setRangePannable(true);
 
-		XYDifferenceRenderer r = //new XYDifferenceRenderer(Color.RED, Color.LIGHT_GRAY, false);
+		XYDifferenceRenderer r = 	//new XYDifferenceRenderer(Color.RED, Color.LIGHT_GRAY, false);
 									new XYDifferenceRenderer();
 		//r.setRoundXCoordinates(true);
 		plot2.setDataset(1, collection3);
@@ -129,8 +130,9 @@ public class Test3 {
 		);
 
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
-		combinedPlot.setGap(0);
-		
+		combinedPlot.setGap(-9);
+		//combinedPlot.setInsets(new RectangleInsets(-20, -10, 0, -10));
+
 		//combinedPlot.setDomainCrosshairVisible(true);
 		
 		combinedPlot.setDomainPannable(true);

@@ -9,8 +9,8 @@ import org.jfree.chart.util.UnitType;
  * terms. This class is immutable.
  */
 public class RectangleInsets implements Serializable {
-    private static final long serialVersionUID = 1902273207559319996L;
-    
+	private static final long serialVersionUID = 1902273207559319996L;
+
     /**
      * A useful constant representing zero insets.
      */
@@ -36,9 +36,9 @@ public class RectangleInsets implements Serializable {
      * 
      * @since 1.0.9
      */
-    public RectangleInsets() {
-        this(1.0, 1.0, 1.0, 1.0);
-    }
+	public RectangleInsets() {
+		this(1.0, 1.0, 1.0, 1.0);
+	}
     
     /**
      * Creates a new instance with the specified insets (as 'absolute' units).
@@ -48,10 +48,10 @@ public class RectangleInsets implements Serializable {
      * @param bottom  the bottom insets.
      * @param right  the right insets.
      */
-    public RectangleInsets(double top, double left, double bottom, double right) {
-        this(UnitType.ABSOLUTE, top, left, bottom, right);   
-    }
-    
+	public RectangleInsets(double top, double left, double bottom, double right) {
+		this(UnitType.ABSOLUTE, top, left, bottom, right);   
+	}
+
     /**
      * Creates a new instance.
      * 

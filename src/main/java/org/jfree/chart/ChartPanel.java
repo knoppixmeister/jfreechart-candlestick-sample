@@ -1630,12 +1630,18 @@ public class ChartPanel extends JPanel implements
                     else {
                     	//System.out.println("222222");
 
+                    	if(screenDataArea == null) return;
+
                     	setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
                     	//setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
                     	
                     	//System.out.println(	"PANNABLE: "+((Pannable) plot).isRangePannable()	);
-                    	
-                    	System.out.println("X: "+e.getX()+"; SCDA_W: "+screenDataArea.getWidth() + "; FW: "+getWidth());
+
+                    	System.out.println(
+                    		"X: "+e.getX()+
+                    		"; SCDA_W: "+screenDataArea.getWidth() +
+                    		"; FW: "+getWidth()
+                    	);
                     	System.out.println("Y: "+e.getY()+"; SCDA_H: "+screenDataArea.getHeight() + "; FH: "+getHeight());
                     	
                     	if(	e.getX() > screenDataArea.getWidth() && e.getX() < getWidth() &&

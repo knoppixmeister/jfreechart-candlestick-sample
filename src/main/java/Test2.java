@@ -98,15 +98,15 @@ public class Test2 {
 
 		DateAxis dateAxis = new DateAxis();
 		dateAxis.setFixedAutoRange(60000);
-		
+
 		NumberAxis priceAxis = new NumberAxis();
 		//priceAxis.setLowerBound(3000);
 		//priceAxis.setUpperBound(12000);
-		
+
 		//priceAxis.setAutoRangeStickyZero(false);
 		priceAxis.setAutoRangeIncludesZero(false);
 		//priceAxis.setRangeType(RangeType.POSITIVE);
-		
+
 		MarkerAxisBand markerAxisBand = new MarkerAxisBand(
 			priceAxis,	//axis,
 			0,		//topOuterGap,

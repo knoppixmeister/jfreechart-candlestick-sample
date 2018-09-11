@@ -444,7 +444,7 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
 
     	if(!insets.equals(insets)) {
         	this.insets = insets;
-        	
+
             if(notify) fireChangeEvent();
         }
     }
