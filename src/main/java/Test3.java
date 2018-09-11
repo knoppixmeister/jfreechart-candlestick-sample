@@ -145,12 +145,12 @@ public class Test3 {
 		JFreeChart chart = new JFreeChart(combinedPlot);
 
 		ChartPanel panel = new ChartPanel(chart);
-		
+
 		panel.addOverlay(chOverlay);
-		
+
 		panel.setMouseWheelEnabled(true);
 		panel.setMouseZoomable(false);
-		
+
 		JButton b = new JButton("BTN");
 		b.setHorizontalAlignment(SwingConstants.RIGHT);
 		b.addActionListener(new ActionListener() {
@@ -166,16 +166,16 @@ public class Test3 {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				System.out.println("AAAAA");
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 			}
@@ -188,14 +188,14 @@ public class Test3 {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				//panel.getScreenDataArea(x, y);
-				
+
 				Rectangle2D dataArea = panel.getScreenDataArea((int)e.getX(), (int)e.getY());
-				
+
 				if(dataArea != null) {
 					//System.out.println(dataArea.getX());
-					
-					double x = dateAxis.java2DToValue(e.getX(), dataArea, plot1.getDomainAxisEdge());
-					double y = priceAxis.java2DToValue(e.getY(), dataArea, plot1.getRangeAxisEdge());
+
+					//double x = dateAxis.java2DToValue(e.getX(), dataArea, plot1.getDomainAxisEdge());
+					//double y = priceAxis.java2DToValue(e.getY(), dataArea, plot1.getRangeAxisEdge());
 					
 					//System.out.println("X: "+x);
 					
@@ -211,7 +211,7 @@ public class Test3 {
 					*/
 				}
 			}
-			
+
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
 			}
@@ -220,7 +220,7 @@ public class Test3 {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				System.out.println("MW: "+e.getWheelRotation()	);
-				
+
 				//((XYPlot)((CombinedDomainXYPlot)panel.getChart().getPlot()).getSubplots().get(0)).getDataR
 			}
 		});
