@@ -1063,7 +1063,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setFixedDimension(double)
      */
     public double getFixedDimension() {
-        return this.fixedDimension;
+        return fixedDimension;
     }
 
     /**
@@ -1118,7 +1118,7 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return The axis state (never {@code null}).
      */
-    public abstract AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState);
+	public abstract AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState);
 
     /**
      * Calculates the positions of the ticks for the axis, storing the results
@@ -1131,7 +1131,7 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return The list of ticks.
      */
-    public abstract List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge);
+	public abstract List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge);
 
     /**
      * Created an entity for the axis.
@@ -1147,28 +1147,24 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.13
      */
     protected void createAndAddEntity(double cursor, AxisState state, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState) {
-        if (plotState == null || plotState.getOwner() == null) {
-            return;  // no need to create entity if we can't save it anyways...
-        }
+        if(plotState == null || plotState.getOwner() == null) return;  // no need to create entity if we can't save it anyways...
+
         Rectangle2D hotspot = null;
-        if (edge.equals(RectangleEdge.TOP)) {
-            hotspot = new Rectangle2D.Double(dataArea.getX(),
-                    state.getCursor(), dataArea.getWidth(),
-                    cursor - state.getCursor());
+        if(edge.equals(RectangleEdge.TOP)) {
+            hotspot = new Rectangle2D.Double(dataArea.getX(), state.getCursor(), dataArea.getWidth(), cursor - state.getCursor());
         }
-        else if (edge.equals(RectangleEdge.BOTTOM)) {
-            hotspot = new Rectangle2D.Double(dataArea.getX(), cursor,
-                    dataArea.getWidth(), state.getCursor() - cursor);
+        else if(edge.equals(RectangleEdge.BOTTOM)) {
+            hotspot = new Rectangle2D.Double(dataArea.getX(), cursor, dataArea.getWidth(), state.getCursor() - cursor);
         }
-        else if (edge.equals(RectangleEdge.LEFT)) {
-            hotspot = new Rectangle2D.Double(state.getCursor(),
-                    dataArea.getY(), cursor - state.getCursor(),
-                    dataArea.getHeight());
+        else if(edge.equals(RectangleEdge.LEFT)) {
+            hotspot = new Rectangle2D.Double(state.getCursor(), dataArea.getY(), cursor - state.getCursor(), dataArea.getHeight());
         }
-        else if (edge.equals(RectangleEdge.RIGHT)) {
+        else if(edge.equals(RectangleEdge.RIGHT)) {
             hotspot = new Rectangle2D.Double(cursor, dataArea.getY(), state.getCursor() - cursor, dataArea.getHeight());
         }
+        
         EntityCollection e = plotState.getOwner().getEntityCollection();
+        
         if(e != null) e.add(new AxisEntity(hotspot, this));
     }
 
@@ -1203,11 +1199,11 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return A boolean.
      */
-    public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(listenerList.getListenerList());
-        
-        return list.contains(listener);
-    }
+	public boolean hasListener(EventListener listener) {
+		List list = Arrays.asList(listenerList.getListenerList());
+
+		return list.contains(listener);
+  	}
 
     /**
      * Notifies all registered listeners that the axis has changed.
@@ -1228,7 +1224,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     protected void fireChangeEvent() {
-        notifyListeners(new AxisChangeEvent(this));
+    	notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1241,11 +1237,11 @@ public abstract class Axis implements Cloneable, Serializable {
      * @return The enclosing rectangle.
      */
     protected Rectangle2D getLabelEnclosure(Graphics2D g2, RectangleEdge edge) {
-        Rectangle2D result = new Rectangle2D.Double();
-        Rectangle2D bounds = null;
-        
-        if(this.attributedLabel != null) {
-            TextLayout layout = new TextLayout(this.attributedLabel.getIterator(), g2.getFontRenderContext());
+    	Rectangle2D result = new Rectangle2D.Double();
+    	Rectangle2D bounds = null;
+
+    	if(attributedLabel != null) {
+            TextLayout layout = new TextLayout(attributedLabel.getIterator(), g2.getFontRenderContext());
             bounds = layout.getBounds();
         }
         else {
@@ -1280,44 +1276,39 @@ public abstract class Axis implements Cloneable, Serializable {
         if(location.equals(AxisLabelLocation.LOW_END)) return dataArea.getMinX();
 
         throw new RuntimeException("Unexpected AxisLabelLocation: " + location);
-    }
-    
-    protected double labelLocationY(AxisLabelLocation location, Rectangle2D dataArea) {
-        if (location.equals(AxisLabelLocation.HIGH_END)) {
-            return dataArea.getMinY();
-        }
-        if (location.equals(AxisLabelLocation.MIDDLE)) {
-            return dataArea.getCenterY();
-        }
-        if (location.equals(AxisLabelLocation.LOW_END)) {
-            return dataArea.getMaxY();
-        }
+	}
+
+	protected double labelLocationY(AxisLabelLocation location, Rectangle2D dataArea) {
+    	if(location.equals(AxisLabelLocation.HIGH_END)) {
+    		return dataArea.getMinY();
+    	}
+    	if(location.equals(AxisLabelLocation.MIDDLE)) {
+    		return dataArea.getCenterY();
+    	}
+    	if(location.equals(AxisLabelLocation.LOW_END)) {
+    		return dataArea.getMaxY();
+    	}
+
         throw new RuntimeException("Unexpected AxisLabelLocation: " + location);
     }
     
     protected TextAnchor labelAnchorH(AxisLabelLocation location) {
-        if (location.equals(AxisLabelLocation.HIGH_END)) {
-            return TextAnchor.CENTER_RIGHT;
-        }
-        if (location.equals(AxisLabelLocation.MIDDLE)) {
-            return TextAnchor.CENTER;
-        }
-        if (location.equals(AxisLabelLocation.LOW_END)) {
-            return TextAnchor.CENTER_LEFT;
-        }
+        if(location.equals(AxisLabelLocation.HIGH_END)) return TextAnchor.CENTER_RIGHT;
+
+        if(location.equals(AxisLabelLocation.MIDDLE)) return TextAnchor.CENTER;
+
+        if(location.equals(AxisLabelLocation.LOW_END)) return TextAnchor.CENTER_LEFT;
+
         throw new RuntimeException("Unexpected AxisLabelLocation: " + location);
     }
-    
+
     protected TextAnchor labelAnchorV(AxisLabelLocation location) {
-        if (location.equals(AxisLabelLocation.HIGH_END)) {
-            return TextAnchor.CENTER_RIGHT;
-        }
-        if (location.equals(AxisLabelLocation.MIDDLE)) {
-            return TextAnchor.CENTER;
-        }
-        if (location.equals(AxisLabelLocation.LOW_END)) {
-            return TextAnchor.CENTER_LEFT;
-        }
+        if(location.equals(AxisLabelLocation.HIGH_END)) return TextAnchor.CENTER_RIGHT;
+
+        if(location.equals(AxisLabelLocation.MIDDLE)) return TextAnchor.CENTER;
+
+        if(location.equals(AxisLabelLocation.LOW_END)) return TextAnchor.CENTER_LEFT;
+
         throw new RuntimeException("Unexpected AxisLabelLocation: " + location);
     }
 
@@ -1333,16 +1324,18 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @return Information about the axis.
      */
-    protected AxisState drawLabel(String label, Graphics2D g2,
-            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge,
-            AxisState state) {
-
+    protected AxisState drawLabel(
+    	String label,
+    	Graphics2D g2,
+    	Rectangle2D plotArea,
+    	Rectangle2D dataArea,
+    	RectangleEdge edge,
+    	AxisState state)
+    {
         // it is unlikely that 'state' will be null, but check anyway...
         Args.nullNotPermitted(state, "state");
 
-        if ((label == null) || (label.equals(""))) {
-            return state;
-        }
+        if((label == null) || (label.equals(""))) return state;
 
         Font font = getLabelFont();
         RectangleInsets insets = getLabelInsets();
@@ -1351,51 +1344,37 @@ public abstract class Axis implements Cloneable, Serializable {
         FontMetrics fm = g2.getFontMetrics();
         Rectangle2D labelBounds = TextUtils.getTextBounds(label, g2, fm);
 
-        if (edge == RectangleEdge.TOP) {
-            AffineTransform t = AffineTransform.getRotateInstance(
-                    getLabelAngle(), labelBounds.getCenterX(),
-                    labelBounds.getCenterY());
-            Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
-            labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = labelLocationX(this.labelLocation, dataArea);
-            double labely = state.getCursor() - insets.getBottom()
-                            - labelBounds.getHeight() / 2.0;
-            TextAnchor anchor = labelAnchorH(this.labelLocation);
-            TextUtils.drawRotatedString(label, g2, (float) labelx,
-                    (float) labely, anchor, getLabelAngle(), TextAnchor.CENTER);
-            state.cursorUp(insets.getTop() + labelBounds.getHeight()
-                    + insets.getBottom());
+        if(edge == RectangleEdge.TOP) {
+        	AffineTransform t = AffineTransform.getRotateInstance(getLabelAngle(), labelBounds.getCenterX(), labelBounds.getCenterY());
+        	Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
+        	labelBounds = rotatedLabelBounds.getBounds2D();
+        	double labelx = labelLocationX(labelLocation, dataArea);
+        	double labely = state.getCursor() - insets.getBottom() - labelBounds.getHeight() / 2.0;
+        	TextAnchor anchor = labelAnchorH(labelLocation);
+        	TextUtils.drawRotatedString(label, g2, (float)labelx, (float) labely, anchor, getLabelAngle(), TextAnchor.CENTER);
+        	state.cursorUp(insets.getTop() + labelBounds.getHeight() + insets.getBottom());
         }
-        else if (edge == RectangleEdge.BOTTOM) {
-            AffineTransform t = AffineTransform.getRotateInstance(
-                    getLabelAngle(), labelBounds.getCenterX(),
-                    labelBounds.getCenterY());
+        else if(edge == RectangleEdge.BOTTOM) {
+            AffineTransform t = AffineTransform.getRotateInstance(getLabelAngle(), labelBounds.getCenterX(), labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = labelLocationX(this.labelLocation, dataArea);
-            double labely = state.getCursor()
-                            + insets.getTop() + labelBounds.getHeight() / 2.0;
-            TextAnchor anchor = labelAnchorH(this.labelLocation);
-            TextUtils.drawRotatedString(label, g2, (float) labelx,
-                    (float) labely, anchor, getLabelAngle(), TextAnchor.CENTER);
-            state.cursorDown(insets.getTop() + labelBounds.getHeight()
-                    + insets.getBottom());
+            double labelx = labelLocationX(labelLocation, dataArea);
+            double labely = state.getCursor() + insets.getTop() + labelBounds.getHeight() / 2.0;
+            TextAnchor anchor = labelAnchorH(labelLocation);
+            TextUtils.drawRotatedString(label, g2, (float) labelx, (float) labely, anchor, getLabelAngle(), TextAnchor.CENTER);
+            state.cursorDown(insets.getTop() + labelBounds.getHeight() + insets.getBottom());
         }
-        else if (edge == RectangleEdge.LEFT) {
-            AffineTransform t = AffineTransform.getRotateInstance(
-                    getLabelAngle() - Math.PI / 2.0, labelBounds.getCenterX(),
-                    labelBounds.getCenterY());
+        else if(edge == RectangleEdge.LEFT) {
+            AffineTransform t = AffineTransform.getRotateInstance(getLabelAngle() - Math.PI / 2.0, labelBounds.getCenterX(), labelBounds.getCenterY());
             Shape rotatedLabelBounds = t.createTransformedShape(labelBounds);
             labelBounds = rotatedLabelBounds.getBounds2D();
-            double labelx = state.getCursor()
-                            - insets.getRight() - labelBounds.getWidth() / 2.0;
-            double labely = labelLocationY(this.labelLocation, dataArea);
-            TextAnchor anchor = labelAnchorV(this.labelLocation);
+            double labelx = state.getCursor() - insets.getRight() - labelBounds.getWidth() / 2.0;
+            double labely = labelLocationY(labelLocation, dataArea);
+            TextAnchor anchor = labelAnchorV(labelLocation);
             TextUtils.drawRotatedString(label, g2, (float) labelx,
                     (float) labely, anchor, getLabelAngle() - Math.PI / 2.0, 
                     anchor);
-            state.cursorLeft(insets.getLeft() + labelBounds.getWidth()
-                    + insets.getRight());
+            state.cursorLeft(insets.getLeft() + labelBounds.getWidth()  + insets.getRight());
         }
         else if (edge == RectangleEdge.RIGHT) {
             AffineTransform t = AffineTransform.getRotateInstance(

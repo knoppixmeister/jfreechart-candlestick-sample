@@ -46,9 +46,9 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      *
      * @since 1.0.9
      */
-    public IntervalMarker(double start, double end, Paint paint) {
-        this(start, end, paint, new BasicStroke(0.5f), null, null, 0.8f);
-    }
+	public IntervalMarker(double start, double end, Paint paint) {
+    	this(start, end, paint, new BasicStroke(0.5f), null, null, 0.8f);
+	}
 
     /**
      * Constructs an interval marker.
@@ -61,15 +61,20 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @param outlineStroke  the outline stroke.
      * @param alpha  the alpha transparency.
      */
-    public IntervalMarker(double start, double end,
-                          Paint paint, Stroke stroke,
-                          Paint outlinePaint, Stroke outlineStroke,
-                          float alpha) {
-
+    public IntervalMarker(
+    	double start,
+    	double end,
+    	Paint paint,
+    	Stroke stroke,
+    	Paint outlinePaint,
+    	Stroke outlineStroke,
+    	float alpha)
+    {
         super(paint, stroke, outlinePaint, outlineStroke, alpha);
-        this.startValue = start;
-        this.endValue = end;
-        this.gradientPaintTransformer = null;
+        
+        startValue 					= start;
+        endValue 					= end;
+        gradientPaintTransformer 	= null;
         
         setLabelOffsetType(LengthAdjustmentType.CONTRACT);
     }

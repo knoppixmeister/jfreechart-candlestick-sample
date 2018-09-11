@@ -1,68 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------------
- * XYSeriesCollection.java
- * -----------------------
- * (C) Copyright 2001-2013, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Aaron Metzger;
- *
- * Changes
- * -------
- * 15-Nov-2001 : Version 1 (DG);
- * 03-Apr-2002 : Added change listener code (DG);
- * 29-Apr-2002 : Added removeSeries, removeAllSeries methods (ARM);
- * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 04-Aug-2003 : Added getSeries() method (DG);
- * 31-Mar-2004 : Modified to use an XYIntervalDelegate.
- * 05-May-2004 : Now extends AbstractIntervalXYDataset (DG);
- * 18-Aug-2004 : Moved from org.jfree.data --> org.jfree.data.xy (DG);
- * 17-Nov-2004 : Updated for changes to DomainInfo interface (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
- * 28-Mar-2005 : Fixed bug in getSeries(int) method (1170825) (DG);
- * 05-Oct-2005 : Made the interval delegate a dataset listener (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 27-Nov-2006 : Added clone() override (DG);
- * 08-May-2007 : Added indexOf(XYSeries) method (DG);
- * 03-Dec-2007 : Added getSeries(Comparable) method (DG);
- * 22-Apr-2008 : Implemented PublicCloneable (DG);
- * 27-Feb-2009 : Overridden getDomainOrder() to detect when all series are
- *               sorted in ascending order (DG);
- * 06-Mar-2009 : Implemented RangeInfo (DG);
- * 06-Mar-2009 : Fixed equals() implementation (DG);
- * 10-Jun-2009 : Simplified code in getX() and getY() methods (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- * 21-Nov-2013 : Fixed bug where removeSeries(int) was not deregistering 
- *               vetoable listener (DG);
- *
- */
-
 package org.jfree.data.xy;
 
 import java.beans.PropertyChangeEvent;
@@ -89,11 +24,14 @@ import org.jfree.data.general.Series;
  * Represents a collection of {@link XYSeries} objects that can be used as a
  * dataset.
  */
-public class XYSeriesCollection extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DomainInfo, RangeInfo, 
-        VetoableChangeListener, PublicCloneable, Serializable {
-
-    /** For serialization. */
+public class XYSeriesCollection extends AbstractIntervalXYDataset implements
+	IntervalXYDataset,
+	DomainInfo,
+	RangeInfo, 
+	VetoableChangeListener,
+	PublicCloneable,
+	Serializable
+{
     private static final long serialVersionUID = -7590013825931496766L;
 
     /** The series that are included in the collection. */
@@ -106,7 +44,7 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      * Constructs an empty dataset.
      */
     public XYSeriesCollection() {
-        this(null);
+    	this(null);
     }
 
     /**
@@ -115,11 +53,14 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      * @param series  the series ({@code null} ignored).
      */
     public XYSeriesCollection(XYSeries series) {
-        this.data = new java.util.ArrayList();
-        this.intervalDelegate = new IntervalXYDelegate(this, false);
-        addChangeListener(this.intervalDelegate);
-        if (series != null) {
-            this.data.add(series);
+    	data = new java.util.ArrayList();
+    	intervalDelegate = new IntervalXYDelegate(this, false);
+    	
+        addChangeListener(intervalDelegate);
+        
+        if(series != null) {
+        	data.add(series);
+        	
             series.addChangeListener(this);
             series.addVetoableChangeListener(this);
         }
@@ -133,12 +74,11 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
     @Override
     public DomainOrder getDomainOrder() {
         int seriesCount = getSeriesCount();
-        for (int i = 0; i < seriesCount; i++) {
+        for(int i = 0; i < seriesCount; i++) {
             XYSeries s = getSeries(i);
-            if (!s.getAutoSort()) {
-                return DomainOrder.NONE;  // we can't be sure of the order
-            }
+            if(!s.getAutoSort()) return DomainOrder.NONE;  // we can't be sure of the order
         }
+        
         return DomainOrder.ASCENDING;
     }
 
@@ -153,14 +93,16 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      */
     public void addSeries(XYSeries series) {
         Args.nullNotPermitted(series, "series");
-        if (getSeriesIndex(series.getKey()) >= 0) {
-            throw new IllegalArgumentException(
-                "This dataset already contains a series with the key " 
-                + series.getKey());
+        
+        if(getSeriesIndex(series.getKey()) >= 0) {
+            throw new IllegalArgumentException("This dataset already contains a series with the key " + series.getKey());
         }
-        this.data.add(series);
+        
+        data.add(series);
+        
         series.addChangeListener(this);
         series.addVetoableChangeListener(this);
+        
         fireDatasetChanged();
     }
 
@@ -188,10 +130,11 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      */
     public void removeSeries(XYSeries series) {
         Args.nullNotPermitted(series, "series");
-        if (this.data.contains(series)) {
+        
+        if(data.contains(series)) {
             series.removeChangeListener(this);
             series.removeVetoableChangeListener(this);
-            this.data.remove(series);
+            data.remove(series);
             fireDatasetChanged();
         }
     }
@@ -210,7 +153,8 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
         }
 
         // Remove all the series from the collection and notify listeners.
-        this.data.clear();
+        data.clear();
+        
         fireDatasetChanged();
     }
 
@@ -230,7 +174,7 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      * @return The list (which is unmodifiable).
      */
     public List getSeries() {
-        return Collections.unmodifiableList(this.data);
+        return Collections.unmodifiableList(data);
     }
 
     /**
@@ -245,7 +189,8 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      */
     public int indexOf(XYSeries series) {
         Args.nullNotPermitted(series, "series");
-        return this.data.indexOf(series);
+        
+        return data.indexOf(series);
     }
 
     /**
@@ -259,10 +204,11 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      *     range {@code 0} to {@code getSeriesCount() - 1}.
      */
     public XYSeries getSeries(int series) {
-        if ((series < 0) || (series >= getSeriesCount())) {
-            throw new IllegalArgumentException("Series index out of bounds");
-        }
-        return (XYSeries) this.data.get(series);
+    	if((series < 0) || (series >= getSeriesCount())) {
+        	throw new IllegalArgumentException("Series index out of bounds");
+    	}
+    	
+        return (XYSeries) data.get(series);
     }
 
     /**
@@ -279,13 +225,13 @@ public class XYSeriesCollection extends AbstractIntervalXYDataset
      */
     public XYSeries getSeries(Comparable key) {
         Args.nullNotPermitted(key, "key");
+        
         Iterator iterator = this.data.iterator();
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             XYSeries series = (XYSeries) iterator.next();
-            if (key.equals(series.getKey())) {
-                return series;
-            }
+            if(key.equals(series.getKey())) return series;
         }
+        
         throw new UnknownKeyException("Key not found: " + key);
     }
 

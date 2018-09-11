@@ -1,6 +1,7 @@
-import java.awt.Color;
+import java.awt.BasicStroke;
 import java.awt.Font;
 import javax.swing.JPanel;
+import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -16,7 +17,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
-
 /**
  * This demo shows a simple bar chart created using the
  * {@link XYSeriesCollection} dataset.
@@ -30,20 +30,15 @@ public class XYSeriesDemo3 extends ApplicationFrame {
      * @param title  the frame title.
      */
     public XYSeriesDemo3(String title) {
-        super(title);
-        
-        IntervalXYDataset dataset = createDataset();
-        JFreeChart chart = createChart(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
-        setContentPane(chartPanel);
+    	super(title);
+
+    	IntervalXYDataset dataset = createDataset();
+    	JFreeChart chart = createChart(dataset);
+    	ChartPanel chartPanel = new ChartPanel(chart);
+    	chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
+    	setContentPane(chartPanel);
     }
 
-    /**
-     * Creates a sample dataset.
-     *
-     * @return A sample dataset.
-     */
     private static IntervalXYDataset createDataset() {
         XYSeries series = new XYSeries("Random Data");
         
@@ -82,14 +77,18 @@ public class XYSeriesDemo3 extends ApplicationFrame {
             false
         );
 
-        XYPlot plot = (XYPlot)chart.getPlot();
+        XYPlot plot = (XYPlot) chart.getPlot();
 
         IntervalMarker target = new IntervalMarker(400.0, 700.0);
         target.setLabel("Target Range");
         target.setLabelFont(new Font("SansSerif", Font.ITALIC, 11));
         target.setLabelAnchor(RectangleAnchor.LEFT);
         target.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
-        target.setPaint(new Color(222, 222, 255, 128));
+        //target.setPaint(new Color(222, 222, 255, 128));
+        target.setStroke(new BasicStroke(2));
+        target.setOutlineStroke(new BasicStroke(20));
+
+        target.setLabelBackgroundColor(ChartColor.RED);
         plot.addRangeMarker(target, Layer.BACKGROUND);
 
         return chart;
