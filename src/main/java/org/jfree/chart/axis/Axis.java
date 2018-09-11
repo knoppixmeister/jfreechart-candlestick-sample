@@ -1413,8 +1413,8 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     protected AxisState drawAttributedLabel(AttributedString label, 
             Graphics2D g2, Rectangle2D plotArea, Rectangle2D dataArea, 
-            RectangleEdge edge, AxisState state) {
-
+            RectangleEdge edge, AxisState state)
+    {
         // it is unlikely that 'state' will be null, but check anyway...
         Args.nullNotPermitted(state, "state");
 
