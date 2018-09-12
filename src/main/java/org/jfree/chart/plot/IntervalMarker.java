@@ -1,30 +1,25 @@
 package org.jfree.chart.plot;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Paint;
-import java.awt.Stroke;
+import java.awt.*;
 import java.io.Serializable;
-
 import org.jfree.chart.event.MarkerChangeEvent;
-import org.jfree.chart.ui.GradientPaintTransformer;
-import org.jfree.chart.ui.LengthAdjustmentType;
+import org.jfree.chart.ui.*;
 import org.jfree.chart.util.ObjectUtils;
 
 /**
  * Represents an interval to be highlighted in some way.
- */
+*/
 public class IntervalMarker extends Marker implements Cloneable, Serializable {
-    private static final long serialVersionUID = -1762344775267627916L;
+	private static final long serialVersionUID = -1762344775267627916L;
 
     /** The start value. */
-    private double startValue;
+	private double startValue;
 
     /** The end value. */
-    private double endValue;
+	private double endValue;
 
     /** The gradient paint transformer (optional). */
-    private GradientPaintTransformer gradientPaintTransformer;
+	private GradientPaintTransformer gradientPaintTransformer;
 
     /**
      * Constructs an interval marker.
@@ -32,9 +27,9 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @param start  the start of the interval.
      * @param end  the end of the interval.
      */
-    public IntervalMarker(double start, double end) {
-        this(start, end, Color.GRAY, new BasicStroke(0.5f), Color.GRAY, new BasicStroke(0.5f), 0.8f);
-    }
+	public IntervalMarker(double start, double end) {
+		this(start, end, Color.GRAY, new BasicStroke(0.5f), Color.GRAY, new BasicStroke(0.5f), 0.8f);
+	}
 
     /**
      * Creates a new interval marker with the specified range and fill paint.
@@ -45,9 +40,9 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @param paint  the fill paint ({@code null} not permitted).
      *
      * @since 1.0.9
-     */
+	*/
 	public IntervalMarker(double start, double end, Paint paint) {
-    	this(start, end, paint, new BasicStroke(0.5f), null, null, 0.8f);
+		this(start, end, paint, new BasicStroke(0.5f), null, null, 0.8f);
 	}
 
     /**
@@ -70,23 +65,23 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
     	Stroke outlineStroke,
     	float alpha)
     {
-        super(paint, stroke, outlinePaint, outlineStroke, alpha);
-        
-        startValue 					= start;
-        endValue 					= end;
-        gradientPaintTransformer 	= null;
-        
-        setLabelOffsetType(LengthAdjustmentType.CONTRACT);
-    }
+    	super(paint, stroke, outlinePaint, outlineStroke, alpha);
+
+    	startValue 					= start;
+    	endValue 					= end;
+    	gradientPaintTransformer 	= null;
+
+    	setLabelOffsetType(LengthAdjustmentType.CONTRACT);
+	}
 
     /**
      * Returns the start value for the interval.
      *
      * @return The start value.
      */
-    public double getStartValue() {
-        return startValue;
-    }
+	public double getStartValue() {
+		return startValue;
+	}
 
     /**
      * Sets the start value for the marker and sends a
@@ -98,16 +93,16 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      */
     public void setStartValue(double value) {
     	startValue = value;
-        
-        notifyListeners(new MarkerChangeEvent(this));
-    }
+
+    	notifyListeners(new MarkerChangeEvent(this));
+	}
 
     /**
      * Returns the end value for the interval.
      *
      * @return The end value.
      */
-    public double getEndValue() {
+	public double getEndValue() {
         return endValue;
     }
 
@@ -121,9 +116,9 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      */
     public void setEndValue(double value) {
     	endValue = value;
-        
-        notifyListeners(new MarkerChangeEvent(this));
-    }
+
+    	notifyListeners(new MarkerChangeEvent(this));
+	}
 
     /**
      * Returns the gradient paint transformer.
@@ -131,7 +126,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      * @return The gradient paint transformer (possibly {@code null}).
      */
     public GradientPaintTransformer getGradientPaintTransformer() {
-        return gradientPaintTransformer;
+    	return gradientPaintTransformer;
     }
 
     /**
@@ -140,10 +135,10 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      *
      * @param transformer  the transformer ({@code null} permitted).
      */
-    public void setGradientPaintTransformer(GradientPaintTransformer transformer) {
+	public void setGradientPaintTransformer(GradientPaintTransformer transformer) {
     	gradientPaintTransformer = transformer;
-    	
-        notifyListeners(new MarkerChangeEvent(this));
+
+    	notifyListeners(new MarkerChangeEvent(this));
     }
 
     
