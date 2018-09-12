@@ -589,8 +589,6 @@ public class ChartPanel extends JPanel implements
         popup = null;
         if(properties || copy || save || print || zoom) {
         	popup = createPopupMenu(properties, copy, save, print, zoom);
-        	
-        	System.out.println("POP");
         }
 
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -1608,7 +1606,6 @@ public class ChartPanel extends JPanel implements
         }
         else {
 
-
         //if((mods & panMask) == panMask) {
         	System.out.println("PANN_YYYY");
 
@@ -1724,28 +1721,34 @@ public class ChartPanel extends JPanel implements
 
     	//handle panning if we have a start point
     	if(panLast != null) {
-        	setCursor(moveCursor);
+    		System.out.println("PAN_LAST");
 
-        	double dx = e.getX() - panLast.getX();
-        	double dy = e.getY() - panLast.getY();
+    		setCursor(moveCursor);
+
+    		double dx = e.getX() - panLast.getX();
+    		double dy = e.getY() - panLast.getY();
 
         	if(dx == 0.0 && dy == 0.0) return;
 
-        	double wPercent = -dx / panW;
-        	double hPercent = dy / panH;
-        	boolean old = chart.getPlot().isNotify();
+        	double wPercent	=	-dx / panW;
+        	double hPercent	=	dy / panH;
+        	boolean old 	=	chart.getPlot().isNotify();
 
             chart.getPlot().setNotify(false);
 
             Pannable p = (Pannable)chart.getPlot();
             if(p.getOrientation() == PlotOrientation.VERTICAL) {
+            	System.out.println("VERT");
+            	
                 p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
                 p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
+            /*
             else {
             	p.panDomainAxes(hPercent, info.getPlotInfo(), panLast);
             	p.panRangeAxes(wPercent, info.getPlotInfo(), panLast);
             }
+            */
 
             panLast = e.getPoint();
             chart.getPlot().setNotify(old);
@@ -1771,7 +1774,7 @@ public class ChartPanel extends JPanel implements
 
     			if(dy > 0) {
     				zoomable.zoomRangeAxes(
-    					1.1,
+    					1.05,
     					plotRenderingInfo,
     					null,
     					false
@@ -1779,7 +1782,7 @@ public class ChartPanel extends JPanel implements
     			}
     			else {
     				zoomable.zoomRangeAxes(
-    					0.9,
+    					0.95,
         				plotRenderingInfo,
         				null,
         				false
@@ -1799,7 +1802,7 @@ public class ChartPanel extends JPanel implements
     			
     			if(dx > 0) {
     				zoomable.zoomDomainAxes(
-    					0.9,
+    					0.95,
     					plotRenderingInfo,
     					null,
     					false
@@ -1807,7 +1810,7 @@ public class ChartPanel extends JPanel implements
     			}
     			else {
     				zoomable.zoomDomainAxes(
-    					1.1,
+    					1.05,
     					plotRenderingInfo,
     					null,
     					false
@@ -1945,7 +1948,7 @@ public class ChartPanel extends JPanel implements
                         w = Math.min(zoomRectangle.getWidth(), maxX - zoomPoint.getX());
                         h = screenDataArea.getHeight();
                     }
-                    else if (!hZoom) {
+                    else if(!hZoom) {
                         x = screenDataArea.getMinX();
                         y = zoomPoint.getY();
                         w = screenDataArea.getWidth();
@@ -2039,15 +2042,15 @@ public class ChartPanel extends JPanel implements
 
 		ChartEntity entity = null;
 		if(info != null) {
-        	EntityCollection entities = info.getEntityCollection();
-            if(entities != null) entity = entities.getEntity(x, y);
-        }
+			EntityCollection entities = info.getEntityCollection();
+			if(entities != null) entity = entities.getEntity(x, y);
+		}
 
         // we can only generate events if the panel's chart is not null
         // (see bug report 1556951)
 		if(chart != null) {
-            ChartMouseEvent event = new ChartMouseEvent(getChart(), e, entity);
-            for(int i = listeners.length-1; i >= 0; i -= 1) {
+			ChartMouseEvent event = new ChartMouseEvent(getChart(), e, entity);
+			for(int i=listeners.length-1; i >= 0; i -= 1) {
                 ((ChartMouseListener) listeners[i]).chartMouseMoved(event);
             }
         }
@@ -2060,8 +2063,8 @@ public class ChartPanel extends JPanel implements
      * @param y  the y value (in screen coordinates).
      */
     public void zoomInBoth(double x, double y) {
-        Plot plot = chart.getPlot();
-        if(plot == null) return;
+    	Plot plot = chart.getPlot();
+    	if(plot == null) return;
 
         // here we tweak the notify flag on the plot so that only
         // one notification happens even though we update multiple
@@ -2083,7 +2086,7 @@ public class ChartPanel extends JPanel implements
      */
     public void zoomInDomain(double x, double y) {
     	Plot plot = chart.getPlot();
-    	
+
         if(plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple

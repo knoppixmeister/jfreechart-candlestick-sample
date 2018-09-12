@@ -1,7 +1,6 @@
 package org.jfree.chart.plot;
 
 import java.awt.geom.Point2D;
-
 import org.jfree.chart.ChartPanel;
 
 /**
@@ -30,7 +29,7 @@ public interface Pannable {
      *
      * @return {@code true} if the range axis is pannable.
      */
-    public boolean isRangePannable();
+	public boolean isRangePannable();
 
     /**
      * Pans the domain axes by the specified percentage.
@@ -39,8 +38,7 @@ public interface Pannable {
      * @param info the plot info
      * @param source the source point where the pan action started.
      */
-    public void panDomainAxes(double percent, PlotRenderingInfo info,
-            Point2D source);
+	public void panDomainAxes(double percent, PlotRenderingInfo info, Point2D source);
 
     /**
      * Pans the range axes by the specified percentage.
@@ -49,5 +47,5 @@ public interface Pannable {
      * @param info the plot info
      * @param source the source point where the pan action started.
      */
-    public void panRangeAxes(double percent, PlotRenderingInfo info, Point2D source);
+	public void panRangeAxes(double percent, PlotRenderingInfo info, Point2D source);
 }

@@ -946,21 +946,19 @@ public class XYPlot extends Plot implements
      * @see #getRangeAxis(int)
      */
     public void setRangeAxis(int index, ValueAxis axis, boolean notify) {
-        ValueAxis existing = getRangeAxis(index);
-        if (existing != null) {
-            existing.removeChangeListener(this);
-        }
-        if (axis != null) {
-            axis.setPlot(this);
-        }
-        this.rangeAxes.put(index, axis);
-        if (axis != null) {
+    	ValueAxis existing = getRangeAxis(index);
+
+    	if(existing != null) existing.removeChangeListener(this);
+    	if(axis != null) axis.setPlot(this);
+
+        rangeAxes.put(index, axis);
+
+        if(axis != null) {
             axis.configure();
             axis.addChangeListener(this);
         }
-        if (notify) {
-            fireChangeEvent();
-        }
+
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -4635,17 +4633,17 @@ public class XYPlot extends Plot implements
      *
      * @since 1.0.13
      */
-    @Override
-    public void panRangeAxes(double percent, PlotRenderingInfo info, Point2D source) {
-        if(!isRangePannable()) return;
+	@Override
+	public void panRangeAxes(double percent, PlotRenderingInfo info, Point2D source) {
+		if(!isRangePannable()) return;
 
-        int rangeAxisCount = getRangeAxisCount();
-        for(int i = 0; i < rangeAxisCount; i++) {
-            ValueAxis axis = getRangeAxis(i);
-            if(axis == null) continue;
+    	int rangeAxisCount = getRangeAxisCount();
+    	for(int i=0; i<rangeAxisCount; i++) {
+    		ValueAxis axis = getRangeAxis(i);
+    		if(axis == null) continue;
 
-            axis.pan(axis.isInverted() ? -percent : percent);
-        }
+    		axis.pan(axis.isInverted() ? -percent : percent);
+    	}
     }
 
     /**
@@ -4955,10 +4953,11 @@ public class XYPlot extends Plot implements
         if (this.domainCrosshairValue != that.domainCrosshairValue) {
             return false;
         }
-        if (this.domainCrosshairLockedOnData
-                != that.domainCrosshairLockedOnData) {
+        
+        if(domainCrosshairLockedOnData != that.domainCrosshairLockedOnData) {
             return false;
         }
+        
         if (this.rangeCrosshairVisible != that.rangeCrosshairVisible) {
             return false;
         }

@@ -224,9 +224,9 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      * @param subplot  the subplot ({@code null} not permitted).
      */
     public void remove(XYPlot subplot) {
-        Args.nullNotPermitted(subplot, "subplot");
+    	Args.nullNotPermitted(subplot, "subplot");
         
-        int position	= -1;
+    	int position	= -1;
         int size 		= subplots.size();
         int i			= 0;
 
@@ -393,7 +393,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         if(result == null) {
             result = new LegendItemCollection();
             if(subplots != null) {
-                Iterator iterator = subplots.iterator();
+                Iterator<XYPlot> iterator = subplots.iterator();
                 while(iterator.hasNext()) {
                     XYPlot plot = (XYPlot) iterator.next();
                     LegendItemCollection more = plot.getLegendItems();

@@ -102,10 +102,10 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     public OHLCSeries getSeries(int series) {
     	if((series < 0) || (series >= getSeriesCount())) {
-            throw new IllegalArgumentException("Series index out of bounds");
+    		throw new IllegalArgumentException("Series index out of bounds");
     	}
 
-        return (OHLCSeries)data.get(series);
+    	return (OHLCSeries)data.get(series);
     }
 
     /**
@@ -168,10 +168,10 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getXValue(int series, int item) {
-        OHLCSeries s 				= (OHLCSeries) data.get(series);
+    	OHLCSeries s 				= (OHLCSeries) data.get(series);
         OHLCItem di 				= (OHLCItem) s.getDataItem(item);
         RegularTimePeriod period 	= di.getPeriod();
-        
+
         return getX(period);
     }
 
@@ -183,10 +183,10 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      *
      * @return The x-value.
      */
-    @Override
-    public Number getX(int series, int item) {
-        return new Double(getXValue(series, item));
-    }
+	@Override
+	public Number getX(int series, int item) {
+		return new Double(getXValue(series, item));
+	}
 
     /**
      * Returns the y-value for an item within a series.
@@ -198,8 +198,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public Number getY(int series, int item) {
-        OHLCSeries s = (OHLCSeries)data.get(series);
-        OHLCItem di = (OHLCItem)s.getDataItem(item);
+        OHLCSeries s = (OHLCSeries) data.get(series);
+        OHLCItem di = (OHLCItem) s.getDataItem(item);
 
         return new Double(di.getYValue());
     }
@@ -214,7 +214,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getOpenValue(int series, int item) {
-        OHLCSeries s = (OHLCSeries) this.data.get(series);
+        OHLCSeries s = (OHLCSeries) data.get(series);
         OHLCItem di = (OHLCItem) s.getDataItem(item);
         
         return di.getOpenValue();

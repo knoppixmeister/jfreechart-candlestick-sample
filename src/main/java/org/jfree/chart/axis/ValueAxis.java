@@ -773,6 +773,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
                 else if(tick.getText() != null) {
                     labelBounds = TextUtils.getTextBounds(tick.getText(), g2, fm);
                 }
+                
                 if(labelBounds != null && labelBounds.getWidth() + insets.getLeft() + insets.getRight() > maxWidth) {
                     maxWidth = labelBounds.getWidth() + insets.getLeft() + insets.getRight();
                 }
@@ -1324,6 +1325,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
     public double lengthToJava2D(double length, Rectangle2D area, RectangleEdge edge) {
         double zero = valueToJava2D(0.0, area, edge);
         double l = valueToJava2D(length, area, edge);
+        
         return Math.abs(l - zero);
     }
 
@@ -1356,10 +1358,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param value  the center value.
      */
     public void centerRange(double value) {
-        double central = range.getCentralValue();
-        Range adjusted = new Range(range.getLowerBound() + value - central, range.getUpperBound() + value - central);
-        setRange(adjusted);
-    }
+    	double central = range.getCentralValue();
+    	Range adjusted = new Range(range.getLowerBound() + value - central, range.getUpperBound() + value - central);
+    	setRange(adjusted);
+	}
 
     /**
      * Increases or decreases the axis range by the specified percentage about
@@ -1390,8 +1392,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #resizeRange(double)
      */
-    public void resizeRange(double percent, double anchorValue) {
-    	if(percent > 0.0) {
+	public void resizeRange(double percent, double anchorValue) {
+		if(percent > 0.0) {
             double halfLength = range.getLength() * percent / 2;
             Range adjusted = new Range(anchorValue - halfLength, anchorValue + halfLength);
             setRange(adjusted);
@@ -1415,11 +1417,11 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.13
      */
     public void resizeRange2(double percent, double anchorValue) {
-        if(percent > 0.0) {
-            double left = anchorValue - getLowerBound();
-            double right = getUpperBound() - anchorValue;
-            Range adjusted = new Range(anchorValue - left * percent, anchorValue + right * percent);
-            setRange(adjusted);
+    	if(percent > 0.0) {
+    		double left = anchorValue - getLowerBound();
+    		double right = getUpperBound() - anchorValue;
+    		Range adjusted = new Range(anchorValue - left * percent, anchorValue + right * percent);
+    		setRange(adjusted);
         }
         else setAutoRange(true);
     }
@@ -1431,15 +1433,15 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param upperPercent  the new upper bound.
      */
     public void zoomRange(double lowerPercent, double upperPercent) {
-        double start = range.getLowerBound();
-        double length = range.getLength();
-        double r0, r1;
-        
-        if(isInverted()) {
+    	double start = range.getLowerBound();
+    	double length = range.getLength();
+    	double r0, r1;
+
+    	if(isInverted()) {
             r0 = start + (length * (1 - upperPercent));
             r1 = start + (length * (1 - lowerPercent));
-        }
-        else {
+    	}
+    	else {
         	r0 = start + length * lowerPercent;
         	r1 = start + length * upperPercent;
         }

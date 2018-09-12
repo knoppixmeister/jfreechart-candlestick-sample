@@ -106,41 +106,38 @@ class DefaultChartEditor extends JPanel implements ActionListener, ChartEditor {
         other.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         JPanel general = new JPanel(new BorderLayout());
-        general.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(),
-            localizationResources.getString("General")));
+        general.setBorder(
+        	BorderFactory.createTitledBorder(
+        		BorderFactory.createEtchedBorder(),
+        		localizationResources.getString("General")
+        	)
+        );
 
         JPanel interior = new JPanel(new LCBLayout(6));
         interior.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-        this.antialias = new JCheckBox(localizationResources.getString(
-                "Draw_anti-aliased"));
-        this.antialias.setSelected(chart.getAntiAlias());
-        interior.add(this.antialias);
+        antialias = new JCheckBox(localizationResources.getString("Draw_anti-aliased"));
+        antialias.setSelected(chart.getAntiAlias());
+        interior.add(antialias);
         interior.add(new JLabel(""));
         interior.add(new JLabel(""));
-        interior.add(new JLabel(localizationResources.getString(
-                "Background_paint")));
-        this.background = new PaintSample(chart.getBackgroundPaint());
-        interior.add(this.background);
-        JButton button = new JButton(localizationResources.getString(
-                "Select..."));
+        interior.add(new JLabel(localizationResources.getString("Background_paint")));
+        background = new PaintSample(chart.getBackgroundPaint());
+        interior.add(background);
+        JButton button = new JButton(localizationResources.getString("Select..."));
         button.setActionCommand("BackgroundPaint");
         button.addActionListener(this);
         interior.add(button);
 
-        interior.add(new JLabel(localizationResources.getString(
-                "Series_Paint")));
-        JTextField info = new JTextField(localizationResources.getString(
-                "No_editor_implemented"));
+        interior.add(new JLabel(localizationResources.getString("Series_Paint")));
+        JTextField info = new JTextField(localizationResources.getString("No_editor_implemented"));
         info.setEnabled(false);
         interior.add(info);
         button = new JButton(localizationResources.getString("Edit..."));
         button.setEnabled(false);
         interior.add(button);
 
-        interior.add(new JLabel(localizationResources.getString(
-                "Series_Stroke")));
+        interior.add(new JLabel(localizationResources.getString("Series_Stroke")));
         info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
         info.setEnabled(false);

@@ -1,59 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------
- * DateTickUnit.java
- * -----------------
- * (C) Copyright 2000-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Chris Boek;
- *
- * Changes
- * -------
- * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
- * 27-Nov-2002 : Added IllegalArgumentException to getMillisecondCount()
- *               method (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 12-Nov-2003 : Added roll fields that can improve the labelling on segmented
- *               date axes (DG);
- * 03-Dec-2003 : DateFormat constructor argument is now filled with an default
- *               if null (TM);
- * 07-Dec-2003 : Fixed bug (null pointer exception) in constructor (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 21-Mar-2007 : Added toString() for debugging (DG);
- * 04-Apr-2007 : Added new methods addToDate(Date, TimeZone) and rollDate(Date,
- *               TimeZone) (CB);
- * 09-Jun-2008 : Deprecated addToDate(Date) (DG);
- * 09-Jan-2009 : Replaced the unit and rollUnit fields with an enumerated
- *               type (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.io.Serializable;
@@ -67,10 +11,8 @@ import org.jfree.chart.util.Args;
 /**
  * A tick unit for use by subclasses of {@link DateAxis}.  Instances of this
  * class are immutable.
- */
+*/
 public class DateTickUnit extends TickUnit implements Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -7289292157229621901L;
 
     /**
@@ -117,9 +59,8 @@ public class DateTickUnit extends TickUnit implements Serializable {
      *
      * @since 1.0.13
      */
-    public DateTickUnit(DateTickUnitType unitType, int multiple,
-            DateFormat formatter) {
-        this(unitType, multiple, unitType, multiple, formatter);
+    public DateTickUnit(DateTickUnitType unitType, int multiple, DateFormat formatter) {
+    	this(unitType, multiple, unitType, multiple, formatter);
     }
 
     /**
@@ -133,22 +74,29 @@ public class DateTickUnit extends TickUnit implements Serializable {
      *
      * @since 1.0.13
      */
-    public DateTickUnit(DateTickUnitType unitType, int multiple,
-            DateTickUnitType rollUnitType, int rollMultiple,
-            DateFormat formatter) {
+    public DateTickUnit(
+    	DateTickUnitType unitType,
+    	int multiple,
+    	DateTickUnitType rollUnitType,
+    	int rollMultiple,
+    	DateFormat formatter)
+    {
         super(DateTickUnit.getMillisecondCount(unitType, multiple));
+        
         Args.nullNotPermitted(formatter, "formatter");
-        if (multiple <= 0) {
+        
+        if(multiple <= 0) {
             throw new IllegalArgumentException("Requires 'multiple' > 0.");
         }
-        if (rollMultiple <= 0) {
+        if(rollMultiple <= 0) {
             throw new IllegalArgumentException("Requires 'rollMultiple' > 0.");
         }
-        this.unitType = unitType;
-        this.count = multiple;
-        this.rollUnitType = rollUnitType;
-        this.rollCount = rollMultiple;
-        this.formatter = formatter;
+        
+        this.unitType 		= unitType;
+        count 				= multiple;
+        this.rollUnitType 	= rollUnitType;
+        rollCount 			= rollMultiple;
+        this.formatter 		= formatter;
     }
 
     /**
@@ -159,7 +107,7 @@ public class DateTickUnit extends TickUnit implements Serializable {
      * @since 1.0.13
      */
     public DateTickUnitType getUnitType() {
-        return this.unitType;
+        return unitType;
     }
 
     /**
@@ -168,7 +116,7 @@ public class DateTickUnit extends TickUnit implements Serializable {
      * @return The unit multiple (always &gt; 0).
      */
     public int getMultiple() {
-        return this.count;
+        return count;
     }
 
     /**
@@ -179,7 +127,7 @@ public class DateTickUnit extends TickUnit implements Serializable {
      * @since 1.0.13
      */
     public DateTickUnitType getRollUnitType() {
-        return this.rollUnitType;
+        return rollUnitType;
     }
 
     /**
@@ -269,7 +217,8 @@ public class DateTickUnit extends TickUnit implements Serializable {
         // here...
         Calendar calendar = Calendar.getInstance(zone);
         calendar.setTime(base);
-        calendar.add(this.rollUnitType.getCalendarField(), this.rollCount);
+        calendar.add(rollUnitType.getCalendarField(), rollCount);
+        
         return calendar.getTime();
     }
 

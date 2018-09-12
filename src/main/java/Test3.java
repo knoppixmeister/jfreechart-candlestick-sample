@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +17,9 @@ import org.jfree.chart.ui.*;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class Test3 {
 	public static void main(String[] args) {
@@ -57,8 +61,9 @@ public class Test3 {
         collection3.addSeries(series3);
 
         for(int i=0; i<200; i++) {
-			long tm = System.currentTimeMillis()+1000+i;
+        	long tm = System.currentTimeMillis()+1000+i;
 
+			/*
 			series.add(new OHLCItem(
 				new FixedMillisecond(tm),
 				5000,	//open,
@@ -66,15 +71,17 @@ public class Test3 {
 				3000,	//low,
 				7000	//close
 			));
+			*/
 
-			series1.add(new TimeSeriesDataItem(new FixedMillisecond(tm), i % 2 == 0 ? 75 : 10));
+			//series1.add(new TimeSeriesDataItem(new FixedMillisecond(tm), i % 2 == 0 ? 75 : 10));
 
 			//series3.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 75));
 			//series2.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 10));
-		}
+        }
 
-		DateAxis dateAxis = new DateAxis();
-		NumberAxis priceAxis = new NumberAxis();
+        DateAxis dateAxis 		= new DateAxis();
+        NumberAxis priceAxis 	= new NumberAxis();
+        priceAxis.setAutoRangeIncludesZero(false);
 
 		XYPlot plot1 = new XYPlot(
 			collection,		//dataset,
@@ -88,10 +95,13 @@ public class Test3 {
 		);
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
+		plot1.setDomainPannable(true);
 
 		plot1.setDomainCrosshairVisible(true);
 		plot1.setRangeCrosshairVisible(true);
-		plot1.setRangeCrosshairValue(4000);
+		//plot1.setRangeCrosshairValue(4000);
+
+		plot1.setNoDataMessage("No data ...");
 
 		XYDataset dataset2 = MovingAverage.createMovingAverage(collection, "-MAVG", 3 * 24 * 60 * 60 * 1000L, 0L);
 		plot1.setDataset(1, dataset2);
@@ -146,12 +156,13 @@ public class Test3 {
 
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(-9);
+		
 		//combinedPlot.setInsets(new RectangleInsets(-20, -10, 0, -10));
 
 		//combinedPlot.setDomainCrosshairVisible(true);
 		
-		combinedPlot.setDomainPannable(true);
-		combinedPlot.setRangePannable(true);
+		//combinedPlot.setDomainPannable(true);
+		//combinedPlot.setRangePannable(true);
 		
 		combinedPlot.add(plot1, 5);
 		combinedPlot.add(plot2, 1);
@@ -164,7 +175,7 @@ public class Test3 {
 		//panel.addOverlay(chOverlay);
 
 		panel.setMouseWheelEnabled(true);
-		panel.setMouseZoomable(false);
+		panel.setMouseZoomable(true);
 
 		JButton b = new JButton("BTN");
 		b.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -278,5 +289,16 @@ public class Test3 {
 			}
 		}).start();
 		*/
+
+		OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
+														.retryOnConnectionFailure(true)
+														.build();
+		client.newWebSocket(
+			new Request.Builder().url("wss://api.bitfinex.com/ws/2")
+								//.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_5m")
+								.build(),
+			new BFWebSocketListener(collection)
+			//new BNWebSocketListener()
+		);
 	}
 }

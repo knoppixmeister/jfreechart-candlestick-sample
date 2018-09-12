@@ -1,15 +1,7 @@
 package org.jfree.data.general;
 
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.io.ObjectInputStream;
-import java.io.ObjectInputValidation;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.EventListener;
-import java.util.List;
-
+import java.io.*;
+import java.util.*;
 import javax.swing.event.EventListenerList;
 import org.jfree.chart.util.Args;
 
@@ -49,10 +41,10 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      *
      * @see #setGroup(DatasetGroup)
      */
-    @Override
-    public DatasetGroup getGroup() {
-        return group;
-    }
+	@Override
+	public DatasetGroup getGroup() {
+		return group;
+	}
 
     /**
      * Sets the dataset group for the dataset.
@@ -63,9 +55,9 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     @Override
     public void setGroup(DatasetGroup group) {
-        Args.nullNotPermitted(group, "group");
+    	Args.nullNotPermitted(group, "group");
 
-        this.group = group;
+    	this.group = group;
     }
 
     /**
@@ -81,7 +73,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
     public boolean getNotify() {
         return notify;
     }
-    
+
     /**
      * Sets the notify flag, which controls whether or not the {@link #fireDatasetChanged()}
      * method notifies listeners.  Setting this flag to {@code true} will
@@ -94,7 +86,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     public void setNotify(boolean notify) {
         this.notify = notify;
-        
+
         if(notify) fireDatasetChanged();    
     }
     
@@ -136,9 +128,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @see #removeChangeListener(DatasetChangeListener)
      */
     public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(listenerList.getListenerList());
-        
-        return list.contains(listener);
+        return Arrays.asList(listenerList.getListenerList()).contains(listener);
     }
 
     /**
@@ -163,11 +153,9 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      */
     protected void notifyListeners(DatasetChangeEvent event) {
         Object[] listeners = listenerList.getListenerList();
-        
+
         for(int i = listeners.length - 2; i >= 0; i -= 2) {
-            if(listeners[i] == DatasetChangeListener.class) {
-                ((DatasetChangeListener) listeners[i + 1]).datasetChanged(event);
-            }
+            if(listeners[i] == DatasetChangeListener.class) ((DatasetChangeListener) listeners[i + 1]).datasetChanged(event);
         }
     }
 

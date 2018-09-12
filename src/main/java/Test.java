@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.panel.CrosshairOverlay;
+import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
@@ -75,13 +77,15 @@ public class Test {
 		} catch (IllegalAccessException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
+		}
+		catch(UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
 		}
 
 		JFrame fr = new JFrame("");
 		
 	//--------------------------------------------------------------------------------------------
+		/*
 		CrosshairOverlay overlay = new CrosshairOverlay();
 
 		Crosshair crosshair1 = new Crosshair(0);
@@ -110,6 +114,7 @@ public class Test {
 		crosshair2.setLabelYOffset(20);
 		crosshair2.setLabelBackgroundPaint(Color.CYAN);//new Color(255, 255, 0, 100)
 		crosshair2.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+		*/
 
 		OHLCSeries series = new OHLCSeries("");
 
@@ -130,11 +135,17 @@ public class Test {
 		collection.addSeries(series);
 
 		DateAxis dateAxis = new DateAxis();
+		//dateAxis.setAxisLineVisible(false);
+		//dateAxis.setAxisLinePaint(ChartColor.BLUE);
+		
 		NumberAxis priceAxis = new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
-		priceAxis.setAxisLineVisible(false);
-		priceAxis.setAxisLinePaint(ChartColor.DARK_RED);
+		//priceAxis.setAxisLineVisible(true);
+		//priceAxis.setAxisLinePaint(ChartColor.DARK_RED);
 		//priceAxis.setVisible(false);
+
+		//NumberAxis leftPriceAxis = new NumberAxis("");
+		//leftPriceAxis.setAutoRangeIncludesZero(false);
 
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
 			3,		//CandlestickRenderer.WIDTHMETHOD_AVERAGE,
@@ -160,15 +171,21 @@ public class Test {
 			candlestickRenderer	//renderer
 		);
 		plot.setAxisOffset(new RectangleInsets(-4, -7, 0, 0));//-8
+		//plot.setAxisOffset(RectangleInsets.ZERO_INSETS);
+
+		//plot.setRangeAxis(0, leftPriceAxis, true);
+		//plot.setRangeAxis(0, priceAxis, true);
 
 		plot.setDomainCrosshairVisible(true);
+		plot.setDomainCrosshairPaint(ChartColor.GRAY);
 		plot.setDomainCrosshairLockedOnData(true);
 
-        //plot.setRangeCrosshairVisible(false);
-        //plot.setRangeCrosshairLockedOnData(true);
+        plot.setRangeCrosshairVisible(true);
+        plot.setRangeCrosshairPaint(ChartColor.GRAY);
+        plot.setRangeCrosshairLockedOnData(true);
 
 		//----------------------------------------------------------------------
-		ValueMarker priceLine = new ValueMarker(6200);
+		ValueMarker priceLine = new ValueMarker(0);
 		//priceLine.setLabel(7000+"");
 		priceLine.setPaint(ChartColor.DARK_RED);
 		priceLine.setLabelFont(new Font("Sans Serial", Font.BOLD, 11));
@@ -252,12 +269,44 @@ public class Test {
 
 		plot.setRangePannable(true);
 		plot.setDomainPannable(true);
+		
 		plot.setRangeAxisLocation(0, AxisLocation.BOTTOM_OR_RIGHT);
 
 		plot.setNoDataMessage("Waiting for data ...");
 		plot.setNoDataMessagePaint(ChartColor.DARK_RED);
 		plot.setNoDataMessageFont(new Font("Sans Serif", Font.BOLD, 19));
 
+		//-----------------------------------------------------------------------
+		/*
+		NumberAxis rangeAxis2 = new NumberAxis();
+		rangeAxis2.setPositiveArrowVisible(true);
+		
+		XYPlot plot2 = new XYPlot(
+			null,//dataset,
+			null,//domainAxis,
+			rangeAxis2,//rangeAxis,
+			null//renderer
+		);
+		plot2.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+		plot2.setAxisOffset(RectangleInsets.ZERO_INSETS);
+		*/
+		//-----------------------------------------------------------------------
+
+		/*
+		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
+		
+		combinedPlot.setAxisOffset(RectangleInsets.ZERO_INSETS);
+		combinedPlot.setGap(-8);
+		
+		combinedPlot.add(plot, 5);
+		//combinedPlot.add(plot2, 1);
+		
+		combinedPlot.setRangePannable(true);
+		combinedPlot.setDomainPannable(true);
+		*/
+
+		//--------------------------------------------------------------------------------------
+		
 		JFreeChart chart = new JFreeChart(plot);
 
 		chart.removeLegend();
@@ -265,6 +314,9 @@ public class Test {
 		ChartPanel panel = new ChartPanel(chart);
 
 		panel.setRegularCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		
+		panel.setMinimumDrawWidth(0);
+		panel.setMinimumDrawHeight(0);
 
 		panel.setMouseZoomable(true);
 		panel.setMouseWheelEnabled(true);
@@ -274,8 +326,6 @@ public class Test {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("BTN_CLK");
-
-				
 			}
 		});
 		panel.add(b);
@@ -294,22 +344,10 @@ public class Test {
 			public void chartMouseMoved(ChartMouseEvent event) {
 				//System.out.println("AAA. X:"+event.getTrigger().getX()+" - Y:"+event.getTrigger().getY());
 
-				//crosshair2.setValue(5000);
-				
-				//System.out.println(	fr.getWidth()	);
-				
-				/*
-				 1300   300
-				 ---- = -----
-				 100     x
-				 */
-				
-				//System.out.println(	event.getTrigger().getX()*100/fr.getWidth() + "%"	);
-				
-				
-				/*
-				double percentX = event.getTrigger().getX()*100/fr.getWidth();
-				
+				Rectangle2D rect2d = panel.getScreenDataArea();
+
+				double percentX = event.getTrigger().getX()*100/rect2d.getWidth();
+
 				ValueAxis domainAxis = plot.getDomainAxis();
 		        Range range = domainAxis.getRange();
 
@@ -319,15 +357,17 @@ public class Test {
 
 				plot.setDomainCrosshairValue(Double.valueOf(c));
 
-				double percentY = 100 - (event.getTrigger().getY()*100/(fr.getHeight()-100));
+				
+				double percentY = 100 - (event.getTrigger().getY()*100/rect2d.getHeight());
 				
 				ValueAxis priceAxis = plot.getRangeAxis();
 				Range range2 = priceAxis.getRange();
 				
 				c = (priceAxis.getLowerBound() + (percentY / 100.0) * range2.getLength());
 				
-				crosshair2.setValue(c);
-				*/
+				//crosshair2.setValue(c);
+				
+				plot.setRangeCrosshairValue(c);
 				
 				//panel.repaint();
 			}
@@ -337,9 +377,8 @@ public class Test {
 			}
 		});
 
-		panel.addOverlay(overlay);
+		//panel.addOverlay(overlay);
 
-		
 		//fr.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		fr.setBounds(200, 10, 1000, 500);
@@ -348,16 +387,16 @@ public class Test {
 
 		//crosshair1.setValue(5000);
 
-        ValueAxis domainAxis = plot.getDomainAxis();
-        Range range = domainAxis.getRange();
+        //ValueAxis domainAxis = plot.getDomainAxis();
+        //Range range = domainAxis.getRange();
 
         //System.out.println(domainAxis.getLowerBound()+" : "+range.getLength());
 
-        double c = domainAxis.getLowerBound() + (20.0 / 100.0) * range.getLength();
+        //double c = domainAxis.getLowerBound() + (20.0 / 100.0) * range.getLength();
 
         //System.out.println("C: "+c);
 
-        plot.setDomainCrosshairValue(Double.valueOf(c));
+        //plot.setDomainCrosshairValue(Double.valueOf(c));
 
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setVisible(true);
@@ -417,136 +456,6 @@ public class Test {
 		);
 
 		//---------------------------------------------------------------------------------------------------------------
-	}
-}
-
-class BFWebSocketListener extends WebSocketListener {
-	private OHLCSeriesCollection collection;
-
-	private org.json.JSONArray	arr = null,
-								arr2 = null,
-								arr3 = null;
-
-	public BFWebSocketListener(OHLCSeriesCollection collection) {
-		this.collection = collection;
-	}
-
-	@Override
-	public void onOpen(WebSocket socket, Response response) {
-		System.out.println("BF_ON_OPEN");
-
-		socket.send("{\"event\":\"subscribe\",\"channel\":\"candles\",\"key\":\"trade:1m:tBTCUSD\"}");
-	}
-
-	@Override
-	public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-		t.printStackTrace();
-	}
-
-	@Override
-	public void onClosing(WebSocket webSocket, int code, String reason) {
-		System.out.println("BF_SOCKET_CLOSING. CODE: "+code+" "+reason);
-	}
-
-	@Override
-	public void onClosed(WebSocket webSocket, int code, String reason) {
-		System.out.println("BF_SOCKET_CLOSED. CODE: "+code+" "+reason);
-	}
-
-	@Override
-	public void onMessage(WebSocket socket, String text) {
-		System.out.println("BF_ON_MESSAGE. "+text);
-
-		if(text.contains("event") || text.contains("hb")) return;
-		
-		arr = new org.json.JSONArray(text);
-
-		if(arr.get(1) == null) return;
-
-		arr2 = new org.json.JSONArray(arr.get(1).toString().trim());
-
-		//System.out.println(	arr2.length()	);
-
-		if(arr2.length() > 6) {//add first data
-			//OHLCSeriesCollection col = new OHLCSeriesCollection();
-			OHLCSeries ser = new OHLCSeries("");
-			//col.addSeries(ser);
-			
-			for(int i=0; i<arr2.length(); i++) {
-				arr3 = new org.json.JSONArray(arr2.get(i).toString().trim());
-
-				OHLCItem ohlcItem = new OHLCItem(
-					new FixedMillisecond(Long.parseLong(arr3.get(0).toString().trim())),
-					Double.parseDouble(arr3.get(1).toString().trim()),	//open,
-					Double.parseDouble(arr3.get(3).toString().trim()),	//high,
-					Double.parseDouble(arr3.get(4).toString().trim()),	//low,
-					Double.parseDouble(arr3.get(2).toString().trim()),	//close
-					Double.parseDouble(arr3.get(5).toString().trim())	//volume
-				);
-
-				//collection.getSeries(0).add(ohlcItem);
-				
-				ser.add(ohlcItem);
-			}
-			
-			
-			if(ser.getItemCount() > 0) {
-				collection.removeAllSeries();
-				collection.addSeries(ser);
-			}
-			
-		}
-		else {//update last data
-			System.out.println("6_items: "+	arr2.toString().trim()	);
-			
-			arr3 = new org.json.JSONArray(arr2.toString().trim());
-			
-			long newTime 		= Long.parseLong(arr3.get(0).toString().trim());
-			long lastOhlcTime 	= ((OHLCItem)collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getPeriod().getFirstMillisecond();
-			
-			if(newTime > lastOhlcTime) {//add new candle data
-				OHLCItem ohlcItem = new OHLCItem(
-					new FixedMillisecond(newTime),
-					Double.parseDouble(arr3.get(1).toString().trim()),	//open,
-					Double.parseDouble(arr3.get(3).toString().trim()),	//high,
-					Double.parseDouble(arr3.get(4).toString().trim()),	//low,
-					Double.parseDouble(arr3.get(2).toString().trim()),	//close
-					Double.parseDouble(arr3.get(5).toString().trim())	//volume
-				);
-
-				collection.getSeries(0).add(ohlcItem);
-			}
-			else {//update last candle
-				double newPrice = Double.parseDouble(arr3.get(2).toString().trim());
-
-				System.out.println("STOCK_NEW_PR: "+newPrice);
-
-				collection.getSeries(0).updatePrice(newPrice);
-
-				/*
-				collection.getSeries(0).remove(
-					collection.getSeries(0).getItemCount()-1
-				);
-
-				OHLCItem ohlcItem = new OHLCItem(
-					new FixedMillisecond(newTime),
-					Double.parseDouble(arr3.get(1).toString().trim()),	//open,
-					Double.parseDouble(arr3.get(3).toString().trim()),	//high,
-					Double.parseDouble(arr3.get(4).toString().trim()),	//low,
-					Double.parseDouble(arr3.get(2).toString().trim()),	//close
-					Double.parseDouble(arr3.get(5).toString().trim())	//volume
-				);
-
-				collection.getSeries(0).add(ohlcItem);
-				*/
-			}
-
-			//System.out.println(	"ITEMS_IN_SERIES: "		);
-		}
-		
-
-		System.out.println("");
-		
 	}
 }
 

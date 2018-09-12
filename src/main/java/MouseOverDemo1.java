@@ -209,16 +209,16 @@ public class MouseOverDemo1 extends ApplicationFrame {
          */
         public void chartMouseMoved(ChartMouseEvent event) {
             ChartEntity entity = event.getEntity();
-            
+
             if(!(entity instanceof CategoryItemEntity)) {
             	renderer.setHighlightedItem(-1, -1);
-                
+
                 return;
             }
-            
-            CategoryItemEntity 	cie		= (CategoryItemEntity) entity;
-            CategoryDataset 	dataset = cie.getDataset();
-            
+
+            CategoryItemEntity 	cie		=	(CategoryItemEntity) entity;
+            CategoryDataset 	dataset	=	cie.getDataset();
+
             renderer.setHighlightedItem(
             	dataset.getRowIndex(cie.getRowKey()),
             	dataset.getColumnIndex(cie.getColumnKey())

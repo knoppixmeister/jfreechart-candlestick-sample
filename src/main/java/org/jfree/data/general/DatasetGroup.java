@@ -1,46 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------
- * DatasetGroup.java
- * -----------------
- * (C) Copyright 2002-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 07-Oct-2002 : Version 1 (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 20-Aug-2003 : Implemented Cloneable (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.data.general;
 
 import java.io.Serializable;
@@ -51,7 +8,6 @@ import org.jfree.chart.util.Args;
  * purpose).
  */
 public class DatasetGroup implements Cloneable, Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = -3640642179674185688L;
 
     /** The group id. */
@@ -62,7 +18,8 @@ public class DatasetGroup implements Cloneable, Serializable {
      */
     public DatasetGroup() {
         super();
-        this.id = "NOID";
+        
+        id = "NOID";
     }
 
     /**
@@ -72,6 +29,7 @@ public class DatasetGroup implements Cloneable, Serializable {
      */
     public DatasetGroup(String id) {
         Args.nullNotPermitted(id, "id");
+        
         this.id = id;
     }
 
@@ -81,7 +39,7 @@ public class DatasetGroup implements Cloneable, Serializable {
      * @return The identification string.
      */
     public String getID() {
-        return this.id;
+        return id;
     }
 
     /**
@@ -96,6 +54,15 @@ public class DatasetGroup implements Cloneable, Serializable {
         return super.clone();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *
@@ -112,10 +79,10 @@ public class DatasetGroup implements Cloneable, Serializable {
             return false;
         }
         DatasetGroup that = (DatasetGroup) obj;
-        if (!this.id.equals(that.id)) {
+        if(!this.id.equals(that.id)) {
             return false;
         }
+        
         return true;
     }
-
 }
