@@ -234,7 +234,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         setAutoRangeMinimumSize(DEFAULT_AUTO_RANGE_MINIMUM_SIZE_IN_MILLISECONDS);
         setRange(DEFAULT_DATE_RANGE, false, false);
         dateFormatOverride = null;
-        this.timeZone = zone;
+        timeZone = zone;
         this.locale = locale;
         timeline = DEFAULT_TIMELINE;
     }
@@ -433,11 +433,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param upper  the upper bound for the axis.
      */
     public void setRange(Date lower, Date upper) {
-        if(lower.getTime() >= upper.getTime()) {
-            throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
-        }
+    	if(lower.getTime() >= upper.getTime()) throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
         
-        setRange(new DateRange(lower, upper));
+    	setRange(new DateRange(lower, upper));
     }
 
     /**
@@ -449,9 +447,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     @Override
     public void setRange(double lower, double upper) {
-        if(lower >= upper) {
-            throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
-        }
+        if(lower >= upper) throw new IllegalArgumentException("Requires 'lower' < 'upper'.");
         
         setRange(new DateRange(lower, upper));
     }
@@ -495,7 +491,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         Date maxDate = getMaximumDate();
         long maxMillis = maxDate.getTime();
         long newMinMillis = date.getTime();
-        if (maxMillis <= newMinMillis) {
+        
+        if(maxMillis <= newMinMillis) {
             Date oldMin = getMinimumDate();
             long length = maxMillis - oldMin.getTime();
             maxDate = new Date(newMinMillis + length);
@@ -657,9 +654,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return The coordinate corresponding to the supplied date.
      */
-    public double dateToJava2D(Date date, Rectangle2D area, 
-            RectangleEdge edge) {
+    public double dateToJava2D(Date date, Rectangle2D area, RectangleEdge edge) {
         double value = date.getTime();
+        
         return valueToJava2D(value, area, edge);
     }
 
@@ -675,37 +672,31 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return A data value.
      */
-    @Override
-    public double java2DToValue(double java2DValue, Rectangle2D area, 
-            RectangleEdge edge) {
+	@Override
+	public double java2DToValue(double java2DValue, Rectangle2D area, RectangleEdge edge) {
+    	DateRange range = (DateRange) getRange();
+    	double axisMin 	= timeline.toTimelineValue(range.getLowerMillis());
+    	double axisMax 	= timeline.toTimelineValue(range.getUpperMillis());
 
-        DateRange range = (DateRange) getRange();
-        double axisMin = this.timeline.toTimelineValue(range.getLowerMillis());
-        double axisMax = this.timeline.toTimelineValue(range.getUpperMillis());
+    	double min = 0.0;
+    	double max = 0.0;
 
-        double min = 0.0;
-        double max = 0.0;
-        if (RectangleEdge.isTopOrBottom(edge)) {
-            min = area.getX();
-            max = area.getMaxX();
-        }
-        else if (RectangleEdge.isLeftOrRight(edge)) {
-            min = area.getMaxY();
-            max = area.getY();
+    	if(RectangleEdge.isTopOrBottom(edge)) {
+    		min = area.getX();
+    		max = area.getMaxX();
+    	}
+        else if(RectangleEdge.isLeftOrRight(edge)) {
+        	min = area.getMaxY();
+        	max = area.getY();
         }
 
         double result;
-        if (isInverted()) {
-             result = axisMax - ((java2DValue - min) / (max - min)
-                      * (axisMax - axisMin));
-        }
-        else {
-             result = axisMin + ((java2DValue - min) / (max - min)
-                      * (axisMax - axisMin));
-        }
 
-        return this.timeline.toMillisecond((long) result);
-    }
+        if(isInverted()) result = axisMax - ((java2DValue - min) / (max - min) * (axisMax - axisMin));
+        else result = axisMin + ((java2DValue - min) / (max - min) * (axisMax - axisMin));
+
+        return timeline.toMillisecond((long) result);
+	}
 
     /**
      * Calculates the value of the lowest visible tick on the axis.
@@ -738,7 +729,6 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The previous "standard" date.
      */
     protected Date previousStandardDate(Date date, DateTickUnit unit) {
-
         int milliseconds;
         int seconds;
         int minutes;
@@ -747,13 +737,13 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         int months;
         int years;
 
-        Calendar calendar = Calendar.getInstance(this.timeZone, this.locale);
+        Calendar calendar = Calendar.getInstance(timeZone, locale);
         calendar.setTime(date);
         int count = unit.getMultiple();
         int current = calendar.get(unit.getCalendarField());
         int value = count * (current / count);
 
-        if (DateTickUnitType.MILLISECOND.equals(unit.getUnitType())) {
+        if(DateTickUnitType.MILLISECOND.equals(unit.getUnitType())) {
             years = calendar.get(Calendar.YEAR);
             months = calendar.get(Calendar.MONTH);
             days = calendar.get(Calendar.DATE);
@@ -763,68 +753,64 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             calendar.set(years, months, days, hours, minutes, seconds);
             calendar.set(Calendar.MILLISECOND, value);
             Date mm = calendar.getTime();
-            if (mm.getTime() >= date.getTime()) {
-                calendar.set(Calendar.MILLISECOND, value - count);
-                mm = calendar.getTime();
+            if(mm.getTime() >= date.getTime()) {
+            	calendar.set(Calendar.MILLISECOND, value - count);
+            	mm = calendar.getTime();
             }
+            
             return mm;
         }
-        else if (DateTickUnitType.SECOND.equals(unit.getUnitType())) {
+        else if(DateTickUnitType.SECOND.equals(unit.getUnitType())) {
             years = calendar.get(Calendar.YEAR);
             months = calendar.get(Calendar.MONTH);
             days = calendar.get(Calendar.DATE);
             hours = calendar.get(Calendar.HOUR_OF_DAY);
             minutes = calendar.get(Calendar.MINUTE);
-            if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                milliseconds = 0;
-            }
-            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                milliseconds = 500;
-            }
-            else {
-                milliseconds = 999;
-            }
+            
+            if(tickMarkPosition == DateTickMarkPosition.START) milliseconds = 0;
+            else if(tickMarkPosition == DateTickMarkPosition.MIDDLE) milliseconds = 500;
+            else milliseconds = 999;
+
             calendar.set(Calendar.MILLISECOND, milliseconds);
             calendar.set(years, months, days, hours, minutes, value);
             Date dd = calendar.getTime();
-            if (dd.getTime() >= date.getTime()) {
-                calendar.set(Calendar.SECOND, value - count);
+            if(dd.getTime() >= date.getTime()) {
+            	calendar.set(Calendar.SECOND, value - count);
                 dd = calendar.getTime();
             }
+            
             return dd;
         }
-        else if (DateTickUnitType.MINUTE.equals(unit.getUnitType())) {
+        else if(DateTickUnitType.MINUTE.equals(unit.getUnitType())) {
             years = calendar.get(Calendar.YEAR);
             months = calendar.get(Calendar.MONTH);
             days = calendar.get(Calendar.DATE);
             hours = calendar.get(Calendar.HOUR_OF_DAY);
-            if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                seconds = 0;
-            }
-            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                seconds = 30;
-            }
-            else {
-                seconds = 59;
-            }
+
+            if(tickMarkPosition == DateTickMarkPosition.START) seconds = 0;
+            else if(tickMarkPosition == DateTickMarkPosition.MIDDLE) seconds = 30;
+            else seconds = 59;
+
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, hours, value, seconds);
             Date d0 = calendar.getTime();
-            if (d0.getTime() >= date.getTime()) {
+            if(d0.getTime() >= date.getTime()) {
                 calendar.set(Calendar.MINUTE, value - count);
                 d0 = calendar.getTime();
             }
+            
             return d0;
         }
-        else if (DateTickUnitType.HOUR.equals(unit.getUnitType())) {
+        else if(DateTickUnitType.HOUR.equals(unit.getUnitType())) {
             years = calendar.get(Calendar.YEAR);
             months = calendar.get(Calendar.MONTH);
             days = calendar.get(Calendar.DATE);
-            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+            
+            if(tickMarkPosition == DateTickMarkPosition.START) {
                 minutes = 0;
                 seconds = 0;
             }
-            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+            else if(tickMarkPosition == DateTickMarkPosition.MIDDLE) {
                 minutes = 30;
                 seconds = 0;
             }
@@ -832,66 +818,65 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 minutes = 59;
                 seconds = 59;
             }
+            
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, value, minutes, seconds);
             Date d1 = calendar.getTime();
-            if (d1.getTime() >= date.getTime()) {
+            
+            if(d1.getTime() >= date.getTime()) {
                 calendar.set(Calendar.HOUR_OF_DAY, value - count);
                 d1 = calendar.getTime();
             }
+            
             return d1;
         }
-        else if (DateTickUnitType.DAY.equals(unit.getUnitType())) {
+        else if(DateTickUnitType.DAY.equals(unit.getUnitType())) {
             years = calendar.get(Calendar.YEAR);
             months = calendar.get(Calendar.MONTH);
-            if (this.tickMarkPosition == DateTickMarkPosition.START) {
-                hours = 0;
-            }
-            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
-                hours = 12;
-            }
-            else {
-                hours = 23;
-            }
+            if(tickMarkPosition == DateTickMarkPosition.START) hours = 0;
+            else if(tickMarkPosition == DateTickMarkPosition.MIDDLE) hours = 12;
+            else hours = 23;
+
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, value, hours, 0, 0);
+            
             // long result = calendar.getTimeInMillis();
-                // won't work with JDK 1.3
+            // won't work with JDK 1.3
             Date d2 = calendar.getTime();
-            if (d2.getTime() >= date.getTime()) {
+            if(d2.getTime() >= date.getTime()) {
                 calendar.set(Calendar.DATE, value - count);
                 d2 = calendar.getTime();
             }
+            
             return d2;
         }
-        else if (DateTickUnitType.MONTH.equals(unit.getUnitType())) {
+        else if(DateTickUnitType.MONTH.equals(unit.getUnitType())) {
             value = count * ((current + 1) / count) - 1;
             years = calendar.get(Calendar.YEAR);
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, value, 1, 0, 0, 0);
-            Month month = new Month(calendar.getTime(), this.timeZone,
-                    this.locale);
-            Date standardDate = calculateDateForPosition(
-                    month, this.tickMarkPosition);
+            Month month = new Month(calendar.getTime(), timeZone, locale);
+            Date standardDate = calculateDateForPosition(month, tickMarkPosition);
             long millis = standardDate.getTime();
-            if (millis >= date.getTime()) {
-                for (int i = 0; i < count; i++) {
+            
+            if(millis >= date.getTime()) {
+                for(int i = 0; i < count; i++) {
                     month = (Month) month.previous();
                 }
                 // need to peg the month in case the time zone isn't the
                 // default - see bug 2078057
-                month.peg(Calendar.getInstance(this.timeZone));
-                standardDate = calculateDateForPosition(
-                        month, this.tickMarkPosition);
+                month.peg(Calendar.getInstance(timeZone));
+                standardDate = calculateDateForPosition(month, tickMarkPosition);
             }
+            
             return standardDate;
         }
-        else if (DateTickUnitType.YEAR.equals(unit.getUnitType())) {
-            if (this.tickMarkPosition == DateTickMarkPosition.START) {
+        else if(DateTickUnitType.YEAR.equals(unit.getUnitType())) {
+            if(tickMarkPosition == DateTickMarkPosition.START) {
                 months = 0;
                 days = 1;
             }
-            else if (this.tickMarkPosition == DateTickMarkPosition.MIDDLE) {
+            else if(tickMarkPosition == DateTickMarkPosition.MIDDLE) {
                 months = 6;
                 days = 1;
             }
@@ -899,15 +884,19 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 months = 11;
                 days = 31;
             }
+            
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(value, months, days, 0, 0, 0);
             Date d3 = calendar.getTime();
-            if (d3.getTime() >= date.getTime()) {
+            
+            if(d3.getTime() >= date.getTime()) {
                 calendar.set(Calendar.YEAR, value - count);
                 d3 = calendar.getTime();
             }
+            
             return d3;
         }
+        
         return null;
     }
 
@@ -920,21 +909,15 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return A date.
      */
-    private Date calculateDateForPosition(RegularTimePeriod period,
-            DateTickMarkPosition position) {
+    private Date calculateDateForPosition(RegularTimePeriod period, DateTickMarkPosition position) {
         Args.nullNotPermitted(period, "period");
+        
         Date result = null;
-        if (position == DateTickMarkPosition.START) {
-            result = new Date(period.getFirstMillisecond());
-        }
-        else if (position == DateTickMarkPosition.MIDDLE) {
-            result = new Date(period.getMiddleMillisecond());
-        }
-        else if (position == DateTickMarkPosition.END) {
-            result = new Date(period.getLastMillisecond());
-        }
-        return result;
+        if(position == DateTickMarkPosition.START) result = new Date(period.getFirstMillisecond());
+        else if(position == DateTickMarkPosition.MIDDLE) result = new Date(period.getMiddleMillisecond());
+        else if(position == DateTickMarkPosition.END) result = new Date(period.getLastMillisecond());
 
+        return result;
     }
 
     /**
@@ -948,9 +931,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     protected Date nextStandardDate(Date date, DateTickUnit unit) {
         Date previous = previousStandardDate(date, unit);
-        Calendar calendar = Calendar.getInstance(this.timeZone, this.locale);
+        Calendar calendar = Calendar.getInstance(timeZone, locale);
         calendar.setTime(previous);
         calendar.add(unit.getCalendarField(), unit.getMultiple());
+        
         return calendar.getTime();
     }
 
@@ -964,8 +948,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return A collection of standard date tick units.
      */
     public static TickUnitSource createStandardDateTickUnits() {
-        return createStandardDateTickUnits(TimeZone.getDefault(),
-                Locale.getDefault());
+        return createStandardDateTickUnits(TimeZone.getDefault(), Locale.getDefault());
     }
 
     /**
@@ -982,11 +965,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @since 1.0.11
      */
-    public static TickUnitSource createStandardDateTickUnits(TimeZone zone,
-            Locale locale) {
-
+    public static TickUnitSource createStandardDateTickUnits(TimeZone zone, Locale locale) {
         Args.nullNotPermitted(zone, "zone");
         Args.nullNotPermitted(locale, "locale");
+        
         TickUnits units = new TickUnits();
 
         // date formatters
@@ -1100,7 +1082,6 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 DateTickUnitType.YEAR, 20, f7));
 
         return units;
-
     }
 
     /**
@@ -1108,47 +1089,42 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     @Override
     protected void autoAdjustRange() {
-
         Plot plot = getPlot();
 
-        if (plot == null) {
-            return;  // no plot, no data
-        }
+        if(plot == null) return;  // no plot, no data
 
-        if (plot instanceof ValueAxisPlot) {
+        if(plot instanceof ValueAxisPlot) {
             ValueAxisPlot vap = (ValueAxisPlot) plot;
 
             Range r = vap.getDataRange(this);
-            if (r == null) {
-                r = new DateRange();
-            }
+            if(r == null) r = new DateRange();
 
-            long upper = this.timeline.toTimelineValue(
-                    (long) r.getUpperBound());
+            long upper = timeline.toTimelineValue((long) r.getUpperBound());
             long lower;
             long fixedAutoRange = (long) getFixedAutoRange();
-            if (fixedAutoRange > 0.0) {
-                lower = upper - fixedAutoRange;
-            }
+            
+            if(fixedAutoRange > 0.0) lower = upper - fixedAutoRange;
             else {
-                lower = this.timeline.toTimelineValue((long) r.getLowerBound());
+                lower = timeline.toTimelineValue((long) r.getLowerBound());
                 double range = upper - lower;
                 long minRange = (long) getAutoRangeMinimumSize();
-                if (range < minRange) {
+                
+                if(range < minRange) {
                     long expand = (long) (minRange - range) / 2;
                     upper = upper + expand;
                     lower = lower - expand;
                 }
+                
                 upper = upper + (long) (range * getUpperMargin());
                 lower = lower - (long) (range * getLowerMargin());
             }
 
-            upper = this.timeline.toMillisecond(upper);
-            lower = this.timeline.toMillisecond(lower);
+            upper = timeline.toMillisecond(upper);
+            lower = timeline.toMillisecond(lower);
+            
             DateRange dr = new DateRange(new Date(lower), new Date(upper));
             setRange(dr, false, false);
         }
-
     }
 
     /**
@@ -1160,17 +1136,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param dataArea  the area defined by the axes.
      * @param edge  the axis location.
      */
-    protected void selectAutoTickUnit(Graphics2D g2, Rectangle2D dataArea,
-            RectangleEdge edge) {
-
-        if (RectangleEdge.isTopOrBottom(edge)) {
-            selectHorizontalAutoTickUnit(g2, dataArea, edge);
-        }
-        else if (RectangleEdge.isLeftOrRight(edge)) {
-            selectVerticalAutoTickUnit(g2, dataArea, edge);
-        }
-
-    }
+    protected void selectAutoTickUnit(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge) {
+        if(RectangleEdge.isTopOrBottom(edge)) selectHorizontalAutoTickUnit(g2, dataArea, edge);
+        else if(RectangleEdge.isLeftOrRight(edge)) selectVerticalAutoTickUnit(g2, dataArea, edge);
+	}
 
     /**
      * Selects an appropriate tick size for the axis.  The strategy is to
@@ -1181,12 +1150,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param dataArea  the area defined by the axes.
      * @param edge  the axis location.
      */
-    protected void selectHorizontalAutoTickUnit(Graphics2D g2,
-            Rectangle2D dataArea, RectangleEdge edge) {
-
+    protected void selectHorizontalAutoTickUnit(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge) {
         double zero = valueToJava2D(0.0, dataArea, edge);
-        double tickLabelWidth = estimateMaximumTickLabelWidth(g2,
-                getTickUnit());
+        double tickLabelWidth = estimateMaximumTickLabelWidth(g2, getTickUnit());
 
         // start with the current tick unit...
         TickUnitSource tickUnits = getStandardTickUnits();
@@ -1200,9 +1166,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         double x2 = valueToJava2D(unit2.getSize(), dataArea, edge);
         double unit2Width = Math.abs(x2 - zero);
         tickLabelWidth = estimateMaximumTickLabelWidth(g2, unit2);
-        if (tickLabelWidth > unit2Width) {
-            unit2 = (DateTickUnit) tickUnits.getLargerTickUnit(unit2);
-        }
+        if(tickLabelWidth > unit2Width) unit2 = (DateTickUnit) tickUnits.getLargerTickUnit(unit2);
+
         setTickUnit(unit2, false, false);
     }
 
@@ -1215,40 +1180,31 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @param dataArea  the area in which the plot should be drawn.
      * @param edge  the axis location.
      */
-    protected void selectVerticalAutoTickUnit(Graphics2D g2,
-            Rectangle2D dataArea, RectangleEdge edge) {
-
+    protected void selectVerticalAutoTickUnit(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge) {
         // start with the current tick unit...
         TickUnitSource tickUnits = getStandardTickUnits();
         double zero = valueToJava2D(0.0, dataArea, edge);
 
         // start with a unit that is at least 1/10th of the axis length
         double estimate1 = getRange().getLength() / 10.0;
-        DateTickUnit candidate1
-            = (DateTickUnit) tickUnits.getCeilingTickUnit(estimate1);
+        DateTickUnit candidate1 = (DateTickUnit) tickUnits.getCeilingTickUnit(estimate1);
         double labelHeight1 = estimateMaximumTickLabelHeight(g2, candidate1);
         double y1 = valueToJava2D(candidate1.getSize(), dataArea, edge);
         double candidate1UnitHeight = Math.abs(y1 - zero);
 
         // now extrapolate based on label height and unit height...
-        double estimate2
-            = (labelHeight1 / candidate1UnitHeight) * candidate1.getSize();
-        DateTickUnit candidate2
-            = (DateTickUnit) tickUnits.getCeilingTickUnit(estimate2);
+        double estimate2 = (labelHeight1 / candidate1UnitHeight) * candidate1.getSize();
+        DateTickUnit candidate2 = (DateTickUnit) tickUnits.getCeilingTickUnit(estimate2);
         double labelHeight2 = estimateMaximumTickLabelHeight(g2, candidate2);
         double y2 = valueToJava2D(candidate2.getSize(), dataArea, edge);
         double unit2Height = Math.abs(y2 - zero);
 
-       // make final selection...
-       DateTickUnit finalUnit;
-       if (labelHeight2 < unit2Height) {
-           finalUnit = candidate2;
-       }
-       else {
-           finalUnit = (DateTickUnit) tickUnits.getLargerTickUnit(candidate2);
-       }
-       setTickUnit(finalUnit, false, false);
+        // make final selection...
+        DateTickUnit finalUnit;
+        if(labelHeight2 < unit2Height) finalUnit = candidate2;
+        else finalUnit = (DateTickUnit) tickUnits.getLargerTickUnit(candidate2);
 
+        setTickUnit(finalUnit, false, false);
     }
 
     /**
@@ -1264,16 +1220,15 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return The estimated maximum width of the tick labels.
      */
-    private double estimateMaximumTickLabelWidth(Graphics2D g2, 
-            DateTickUnit unit) {
-
+    private double estimateMaximumTickLabelWidth(Graphics2D g2, DateTickUnit unit) {
         RectangleInsets tickLabelInsets = getTickLabelInsets();
         double result = tickLabelInsets.getLeft() + tickLabelInsets.getRight();
 
         Font tickLabelFont = getTickLabelFont();
         FontRenderContext frc = g2.getFontRenderContext();
         LineMetrics lm = tickLabelFont.getLineMetrics("ABCxyz", frc);
-        if (isVerticalTickLabels()) {
+        
+        if(isVerticalTickLabels()) {
             // all tick labels have the same width (equal to the height of
             // the font)...
             result += lm.getHeight();
@@ -1285,7 +1240,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             Date upper = range.getUpperDate();
             String lowerStr, upperStr;
             DateFormat formatter = getDateFormatOverride();
-            if (formatter != null) {
+            if(formatter != null) {
                 lowerStr = formatter.format(lower);
                 upperStr = formatter.format(upper);
             }
@@ -1293,14 +1248,15 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 lowerStr = unit.dateToString(lower);
                 upperStr = unit.dateToString(upper);
             }
+            
             FontMetrics fm = g2.getFontMetrics(tickLabelFont);
             double w1 = fm.stringWidth(lowerStr);
             double w2 = fm.stringWidth(upperStr);
+            
             result += Math.max(w1, w2);
         }
 
         return result;
-
     }
 
     /**
@@ -1316,16 +1272,15 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return The estimated maximum width of the tick labels.
      */
-    private double estimateMaximumTickLabelHeight(Graphics2D g2,
-            DateTickUnit unit) {
-
+    private double estimateMaximumTickLabelHeight(Graphics2D g2, DateTickUnit unit) {
         RectangleInsets tickLabelInsets = getTickLabelInsets();
         double result = tickLabelInsets.getTop() + tickLabelInsets.getBottom();
 
         Font tickLabelFont = getTickLabelFont();
         FontRenderContext frc = g2.getFontRenderContext();
         LineMetrics lm = tickLabelFont.getLineMetrics("ABCxyz", frc);
-        if (!isVerticalTickLabels()) {
+        
+        if(!isVerticalTickLabels()) {
             // all tick labels have the same width (equal to the height of
             // the font)...
             result += lm.getHeight();

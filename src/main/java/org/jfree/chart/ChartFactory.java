@@ -1390,16 +1390,21 @@ public abstract class ChartFactory {
      *
      * @return An XY bar chart.
      */
-    public static JFreeChart createXYBarChart(String title, String xAxisLabel,
-            boolean dateAxis, String yAxisLabel, IntervalXYDataset dataset,
-            PlotOrientation orientation, boolean legend, boolean tooltips,
-            boolean urls) {
+	public static JFreeChart createXYBarChart(
+    	String title,
+    	String xAxisLabel,
+    	boolean dateAxis,
+    	String yAxisLabel,
+    	IntervalXYDataset dataset,
+    	PlotOrientation orientation,
+    	boolean legend,
+    	boolean tooltips,
+    	boolean urls)
+	{
+		Args.nullNotPermitted(orientation, "orientation");
 
-        Args.nullNotPermitted(orientation, "orientation");
         ValueAxis domainAxis;
-        if (dateAxis) {
-            domainAxis = new DateAxis(xAxisLabel);
-        }
+        if(dateAxis) domainAxis = new DateAxis(xAxisLabel);
         else {
             NumberAxis axis = new NumberAxis(xAxisLabel);
             axis.setAutoRangeIncludesZero(false);
@@ -1408,29 +1413,25 @@ public abstract class ChartFactory {
         ValueAxis valueAxis = new NumberAxis(yAxisLabel);
 
         XYBarRenderer renderer = new XYBarRenderer();
-        if (tooltips) {
+        if(tooltips) {
             XYToolTipGenerator tt;
-            if (dateAxis) {
-                tt = StandardXYToolTipGenerator.getTimeSeriesInstance();
-            }
-            else {
-                tt = new StandardXYToolTipGenerator();
-            }
+            if(dateAxis) tt = StandardXYToolTipGenerator.getTimeSeriesInstance();
+            else tt = new StandardXYToolTipGenerator();
+
             renderer.setDefaultToolTipGenerator(tt);
         }
-        if (urls) {
-            renderer.setURLGenerator(new StandardXYURLGenerator());
-        }
+
+        if(urls) renderer.setURLGenerator(new StandardXYURLGenerator()); 
 
         XYPlot plot = new XYPlot(dataset, domainAxis, valueAxis, renderer);
         plot.setOrientation(orientation);
 
-        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT,
-                plot, legend);
-        currentTheme.apply(chart);
-        return chart;
+        JFreeChart chart = new JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
 
-    }
+        //currentTheme.apply(chart);
+
+        return chart;
+	}
 
     /**
      * Creates an area chart using an {@link XYDataset}.
@@ -1449,12 +1450,10 @@ public abstract class ChartFactory {
      * 
      * @since 1.0.16
      */
-    public static JFreeChart createXYAreaChart(String title,String xAxisLabel,
-            String yAxisLabel, XYDataset dataset) {
-        return createXYAreaChart(title, xAxisLabel, yAxisLabel, dataset, 
-                PlotOrientation.VERTICAL, true, true, false);
-    }
-    
+    public static JFreeChart createXYAreaChart(String title,String xAxisLabel, String yAxisLabel, XYDataset dataset) {
+    	return createXYAreaChart(title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+	}
+
     /**
      * Creates an area chart using an {@link XYDataset}.
      * <P>
@@ -1475,11 +1474,18 @@ public abstract class ChartFactory {
      *
      * @return An XY area chart.
      */
-    public static JFreeChart createXYAreaChart(String title, String xAxisLabel,
-            String yAxisLabel, XYDataset dataset, PlotOrientation orientation,
-            boolean legend, boolean tooltips, boolean urls) {
-
+    public static JFreeChart createXYAreaChart(
+    	String title,
+    	String xAxisLabel,
+    	String yAxisLabel,
+    	XYDataset dataset,
+    	PlotOrientation orientation,
+    	boolean legend,
+    	boolean tooltips,
+    	boolean urls)
+    {
         Args.nullNotPermitted(orientation, "orientation");
+        
         NumberAxis xAxis = new NumberAxis(xAxisLabel);
         xAxis.setAutoRangeIncludesZero(false);
         NumberAxis yAxis = new NumberAxis(yAxisLabel);

@@ -1,67 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------
- * LegendItem.java
- * ---------------
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Andrzej Porebski;
- *                   David Li;
- *                   Wolfgang Irler;
- *                   Luke Quinane;
- *
- * Changes (from 2-Oct-2002)
- * -------------------------
- * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 17-Jan-2003 : Dropped outlineStroke attribute (DG);
- * 08-Oct-2003 : Applied patch for displaying series line style, contributed by
- *               Luke Quinane (DG);
- * 21-Jan-2004 : Added the shapeFilled flag (DG);
- * 04-Jun-2004 : Added equals() method, implemented Serializable (DG);
- * 25-Nov-2004 : Changes required by new LegendTitle implementation (DG);
- * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0
- *               release (DG);
- * 20-Apr-2005 : Added tooltip and URL text (DG);
- * 28-Nov-2005 : Separated constructors for AttributedString labels (DG);
- * 10-Dec-2005 : Fixed serialization bug (1377239) (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 20-Jul-2006 : Added dataset and series index fields (DG);
- * 13-Dec-2006 : Added fillPaintTransformer attribute (DG);
- * 18-May-2007 : Added dataset and seriesKey fields (DG);
- * 03-Aug-2007 : Fixed null pointer exception (DG);
- * 23-Apr-2008 : Added new constructor and implemented Cloneable (DG);
- * 17-Jun-2008 : Added optional labelFont and labelPaint attributes (DG);
- * 15-Oct-2008 : Added new constructor (DG);
- * 28-Apr-2009 : Added various setter methods (DG);
- * 01-Jul-2013 : Use ParamChecks class (DG);
- *
- */
-
 package org.jfree.chart;
 
 import java.awt.BasicStroke;
@@ -95,8 +31,6 @@ import org.jfree.data.general.Dataset;
  * without any consideration for layout issues.
  */
 public class LegendItem implements Cloneable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -797214582948827144L;
 
     /**
@@ -224,8 +158,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public LegendItem(String label, Paint paint) {
-        this(label, null, null, null, new Rectangle2D.Double(-4.0, -4.0, 8.0,
-                8.0), paint);
+        this(label, null, null, null, new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0), paint);
     }
 
     /**
@@ -240,17 +173,14 @@ public class LegendItem implements Cloneable, Serializable {
      * @param fillPaint  the paint used to fill the shape ({@code null}
      *                   not permitted).
      */
-    public LegendItem(String label, String description,
-                      String toolTipText, String urlText,
-                      Shape shape, Paint fillPaint) {
-
-        this(label, description, toolTipText, urlText,
+    public LegendItem(String label, String description, String toolTipText, String urlText, Shape shape, Paint fillPaint) {
+    	this(label, description, toolTipText, urlText,
                 /* shape visible = */ true, shape,
                 /* shape filled = */ true, fillPaint,
                 /* shape outlined */ false, Color.BLACK, UNUSED_STROKE,
                 /* line visible */ false, UNUSED_SHAPE, UNUSED_STROKE,
-                Color.BLACK);
-
+            Color.BLACK
+		);
     }
 
     /**
@@ -268,17 +198,23 @@ public class LegendItem implements Cloneable, Serializable {
      * @param outlinePaint  the outline paint ({@code null} not
      *                      permitted).
      */
-    public LegendItem(String label, String description, String toolTipText, 
-            String urlText, Shape shape, Paint fillPaint, Stroke outlineStroke, 
-            Paint outlinePaint) {
-
+    public LegendItem(
+    	String label,
+    	String description,
+    	String toolTipText, 
+    	String urlText,
+    	Shape shape,
+    	Paint fillPaint,
+    	Stroke outlineStroke, 
+    	Paint outlinePaint)
+    {
         this(label, description, toolTipText, urlText,
                 /* shape visible = */ true, shape,
                 /* shape filled = */ true, fillPaint,
                 /* shape outlined = */ true, outlinePaint, outlineStroke,
-                /* line visible */ false, UNUSED_SHAPE, UNUSED_STROKE,
-                Color.BLACK);
-
+            /* line visible */ false, UNUSED_SHAPE, UNUSED_STROKE,
+            Color.BLACK
+		);
     }
 
     /**
@@ -292,9 +228,7 @@ public class LegendItem implements Cloneable, Serializable {
      * @param lineStroke  the line stroke ({@code null} not permitted).
      * @param linePaint  the line paint ({@code null} not permitted).
      */
-    public LegendItem(String label, String description, String toolTipText, 
-            String urlText, Shape line, Stroke lineStroke, Paint linePaint) {
-
+    public LegendItem(String label, String description, String toolTipText, String urlText, Shape line, Stroke lineStroke, Paint linePaint) {
         this(label, description, toolTipText, urlText,
                 /* shape visible = */ false, UNUSED_SHAPE,
                 /* shape filled = */ false, Color.BLACK,
@@ -334,16 +268,17 @@ public class LegendItem implements Cloneable, Serializable {
                       boolean shapeOutlineVisible, Paint outlinePaint,
                       Stroke outlineStroke,
                       boolean lineVisible, Shape line,
-                      Stroke lineStroke, Paint linePaint) {
-
+                      Stroke lineStroke, Paint linePaint)
+    {
         Args.nullNotPermitted(label, "label");
         Args.nullNotPermitted(fillPaint, "fillPaint");
         Args.nullNotPermitted(lineStroke, "lineStroke");
         Args.nullNotPermitted(outlinePaint, "outlinePaint");
         Args.nullNotPermitted(outlineStroke, "outlineStroke");
+        
         this.label = label;
-        this.labelPaint = null;
-        this.attributedLabel = null;
+        labelPaint = null;
+        attributedLabel = null;
         this.description = description;
         this.shapeVisible = shapeVisible;
         this.shape = shape;
@@ -376,14 +311,12 @@ public class LegendItem implements Cloneable, Serializable {
     public LegendItem(AttributedString label, String description,
                       String toolTipText, String urlText,
                       Shape shape, Paint fillPaint) {
-
         this(label, description, toolTipText, urlText,
                 /* shape visible = */ true, shape,
                 /* shape filled = */ true, fillPaint,
                 /* shape outlined = */ false, Color.BLACK, UNUSED_STROKE,
                 /* line visible = */ false, UNUSED_SHAPE, UNUSED_STROKE,
                 Color.BLACK);
-
     }
 
     /**
@@ -477,6 +410,7 @@ public class LegendItem implements Cloneable, Serializable {
         Args.nullNotPermitted(linePaint, "linePaint");
         Args.nullNotPermitted(outlinePaint, "outlinePaint");
         Args.nullNotPermitted(outlineStroke, "outlineStroke");
+        
         this.label = characterIteratorToString(label.getIterator());
         this.attributedLabel = label;
         this.description = description;

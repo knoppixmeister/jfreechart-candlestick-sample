@@ -1,11 +1,5 @@
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Collections;
 
@@ -18,14 +12,14 @@ import org.jfree.chart.axis.*;
 import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
-import org.jfree.chart.ui.RectangleAnchor;
-import org.jfree.chart.ui.RectangleInsets;
+import org.jfree.chart.ui.*;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
 
 public class Test3 {
 	public static void main(String[] args) {
+		/*
 		CrosshairOverlay chOverlay = new CrosshairOverlay();
 
 		Crosshair crosshair1 = new Crosshair(0);
@@ -35,10 +29,19 @@ public class Test3 {
 		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
 		crosshair1.setLabelBackgroundPaint(Color.RED);
 
-		chOverlay.addDomainCrosshair(crosshair1);
-		//chOverlay.addRangeCrosshair(crosshair1);
+		Crosshair crosshair2 = new Crosshair(5000);
+		crosshair1.setPaint(Color.BLACK);
 
-		//-----------------------------------------------------------
+		crosshair1.setLabelVisible(true);
+		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+		crosshair1.setLabelBackgroundPaint(Color.CYAN);
+
+		chOverlay.addDomainCrosshair(crosshair1);
+		chOverlay.addRangeCrosshair(crosshair2);
+		*/
+
+	//-----------------------------------------------------------
+
 		OHLCSeriesCollection collection = new OHLCSeriesCollection();
 		OHLCSeries series = new OHLCSeries("");
 		collection.addSeries(series);
@@ -53,7 +56,7 @@ public class Test3 {
         collection3.addSeries(series2);
         collection3.addSeries(series3);
 
-		for(int i=0; i<200; i++) {
+        for(int i=0; i<200; i++) {
 			long tm = System.currentTimeMillis()+1000+i;
 
 			series.add(new OHLCItem(
@@ -64,10 +67,10 @@ public class Test3 {
 				7000	//close
 			));
 
-			series1.add(new TimeSeriesDataItem(new FixedMillisecond(tm), i % 2 == 0 ? 100 : -100));
+			series1.add(new TimeSeriesDataItem(new FixedMillisecond(tm), i % 2 == 0 ? 75 : 10));
 
-			series3.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 75));
-			series2.add(new TimeSeriesDataItem(new FixedMillisecond(tm), -50));
+			//series3.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 75));
+			//series2.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 10));
 		}
 
 		DateAxis dateAxis = new DateAxis();
@@ -85,20 +88,18 @@ public class Test3 {
 		);
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
-		
+
 		plot1.setDomainCrosshairVisible(true);
 		plot1.setRangeCrosshairVisible(true);
 		plot1.setRangeCrosshairValue(4000);
-		
+
 		XYDataset dataset2 = MovingAverage.createMovingAverage(collection, "-MAVG", 3 * 24 * 60 * 60 * 1000L, 0L);
-        plot1.setDataset(1, dataset2);
-        plot1.setRenderer(1, new StandardXYItemRenderer());
- 
+		plot1.setDataset(1, dataset2);
+		plot1.setRenderer(1, new StandardXYItemRenderer());
+
 		//------------------------------------------------------------
-        TimeSeriesCollection dataset = new TimeSeriesCollection();
-        
-        
-        
+		TimeSeriesCollection dataset = new TimeSeriesCollection();
+
 		XYPlot plot2 = new XYPlot(
 			collection2,								//dataset,
 			null,										//domainAxis,
@@ -108,7 +109,9 @@ public class Test3 {
 		);
 		//plot2.setBackgroundPaint(ChartColor.DARK_RED);
 		plot2.setRangeCrosshairVisible(true);
-		plot2.setRangeZeroBaselineVisible(true);
+		plot2.setRangeCrosshairLockedOnData(false);
+		plot2.setDomainCrosshairVisible(true);
+		//plot2.setRangeZeroBaselineVisible(true);
 		//plot2.setRangeGridlinePaint(new Color(142, 21, 153));
 
 		plot2.getRenderer().setSeriesPaint(0, new Color(142, 21, 153), true);
@@ -116,11 +119,23 @@ public class Test3 {
 		plot2.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot2.setRangePannable(true);
 
+		/*
 		XYDifferenceRenderer r = 	//new XYDifferenceRenderer(Color.RED, Color.LIGHT_GRAY, false);
 									new XYDifferenceRenderer();
 		//r.setRoundXCoordinates(true);
 		plot2.setDataset(1, collection3);
 		plot2.setRenderer(1, r);
+		*/
+
+		IntervalMarker target = new IntervalMarker(30.0, 70.0);
+		//target.setLabel("Target Range");
+		//target.setLabelFont(new Font("SansSerif", Font.ITALIC, 11));
+		//target.setLabelAnchor(RectangleAnchor.LEFT);
+		//target.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
+
+		plot2.addRangeMarker(target, Layer.BACKGROUND);
+
+	//----------------------------------------------------------------------------------------------------------------------
 
 		XYPlot plot3 = new XYPlot(
 			//dataset,
@@ -146,7 +161,7 @@ public class Test3 {
 
 		ChartPanel panel = new ChartPanel(chart);
 
-		panel.addOverlay(chOverlay);
+		//panel.addOverlay(chOverlay);
 
 		panel.setMouseWheelEnabled(true);
 		panel.setMouseZoomable(false);
@@ -157,63 +172,67 @@ public class Test3 {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("MMMM");
-				
 			}
 		});
 		panel.add(b);
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
+			public void mouseReleased(MouseEvent e) {
 			}
 
 			@Override
-			public void mousePressed(MouseEvent arg0) {
+			public void mousePressed(MouseEvent e) {
 				System.out.println("AAAAA");
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
+			public void mouseExited(MouseEvent e) {
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent e) {
 			}
 
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
+
 		panel.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
+				System.out.println("MOSE MOVED");
+
 				//panel.getScreenDataArea(x, y);
 
-				Rectangle2D dataArea = panel.getScreenDataArea((int)e.getX(), (int)e.getY());
+				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
 
 				if(dataArea != null) {
-					//System.out.println(dataArea.getX());
+					System.out.println("X: "+e.getX());
 
-					//double x = dateAxis.java2DToValue(e.getX(), dataArea, plot1.getDomainAxisEdge());
+					double x = dateAxis.java2DToValue(e.getX(), dataArea, combinedPlot.getDomainAxisEdge());
 					//double y = priceAxis.java2DToValue(e.getY(), dataArea, plot1.getRangeAxisEdge());
-					
+
 					//System.out.println("X: "+x);
-					
-					/*
-					plot1.setRangeCrosshairValue(y);
+
+					//plot1.setRangeCrosshairValue(y);
 					plot1.setDomainCrosshairValue(x);
-					
+
 					plot2.setDomainCrosshairVisible(true);
 					plot2.setDomainCrosshairValue(x);
-					
+
 					plot3.setDomainCrosshairVisible(true);
 					plot3.setDomainCrosshairValue(x);
-					*/
+
+					//combinedPlot.setDomainCrosshairValue(x);
 				}
+				else System.out.println("NO DATA AREA");
 			}
 
 			@Override
-			public void mouseDragged(MouseEvent arg0) {
+			public void mouseDragged(MouseEvent e) {
+				;
 			}
 		});
 		panel.addMouseWheelListener(new MouseWheelListener() {
@@ -224,7 +243,7 @@ public class Test3 {
 				//((XYPlot)((CombinedDomainXYPlot)panel.getChart().getPlot()).getSubplots().get(0)).getDataR
 			}
 		});
-		
+
 		panel.getChart().removeLegend();
 
 		JFrame fr = new JFrame();
@@ -238,10 +257,10 @@ public class Test3 {
 		button.setBounds(10, 10, 100, 30);
 		fr.add(button);
 		*/
-		
+
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setVisible(true);
-		
+
 		
 		/*
 		new Thread(new Runnable() {

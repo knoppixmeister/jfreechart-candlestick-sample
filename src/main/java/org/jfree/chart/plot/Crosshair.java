@@ -1,16 +1,8 @@
 package org.jfree.chart.plot;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Paint;
-import java.awt.Stroke;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.awt.*;
+import java.beans.*;
+import java.io.*;
 import org.jfree.chart.HashUtils;
 import org.jfree.chart.labels.CrosshairLabelGenerator;
 import org.jfree.chart.labels.StandardCrosshairLabelGenerator;
@@ -133,15 +125,15 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         this.stroke = stroke;
         labelVisible = false;
         labelGenerator = new StandardCrosshairLabelGenerator();
-        this.labelAnchor = RectangleAnchor.BOTTOM_LEFT;
-        this.labelXOffset = 3.0;
-        this.labelYOffset = 3.0;
-        this.labelFont = new Font("Tahoma", Font.PLAIN, 12);
-        this.labelPaint = Color.BLACK;
-        this.labelBackgroundPaint = new Color(0, 0, 255, 63);
-        this.labelOutlineVisible = true;
-        this.labelOutlinePaint = Color.BLACK;
-        this.labelOutlineStroke = new BasicStroke(0.5f);
+        labelAnchor = RectangleAnchor.BOTTOM_LEFT;
+        labelXOffset = 3.0;
+        labelYOffset = 3.0;
+        labelFont = new Font("Tahoma", Font.PLAIN, 12);
+        labelPaint = Color.BLACK;
+        labelBackgroundPaint = new Color(0, 0, 255, 63);
+        labelOutlineVisible = true;
+        labelOutlinePaint = Color.BLACK;
+        labelOutlineStroke = new BasicStroke(0.5f);
         
         pcs = new PropertyChangeSupport(this);
     }
@@ -170,7 +162,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setVisible(boolean visible) {
         boolean old = this.visible;
         this.visible = visible;
-        this.pcs.firePropertyChange("visible", old, visible);
+        
+        pcs.firePropertyChange("visible", old, visible);
     }
 
     /**
@@ -181,7 +174,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setValue(double)
      */
     public double getValue() {
-        return this.value;
+        return value;
     }
 
     /**
@@ -329,7 +322,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #getLabelAnchor()
      */
     public void setLabelAnchor(RectangleAnchor anchor) {
-        RectangleAnchor old = this.labelAnchor;
+        RectangleAnchor old = labelAnchor;
         
         labelAnchor = anchor;
         pcs.firePropertyChange("labelAnchor", old, anchor);
@@ -355,8 +348,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #getLabelXOffset()
      */
     public void setLabelXOffset(double offset) {
-        Double old = this.labelXOffset;
-        this.labelXOffset = offset;
+        Double old = labelXOffset;
+        labelXOffset = offset;
         
         pcs.firePropertyChange("labelXOffset", old, offset);
     }
@@ -381,8 +374,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #getLabelYOffset()
      */
     public void setLabelYOffset(double offset) {
-        Double old = this.labelYOffset;
-        this.labelYOffset = offset;
+        Double old = labelYOffset;
+        labelYOffset = offset;
         
         pcs.firePropertyChange("labelYOffset", old, offset);
     }
@@ -409,8 +402,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelFont(Font font) {
         Args.nullNotPermitted(font, "font");
         
-        Font old = this.labelFont;
-        this.labelFont = font;
+        Font old = labelFont;
+        labelFont = font;
         pcs.firePropertyChange("labelFont", old, font);
     }
 
@@ -436,8 +429,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         
-        Paint old = this.labelPaint;
-        this.labelPaint = paint;
+        Paint old = labelPaint;
+        labelPaint = paint;
         pcs.firePropertyChange("labelPaint", old, paint);
     }
 
@@ -461,8 +454,8 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #getLabelBackgroundPaint()
      */
     public void setLabelBackgroundPaint(Paint paint) {
-        Paint old = this.labelBackgroundPaint;
-        this.labelBackgroundPaint = paint;
+        Paint old = labelBackgroundPaint;
+        labelBackgroundPaint = paint;
         pcs.firePropertyChange("labelBackgroundPaint", old, paint);
     }
 
@@ -503,7 +496,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelOutlinePaint(java.awt.Paint)
      */
     public Paint getLabelOutlinePaint() {
-        return this.labelOutlinePaint;
+        return labelOutlinePaint;
     }
 
     /**
@@ -517,9 +510,9 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public void setLabelOutlinePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         
-        Paint old = this.labelOutlinePaint;
-        this.labelOutlinePaint = paint;
-        this.pcs.firePropertyChange("labelOutlinePaint", old, paint);
+        Paint old = labelOutlinePaint;
+        labelOutlinePaint = paint;
+        pcs.firePropertyChange("labelOutlinePaint", old, paint);
     }
 
     /**
@@ -531,7 +524,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #setLabelOutlineStroke(java.awt.Stroke)
      */
     public Stroke getLabelOutlineStroke() {
-        return this.labelOutlineStroke;
+        return labelOutlineStroke;
     }
 
     /**
@@ -543,13 +536,30 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      * @see #getLabelOutlineStroke()
      */
     public void setLabelOutlineStroke(Stroke stroke) {
-        Args.nullNotPermitted(stroke, "stroke");
-        
-        Stroke old = this.labelOutlineStroke;
-        this.labelOutlineStroke = stroke;
-        this.pcs.firePropertyChange("labelOutlineStroke", old, stroke);
+    	Args.nullNotPermitted(stroke, "stroke");
+
+    	Stroke old = labelOutlineStroke;
+    	labelOutlineStroke = stroke;
+    	pcs.firePropertyChange("labelOutlineStroke", old, stroke);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this crosshair for equality with an arbitrary object.
      *
@@ -613,6 +623,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         if (!this.labelOutlineStroke.equals(that.labelOutlineStroke)) {
             return false;
         }
+        
         return true;  // can't find any difference
     }
 
@@ -624,6 +635,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
+        
         hash = HashUtils.hashCode(hash, this.visible);
         hash = HashUtils.hashCode(hash, this.value);
         hash = HashUtils.hashCode(hash, this.paint);
@@ -639,6 +651,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         hash = HashUtils.hashCode(hash, this.labelOutlineVisible);
         hash = HashUtils.hashCode(hash, this.labelOutlineStroke);
         hash = HashUtils.hashCode(hash, this.labelOutlinePaint);
+        
         return hash;
     }
 
@@ -705,12 +718,12 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.paint = SerialUtils.readPaint(stream);
-        this.stroke = SerialUtils.readStroke(stream);
-        this.labelPaint = SerialUtils.readPaint(stream);
-        this.labelBackgroundPaint = SerialUtils.readPaint(stream);
-        this.labelOutlineStroke = SerialUtils.readStroke(stream);
-        this.labelOutlinePaint = SerialUtils.readPaint(stream);
-        this.pcs = new PropertyChangeSupport(this);
+        paint = SerialUtils.readPaint(stream);
+        stroke = SerialUtils.readStroke(stream);
+        labelPaint = SerialUtils.readPaint(stream);
+        labelBackgroundPaint = SerialUtils.readPaint(stream);
+        labelOutlineStroke = SerialUtils.readStroke(stream);
+        labelOutlinePaint = SerialUtils.readPaint(stream);
+        pcs = new PropertyChangeSupport(this);
     }
 }

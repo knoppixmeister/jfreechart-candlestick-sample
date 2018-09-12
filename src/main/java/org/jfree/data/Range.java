@@ -1,66 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------
- * Range.java
- * ----------
- * (C) Copyright 2002-2016, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Chuanhao Chiu;
- *                   Bill Kelemen;
- *                   Nicolas Brodu;
- *                   Sergei Ivanov;
- *
- * Changes (from 23-Jun-2001)
- * --------------------------
- * 22-Apr-2002 : Version 1, loosely based by code by Bill Kelemen (DG);
- * 30-Apr-2002 : Added getLength() and getCentralValue() methods.  Changed
- *               argument check in constructor (DG);
- * 13-Jun-2002 : Added contains(double) method (DG);
- * 22-Aug-2002 : Added fix to combine method where both ranges are null, thanks
- *               to Chuanhao Chiu for reporting and fixing this (DG);
- * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 14-Aug-2003 : Added equals() method (DG);
- * 27-Aug-2003 : Added toString() method (BK);
- * 11-Sep-2003 : Added Clone Support (NB);
- * 23-Sep-2003 : Fixed Checkstyle issues (DG);
- * 25-Sep-2003 : Oops, Range immutable, clone not necessary (NB);
- * 05-May-2004 : Added constrain() and intersects() methods (DG);
- * 18-May-2004 : Added expand() method (DG);
- * ------------- JFreeChart 1.0.x ---------------------------------------------
- * 11-Jan-2006 : Added new method expandToInclude(Range, double) (DG);
- * 18-Dec-2007 : New methods intersects(Range) and scale(...) thanks to Sergei
- *               Ivanov (DG);
- * 08-Jan-2012 : New method combineIgnoringNaN() (DG);
- * 23-Feb-2014 : Added isNaNRange() method (DG);
- * 
- */
-
 package org.jfree.data;
 
 import java.io.Serializable;
@@ -68,10 +5,8 @@ import org.jfree.chart.util.Args;
 
 /**
  * Represents an immutable range of values.
- */
+*/
 public strictfp class Range implements Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = -906333695431863380L;
 
     /** The lower bound of the range. */
@@ -87,11 +22,12 @@ public strictfp class Range implements Serializable {
      * @param upper  the upper bound (must be &gt;= lower bound).
      */
     public Range(double lower, double upper) {
-        if (lower > upper) {
-            String msg = "Range(double, double): require lower (" + lower
-                + ") <= upper (" + upper + ").";
+        if(lower > upper) {
+            String msg = "Range(double, double): require lower (" + lower+ ") <= upper (" + upper + ").";
+            
             throw new IllegalArgumentException(msg);
         }
+        
         this.lower = lower;
         this.upper = upper;
     }
@@ -102,7 +38,7 @@ public strictfp class Range implements Serializable {
      * @return The lower bound.
      */
     public double getLowerBound() {
-        return this.lower;
+        return lower;
     }
 
     /**
@@ -111,7 +47,7 @@ public strictfp class Range implements Serializable {
      * @return The upper bound.
      */
     public double getUpperBound() {
-        return this.upper;
+        return upper;
     }
 
     /**
@@ -120,7 +56,7 @@ public strictfp class Range implements Serializable {
      * @return The length.
      */
     public double getLength() {
-        return this.upper - this.lower;
+        return upper - lower;
     }
 
     /**
@@ -129,7 +65,7 @@ public strictfp class Range implements Serializable {
      * @return The central value.
      */
     public double getCentralValue() {
-        return this.lower / 2.0 + this.upper / 2.0;
+        return lower / 2.0 + upper / 2.0;
     }
 
     /**
@@ -141,7 +77,7 @@ public strictfp class Range implements Serializable {
      * @return {@code true} if the range contains the specified value.
      */
     public boolean contains(double value) {
-        return (value >= this.lower && value <= this.upper);
+        return (value >= lower && value <= upper);
     }
 
     /**
@@ -154,12 +90,8 @@ public strictfp class Range implements Serializable {
      * @return A boolean.
      */
     public boolean intersects(double b0, double b1) {
-        if (b0 <= this.lower) {
-            return (b1 > this.lower);
-        }
-        else {
-            return (b0 < this.upper && b1 >= b0);
-        }
+        if(b0 <= lower) return (b1 > lower);
+        else return (b0 < upper && b1 >= b0);
     }
 
     /**
@@ -186,14 +118,12 @@ public strictfp class Range implements Serializable {
      */
     public double constrain(double value) {
         double result = value;
-        if (!contains(value)) {
-            if (value > this.upper) {
-                result = this.upper;
-            }
-            else if (value < this.lower) {
-                result = this.lower;
-            }
+        
+        if(!contains(value)) {
+            if(value > upper) result = upper;
+            else if(value < lower) result = lower;
         }
+        
         return result;
     }
 
@@ -214,14 +144,12 @@ public strictfp class Range implements Serializable {
      * @return A new range (possibly {@code null}).
      */
     public static Range combine(Range range1, Range range2) {
-        if (range1 == null) {
-            return range2;
-        }
-        if (range2 == null) {
-            return range1;
-        }
+        if(range1 == null) return range2;
+        if(range2 == null) return range1;
+
         double l = Math.min(range1.getLowerBound(), range2.getLowerBound());
         double u = Math.max(range1.getUpperBound(), range2.getUpperBound());
+        
         return new Range(l, u);
     }
 
@@ -238,23 +166,22 @@ public strictfp class Range implements Serializable {
      * @since 1.0.15
      */
     public static Range combineIgnoringNaN(Range range1, Range range2) {
-        if (range1 == null) {
-            if (range2 != null && range2.isNaNRange()) {
-                return null;
-            }
+        if(range1 == null) {
+            if(range2 != null && range2.isNaNRange()) return null;
+
             return range2;
         }
-        if (range2 == null) {
-            if (range1.isNaNRange()) {
-                return null;
-            }
+        if(range2 == null) {
+            if(range1.isNaNRange()) return null;
+            
             return range1;
         }
+        
         double l = min(range1.getLowerBound(), range2.getLowerBound());
         double u = max(range1.getUpperBound(), range2.getUpperBound());
-        if (Double.isNaN(l) && Double.isNaN(u)) {
-            return null;
-        }
+        
+        if(Double.isNaN(l) && Double.isNaN(u)) return null;
+        
         return new Range(l, u);
     }
     
@@ -278,7 +205,7 @@ public strictfp class Range implements Serializable {
     }
 
     private static double max(double d1, double d2) {
-        if (Double.isNaN(d1)) {
+        if(Double.isNaN(d1)) {
             return d2;
         }
         if (Double.isNaN(d2)) {
@@ -360,19 +287,14 @@ public strictfp class Range implements Serializable {
      *
      * @return A new range.
      */
-    public static Range shift(Range base, double delta,
-                              boolean allowZeroCrossing) {
+    public static Range shift(Range base, double delta, boolean allowZeroCrossing) {
         Args.nullNotPermitted(base, "base");
-        if (allowZeroCrossing) {
-            return new Range(base.getLowerBound() + delta,
-                    base.getUpperBound() + delta);
+
+        if(allowZeroCrossing) {
+            return new Range(base.getLowerBound() + delta, base.getUpperBound() + delta);
         }
-        else {
-            return new Range(shiftWithNoZeroCrossing(base.getLowerBound(),
-                    delta), shiftWithNoZeroCrossing(base.getUpperBound(),
-                    delta));
-        }
-    }
+        else return new Range(shiftWithNoZeroCrossing(base.getLowerBound(), delta), shiftWithNoZeroCrossing(base.getUpperBound(), delta));
+	}
 
     /**
      * Returns the given {@code value} adjusted by {@code delta} but
@@ -384,15 +306,9 @@ public strictfp class Range implements Serializable {
      * @return The adjusted value.
      */
     private static double shiftWithNoZeroCrossing(double value, double delta) {
-        if (value > 0.0) {
-            return Math.max(value + delta, 0.0);
-        }
-        else if (value < 0.0) {
-            return Math.min(value + delta, 0.0);
-        }
-        else {
-            return value + delta;
-        }
+        if(value > 0.0) return Math.max(value + delta, 0.0);
+        else if(value < 0.0) return Math.min(value + delta, 0.0);
+        else return value + delta;
     }
 
     /**
@@ -407,11 +323,12 @@ public strictfp class Range implements Serializable {
      */
     public static Range scale(Range base, double factor) {
         Args.nullNotPermitted(base, "base");
-        if (factor < 0) {
+        
+        if(factor < 0) {
             throw new IllegalArgumentException("Negative 'factor' argument.");
         }
-        return new Range(base.getLowerBound() * factor,
-                base.getUpperBound() * factor);
+        
+        return new Range(base.getLowerBound() * factor, base.getUpperBound() * factor);
     }
 
     /**
@@ -423,16 +340,13 @@ public strictfp class Range implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Range)) {
-            return false;
-        }
-        Range range = (Range) obj;
-        if (!(this.lower == range.lower)) {
-            return false;
-        }
-        if (!(this.upper == range.upper)) {
-            return false;
-        }
+    	if(!(obj instanceof Range)) return false;
+
+    	Range range = (Range) obj;
+    	if(!(lower == range.lower)) return false;
+
+    	if(!(upper == range.upper)) return false;
+ 
         return true;
     }
 
@@ -444,10 +358,10 @@ public strictfp class Range implements Serializable {
      * 
      * @since 1.0.18
      */
-    public boolean isNaNRange() {
-        return Double.isNaN(this.lower) && Double.isNaN(this.upper);
-    }
-    
+	public boolean isNaNRange() {
+    	return Double.isNaN(lower) && Double.isNaN(upper);
+	}
+
     /**
      * Returns a hash code.
      *
@@ -457,10 +371,12 @@ public strictfp class Range implements Serializable {
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(this.lower);
+        
+        temp = Double.doubleToLongBits(lower);
         result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.upper);
+        temp = Double.doubleToLongBits(upper);
         result = 29 * result + (int) (temp ^ (temp >>> 32));
+        
         return result;
     }
 
@@ -472,7 +388,6 @@ public strictfp class Range implements Serializable {
      */
     @Override
     public String toString() {
-        return ("Range[" + this.lower + "," + this.upper + "]");
+        return ("Range[" + lower + "," + upper + "]");
     }
-
 }

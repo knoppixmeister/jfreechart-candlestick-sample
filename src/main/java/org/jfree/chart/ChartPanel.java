@@ -1143,6 +1143,7 @@ public class ChartPanel extends JPanel implements
         
         overlays.add(overlay);
         overlay.addChangeListener(this);
+
         repaint();
     }
 
@@ -1159,6 +1160,7 @@ public class ChartPanel extends JPanel implements
         boolean removed = overlays.remove(overlay);
         if(removed) {
             overlay.removeChangeListener(this);
+            
             repaint();
         }
     }
@@ -1239,11 +1241,12 @@ public class ChartPanel extends JPanel implements
      * @return The Java2D coordinates.
      */
     public Point2D translateScreenToJava2D(Point screenPoint) {
-        Insets insets = getInsets();
-        double x = (screenPoint.getX() - insets.left) / this.scaleX;
-        double y = (screenPoint.getY() - insets.top) / this.scaleY;
-        
-        return new Point2D.Double(x, y);
+    	Insets insets = getInsets();
+
+    	double x = (screenPoint.getX() - insets.left) / scaleX;
+    	double y = (screenPoint.getY() - insets.top) / scaleY;
+
+    	return new Point2D.Double(x, y);
     }
 
     /**
@@ -1260,7 +1263,7 @@ public class ChartPanel extends JPanel implements
         double y = rect.getY() * getScaleY() + insets.top;
         double w = rect.getWidth() * getScaleX();
         double h = rect.getHeight() * getScaleY();
-        
+
         return new Rectangle2D.Double(x, y, w, h);
     }
 
@@ -1276,13 +1279,15 @@ public class ChartPanel extends JPanel implements
      * @return The chart entity (possibly {@code null}).
      */
     public ChartEntity getEntityForPoint(int viewX, int viewY) {
-        ChartEntity result = null;
-        
-        if(info != null) {
+    	ChartEntity result = null;
+
+    	if(info != null) {
             Insets insets = getInsets();
-            double x = (viewX - insets.left) / this.scaleX;
-            double y = (viewY - insets.top) / this.scaleY;
-            EntityCollection entities = this.info.getEntityCollection();
+            
+            double x = (viewX - insets.left) / scaleX;
+            double y = (viewY - insets.top) / scaleY;
+            
+            EntityCollection entities = info.getEntityCollection();
             result = entities != null ? entities.getEntity(x, y) : null;
         }
         
@@ -1296,7 +1301,7 @@ public class ChartPanel extends JPanel implements
      * @return A boolean.
      */
     public boolean getRefreshBuffer() {
-        return refreshBuffer;
+    	return refreshBuffer;
     }
 
     /**
@@ -1306,9 +1311,9 @@ public class ChartPanel extends JPanel implements
      * @param flag  {@code true} indicates that the buffer should be
      *              refreshed.
      */
-    public void setRefreshBuffer(boolean flag) {
-    	refreshBuffer = flag;
-    }
+	public void setRefreshBuffer(boolean flag) {
+		refreshBuffer = flag;
+	}
 
     /**
      * Paints the component by drawing the chart to fill the entire component,
@@ -1325,42 +1330,40 @@ public class ChartPanel extends JPanel implements
         if(chart == null) return;
 
         Graphics2D g2 = (Graphics2D)g.create();
-        
+
         // first determine the size of the chart rendering area...
         Dimension size = getSize();
         Insets insets = getInsets();
-        Rectangle2D available = new Rectangle2D.Double(insets.left, insets.top,
-                size.getWidth() - insets.left - insets.right,
-                size.getHeight() - insets.top - insets.bottom);
+        Rectangle2D available = new Rectangle2D.Double(insets.left, insets.top, size.getWidth() - insets.left - insets.right, size.getHeight() - insets.top - insets.bottom);
 
         // work out if scaling is required...
         boolean scale = false;
         double drawWidth = available.getWidth();
         double drawHeight = available.getHeight();
-        
+
         scaleX = 1.0;
         scaleY = 1.0;
 
-        if(drawWidth < this.minimumDrawWidth) {
-            this.scaleX = drawWidth / this.minimumDrawWidth;
-            drawWidth = this.minimumDrawWidth;
-            scale = true;
+        if(drawWidth < minimumDrawWidth) {
+        	scaleX 		= drawWidth / minimumDrawWidth;
+            drawWidth 	= minimumDrawWidth;
+            scale 		= true;
         }
         else if(drawWidth > maximumDrawWidth) {
-        	scaleX = drawWidth / maximumDrawWidth;
-            drawWidth = maximumDrawWidth;
-            scale = true;
+        	scaleX 		= drawWidth / maximumDrawWidth;
+            drawWidth 	= maximumDrawWidth;
+            scale 		= true;
         }
 
         if(drawHeight < minimumDrawHeight) {
-        	scaleY = drawHeight / minimumDrawHeight;
-            drawHeight = minimumDrawHeight;
-            scale = true;
+        	scaleY 		= drawHeight / minimumDrawHeight;
+            drawHeight 	= minimumDrawHeight;
+            scale 		= true;
         }
         else if(drawHeight > maximumDrawHeight) {
-        	scaleY = drawHeight / maximumDrawHeight;
-            drawHeight = maximumDrawHeight;
-            scale = true;
+        	scaleY 		= drawHeight / maximumDrawHeight;
+            drawHeight 	= maximumDrawHeight;
+            scale 		= true;
         }
 
         Rectangle2D chartArea = new Rectangle2D.Double(0.0, 0.0, drawWidth, drawHeight);
@@ -1368,11 +1371,11 @@ public class ChartPanel extends JPanel implements
         // are we using the chart buffer?
         if(useBuffer) {
             // do we need to resize the buffer?
-            if((this.chartBuffer == null) || (this.chartBufferWidth != available.getWidth()) || (this.chartBufferHeight != available.getHeight())) {
-                this.chartBufferWidth = (int) available.getWidth();
-                this.chartBufferHeight = (int) available.getHeight();
+            if((chartBuffer == null) || (chartBufferWidth != available.getWidth()) || (chartBufferHeight != available.getHeight())) {
+            	chartBufferWidth = (int) available.getWidth();
+            	chartBufferHeight = (int) available.getHeight();
                 GraphicsConfiguration gc = g2.getDeviceConfiguration();
-                
+
                 chartBuffer = gc.createCompatibleImage(chartBufferWidth, chartBufferHeight, Transparency.TRANSLUCENT);
                 refreshBuffer = true;
             }
@@ -1409,8 +1412,8 @@ public class ChartPanel extends JPanel implements
         else { // redrawing the chart every time...
         	AffineTransform saved = g2.getTransform();
         	g2.translate(insets.left, insets.top);
-            
-            if(scale) {
+
+        	if(scale) {
                 AffineTransform st = AffineTransform.getScaleInstance(scaleX, scaleY);
                 g2.transform(st);
             }
@@ -1441,14 +1444,14 @@ public class ChartPanel extends JPanel implements
     @Override
     public void chartChanged(ChartChangeEvent event) {
     	refreshBuffer = true;
-        Plot plot = chart.getPlot();
-        if(plot instanceof Zoomable) {
+    	Plot plot = chart.getPlot();
+    	if(plot instanceof Zoomable) {
             Zoomable z = (Zoomable) plot;
             orientation = z.getOrientation();
-        }
-        
-        repaint();
-    }
+    	}
+
+    	repaint();
+	}
 
     /**
      * Receives notification of a chart progress event.
@@ -1474,7 +1477,7 @@ public class ChartPanel extends JPanel implements
         // coordinates, or use defaults...
         double screenX = -1.0;
         double screenY = -1.0;
-        
+
         if(zoomPoint != null) {
             screenX = zoomPoint.getX();
             screenY = zoomPoint.getY();
@@ -1483,22 +1486,19 @@ public class ChartPanel extends JPanel implements
         if(command.equals(PROPERTIES_COMMAND)) doEditChartProperties();
         else if(command.equals(COPY_COMMAND)) doCopy();
         else if (command.equals(SAVE_AS_PNG_COMMAND)) {
-            try {
+        	try {
                 doSaveAs();
             }
-            catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "I/O error occurred.",
-                        localizationResources.getString("Save_as_PNG"),
-                        JOptionPane.WARNING_MESSAGE);
+            catch(IOException e) {
+                JOptionPane.showMessageDialog(this, "I/O error occurred.", localizationResources.getString("Save_as_PNG"), JOptionPane.WARNING_MESSAGE);
             }
         }
-        else if (command.equals(SAVE_AS_SVG_COMMAND)) {
+        else if(command.equals(SAVE_AS_SVG_COMMAND)) {
             try {
                 saveAsSVG(null);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "I/O error occurred.",
-                        localizationResources.getString("Save_as_SVG"),
-                        JOptionPane.WARNING_MESSAGE);
+            }
+            catch(IOException e) {
+                JOptionPane.showMessageDialog(this, "I/O error occurred.", localizationResources.getString("Save_as_SVG"), JOptionPane.WARNING_MESSAGE);
             }
         }
         else if (command.equals(SAVE_AS_PDF_COMMAND)) {
@@ -2341,8 +2341,9 @@ public class ChartPanel extends JPanel implements
         else {
             // get the origin of the zoom selection in the Java2D space used for
             // drawing the chart (that is, before any scaling to fit the panel)
-            Point2D selectOrigin = translateScreenToJava2D(new Point(x, y));
-            int subplotIndex = plotInfo.getSubplotIndex(selectOrigin);
+        	Point2D selectOrigin = translateScreenToJava2D(new Point(x, y));
+
+        	int subplotIndex = plotInfo.getSubplotIndex(selectOrigin);
             if(subplotIndex == -1) return null;
 
             result = scale(plotInfo.getSubplotInfo(subplotIndex).getDataArea());

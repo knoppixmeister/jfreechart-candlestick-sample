@@ -954,21 +954,15 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
     	Paint p = this.backgroundPaint;
     	if(p instanceof GradientPaint) {
             GradientPaint gp = (GradientPaint) p;
-            if (orientation == PlotOrientation.VERTICAL) {
-                p = new GradientPaint((float) area.getCenterX(),
-                        (float) area.getMaxY(), gp.getColor1(),
-                        (float) area.getCenterX(), (float) area.getMinY(),
-                        gp.getColor2());
+            if(orientation == PlotOrientation.VERTICAL) {
+                p = new GradientPaint((float) area.getCenterX(), (float) area.getMaxY(), gp.getColor1(), (float) area.getCenterX(), (float) area.getMinY(), gp.getColor2());
             }
             else if(orientation == PlotOrientation.HORIZONTAL) {
-                p = new GradientPaint((float) area.getMinX(),
-                        (float) area.getCenterY(), gp.getColor1(),
-                        (float) area.getMaxX(), (float) area.getCenterY(),
-                        gp.getColor2());
+                p = new GradientPaint((float) area.getMinX(), (float) area.getCenterY(), gp.getColor1(), (float) area.getMaxX(), (float) area.getCenterY(), gp.getColor2());
             }
-        }
-    	
-        Composite originalComposite = g2.getComposite();
+    	}
+
+    	Composite originalComposite = g2.getComposite();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, backgroundAlpha));
         g2.setPaint(p);
         g2.fill(area);
@@ -991,9 +985,7 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
 
         Composite savedComposite = g2.getComposite();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, backgroundImageAlpha));
-        Rectangle2D dest = new Rectangle2D.Double(0.0, 0.0,
-                this.backgroundImage.getWidth(null),
-                this.backgroundImage.getHeight(null));
+        Rectangle2D dest = new Rectangle2D.Double(0.0, 0.0, backgroundImage.getWidth(null), backgroundImage.getHeight(null));
         Align.align(dest, area, backgroundImageAlignment);
         Shape savedClip = g2.getClip();
         g2.clip(area);
@@ -1141,7 +1133,9 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
     @Override
     public void datasetChanged(DatasetChangeEvent event) {
         PlotChangeEvent newEvent = new PlotChangeEvent(this);
+        
         newEvent.setType(ChartChangeEventType.DATASET_UPDATED);
+        
         notifyListeners(newEvent);
     }
 

@@ -28,8 +28,6 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
 
     /** Temporary storage for the subplot areas. */
     private transient Rectangle2D[] subplotAreas;
-    // TODO:  the subplot areas needs to be moved out of the plot into the plot
-    //        state
 
 	public CombinedDomainXYPlot() {
 		this(new NumberAxis());
@@ -57,10 +55,10 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      *
      * @return The type of plot.
      */
-    @Override
-    public String getPlotType() {
-        return "Combined_Domain_XYPlot";
-    }
+	@Override
+	public String getPlotType() {
+    	return "Combined_Domain_XYPlot";
+	}
 
     /**
      * Returns the gap between subplots, measured in Java2D units.
@@ -68,10 +66,10 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      * @return The gap (in Java2D units).
      *
      * @see #setGap(double)
-     */
-    public double getGap() {
-        return gap;
-    }
+	*/
+	public double getGap() {
+		return gap;
+	}
 
     /**
      * Sets the amount of space between subplots and sends a
@@ -81,11 +79,11 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      *
      * @see #getGap()
      */
-    public void setGap(double gap) {
-        this.gap = gap;
-        
-        fireChangeEvent();
-    }
+	public void setGap(double gap) {
+    	this.gap = gap;
+
+    	fireChangeEvent();
+	}
 
     /**
      * Returns {@code true} if the range is pannable for at least one subplot,
@@ -95,13 +93,13 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public boolean isRangePannable() {
-        for(XYPlot subplot : subplots) {
+    	for(XYPlot subplot : subplots) {
         	if(subplot.isRangePannable()) return true;
-        }
-        
-        return false;
-    }
-    
+    	}
+
+    	return false;
+	}
+
     /**
      * Sets the flag, on each of the subplots, that controls whether or not the 
      * range is pannable.
@@ -293,7 +291,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         Rectangle2D adjustedPlotArea = space.shrink(plotArea, null);
 
         // work out the maximum height or width of the non-shared axes...
-        int n = this.subplots.size();
+        int n = subplots.size();
         int totalWeight = 0;
         for(int i=0; i<n; i++) {
             XYPlot sub = (XYPlot)subplots.get(i);
@@ -315,12 +313,12 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
             // calculate sub-plot area
             if(orientation == PlotOrientation.HORIZONTAL) {
                 double w = usableSize * plot.getWeight() / totalWeight;
-                this.subplotAreas[i] = new Rectangle2D.Double(x, y, w, adjustedPlotArea.getHeight());
+                subplotAreas[i] = new Rectangle2D.Double(x, y, w, adjustedPlotArea.getHeight());
                 x = x + w + gap;
             }
             else if (orientation == PlotOrientation.VERTICAL) {
                 double h = usableSize * plot.getWeight() / totalWeight;
-                this.subplotAreas[i] = new Rectangle2D.Double(x, y, adjustedPlotArea.getWidth(), h);
+                subplotAreas[i] = new Rectangle2D.Double(x, y, adjustedPlotArea.getWidth(), h);
                 y = y + h + gap;
             }
 
@@ -377,7 +375,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
                 subplotInfo = new PlotRenderingInfo(info.getOwner());
                 info.addSubplotInfo(subplotInfo);
             }
-            plot.draw(g2, this.subplotAreas[i], anchor, parentState, subplotInfo);
+            plot.draw(g2, subplotAreas[i], anchor, parentState, subplotInfo);
         }
 
         if(info != null) info.setDataArea(dataArea);
@@ -622,7 +620,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
+        if(obj == this) {
             return true;
         }
         if (!(obj instanceof CombinedDomainXYPlot)) {
@@ -635,6 +633,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         if (!ObjectUtils.equal(this.subplots, that.subplots)) {
             return false;
         }
+        
         return super.equals(obj);
     }
 
@@ -648,20 +647,18 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
-        CombinedDomainXYPlot result = (CombinedDomainXYPlot) super.clone();
-        result.subplots = (List) ObjectUtils.deepClone(this.subplots);
-        for (Iterator it = result.subplots.iterator(); it.hasNext();) {
-            Plot child = (Plot) it.next();
-            child.setParent(result);
-        }
+    	CombinedDomainXYPlot result = (CombinedDomainXYPlot) super.clone();
+    	result.subplots = (List) ObjectUtils.deepClone(subplots);
+    	for(Iterator it = result.subplots.iterator(); it.hasNext();) {
+    		Plot child = (Plot) it.next();
+    		child.setParent(result);
+    	}
 
         // after setting up all the subplots, the shared domain axis may need
         // reconfiguring
-        ValueAxis domainAxis = result.getDomainAxis();
-        if(domainAxis != null) {
-            domainAxis.configure();
-        }
+    	ValueAxis domainAxis = result.getDomainAxis();
+    	if(domainAxis != null) domainAxis.configure();
 
-        return result;
+    	return result;
     }
 }

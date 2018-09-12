@@ -47,9 +47,9 @@ public class CrosshairState {
      * Creates a new {@code crosshairState} instance that calculates
      * distance in Java2D space.
      */
-    public CrosshairState() {
-        this(false);
-    }
+	public CrosshairState() {
+		this(false);
+	}
 
     /**
      * Creates a new {@code crosshairState} instance.  Determination of the
@@ -88,10 +88,10 @@ public class CrosshairState {
      *
      * @see #getCrosshairDistance()
      */
-    public void setCrosshairDistance(double distance) {
-        this.distance = distance;
-    }
-    
+	public void setCrosshairDistance(double distance) {
+		this.distance = distance;
+	}
+
     /**
      * Updates the crosshair point.
      * 
@@ -103,32 +103,31 @@ public class CrosshairState {
      * @param orientation  the plot orientation ({@code null} not permitted).
      */
     public void updateCrosshairPoint(double x, double y, int datasetIndex, double transX, double transY, PlotOrientation orientation) {
-        if(anchor != null) {
-            double d = 0.0;
-            if (this.calculateDistanceInDataSpace) { 
-                d = (x - this.anchorX) * (x - this.anchorX)
-                  + (y - this.anchorY) * (y - this.anchorY);
-            }
+    	if(anchor != null) {
+    		double d = 0.0;
+
+    		if(calculateDistanceInDataSpace) d = (x - anchorX) * (x - anchorX) + (y - anchorY) * (y - anchorY);
             else {
                 // anchor point is in Java2D coordinates
                 double xx = this.anchor.getX();
                 double yy = this.anchor.getY();
-                if (orientation == PlotOrientation.HORIZONTAL) {
+
+                if(orientation == PlotOrientation.HORIZONTAL) {
                     double temp = yy;
                     yy = xx;
                     xx = temp;
                 }
+
                 d = (transX - xx) * (transX - xx) + (transY - yy) * (transY - yy);
             }
 
-            if (d < this.distance) {
-                this.crosshairX = x;
-                this.crosshairY = y;
-                this.datasetIndex = datasetIndex;
-                this.distance = d;
+            if(d < distance) {
+            	crosshairX = x;
+            	crosshairY = y;
+            	this.datasetIndex = datasetIndex;
+            	distance = d;
             }
         }
-
     }
     
     /**
@@ -142,13 +141,14 @@ public class CrosshairState {
      * @since 1.0.20
      */
     public void updateCrosshairX(double x, double transX, int datasetIndex) {
-        if(this.anchor == null) return;
+        if(anchor == null) return;
 
-        double d = Math.abs(transX - this.anchor.getX());
-        if (d < this.distance) {
-            this.crosshairX = x;
+        double d = Math.abs(transX - anchor.getX());
+        
+        if(d < distance) {
+            crosshairX = x;
             this.datasetIndex = datasetIndex;
-            this.distance = d;
+            distance = d;
         }        
     }
 
@@ -166,13 +166,14 @@ public class CrosshairState {
      * @since 1.0.20
      */
     public void updateCrosshairY(double candidateY, double transY, int datasetIndex) {
-        if(this.anchor == null) return;
+        if(anchor == null) return;
 
-        double d = Math.abs(transY - this.anchor.getY());
-        if (d < this.distance) {
-            this.crosshairY = candidateY;
+        double d = Math.abs(transY - anchor.getY());
+        
+        if(d < this.distance) {
+        	crosshairY = candidateY;
             this.datasetIndex = datasetIndex;
-            this.distance = d;
+            distance = d;
         }
     }
 
@@ -251,7 +252,7 @@ public class CrosshairState {
      * @since 1.0.3
      */
     public void setAnchorY(double y) {
-        this.anchorY = y;
+    	anchorY = y;
     }
 
     /**
@@ -262,7 +263,7 @@ public class CrosshairState {
      * @see #setCrosshairX(double)
      */
     public double getCrosshairX() {
-        return this.crosshairX;
+        return crosshairX;
     }
 
     /**
@@ -277,7 +278,7 @@ public class CrosshairState {
      * PlotOrientation)
      */
     public void setCrosshairX(double x) {
-        this.crosshairX = x;
+    	crosshairX = x;
     }
 
     /**
@@ -289,7 +290,7 @@ public class CrosshairState {
      * @see #setCrosshairY(double)
      */
     public double getCrosshairY() {
-        return this.crosshairY;
+        return crosshairY;
     }
 
     /**
@@ -303,7 +304,7 @@ public class CrosshairState {
      * PlotOrientation)
      */
     public void setCrosshairY(double y) {
-        this.crosshairY = y;
+    	crosshairY = y;
     }
 
     /**
@@ -318,7 +319,7 @@ public class CrosshairState {
      * @since 1.0.11
      */
     public int getDatasetIndex() {
-        return this.datasetIndex;
+        return datasetIndex;
     }
 
     /**
@@ -331,6 +332,6 @@ public class CrosshairState {
      * @since 1.0.11
      */
     public void setDatasetIndex(int index) {
-        this.datasetIndex = index;
+    	datasetIndex = index;
     }
 }

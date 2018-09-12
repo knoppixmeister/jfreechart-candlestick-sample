@@ -98,9 +98,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
     /**
      * Creates a new renderer with both lines and shapes visible.
      */
-    public XYLineAndShapeRenderer() {
-        this(true, true);
-    }
+	public XYLineAndShapeRenderer() {
+		this(true, true);
+	}
 
     /**
      * Creates a new renderer.
@@ -109,19 +109,19 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param shapes  shapes visible?
      */
     public XYLineAndShapeRenderer(boolean lines, boolean shapes) {
-        this.seriesLinesVisible = new BooleanList();
-        this.defaultLinesVisible = lines;
-        this.legendLine = new Line2D.Double(-7.0, 0.0, 7.0, 0.0);
+    	seriesLinesVisible 	= new BooleanList();
+    	defaultLinesVisible = lines;
+    	legendLine 			= new Line2D.Double(-7.0, 0.0, 7.0, 0.0);
 
-        this.seriesShapesVisible = new BooleanList();
-        this.defaultShapesVisible = shapes;
+    	seriesShapesVisible 	= new BooleanList();
+    	defaultShapesVisible 	= shapes;
 
-        this.useFillPaint = false;     // use item paint for fills by default
-        this.seriesShapesFilled = new BooleanList();
-        this.defaultShapesFilled = true;
+    	useFillPaint 		= false;     // use item paint for fills by default
+    	seriesShapesFilled 	= new BooleanList();
+    	defaultShapesFilled = true;
 
-        this.drawOutlines = true;
-        this.useOutlinePaint = false;  // use item paint for outlines by
+    	drawOutlines 		= true;
+    	useOutlinePaint 	= false;  // use item paint for outlines by
                                        // default, not outline paint
 
         drawSeriesLineAsPath = false;
@@ -151,7 +151,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
     public void setDrawSeriesLineAsPath(boolean flag) {
         if(drawSeriesLineAsPath != flag) {
         	drawSeriesLineAsPath = flag;
-        	
+
             fireChangeEvent();
         }
     }
@@ -236,7 +236,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setDefaultLinesVisible(boolean)
      */
     public boolean getDefaultLinesVisible() {
-        return this.defaultLinesVisible;
+        return defaultLinesVisible;
     }
 
     /**
@@ -248,7 +248,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getDefaultLinesVisible()
      */
     public void setDefaultLinesVisible(boolean flag) {
-        this.defaultLinesVisible = flag;
+    	defaultLinesVisible = flag;
         
         fireChangeEvent();
     }
@@ -261,7 +261,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setLegendLine(Shape)
      */
     public Shape getLegendLine() {
-        return this.legendLine;
+        return legendLine;
     }
 
     /**
@@ -275,7 +275,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
         
-        this.legendLine = line;
+        legendLine = line;
         
         fireChangeEvent();
     }
@@ -313,7 +313,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setSeriesShapesVisible(int, Boolean)
      */
     public Boolean getSeriesShapesVisible(int series) {
-        return this.seriesShapesVisible.getBoolean(series);
+        return seriesShapesVisible.getBoolean(series);
     }
 
     /**
@@ -339,7 +339,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getSeriesShapesVisible(int)
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
-        this.seriesShapesVisible.setBoolean(series, flag);
+    	seriesShapesVisible.setBoolean(series, flag);
+    	
         fireChangeEvent();
     }
 
@@ -351,7 +352,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setDefaultShapesVisible(boolean)
      */
     public boolean getDefaultShapesVisible() {
-        return this.defaultShapesVisible;
+        return defaultShapesVisible;
     }
 
     /**
@@ -363,7 +364,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getDefaultShapesVisible()
      */
     public void setDefaultShapesVisible(boolean flag) {
-        this.defaultShapesVisible = flag;
+    	defaultShapesVisible = flag;
+    	
         fireChangeEvent();
     }
 
@@ -383,12 +385,10 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @return A boolean.
      */
     public boolean getItemShapeFilled(int series, int item) {
-        Boolean flag = getSeriesShapesFilled(series);
-        if (flag != null) {
-            return flag;
-        }
-        return this.defaultShapesFilled;
-       
+    	Boolean flag = getSeriesShapesFilled(series);
+        if(flag != null) return flag;
+ 
+        return defaultShapesFilled;
     }
 
     /**
@@ -401,9 +401,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      *
      * @see #setSeriesShapesFilled(int, Boolean)
      */
-    public Boolean getSeriesShapesFilled(int series) {
-        return this.seriesShapesFilled.getBoolean(series);
-    }
+	public Boolean getSeriesShapesFilled(int series) {
+    	return seriesShapesFilled.getBoolean(series);
+	}
 
     /**
      * Sets the 'shapes filled' flag for a series and sends a
@@ -428,7 +428,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
-        this.seriesShapesFilled.setBoolean(series, flag);
+    	seriesShapesFilled.setBoolean(series, flag);
+    	
         fireChangeEvent();
     }
 
@@ -440,7 +441,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setDefaultShapesFilled(boolean)
      */
     public boolean getDefaultShapesFilled() {
-        return this.defaultShapesFilled;
+        return defaultShapesFilled;
     }
 
     /**
@@ -452,7 +453,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getDefaultShapesFilled()
      */
     public void setDefaultShapesFilled(boolean flag) {
-        this.defaultShapesFilled = flag;
+    	defaultShapesFilled = flag;
+    	
         fireChangeEvent();
     }
 
@@ -465,7 +467,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #setDrawOutlines(boolean)
      */
     public boolean getDrawOutlines() {
-        return this.drawOutlines;
+        return drawOutlines;
     }
 
     /**
@@ -481,7 +483,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getDrawOutlines()
      */
     public void setDrawOutlines(boolean flag) {
-        this.drawOutlines = flag;
+    	drawOutlines = flag;
+    	
         fireChangeEvent();
     }
 
@@ -499,7 +502,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getUseOutlinePaint()
      */
     public boolean getUseFillPaint() {
-        return this.useFillPaint;
+        return useFillPaint;
     }
 
     /**
@@ -512,7 +515,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getUseFillPaint()
      */
     public void setUseFillPaint(boolean flag) {
-        this.useFillPaint = flag;
+    	useFillPaint = flag;
+    	
         fireChangeEvent();
     }
 
@@ -527,7 +531,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getUseFillPaint()
      */
     public boolean getUseOutlinePaint() {
-        return this.useOutlinePaint;
+        return useOutlinePaint;
     }
 
     /**
@@ -543,7 +547,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @see #getUseOutlinePaint()
      */
     public void setUseOutlinePaint(boolean flag) {
-        this.useOutlinePaint = flag;
+    	useOutlinePaint = flag;
+    	
         fireChangeEvent();
     }
 
@@ -553,7 +558,6 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * drawing.
      */
     public static class State extends XYItemRendererState {
-
         /** The path for the current series. */
         public GeneralPath seriesPath;
 
@@ -570,7 +574,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
          */
         public State(PlotRenderingInfo info) {
             super(info);
-            this.seriesPath = new GeneralPath();
+            
+            seriesPath = new GeneralPath();
         }
 
         /**
@@ -580,7 +585,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
          * @return A boolean.
          */
         public boolean isLastPointGood() {
-            return this.lastPointGood;
+            return lastPointGood;
         }
 
         /**
@@ -590,7 +595,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
          * @param good  the flag.
          */
         public void setLastPointGood(boolean good) {
-            this.lastPointGood = good;
+        	lastPointGood = good;
         }
 
         /**
@@ -605,14 +610,12 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
          * @param passCount  the number of passes.
          */
         @Override
-        public void startSeriesPass(XYDataset dataset, int series,
-                int firstItem, int lastItem, int pass, int passCount) {
-            this.seriesPath.reset();
-            this.lastPointGood = false;
-            super.startSeriesPass(dataset, series, firstItem, lastItem, pass,
-                    passCount);
+        public void startSeriesPass(XYDataset dataset, int series, int firstItem, int lastItem, int pass, int passCount) {
+        	seriesPath.reset();
+        	lastPointGood = false;
+        	
+            super.startSeriesPass(dataset, series, firstItem, lastItem, pass, passCount);
        }
-
     }
 
     /**
@@ -632,8 +635,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @return The renderer state.
      */
     @Override
-    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
-            XYPlot plot, XYDataset data, PlotRenderingInfo info) {
+    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea, XYPlot plot, XYDataset data, PlotRenderingInfo info) {
         return new State(info);
     }
 
@@ -656,40 +658,37 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param pass  the pass index.
      */
     @Override
-    public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
-
+    public void drawItem(
+    	Graphics2D g2,
+    	XYItemRendererState state,
+    	Rectangle2D dataArea,
+    	PlotRenderingInfo info,
+    	XYPlot plot,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	XYDataset dataset,
+    	int series,
+    	int item,
+    	CrosshairState crosshairState,
+    	int pass)
+    {
         // do nothing if item is not visible
-        if (!getItemVisible(series, item)) {
-            return;
-        }
+        if(!getItemVisible(series, item)) return;
 
         // first pass draws the background (lines, for instance)
-        if (isLinePass(pass)) {
-            if (getItemLineVisible(series, item)) {
-                if (this.drawSeriesLineAsPath) {
-                    drawPrimaryLineAsPath(state, g2, plot, dataset, pass,
-                            series, item, domainAxis, rangeAxis, dataArea);
-                }
-                else {
-                    drawPrimaryLine(state, g2, plot, dataset, pass, series,
-                            item, domainAxis, rangeAxis, dataArea);
-                }
+        if(isLinePass(pass)) {
+            if(getItemLineVisible(series, item)) {
+                if(drawSeriesLineAsPath) drawPrimaryLineAsPath(state, g2, plot, dataset, pass, series, item, domainAxis, rangeAxis, dataArea);
+                else drawPrimaryLine(state, g2, plot, dataset, pass, series, item, domainAxis, rangeAxis, dataArea);
             }
         }
         // second pass adds shapes where the items are ..
-        else if (isItemPass(pass)) {
-
+        else if(isItemPass(pass)) {
             // setup for collecting optional entity info...
             EntityCollection entities = null;
-            if (info != null && info.getOwner() != null) {
-                entities = info.getOwner().getEntityCollection();
-            }
+            if(info != null && info.getOwner() != null) entities = info.getOwner().getEntityCollection();
 
-            drawSecondaryPass(g2, plot, dataset, pass, series, item,
-                    domainAxis, dataArea, rangeAxis, crosshairState, entities);
+            drawSecondaryPass(g2, plot, dataset, pass, series, item, domainAxis, dataArea, rangeAxis, crosshairState, entities);
         }
     }
 
@@ -701,9 +700,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      *
      * @return A boolean.
      */
-    protected boolean isLinePass(int pass) {
-        return pass == 0;
-    }
+	protected boolean isLinePass(int pass) {
+    	return pass == 0;
+	}
 
     /**
      * Returns {@code true} if the specified pass is the one for drawing
@@ -714,7 +713,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @return A boolean.
      */
     protected boolean isItemPass(int pass) {
-        return pass == 1;
+    	return pass == 1;
     }
 
     /**
@@ -742,23 +741,18 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
                                    int item,
                                    ValueAxis domainAxis,
                                    ValueAxis rangeAxis,
-                                   Rectangle2D dataArea) {
-        if (item == 0) {
-            return;
-        }
+                                   Rectangle2D dataArea)
+    {
+        if(item == 0) return;
 
         // get the data point...
         double x1 = dataset.getXValue(series, item);
         double y1 = dataset.getYValue(series, item);
-        if (Double.isNaN(y1) || Double.isNaN(x1)) {
-            return;
-        }
+        if(Double.isNaN(y1) || Double.isNaN(x1)) return;
 
         double x0 = dataset.getXValue(series, item - 1);
         double y0 = dataset.getYValue(series, item - 1);
-        if (Double.isNaN(y0) || Double.isNaN(x0)) {
-            return;
-        }
+        if(Double.isNaN(y0) || Double.isNaN(x0)) return;
 
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
         RectangleEdge yAxisLocation = plot.getRangeAxisEdge();
@@ -770,24 +764,17 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
         // only draw if we have good values
-        if (Double.isNaN(transX0) || Double.isNaN(transY0)
-            || Double.isNaN(transX1) || Double.isNaN(transY1)) {
-            return;
-        }
+        if(Double.isNaN(transX0) || Double.isNaN(transY0) || Double.isNaN(transX1) || Double.isNaN(transY1)) return;
 
         PlotOrientation orientation = plot.getOrientation();
+        
         boolean visible;
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            state.workingLine.setLine(transY0, transX0, transY1, transX1);
-        }
-        else if (orientation == PlotOrientation.VERTICAL) {
-            state.workingLine.setLine(transX0, transY0, transX1, transY1);
-        }
+        
+        if(orientation == PlotOrientation.HORIZONTAL) state.workingLine.setLine(transY0, transX0, transY1, transX1);
+        else if(orientation == PlotOrientation.VERTICAL) state.workingLine.setLine(transX0, transY0, transX1, transY1);
         visible = LineUtils.clipLine(state.workingLine, dataArea);
-        if (visible) {
-            drawFirstPassShape(g2, pass, series, item, state.workingLine);
-        }
-    }
+        if(visible) drawFirstPassShape(g2, pass, series, item, state.workingLine);
+	}
 
     /**
      * Draws the first pass shape.
@@ -798,13 +785,11 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param item  the item index.
      * @param shape  the shape.
      */
-    protected void drawFirstPassShape(Graphics2D g2, int pass, int series,
-                                      int item, Shape shape) {
+    protected void drawFirstPassShape(Graphics2D g2, int pass, int series, int item, Shape shape) {
         g2.setStroke(getItemStroke(series, item));
         g2.setPaint(getItemPaint(series, item));
         g2.draw(shape);
     }
-
 
     /**
      * Draws the item (first pass). This method draws the lines
@@ -824,11 +809,18 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param rangeAxis  the range axis.
      * @param dataArea  the area within which the data is being drawn.
      */
-    protected void drawPrimaryLineAsPath(XYItemRendererState state,
-            Graphics2D g2, XYPlot plot, XYDataset dataset, int pass,
-            int series, int item, ValueAxis domainAxis, ValueAxis rangeAxis,
-            Rectangle2D dataArea) {
-
+    protected void drawPrimaryLineAsPath(
+    	XYItemRendererState state,
+    	Graphics2D g2,
+    	XYPlot plot,
+    	XYDataset dataset,
+    	int pass,
+    	int series,
+    	int item,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	Rectangle2D dataArea)
+    {
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
         RectangleEdge yAxisLocation = plot.getRangeAxisEdge();
 
@@ -840,29 +832,25 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
 
         State s = (State) state;
         // update path to reflect latest point
-        if (!Double.isNaN(transX1) && !Double.isNaN(transY1)) {
-            float x = (float) transX1;
-            float y = (float) transY1;
-            PlotOrientation orientation = plot.getOrientation();
-            if (orientation == PlotOrientation.HORIZONTAL) {
+        if(!Double.isNaN(transX1) && !Double.isNaN(transY1)) {
+        	float x = (float) transX1;
+        	float y = (float) transY1;
+        	PlotOrientation orientation = plot.getOrientation();
+
+            if(orientation == PlotOrientation.HORIZONTAL) {
                 x = (float) transY1;
                 y = (float) transX1;
             }
-            if (s.isLastPointGood()) {
-                s.seriesPath.lineTo(x, y);
-            }
-            else {
-                s.seriesPath.moveTo(x, y);
-            }
+
+            if(s.isLastPointGood()) s.seriesPath.lineTo(x, y);
+            else s.seriesPath.moveTo(x, y);
+
             s.setLastPointGood(true);
-        } else {
-            s.setLastPointGood(false);
         }
+        else s.setLastPointGood(false);
+
         // if this is the last item, draw the path ...
-        if (item == s.getLastItemIndex()) {
-            // draw path
-            drawFirstPassShape(g2, pass, series, item, s.seriesPath);
-        }
+        if(item == s.getLastItemIndex()) drawFirstPassShape(g2, pass, series, item, s.seriesPath);
     }
 
     /**
@@ -884,19 +872,25 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @param crosshairState  the crosshair state.
      * @param entities the entity collection.
      */
-    protected void drawSecondaryPass(Graphics2D g2, XYPlot plot, 
-            XYDataset dataset, int pass, int series, int item,
-            ValueAxis domainAxis, Rectangle2D dataArea, ValueAxis rangeAxis,
-            CrosshairState crosshairState, EntityCollection entities) {
-
+    protected void drawSecondaryPass(
+    	Graphics2D g2,
+    	XYPlot plot, 
+    	XYDataset dataset,
+    	int pass,
+    	int series,
+    	int item,
+    	ValueAxis domainAxis,
+    	Rectangle2D dataArea,
+    	ValueAxis rangeAxis,
+    	CrosshairState crosshairState,
+    	EntityCollection entities)
+    {
         Shape entityArea = null;
 
         // get the data point...
         double x1 = dataset.getXValue(series, item);
         double y1 = dataset.getYValue(series, item);
-        if (Double.isNaN(y1) || Double.isNaN(x1)) {
-            return;
-        }
+        if(Double.isNaN(y1) || Double.isNaN(x1)) return;
 
         PlotOrientation orientation = plot.getOrientation();
         RectangleEdge xAxisLocation = plot.getDomainAxisEdge();
@@ -904,34 +898,27 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         double transX1 = domainAxis.valueToJava2D(x1, dataArea, xAxisLocation);
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
-        if (getItemShapeVisible(series, item)) {
+        if(getItemShapeVisible(series, item)) {
             Shape shape = getItemShape(series, item);
-            if (orientation == PlotOrientation.HORIZONTAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transY1,
-                        transX1);
+            
+            if(orientation == PlotOrientation.HORIZONTAL) shape = ShapeUtils.createTranslatedShape(shape, transY1, transX1);
+            else if(orientation == PlotOrientation.VERTICAL) {
+                shape = ShapeUtils.createTranslatedShape(shape, transX1, transY1);
             }
-            else if (orientation == PlotOrientation.VERTICAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transX1,
-                        transY1);
-            }
+            
             entityArea = shape;
-            if (shape.intersects(dataArea)) {
-                if (getItemShapeFilled(series, item)) {
-                    if (this.useFillPaint) {
-                        g2.setPaint(getItemFillPaint(series, item));
-                    }
-                    else {
-                        g2.setPaint(getItemPaint(series, item));
-                    }
+            if(shape.intersects(dataArea)) {
+                if(getItemShapeFilled(series, item)) {
+                    if(useFillPaint) g2.setPaint(getItemFillPaint(series, item));
+                    else g2.setPaint(getItemPaint(series, item));
+
                     g2.fill(shape);
                 }
-                if (this.drawOutlines) {
-                    if (getUseOutlinePaint()) {
-                        g2.setPaint(getItemOutlinePaint(series, item));
-                    }
-                    else {
-                        g2.setPaint(getItemPaint(series, item));
-                    }
+                
+                if(drawOutlines) {
+                    if(getUseOutlinePaint()) g2.setPaint(getItemOutlinePaint(series, item));
+                    else g2.setPaint(getItemPaint(series, item));
+  
                     g2.setStroke(getItemOutlineStroke(series, item));
                     g2.draw(shape);
                 }
@@ -940,24 +927,22 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
 
         double xx = transX1;
         double yy = transY1;
-        if (orientation == PlotOrientation.HORIZONTAL) {
+        if(orientation == PlotOrientation.HORIZONTAL) {
             xx = transY1;
             yy = transX1;
         }
 
         // draw the item label if there is one...
-        if (isItemLabelVisible(series, item)) {
-            drawItemLabel(g2, orientation, dataset, series, item, xx, yy,
-                    (y1 < 0.0));
+        if(isItemLabelVisible(series, item)) {
+            drawItemLabel(g2, orientation, dataset, series, item, xx, yy, (y1 < 0.0));
         }
 
         int datasetIndex = plot.indexOf(dataset);
-        updateCrosshairValues(crosshairState, x1, y1, datasetIndex,
-                transX1, transY1, orientation);
+        updateCrosshairValues(crosshairState, x1, y1, datasetIndex, transX1, transY1, orientation);
 
         // add an entity for the item, but only if it falls within the data
         // area...
-        if (entities != null && ShapeUtils.isPointInRect(dataArea, xx, yy)) {
+        if(entities != null && ShapeUtils.isPointInRect(dataArea, xx, yy)) {
             addEntity(entities, entityArea, dataset, series, item, xx, yy);
         }
     }
@@ -974,52 +959,56 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
     @Override
     public LegendItem getLegendItem(int datasetIndex, int series) {
         XYPlot plot = getPlot();
-        if (plot == null) {
-            return null;
-        }
+        if(plot == null) return null;
 
         XYDataset dataset = plot.getDataset(datasetIndex);
-        if (dataset == null) {
-            return null;
-        }
+        if(dataset == null) return null;
 
-        if (!getItemVisible(series, 0)) {
-            return null;
-        }
-        String label = getLegendItemLabelGenerator().generateLabel(dataset,
-                series);
+        if(!getItemVisible(series, 0)) return null;
+
+        String label = getLegendItemLabelGenerator().generateLabel(dataset, series);
         String description = label;
         String toolTipText = null;
-        if (getLegendItemToolTipGenerator() != null) {
-            toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                    dataset, series);
+        if(getLegendItemToolTipGenerator() != null) {
+            toolTipText = getLegendItemToolTipGenerator().generateLabel(dataset, series);
         }
+        
         String urlText = null;
-        if (getLegendItemURLGenerator() != null) {
-            urlText = getLegendItemURLGenerator().generateLabel(dataset,
-                    series);
-        }
+        if(getLegendItemURLGenerator() != null) urlText = getLegendItemURLGenerator().generateLabel(dataset, series);
+        
         boolean shapeIsVisible = getItemShapeVisible(series, 0);
         Shape shape = lookupLegendShape(series);
         boolean shapeIsFilled = getItemShapeFilled(series, 0);
-        Paint fillPaint = (this.useFillPaint ? lookupSeriesFillPaint(series)
-                : lookupSeriesPaint(series));
-        boolean shapeOutlineVisible = this.drawOutlines;
-        Paint outlinePaint = (this.useOutlinePaint ? lookupSeriesOutlinePaint(
-                series) : lookupSeriesPaint(series));
+        Paint fillPaint = (useFillPaint ? lookupSeriesFillPaint(series) : lookupSeriesPaint(series));
+        boolean shapeOutlineVisible = drawOutlines;
+        Paint outlinePaint = (useOutlinePaint ? lookupSeriesOutlinePaint(series) : lookupSeriesPaint(series));
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
         boolean lineVisible = getItemLineVisible(series, 0);
         Stroke lineStroke = lookupSeriesStroke(series);
         Paint linePaint = lookupSeriesPaint(series);
-        LegendItem result = new LegendItem(label, description, toolTipText,
-                urlText, shapeIsVisible, shape, shapeIsFilled, fillPaint,
-                shapeOutlineVisible, outlinePaint, outlineStroke, lineVisible,
-                this.legendLine, lineStroke, linePaint);
+        
+        LegendItem result = new LegendItem(
+        	label,
+        	description,
+        	toolTipText,
+        	urlText,
+        	shapeIsVisible,
+        	shape,
+        	shapeIsFilled,
+        	fillPaint,
+        	shapeOutlineVisible,
+        	outlinePaint,
+        	outlineStroke,
+        	lineVisible,
+        	legendLine,
+        	lineStroke,
+        	linePaint
+        );
+        
         result.setLabelFont(lookupLegendTextFont(series));
         Paint labelPaint = lookupLegendTextPaint(series);
-        if (labelPaint != null) {
-            result.setLabelPaint(labelPaint);
-        }
+        if(labelPaint != null) result.setLabelPaint(labelPaint);
+
         result.setSeriesKey(dataset.getSeriesKey(series));
         result.setSeriesIndex(series);
         result.setDataset(dataset);
@@ -1035,21 +1024,32 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      *
      * @throws CloneNotSupportedException if the clone cannot be created.
      */
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        XYLineAndShapeRenderer clone = (XYLineAndShapeRenderer) super.clone();
-        clone.seriesLinesVisible
-                = (BooleanList) this.seriesLinesVisible.clone();
-        if (this.legendLine != null) {
-            clone.legendLine = ShapeUtils.clone(this.legendLine);
-        }
-        clone.seriesShapesVisible
-                = (BooleanList) this.seriesShapesVisible.clone();
-        clone.seriesShapesFilled
-                = (BooleanList) this.seriesShapesFilled.clone();
-        return clone;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		XYLineAndShapeRenderer clone = (XYLineAndShapeRenderer) super.clone();
+		clone.seriesLinesVisible = (BooleanList) seriesLinesVisible.clone();
+		if(legendLine != null) clone.legendLine = ShapeUtils.clone(legendLine);
+
+		clone.seriesShapesVisible = (BooleanList) this.seriesShapesVisible.clone();
+		clone.seriesShapesFilled = (BooleanList) this.seriesShapesFilled.clone();
+
+		return clone;
     }
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     /**
      * Tests this renderer for equality with an arbitrary object.
      *
@@ -1102,12 +1102,10 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         if (this.useOutlinePaint != that.useOutlinePaint) {
             return false;
         }
-        if (this.useFillPaint != that.useFillPaint) {
-            return false;
-        }
-        if (this.drawSeriesLineAsPath != that.drawSeriesLineAsPath) {
-            return false;
-        }
+        if(this.useFillPaint != that.useFillPaint) return false;
+
+        if(this.drawSeriesLineAsPath != that.drawSeriesLineAsPath) return false;
+
         return true;
     }
 
@@ -1119,10 +1117,9 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.legendLine = SerialUtils.readShape(stream);
+        legendLine = SerialUtils.readShape(stream);
     }
 
     /**
@@ -1134,7 +1131,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        SerialUtils.writeShape(this.legendLine, stream);
+        
+        SerialUtils.writeShape(legendLine, stream);
     }
-
 }

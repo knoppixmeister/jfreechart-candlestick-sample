@@ -319,7 +319,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
     public void setUpArrow(Shape arrow) {
         Args.nullNotPermitted(arrow, "arrow");
         
-        this.upArrow = arrow;
+        upArrow = arrow;
         
         fireChangeEvent();
     }
@@ -347,7 +347,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      */
     public void setDownArrow(Shape arrow) {
         Args.nullNotPermitted(arrow, "arrow");
-        this.downArrow = arrow;
+        
+        downArrow = arrow;
+        
         fireChangeEvent();
     }
 
@@ -360,7 +362,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setLeftArrow(Shape)
      */
     public Shape getLeftArrow() {
-        return this.leftArrow;
+        return leftArrow;
     }
 
     /**
@@ -374,7 +376,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      */
     public void setLeftArrow(Shape arrow) {
         Args.nullNotPermitted(arrow, "arrow");
-        this.leftArrow = arrow;
+        
+        leftArrow = arrow;
+        
         fireChangeEvent();
     }
 
@@ -387,7 +391,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setRightArrow(Shape)
      */
     public Shape getRightArrow() {
-        return this.rightArrow;
+        return rightArrow;
     }
 
     /**
@@ -401,7 +405,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      */
     public void setRightArrow(Shape arrow) {
         Args.nullNotPermitted(arrow, "arrow");
-        this.rightArrow = arrow;
+        
+        rightArrow = arrow;
+        
         fireChangeEvent();
     }
 
@@ -430,6 +436,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
         else if(edge == RectangleEdge.RIGHT) {
             axisLine = new Line2D.Double(c, dataArea.getY(), c, dataArea.getMaxY());
         }
+        
         g2.setPaint(getAxisLinePaint());
         g2.setStroke(getAxisLineStroke());
         Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
@@ -445,25 +452,24 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
         }
         
         if(negativeArrowVisible) {
-            if(inverted) {
-                drawUpOrRight = true;
-            } else {
-                drawDownOrLeft = true;
-            }
+            if(inverted) drawUpOrRight = true;
+            else drawDownOrLeft = true;
         }
-        if (drawUpOrRight) {
+        
+        if(drawUpOrRight) {
             double x = 0.0;
             double y = 0.0;
             Shape arrow = null;
-            if (edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
+            
+            if(edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
                 x = dataArea.getMaxX();
                 y = cursor;
-                arrow = this.rightArrow;
-            } else if (edge == RectangleEdge.LEFT
-                    || edge == RectangleEdge.RIGHT) {
+                arrow = rightArrow;
+            }
+            else if(edge == RectangleEdge.LEFT || edge == RectangleEdge.RIGHT) {
                 x = cursor;
                 y = dataArea.getMinY();
-                arrow = this.upArrow;
+                arrow = upArrow;
             }
 
             // draw the arrow...
@@ -474,19 +480,20 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
             g2.draw(shape);
         }
 
-        if (drawDownOrLeft) {
+        if(drawDownOrLeft) {
             double x = 0.0;
             double y = 0.0;
             Shape arrow = null;
-            if (edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
+            
+            if(edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
                 x = dataArea.getMinX();
                 y = cursor;
-                arrow = this.leftArrow;
-            } else if (edge == RectangleEdge.LEFT
-                    || edge == RectangleEdge.RIGHT) {
+                arrow = leftArrow;
+            }
+            else if(edge == RectangleEdge.LEFT || edge == RectangleEdge.RIGHT) {
                 x = cursor;
                 y = dataArea.getMaxY();
-                arrow = this.downArrow;
+                arrow = downArrow;
             }
 
             // draw the arrow...
@@ -511,7 +518,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
     protected float[] calculateAnchorPoint(ValueTick tick, double cursor, Rectangle2D dataArea, RectangleEdge edge) {
         RectangleInsets insets = getTickLabelInsets();
         float[] result = new float[2];
-        if (edge == RectangleEdge.TOP) {
+        
+        if(edge == RectangleEdge.TOP) {
             result[0] = (float) valueToJava2D(tick.getValue(), dataArea, edge);
             result[1] = (float) (cursor - insets.getBottom() - 2.0);
         }
@@ -612,26 +620,25 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
             }
         }
         g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);
-        
+ 
         // need to work out the space used by the tick labels...
         // so we can update the cursor...
         double used = 0.0;
-        if (isTickLabelsVisible()) {
-            if (edge == RectangleEdge.LEFT) {
-                used += findMaximumTickLabelWidth(ticks, g2, plotArea,
-                        isVerticalTickLabels());
+        if(isTickLabelsVisible()) {
+            if(edge == RectangleEdge.LEFT) {
+                used += findMaximumTickLabelWidth(ticks, g2, plotArea, isVerticalTickLabels());
                 state.cursorLeft(used);
-            } else if (edge == RectangleEdge.RIGHT) {
-                used = findMaximumTickLabelWidth(ticks, g2, plotArea,
-                        isVerticalTickLabels());
+            }
+            else if(edge == RectangleEdge.RIGHT) {
+                used = findMaximumTickLabelWidth(ticks, g2, plotArea, isVerticalTickLabels());
                 state.cursorRight(used);
-            } else if (edge == RectangleEdge.TOP) {
-                used = findMaximumTickLabelHeight(ticks, g2, plotArea,
-                        isVerticalTickLabels());
+            }
+            else if(edge == RectangleEdge.TOP) {
+                used = findMaximumTickLabelHeight(ticks, g2, plotArea, isVerticalTickLabels());
                 state.cursorUp(used);
-            } else if (edge == RectangleEdge.BOTTOM) {
-                used = findMaximumTickLabelHeight(ticks, g2, plotArea,
-                        isVerticalTickLabels());
+            }
+            else if(edge == RectangleEdge.BOTTOM) {
+                used = findMaximumTickLabelHeight(ticks, g2, plotArea, isVerticalTickLabels());
                 state.cursorDown(used);
             }
         }
@@ -652,45 +659,36 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *         space).
      */
     @Override
-    public AxisSpace reserveSpace(Graphics2D g2, Plot plot, 
-            Rectangle2D plotArea, RectangleEdge edge, AxisSpace space) {
-
+    public AxisSpace reserveSpace(Graphics2D g2, Plot plot, Rectangle2D plotArea, RectangleEdge edge, AxisSpace space) {
         // create a new space object if one wasn't supplied...
-        if (space == null) {
-            space = new AxisSpace();
-        }
+        if(space == null) space = new AxisSpace();
 
         // if the axis is not visible, no additional space is required...
-        if (!isVisible()) {
-            return space;
-        }
+        if(!isVisible()) return space;
 
         // if the axis has a fixed dimension, return it...
         double dimension = getFixedDimension();
-        if (dimension > 0.0) {
+        if(dimension > 0.0) {
             space.add(dimension, edge);
+            
             return space;
         }
 
         // calculate the max size of the tick labels (if visible)...
         double tickLabelHeight = 0.0;
         double tickLabelWidth = 0.0;
-        if (isTickLabelsVisible()) {
+
+        if(isTickLabelsVisible()) {
             g2.setFont(getTickLabelFont());
             List ticks = refreshTicks(g2, new AxisState(), plotArea, edge);
-            if (RectangleEdge.isTopOrBottom(edge)) {
-                tickLabelHeight = findMaximumTickLabelHeight(ticks, g2,
-                        plotArea, isVerticalTickLabels());
-            }
-            else if (RectangleEdge.isLeftOrRight(edge)) {
-                tickLabelWidth = findMaximumTickLabelWidth(ticks, g2, plotArea,
-                        isVerticalTickLabels());
-            }
+            
+            if(RectangleEdge.isTopOrBottom(edge)) tickLabelHeight = findMaximumTickLabelHeight(ticks, g2, plotArea, isVerticalTickLabels());
+            else if(RectangleEdge.isLeftOrRight(edge)) tickLabelWidth = findMaximumTickLabelWidth(ticks, g2, plotArea, isVerticalTickLabels());
         }
 
         // get the axis label size and update the space object...
         Rectangle2D labelEnclosure = getLabelEnclosure(g2, edge);
-        if (RectangleEdge.isTopOrBottom(edge)) {
+        if(RectangleEdge.isTopOrBottom(edge)) {
             double labelHeight = labelEnclosure.getHeight();
             space.add(labelHeight + tickLabelHeight, edge);
         }
@@ -700,7 +698,6 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
         }
 
         return space;
-
     }
 
     /**
@@ -714,43 +711,37 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @return The height of the tallest tick label.
      */
-    protected double findMaximumTickLabelHeight(List ticks, Graphics2D g2,
-            Rectangle2D drawArea, boolean vertical) {
-
+    protected double findMaximumTickLabelHeight(List ticks, Graphics2D g2, Rectangle2D drawArea, boolean vertical) {
         RectangleInsets insets = getTickLabelInsets();
         Font font = getTickLabelFont();
         g2.setFont(font);
         double maxHeight = 0.0;
-        if (vertical) {
+        
+        if(vertical) {
             FontMetrics fm = g2.getFontMetrics(font);
             Iterator iterator = ticks.iterator();
             while (iterator.hasNext()) {
                 Tick tick = (Tick) iterator.next();
                 Rectangle2D labelBounds = null;
-                if (tick instanceof LogTick) {
+                if(tick instanceof LogTick) {
                     LogTick lt = (LogTick) tick;
-                    if (lt.getAttributedLabel() != null) {
-                        labelBounds = AttrStringUtils.getTextBounds(
-                                lt.getAttributedLabel(), g2);
-                    }
-                } else if (tick.getText() != null) {
-                    labelBounds = TextUtils.getTextBounds(
-                            tick.getText(), g2, fm);
+                    if(lt.getAttributedLabel() != null) labelBounds = AttrStringUtils.getTextBounds(lt.getAttributedLabel(), g2);
                 }
-                if (labelBounds != null && labelBounds.getWidth() 
-                        + insets.getTop() + insets.getBottom() > maxHeight) {
-                    maxHeight = labelBounds.getWidth()
-                                + insets.getTop() + insets.getBottom();
+                else if(tick.getText() != null) {
+                    labelBounds = TextUtils.getTextBounds(tick.getText(), g2, fm);
+                }
+
+                if(labelBounds != null && labelBounds.getWidth() + insets.getTop() + insets.getBottom() > maxHeight) {
+                    maxHeight = labelBounds.getWidth() + insets.getTop() + insets.getBottom();
                 }
             }
-        } else {
-            LineMetrics metrics = font.getLineMetrics("ABCxyz",
-                    g2.getFontRenderContext());
-            maxHeight = metrics.getHeight()
-                        + insets.getTop() + insets.getBottom();
         }
-        return maxHeight;
+        else {
+            LineMetrics metrics = font.getLineMetrics("ABCxyz", g2.getFontRenderContext());
+            maxHeight = metrics.getHeight() + insets.getTop() + insets.getBottom();
+        }
 
+        return maxHeight;
     }
 
     /**
@@ -764,43 +755,35 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @return The width of the tallest tick label.
      */
-    protected double findMaximumTickLabelWidth(List ticks, Graphics2D g2,
-            Rectangle2D drawArea, boolean vertical) {
+    protected double findMaximumTickLabelWidth(List ticks, Graphics2D g2, Rectangle2D drawArea, boolean vertical) {
+    	RectangleInsets insets = getTickLabelInsets();
+    	Font font = getTickLabelFont();
+    	double maxWidth = 0.0;
 
-        RectangleInsets insets = getTickLabelInsets();
-        Font font = getTickLabelFont();
-        double maxWidth = 0.0;
-        if (!vertical) {
-            FontMetrics fm = g2.getFontMetrics(font);
-            Iterator iterator = ticks.iterator();
-            while (iterator.hasNext()) {
+    	if(!vertical) {
+    		FontMetrics fm = g2.getFontMetrics(font);
+    		Iterator iterator = ticks.iterator();
+            while(iterator.hasNext()) {
                 Tick tick = (Tick) iterator.next();
                 Rectangle2D labelBounds = null;
-                if (tick instanceof LogTick) {
+                if(tick instanceof LogTick) {
                     LogTick lt = (LogTick) tick;
-                    if (lt.getAttributedLabel() != null) {
-                        labelBounds = AttrStringUtils.getTextBounds(
-                                lt.getAttributedLabel(), g2);
-                    }
-                } else if (tick.getText() != null) {
-                    labelBounds = TextUtils.getTextBounds(tick.getText(), 
-                            g2, fm);
+                    if(lt.getAttributedLabel() != null) labelBounds = AttrStringUtils.getTextBounds(lt.getAttributedLabel(), g2);
                 }
-                if (labelBounds != null 
-                        && labelBounds.getWidth() + insets.getLeft()
-                        + insets.getRight() > maxWidth) {
-                    maxWidth = labelBounds.getWidth()
-                               + insets.getLeft() + insets.getRight();
+                else if(tick.getText() != null) {
+                    labelBounds = TextUtils.getTextBounds(tick.getText(), g2, fm);
+                }
+                if(labelBounds != null && labelBounds.getWidth() + insets.getLeft() + insets.getRight() > maxWidth) {
+                    maxWidth = labelBounds.getWidth() + insets.getLeft() + insets.getRight();
                 }
             }
-        } else {
-            LineMetrics metrics = font.getLineMetrics("ABCxyz",
-                    g2.getFontRenderContext());
-            maxWidth = metrics.getHeight()
-                       + insets.getTop() + insets.getBottom();
         }
-        return maxWidth;
+        else {
+            LineMetrics metrics = font.getLineMetrics("ABCxyz", g2.getFontRenderContext());
+            maxWidth = metrics.getHeight() + insets.getTop() + insets.getBottom();
+        }
 
+        return maxWidth;
     }
 
     /**
@@ -815,7 +798,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setInverted(boolean)
      */
     public boolean isInverted() {
-        return this.inverted;
+        return inverted;
     }
 
     /**
@@ -827,8 +810,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #isInverted()
      */
     public void setInverted(boolean flag) {
-        if (this.inverted != flag) {
-            this.inverted = flag;
+        if(inverted != flag) {
+        	inverted = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -842,7 +826,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setAutoRange(boolean)
      */
     public boolean isAutoRange() {
-        return this.autoRange;
+        return autoRange;
     }
 
     /**
@@ -868,13 +852,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #isAutoRange()
      */
     protected void setAutoRange(boolean auto, boolean notify) {
-        this.autoRange = auto;
-        if (this.autoRange) {
-            autoAdjustRange();
-        }
-        if (notify) {
-            fireChangeEvent();
-        }
+    	autoRange = auto;
+        if(autoRange) autoAdjustRange();
+
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -886,7 +867,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setAutoRangeMinimumSize(double)
      */
     public double getAutoRangeMinimumSize() {
-        return this.autoRangeMinimumSize;
+        return autoRangeMinimumSize;
     }
 
     /**
@@ -912,20 +893,16 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param notify  notify listeners?
      */
     public void setAutoRangeMinimumSize(double size, boolean notify) {
-        if (size <= 0.0) {
-            throw new IllegalArgumentException(
-                "NumberAxis.setAutoRangeMinimumSize(double): must be > 0.0.");
+        if(size <= 0.0) {
+            throw new IllegalArgumentException("NumberAxis.setAutoRangeMinimumSize(double): must be > 0.0.");
         }
-        if (this.autoRangeMinimumSize != size) {
-            this.autoRangeMinimumSize = size;
-            if (this.autoRange) {
-                autoAdjustRange();
-            }
-            if (notify) {
-                fireChangeEvent();
-            }
-        }
+        
+        if(autoRangeMinimumSize != size) {
+        	autoRangeMinimumSize = size;
+            if(autoRange) autoAdjustRange();
 
+            if(notify) fireChangeEvent();
+        }
     }
 
     /**
@@ -938,7 +915,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.5
      */
     public Range getDefaultAutoRange() {
-        return this.defaultAutoRange;
+        return defaultAutoRange;
     }
 
     /**
@@ -952,8 +929,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.5
      */
     public void setDefaultAutoRange(Range range) {
-        Args.nullNotPermitted(range, "range");
-        this.defaultAutoRange = range;
+    	Args.nullNotPermitted(range, "range");
+    	
+        defaultAutoRange = range;
+        
         fireChangeEvent();
     }
 
@@ -968,7 +947,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setLowerMargin(double)
      */
     public double getLowerMargin() {
-        return this.lowerMargin;
+        return lowerMargin;
     }
 
     /**
@@ -983,11 +962,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setUpperMargin(double)
      */
     public void setLowerMargin(double margin) {
-        this.lowerMargin = margin;
-        if (isAutoRange()) {
-            autoAdjustRange();
-        }
-        fireChangeEvent();
+    	lowerMargin = margin;
+    	if(isAutoRange()) autoAdjustRange();
+
+    	fireChangeEvent();
     }
 
     /**
@@ -1001,7 +979,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setUpperMargin(double)
      */
     public double getUpperMargin() {
-        return this.upperMargin;
+        return upperMargin;
     }
 
     /**
@@ -1016,10 +994,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setLowerMargin(double)
      */
     public void setUpperMargin(double margin) {
-        this.upperMargin = margin;
-        if (isAutoRange()) {
-            autoAdjustRange();
-        }
+    	upperMargin = margin;
+        if(isAutoRange()) autoAdjustRange();
+
         fireChangeEvent();
     }
 
@@ -1056,7 +1033,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setLowerBound(double)
      */
     public double getLowerBound() {
-        return this.range.getLowerBound();
+        return range.getLowerBound();
     }
 
     /**
@@ -1067,14 +1044,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #getLowerBound()
      */
-    public void setLowerBound(double min) {
-        if (this.range.getUpperBound() > min) {
-            setRange(new Range(min, this.range.getUpperBound()));
-        }
-        else {
-            setRange(new Range(min, min + 1.0));
-        }
-    }
+	public void setLowerBound(double min) {
+		if(range.getUpperBound() > min) setRange(new Range(min, range.getUpperBound()));
+		else setRange(new Range(min, min + 1.0));
+	}
 
     /**
      * Returns the upper bound for the axis range.
@@ -1084,7 +1057,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setUpperBound(double)
      */
     public double getUpperBound() {
-        return this.range.getUpperBound();
+        return range.getUpperBound();
     }
 
     /**
@@ -1096,12 +1069,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #getUpperBound()
      */
     public void setUpperBound(double max) {
-        if (this.range.getLowerBound() < max) {
-            setRange(new Range(this.range.getLowerBound(), max));
-        }
-        else {
-            setRange(max - 1.0, max);
-        }
+        if(range.getLowerBound() < max) setRange(new Range(range.getLowerBound(), max));
+        else setRange(max - 1.0, max);
     }
 
     /**
@@ -1112,7 +1081,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setRange(Range)
      */
     public Range getRange() {
-        return this.range;
+        return range;
     }
 
     /**
@@ -1144,20 +1113,17 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #getRange()
      */
-    public void setRange(Range range, boolean turnOffAutoRange, 
-            boolean notify) {
+    public void setRange(Range range, boolean turnOffAutoRange, boolean notify) {
         Args.nullNotPermitted(range, "range");
-        if (range.getLength() <= 0.0) {
-            throw new IllegalArgumentException(
-                    "A positive range length is required: " + range);
+        
+        if(range.getLength() <= 0.0) {
+            throw new IllegalArgumentException("A positive range length is required: " + range);
         }
-        if (turnOffAutoRange) {
-            this.autoRange = false;
-        }
+        if(turnOffAutoRange) autoRange = false;
+
         this.range = range;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1199,11 +1165,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param notify  a flag that controls whether or not listeners are
      *                notified.
      */
-    public void setRangeWithMargins(Range range, boolean turnOffAutoRange,
-                                    boolean notify) {
+    public void setRangeWithMargins(Range range, boolean turnOffAutoRange, boolean notify) {
         Args.nullNotPermitted(range, "range");
-        setRange(Range.expand(range, getLowerMargin(), getUpperMargin()),
-                turnOffAutoRange, notify);
+        
+        setRange(Range.expand(range, getLowerMargin(), getUpperMargin()), turnOffAutoRange, notify);
     }
 
     /**
@@ -1239,7 +1204,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setAutoTickUnitSelection(boolean)
      */
     public boolean isAutoTickUnitSelection() {
-        return this.autoTickUnitSelection;
+        return autoTickUnitSelection;
     }
 
     /**
@@ -1265,12 +1230,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #isAutoTickUnitSelection()
      */
     public void setAutoTickUnitSelection(boolean flag, boolean notify) {
-
-        if (this.autoTickUnitSelection != flag) {
-            this.autoTickUnitSelection = flag;
-            if (notify) {
-                fireChangeEvent();
-            }
+        if(autoTickUnitSelection != flag) {
+        	autoTickUnitSelection = flag;
+        	
+            if(notify) fireChangeEvent();
         }
     }
 
@@ -1282,7 +1245,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #setStandardTickUnits(TickUnitSource)
      */
     public TickUnitSource getStandardTickUnits() {
-        return this.standardTickUnits;
+        return standardTickUnits;
     }
 
     /**
@@ -1298,7 +1261,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #getStandardTickUnits()
      */
     public void setStandardTickUnits(TickUnitSource source) {
-        this.standardTickUnits = source;
+    	standardTickUnits = source;
+    	
         fireChangeEvent();
     }
 
@@ -1312,7 +1276,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.12
      */
     public int getMinorTickCount() {
-        return this.minorTickCount;
+        return minorTickCount;
     }
 
     /**
@@ -1326,7 +1290,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.12
      */
     public void setMinorTickCount(int count) {
-        this.minorTickCount = count;
+    	minorTickCount = count;
+    	
         fireChangeEvent();
     }
 
@@ -1344,8 +1309,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #java2DToValue(double, Rectangle2D, RectangleEdge)
      */
-    public abstract double valueToJava2D(double value, Rectangle2D area,
-                                         RectangleEdge edge);
+    public abstract double valueToJava2D(double value, Rectangle2D area, RectangleEdge edge);
 
     /**
      * Converts a length in data coordinates into the corresponding length in
@@ -1357,8 +1321,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @return The length in Java2D coordinates.
      */
-    public double lengthToJava2D(double length, Rectangle2D area,
-                                 RectangleEdge edge) {
+    public double lengthToJava2D(double length, Rectangle2D area, RectangleEdge edge) {
         double zero = valueToJava2D(0.0, area, edge);
         double l = valueToJava2D(length, area, edge);
         return Math.abs(l - zero);
@@ -1376,8 +1339,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #valueToJava2D(double, Rectangle2D, RectangleEdge)
      */
-    public abstract double java2DToValue(double java2DValue, Rectangle2D area, 
-            RectangleEdge edge);
+    public abstract double java2DToValue(double java2DValue, Rectangle2D area, RectangleEdge edge);
 
     /**
      * Automatically sets the axis range to fit the range of values in the
@@ -1394,9 +1356,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param value  the center value.
      */
     public void centerRange(double value) {
-        double central = this.range.getCentralValue();
-        Range adjusted = new Range(this.range.getLowerBound() + value - central,
-                this.range.getUpperBound() + value - central);
+        double central = range.getCentralValue();
+        Range adjusted = new Range(range.getLowerBound() + value - central, range.getUpperBound() + value - central);
         setRange(adjusted);
     }
 
@@ -1413,7 +1374,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #resizeRange(double, double)
      */
     public void resizeRange(double percent) {
-        resizeRange(percent, this.range.getCentralValue());
+    	resizeRange(percent, range.getCentralValue());
     }
 
     /**
@@ -1430,15 +1391,12 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @see #resizeRange(double)
      */
     public void resizeRange(double percent, double anchorValue) {
-        if (percent > 0.0) {
-            double halfLength = this.range.getLength() * percent / 2;
-            Range adjusted = new Range(anchorValue - halfLength,
-                    anchorValue + halfLength);
+    	if(percent > 0.0) {
+            double halfLength = range.getLength() * percent / 2;
+            Range adjusted = new Range(anchorValue - halfLength, anchorValue + halfLength);
             setRange(adjusted);
         }
-        else {
-            setAutoRange(true);
-        }
+        else setAutoRange(true);
     }
 
     /**
@@ -1457,16 +1415,13 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @since 1.0.13
      */
     public void resizeRange2(double percent, double anchorValue) {
-        if (percent > 0.0) {
+        if(percent > 0.0) {
             double left = anchorValue - getLowerBound();
             double right = getUpperBound() - anchorValue;
-            Range adjusted = new Range(anchorValue - left * percent,
-                    anchorValue + right * percent);
+            Range adjusted = new Range(anchorValue - left * percent, anchorValue + right * percent);
             setRange(adjusted);
         }
-        else {
-            setAutoRange(true);
-        }
+        else setAutoRange(true);
     }
 
     /**
@@ -1476,20 +1431,20 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @param upperPercent  the new upper bound.
      */
     public void zoomRange(double lowerPercent, double upperPercent) {
-        double start = this.range.getLowerBound();
-        double length = this.range.getLength();
+        double start = range.getLowerBound();
+        double length = range.getLength();
         double r0, r1;
-        if (isInverted()) {
+        
+        if(isInverted()) {
             r0 = start + (length * (1 - upperPercent));
             r1 = start + (length * (1 - lowerPercent));
         }
         else {
-            r0 = start + length * lowerPercent;
-            r1 = start + length * upperPercent;
+        	r0 = start + length * lowerPercent;
+        	r1 = start + length * upperPercent;
         }
-        if ((r1 > r0) && !Double.isInfinite(r1 - r0)) {
-            setRange(new Range(r0, r1));
-        }
+
+        if((r1 > r0) && !Double.isInfinite(r1 - r0)) setRange(new Range(r0, r1));
     }
 
     /**
@@ -1515,9 +1470,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #setAutoTickIndex(int)
      */
-    protected int getAutoTickIndex() {
-        return this.autoTickIndex;
-    }
+	protected int getAutoTickIndex() {
+		return autoTickIndex;
+	}
 
     /**
      * Sets the auto tick index.
@@ -1526,10 +1481,26 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #getAutoTickIndex()
      */
-    protected void setAutoTickIndex(int index) {
-        this.autoTickIndex = index;
-    }
+	protected void setAutoTickIndex(int index) {
+		autoTickIndex = index;
+	}
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests the axis for equality with an arbitrary object.
      *
@@ -1604,6 +1575,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
     @Override
     public Object clone() throws CloneNotSupportedException {
         ValueAxis clone = (ValueAxis) super.clone();
+        
         return clone;
     }
 
@@ -1630,14 +1602,11 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
-
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         this.upArrow = SerialUtils.readShape(stream);
         this.downArrow = SerialUtils.readShape(stream);
         this.leftArrow = SerialUtils.readShape(stream);
         this.rightArrow = SerialUtils.readShape(stream);
     }
-
 }

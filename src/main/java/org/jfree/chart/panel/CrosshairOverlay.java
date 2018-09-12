@@ -47,7 +47,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
 
     /**
      * Creates a new overlay that initially contains no crosshairs.
-     */
+	*/
     public CrosshairOverlay() {
         super();
 
@@ -70,7 +70,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     	xCrosshairs.add(crosshair);
     	crosshair.addPropertyChangeListener(this);
 
-        fireOverlayChanged();
+    	fireOverlayChanged();
 	}
 
     /**
@@ -85,11 +85,11 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     	Args.nullNotPermitted(crosshair, "crosshair");
 
     	if(xCrosshairs.remove(crosshair)) {
-            crosshair.removePropertyChangeListener(this);
-            
-            fireOverlayChanged();
-        }
-    }
+    		crosshair.removePropertyChangeListener(this);
+
+    		fireOverlayChanged();
+    	}
+	}
 
     /**
      * Clears all the domain crosshairs from the overlay and sends an
@@ -100,11 +100,11 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
 
         for(Crosshair c : getDomainCrosshairs()) {
         	xCrosshairs.remove(c);
-            c.removePropertyChangeListener(this);
+        	c.removePropertyChangeListener(this);
         }
-        
+
         fireOverlayChanged();
-    }
+	}
 
     /**
      * Returns a new list containing the domain crosshairs for this overlay.
@@ -180,7 +180,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
-    	fireOverlayChanged();
+		fireOverlayChanged();
 	}
 
     /**
@@ -194,43 +194,43 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      */
     @Override
     public void paintOverlay(Graphics2D g2, ChartPanel chartPanel) {
-        Shape savedClip = g2.getClip();
-        Rectangle2D dataArea = chartPanel.getScreenDataArea();
-        g2.clip(dataArea);
-        JFreeChart chart = chartPanel.getChart();
-        XYPlot plot = (XYPlot) chart.getPlot();
-        ValueAxis xAxis = plot.getDomainAxis();
-        RectangleEdge xAxisEdge = plot.getDomainAxisEdge();
+    	Shape savedClip = g2.getClip();
+    	Rectangle2D dataArea = chartPanel.getScreenDataArea();
+    	g2.clip(dataArea);
+    	JFreeChart chart = chartPanel.getChart();
+    	XYPlot plot = (XYPlot) chart.getPlot();
+    	ValueAxis xAxis = plot.getDomainAxis();
+    	RectangleEdge xAxisEdge = plot.getDomainAxisEdge();
 
-        for(Crosshair ch : getDomainCrosshairs()) {
+    	for(Crosshair ch : getDomainCrosshairs()) {
             if(ch.isVisible()) {
-                double xx 	=	xAxis.valueToJava2D(ch.getValue(), dataArea, xAxisEdge);
+                double xx = xAxis.valueToJava2D(ch.getValue(), dataArea, xAxisEdge);
 
                 //System.out.println("XX: "+xx+"; CH_VAL: "+ch.getValue());
-                
-                if(plot.getOrientation() == PlotOrientation.VERTICAL) {
-                    drawVerticalCrosshair(g2, dataArea, xx, ch);
-                }
+
+                if(plot.getOrientation() == PlotOrientation.VERTICAL) drawVerticalCrosshair(g2, dataArea, xx, ch);
                 else drawHorizontalCrosshair(g2, dataArea, xx, ch);
             }
         }
-        
+
         ValueAxis yAxis = plot.getRangeAxis();
         RectangleEdge yAxisEdge = plot.getRangeAxisEdge();
-        
+
         for(Crosshair ch : getRangeCrosshairs()) {
-            if (ch.isVisible()) {
-                double y = ch.getValue();
-                double yy = yAxis.valueToJava2D(y, dataArea, yAxisEdge);
-                if (plot.getOrientation() == PlotOrientation.VERTICAL) {
-                    drawHorizontalCrosshair(g2, dataArea, yy, ch);
-                }
+            if(ch.isVisible()) {
+                double y  = ch.getValue();
+                double yy = yAxis.valueToJava2D(
+                	y,
+                	dataArea,
+                	yAxisEdge
+                );
+                if(plot.getOrientation() == PlotOrientation.VERTICAL) drawHorizontalCrosshair(g2, dataArea, yy, ch);
                 else drawVerticalCrosshair(g2, dataArea, yy, ch);
             }
         }
-        
+
         g2.setClip(savedClip);
-    }
+	}
 
     /**
      * Draws a crosshair horizontally across the plot.
@@ -250,7 +250,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
             g2.setPaint(crosshair.getPaint());
             g2.setStroke(crosshair.getStroke());
             g2.draw(line);
-            
+
             if(crosshair.isLabelVisible()) {
             	//System.out.println("HOR_VIS");
 
@@ -326,7 +326,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                 float yy = (float) pt.getY();
                 TextAnchor alignPt = textAlignPtForLabelAnchorV(anchor);
                 Shape hotspot = TextUtils.calculateRotatedStringBounds(label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
-                if (!dataArea.contains(hotspot.getBounds2D())) {
+                
+                if(!dataArea.contains(hotspot.getBounds2D())) {
                     anchor = flipAnchorH(anchor);
                     pt = calculateLabelPoint(line, anchor, 5, 5);
                     xx = (float) pt.getX();
@@ -334,13 +335,16 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                     alignPt = textAlignPtForLabelAnchorV(anchor);
                     hotspot = TextUtils.calculateRotatedStringBounds(label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
                 }
+                
                 g2.setPaint(crosshair.getLabelBackgroundPaint());
                 g2.fill(hotspot);
-                if (crosshair.isLabelOutlineVisible()) {
+                
+                if(crosshair.isLabelOutlineVisible()) {
                     g2.setPaint(crosshair.getLabelOutlinePaint());
                     g2.setStroke(crosshair.getLabelOutlineStroke());
                     g2.draw(hotspot);
                 }
+                
                 g2.setPaint(crosshair.getLabelPaint());
                 TextUtils.drawAlignedString(label, g2, xx, yy, alignPt);
                 g2.setFont(savedFont);

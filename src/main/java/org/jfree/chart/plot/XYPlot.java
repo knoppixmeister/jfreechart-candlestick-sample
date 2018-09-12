@@ -786,13 +786,13 @@ public class XYPlot extends Plot implements
      * @see #setRangeAxisLocation(int, AxisLocation, boolean)
      */
     public void setDomainAxisLocation(int index, AxisLocation location, boolean notify) {
-        if(index == 0 && location == null) {
+    	if(index == 0 && location == null) {
             throw new IllegalArgumentException("Null 'location' for index 0 not permitted.");
-        }
-        
-        domainAxisLocations.put(index, location);
-        
-        if(notify) fireChangeEvent();
+    	}
+
+    	domainAxisLocations.put(index, location);
+
+    	if(notify) fireChangeEvent();
     }
 
     /**
@@ -804,11 +804,11 @@ public class XYPlot extends Plot implements
      *
      * @see #getRangeAxisEdge(int)
      */
-    public RectangleEdge getDomainAxisEdge(int index) {
-        AxisLocation location = getDomainAxisLocation(index);
-        
-        return Plot.resolveDomainAxisLocation(location, orientation);
-    }
+	public RectangleEdge getDomainAxisEdge(int index) {
+    	AxisLocation location = getDomainAxisLocation(index);
+
+    	return Plot.resolveDomainAxisLocation(location, orientation);
+	}
 
     /**
      * Returns the range axis for the plot.  If the range axis for this plot is
@@ -820,9 +820,9 @@ public class XYPlot extends Plot implements
      * @see #getRangeAxis(int)
      * @see #setRangeAxis(ValueAxis)
      */
-    public ValueAxis getRangeAxis() {
-        return getRangeAxis(0);
-    }
+	public ValueAxis getRangeAxis() {
+    	return getRangeAxis(0);
+	}
 
     /**
      * Sets the range axis for the plot and sends a {@link PlotChangeEvent} to
@@ -897,7 +897,7 @@ public class XYPlot extends Plot implements
      * @see #getOrientation()
      */
     public RectangleEdge getRangeAxisEdge() {
-        return Plot.resolveRangeAxisLocation(getRangeAxisLocation(), this.orientation);
+        return Plot.resolveRangeAxisLocation(getRangeAxisLocation(), orientation);
     }
 
     /**
@@ -2411,20 +2411,22 @@ public class XYPlot extends Plot implements
      * @see #clearRangeMarkers()
      */
     public void clearRangeMarkers() {
-        if (this.backgroundRangeMarkers != null) {
-            Set<Integer> keys = this.backgroundRangeMarkers.keySet();
-            for (Integer key : keys) {
+        if(backgroundRangeMarkers != null) {
+            Set<Integer> keys = backgroundRangeMarkers.keySet();
+            for(Integer key : keys) {
                 clearRangeMarkers(key);
             }
-            this.backgroundRangeMarkers.clear();
+            backgroundRangeMarkers.clear();
         }
-        if (this.foregroundRangeMarkers != null) {
-            Set<Integer> keys = this.foregroundRangeMarkers.keySet();
-            for (Integer key : keys) {
+        
+        if(foregroundRangeMarkers != null) {
+            Set<Integer> keys = foregroundRangeMarkers.keySet();
+            for(Integer key : keys) {
                 clearRangeMarkers(key);
             }
-            this.foregroundRangeMarkers.clear();
+            foregroundRangeMarkers.clear();
         }
+        
         fireChangeEvent();
     }
 
@@ -2460,31 +2462,29 @@ public class XYPlot extends Plot implements
      *
      * @since 1.0.10
      */
-    public void addRangeMarker(int index, Marker marker, Layer layer,
-            boolean notify) {
+    public void addRangeMarker(int index, Marker marker, Layer layer, boolean notify) {
         Collection markers;
-        if (layer == Layer.FOREGROUND) {
-            markers = (Collection) this.foregroundRangeMarkers.get(
-                    new Integer(index));
-            if (markers == null) {
+        if(layer == Layer.FOREGROUND) {
+            markers = (Collection) foregroundRangeMarkers.get(new Integer(index));
+            if(markers == null) {
                 markers = new java.util.ArrayList();
-                this.foregroundRangeMarkers.put(new Integer(index), markers);
+                foregroundRangeMarkers.put(new Integer(index), markers);
             }
+            
             markers.add(marker);
         }
-        else if (layer == Layer.BACKGROUND) {
-            markers = (Collection) this.backgroundRangeMarkers.get(
-                    new Integer(index));
-            if (markers == null) {
+        else if(layer == Layer.BACKGROUND) {
+            markers = (Collection) backgroundRangeMarkers.get(new Integer(index));
+            if(markers == null) {
                 markers = new java.util.ArrayList();
-                this.backgroundRangeMarkers.put(new Integer(index), markers);
+                backgroundRangeMarkers.put(new Integer(index), markers);
             }
+            
             markers.add(marker);
         }
         marker.addChangeListener(this);
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -2494,32 +2494,33 @@ public class XYPlot extends Plot implements
      * @param index  the renderer index.
      */
     public void clearRangeMarkers(int index) {
-        Integer key = new Integer(index);
-        if (this.backgroundRangeMarkers != null) {
-            Collection markers
-                = (Collection) this.backgroundRangeMarkers.get(key);
-            if (markers != null) {
+    	Integer key = new Integer(index);
+
+    	if(backgroundRangeMarkers != null) {
+            Collection markers = (Collection) backgroundRangeMarkers.get(key);
+            if(markers != null) {
                 Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
+                while(iterator.hasNext()) {
                     Marker m = (Marker) iterator.next();
                     m.removeChangeListener(this);
                 }
                 markers.clear();
             }
-        }
-        if (this.foregroundRangeMarkers != null) {
-            Collection markers
-                = (Collection) this.foregroundRangeMarkers.get(key);
-            if (markers != null) {
+    	}
+
+    	if(foregroundRangeMarkers != null) {
+            Collection markers = (Collection) foregroundRangeMarkers.get(key);
+            if(markers != null) {
                 Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
+                while(iterator.hasNext()) {
                     Marker m = (Marker) iterator.next();
                     m.removeChangeListener(this);
                 }
                 markers.clear();
             }
-        }
-        fireChangeEvent();
+    	}
+
+    	fireChangeEvent();
     }
 
     /**
@@ -2584,26 +2585,19 @@ public class XYPlot extends Plot implements
      *
      * @since 1.0.10
      */
-    public boolean removeRangeMarker(int index, Marker marker, Layer layer,
-            boolean notify) {
+    public boolean removeRangeMarker(int index, Marker marker, Layer layer, boolean notify) {
         Args.nullNotPermitted(marker, "marker");
         Args.nullNotPermitted(layer, "layer");
+
         List markers;
-        if (layer == Layer.FOREGROUND) {
-            markers = (List) this.foregroundRangeMarkers.get(
-                    new Integer(index));
-        }
-        else {
-            markers = (List) this.backgroundRangeMarkers.get(
-                    new Integer(index));
-        }
-        if (markers == null) {
-            return false;
-        }
+        if(layer == Layer.FOREGROUND) markers = (List) this.foregroundRangeMarkers.get(new Integer(index));
+        else markers = (List) this.backgroundRangeMarkers.get(new Integer(index));
+
+        if(markers == null) return false;
+
         boolean removed = markers.remove(marker);
-        if (removed && notify) {
-            fireChangeEvent();
-        }
+        if(removed && notify) fireChangeEvent();
+
         return removed;
     }
 
@@ -2631,11 +2625,11 @@ public class XYPlot extends Plot implements
      */
     public void addAnnotation(XYAnnotation annotation, boolean notify) {
         Args.nullNotPermitted(annotation, "annotation");
-        this.annotations.add(annotation);
+        
+        annotations.add(annotation);
         annotation.addChangeListener(this);
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -2666,11 +2660,11 @@ public class XYPlot extends Plot implements
      */
     public boolean removeAnnotation(XYAnnotation annotation, boolean notify) {
         Args.nullNotPermitted(annotation, "annotation");
-        boolean removed = this.annotations.remove(annotation);
+        
+        boolean removed = annotations.remove(annotation);
         annotation.removeChangeListener(this);
-        if (removed && notify) {
-            fireChangeEvent();
-        }
+        if(removed && notify) fireChangeEvent();
+        
         return removed;
     }
 
@@ -2683,9 +2677,9 @@ public class XYPlot extends Plot implements
      *
      * @see #addAnnotation(XYAnnotation)
      */
-    public List getAnnotations() {
-        return new ArrayList(this.annotations);
-    }
+	public List getAnnotations() {
+    	return new ArrayList(annotations);
+	}
 
     /**
      * Clears all the annotations and sends a {@link PlotChangeEvent} to all
@@ -2694,12 +2688,13 @@ public class XYPlot extends Plot implements
      * @see #addAnnotation(XYAnnotation)
      */
     public void clearAnnotations() {
-        for (XYAnnotation annotation : this.annotations) {
+    	for(XYAnnotation annotation : annotations) {
             annotation.removeChangeListener(this);
-        }
-        this.annotations.clear();
-        fireChangeEvent();
-    }
+    	}
+    	annotations.clear();
+
+    	fireChangeEvent();
+	}
 
     /**
      * Returns the shadow generator for the plot, if any.
@@ -2709,7 +2704,7 @@ public class XYPlot extends Plot implements
      * @since 1.0.14
      */
     public ShadowGenerator getShadowGenerator() {
-        return this.shadowGenerator;
+        return shadowGenerator;
     }
 
     /**
@@ -2721,7 +2716,8 @@ public class XYPlot extends Plot implements
      * @since 1.0.14
      */
     public void setShadowGenerator(ShadowGenerator generator) {
-        this.shadowGenerator = generator;
+    	shadowGenerator = generator;
+    	
         fireChangeEvent();
     }
 
@@ -2733,12 +2729,12 @@ public class XYPlot extends Plot implements
      *
      * @return The required space.
      */
-    protected AxisSpace calculateAxisSpace(Graphics2D g2,
-                                           Rectangle2D plotArea) {
+    protected AxisSpace calculateAxisSpace(Graphics2D g2, Rectangle2D plotArea) {
         AxisSpace space = new AxisSpace();
         space = calculateRangeAxisSpace(g2, plotArea, space);
         Rectangle2D revPlotArea = space.shrink(plotArea, null);
         space = calculateDomainAxisSpace(g2, revPlotArea, space);
+        
         return space;
     }
 
@@ -2751,41 +2747,31 @@ public class XYPlot extends Plot implements
      *
      * @return The required space.
      */
-    protected AxisSpace calculateDomainAxisSpace(Graphics2D g2, 
-            Rectangle2D plotArea, AxisSpace space) {
-
-        if (space == null) {
-            space = new AxisSpace();
-        }
+    protected AxisSpace calculateDomainAxisSpace(Graphics2D g2, Rectangle2D plotArea, AxisSpace space) {
+    	if(space == null) space = new AxisSpace();
 
         // reserve some space for the domain axis...
-        if (this.fixedDomainAxisSpace != null) {
-            if (this.orientation == PlotOrientation.HORIZONTAL) {
-                space.ensureAtLeast(this.fixedDomainAxisSpace.getLeft(),
-                        RectangleEdge.LEFT);
-                space.ensureAtLeast(this.fixedDomainAxisSpace.getRight(),
-                        RectangleEdge.RIGHT);
+        if(fixedDomainAxisSpace != null) {
+            if(orientation == PlotOrientation.HORIZONTAL) {
+                space.ensureAtLeast(fixedDomainAxisSpace.getLeft(), RectangleEdge.LEFT);
+                space.ensureAtLeast(fixedDomainAxisSpace.getRight(), RectangleEdge.RIGHT);
             }
-            else if (this.orientation == PlotOrientation.VERTICAL) {
-                space.ensureAtLeast(this.fixedDomainAxisSpace.getTop(),
-                        RectangleEdge.TOP);
-                space.ensureAtLeast(this.fixedDomainAxisSpace.getBottom(),
-                        RectangleEdge.BOTTOM);
+            else if(this.orientation == PlotOrientation.VERTICAL) {
+                space.ensureAtLeast(fixedDomainAxisSpace.getTop(), RectangleEdge.TOP);
+                space.ensureAtLeast(fixedDomainAxisSpace.getBottom(), RectangleEdge.BOTTOM);
             }
         }
         else {
-            // reserve space for the domain axes...
-            for (ValueAxis axis: this.domainAxes.values()) {
-                if (axis != null) {
-                    RectangleEdge edge = getDomainAxisEdge(
-                            findDomainAxisIndex(axis));
-                    space = axis.reserveSpace(g2, this, plotArea, edge, space);
+        	// reserve space for the domain axes...
+        	for(ValueAxis axis: domainAxes.values()) {
+        		if(axis != null) {
+        			RectangleEdge edge = getDomainAxisEdge(findDomainAxisIndex(axis));
+        			space = axis.reserveSpace(g2, this, plotArea, edge, space);
                 }
             }
         }
 
         return space;
-
     }
 
     /**
@@ -2797,41 +2783,32 @@ public class XYPlot extends Plot implements
      *
      * @return The required space.
      */
-    protected AxisSpace calculateRangeAxisSpace(Graphics2D g2, 
-            Rectangle2D plotArea, AxisSpace space) {
-
-        if (space == null) {
-            space = new AxisSpace();
-        }
+    protected AxisSpace calculateRangeAxisSpace(Graphics2D g2, Rectangle2D plotArea, AxisSpace space) {
+        if(space == null) space = new AxisSpace();
 
         // reserve some space for the range axis...
-        if (this.fixedRangeAxisSpace != null) {
-            if (this.orientation == PlotOrientation.HORIZONTAL) {
-                space.ensureAtLeast(this.fixedRangeAxisSpace.getTop(),
-                        RectangleEdge.TOP);
-                space.ensureAtLeast(this.fixedRangeAxisSpace.getBottom(),
-                        RectangleEdge.BOTTOM);
+        if(fixedRangeAxisSpace != null) {
+            if(orientation == PlotOrientation.HORIZONTAL) {
+                space.ensureAtLeast(fixedRangeAxisSpace.getTop(), RectangleEdge.TOP);
+                space.ensureAtLeast(fixedRangeAxisSpace.getBottom(), RectangleEdge.BOTTOM);
             }
-            else if (this.orientation == PlotOrientation.VERTICAL) {
-                space.ensureAtLeast(this.fixedRangeAxisSpace.getLeft(),
-                        RectangleEdge.LEFT);
-                space.ensureAtLeast(this.fixedRangeAxisSpace.getRight(),
-                        RectangleEdge.RIGHT);
+            else if(orientation == PlotOrientation.VERTICAL) {
+                space.ensureAtLeast(fixedRangeAxisSpace.getLeft(), RectangleEdge.LEFT);
+                space.ensureAtLeast(fixedRangeAxisSpace.getRight(), RectangleEdge.RIGHT);
             }
         }
         else {
             // reserve space for the range axes...
-            for (ValueAxis axis: this.rangeAxes.values()) {
-                if (axis != null) {
-                    RectangleEdge edge = getRangeAxisEdge(
-                            findRangeAxisIndex(axis));
+            for(ValueAxis axis: rangeAxes.values()) {
+                if(axis != null) {
+                    RectangleEdge edge = getRangeAxisEdge(findRangeAxisIndex(axis));
                     space = axis.reserveSpace(g2, this, plotArea, edge, space);
                 }
             }
         }
-        return space;
 
-    }
+        return space;
+	}
 
     /**
      * Trims a rectangle to integer coordinates.
@@ -2845,6 +2822,7 @@ public class XYPlot extends Plot implements
         int y0 = (int) Math.ceil(rect.getMinY());
         int x1 = (int) Math.floor(rect.getMaxX());
         int y1 = (int) Math.floor(rect.getMaxY());
+        
         return new Rectangle(x0, y0, (x1 - x0), (y1 - y0));
     }
 

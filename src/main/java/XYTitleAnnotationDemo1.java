@@ -31,11 +31,13 @@ public class XYTitleAnnotationDemo1 extends ApplicationFrame {
 	private static final long serialVersionUID = -5566169296574811475L;
 
     public XYTitleAnnotationDemo1(String title) {
-        super(title);
-        
-        ChartPanel chartPanel = (ChartPanel) createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
-        chartPanel.setMouseZoomable(true);
+    	super(title);
+
+    	ChartPanel chartPanel = (ChartPanel) createDemoPanel();
+    	
+    	chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
+    	chartPanel.setMouseZoomable(true);
+
         setContentPane(chartPanel);
     }
 
@@ -73,20 +75,22 @@ public class XYTitleAnnotationDemo1 extends ApplicationFrame {
         ta.setMaxWidth(0.48);
         plot.addAnnotation(ta);
 
+        /*
         XYItemRenderer r = plot.getRenderer();
         if(r instanceof XYLineAndShapeRenderer) {
-            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
+        	XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
     
             //renderer.setBaseShapesVisible(true);
             //renderer.setBaseShapesFilled(true);
         }
+        */
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
 
         ValueAxis yAxis = plot.getRangeAxis();
         yAxis.setLowerMargin(0.35);
-        
+
         return chart;
     }
 
