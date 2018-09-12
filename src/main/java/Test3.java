@@ -98,8 +98,11 @@ public class Test3 {
 		plot1.setDomainPannable(true);
 
 		plot1.setDomainCrosshairVisible(true);
+		plot1.setDomainCrosshairLockedOnData(true);
+		
 		plot1.setRangeCrosshairVisible(true);
 		//plot1.setRangeCrosshairValue(4000);
+		//plot1.setRangeC
 
 		plot1.setNoDataMessage("No data ...");
 

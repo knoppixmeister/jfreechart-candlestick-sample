@@ -1,16 +1,15 @@
-import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.InvalidObjectException;
+
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
@@ -29,6 +28,10 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.event.ChartProgressEvent;
+import org.jfree.chart.event.ChartProgressListener;
+import org.jfree.chart.labels.CrosshairLabelGenerator;
+import org.jfree.chart.labels.StandardCrosshairLabelGenerator;
 import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.Crosshair;
@@ -41,6 +44,7 @@ import org.jfree.chart.renderer.xy.CandlestickRenderer;
 import org.jfree.chart.ui.RectangleAnchor;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.chart.ui.TextAnchor;
+import org.jfree.chart.util.Args;
 import org.jfree.data.Range;
 import org.jfree.data.category.SlidingCategoryDataset;
 import org.jfree.data.general.DatasetChangeEvent;
@@ -52,14 +56,39 @@ import org.jfree.data.time.FixedMillisecond;
 import org.jfree.data.time.ohlc.OHLCItem;
 import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import com.fx.jfree.chart.candlestick.CustomHighLowItemLabelGenerator;
+import com.sun.jmx.snmp.Timestamp;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+
+class DateDomainCrossharLabelGenerator implements CrosshairLabelGenerator {
+	public String labelTextFormat;
+
+	public DateDomainCrossharLabelGenerator() {
+		this(" {0} ");
+	}
+	
+	public DateDomainCrossharLabelGenerator(String labelTextFormat) {
+		this.labelTextFormat = labelTextFormat;
+	}
+	
+	@Override
+	public String generateLabel(Crosshair crosshair) {
+		Args.nullNotPermitted(crosshair, "crosshair");
+
+		return	MessageFormat.format(
+									labelTextFormat,
+									DateTimeFormat.forPattern("dd-MM-YYYY HH:mm").print(new DateTime(Long.parseLong(((long)crosshair.getValue())+"")))
+								);
+	}
+}
 
 public class Test {
 	public static double oldPrice = 0;
@@ -85,36 +114,43 @@ public class Test {
 		JFrame fr = new JFrame("");
 		
 	//--------------------------------------------------------------------------------------------
-		/*
+		
 		CrosshairOverlay overlay = new CrosshairOverlay();
 
-		Crosshair crosshair1 = new Crosshair(0);
-		crosshair1.setPaint(Color.BLACK);
+		Crosshair domainCrosshair = new Crosshair(0);
+		
+		domainCrosshair.setPaint(Color.BLACK);
+		domainCrosshair.setLabelVisible(true);
+		domainCrosshair.setLabelPaint(Color.WHITE);
+		domainCrosshair.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+		domainCrosshair.setLabelBackgroundPaint(Color.decode("#4a4a4a"));
+		
+		//StandardCrosshairLabelGenerator sclg = new StandardCrosshairLabelGenerator("{0,date}", NumberFormat.getNumberInstance());
+		
+		domainCrosshair.setLabelGenerator(new DateDomainCrossharLabelGenerator());
+		
+		//((StandardCrosshairLabelGenerator)domainCrosshair.getLabelGenerator())
 
-		crosshair1.setLabelVisible(true);
-		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-		crosshair1.setLabelBackgroundPaint(Color.RED);
-
-		overlay.addDomainCrosshair(crosshair1);
+		overlay.addDomainCrosshair(domainCrosshair);
 
 		//-------------------------------------------------------
 
-		//SlidingCategoryDataset slidingDataset = new SlidingCategoryDataset(null, 0, 100);
-		
 		Crosshair crosshair2 = new Crosshair(0);
-		crosshair2.setPaint(Color.GRAY);
-
 		overlay.addRangeCrosshair(crosshair2);
 
+		crosshair2.setPaint(Color.GRAY);
+
 		crosshair2.setLabelVisible(true);
-		crosshair2.setStroke(new BasicStroke(1));
+		//crosshair2.setStroke(new BasicStroke(1));
 		crosshair2.setLabelOutlineVisible(true);
 		crosshair2.setLabelOutlinePaint(ChartColor.DARK_MAGENTA);
-		crosshair2.setLabelXOffset(10);
-		crosshair2.setLabelYOffset(20);
+		//crosshair2.setLabelXOffset(10);
+		//crosshair2.setLabelYOffset(20);
 		crosshair2.setLabelBackgroundPaint(Color.CYAN);//new Color(255, 255, 0, 100)
 		crosshair2.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
-		*/
+		//crosshair2.setValue(6340);
+
+	//---------------------------------------------------------------------------------------------------------------------
 
 		OHLCSeries series = new OHLCSeries("");
 
@@ -176,13 +212,15 @@ public class Test {
 		//plot.setRangeAxis(0, leftPriceAxis, true);
 		//plot.setRangeAxis(0, priceAxis, true);
 
+		/*
 		plot.setDomainCrosshairVisible(true);
 		plot.setDomainCrosshairPaint(ChartColor.GRAY);
 		plot.setDomainCrosshairLockedOnData(true);
 
-        plot.setRangeCrosshairVisible(true);
+		plot.setRangeCrosshairVisible(true);
         plot.setRangeCrosshairPaint(ChartColor.GRAY);
         plot.setRangeCrosshairLockedOnData(true);
+        */
 
 		//----------------------------------------------------------------------
 		ValueMarker priceLine = new ValueMarker(0);
@@ -215,12 +253,12 @@ public class Test {
 			@Override
 			public void datasetChanged(DatasetChangeEvent event) {
 				if(collection.getSeriesCount() == 0) return;
-				
+
 				OHLCSeries ser = collection.getSeries(0);
 				if(ser == null) return;
-				
+
 				double val = ((OHLCItem)ser.getDataItem(collection.getSeries(0).getItemCount()-1)).getYValue();
-				
+
 				if(val > oldPrice) {
 					priceLine.setLabelBackgroundColor(Color.decode("#238853"));
 					priceLine.setPaint(Color.decode("#238853"));
@@ -308,15 +346,28 @@ public class Test {
 		//--------------------------------------------------------------------------------------
 		
 		JFreeChart chart = new JFreeChart(plot);
+		chart.addProgressListener(new ChartProgressListener() {
+			@Override
+			public void chartProgress(ChartProgressEvent event) {
+				if(event.getPercent() < 100) {
+					crosshair2.setVisible(false);
+				}
+				else crosshair2.setVisible(true);
+
+				System.out.println("LOAD_PERC: "+event.getPercent());
+			}
+		});
 
 		chart.removeLegend();
 
 		ChartPanel panel = new ChartPanel(chart);
+		
+		panel.addOverlay(overlay);
 
 		panel.setRegularCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		
-		panel.setMinimumDrawWidth(0);
-		panel.setMinimumDrawHeight(0);
+		//panel.setMinimumDrawWidth(0);
+		//panel.setMinimumDrawHeight(0);
 
 		panel.setMouseZoomable(true);
 		panel.setMouseWheelEnabled(true);
@@ -353,11 +404,12 @@ public class Test {
 
 				double c = domainAxis.getLowerBound() + (percentX / 100.0) * range.getLength();
 
+				if(domainCrosshair.isVisible()) domainCrosshair.setValue(c);
+
 				//System.out.println("C: "+c);
 
-				plot.setDomainCrosshairValue(Double.valueOf(c));
+				//plot.setDomainCrosshairValue(Double.valueOf(c));
 
-				
 				double percentY = 100 - (event.getTrigger().getY()*100/rect2d.getHeight());
 				
 				ValueAxis priceAxis = plot.getRangeAxis();
@@ -365,9 +417,9 @@ public class Test {
 				
 				c = (priceAxis.getLowerBound() + (percentY / 100.0) * range2.getLength());
 				
-				//crosshair2.setValue(c);
+				crosshair2.setValue(c);
 				
-				plot.setRangeCrosshairValue(c);
+				//plot.setRangeCrosshairValue(c);
 				
 				//panel.repaint();
 			}
@@ -376,8 +428,6 @@ public class Test {
 			public void chartMouseClicked(ChartMouseEvent event) {
 			}
 		});
-
-		//panel.addOverlay(overlay);
 
 		//fr.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -401,6 +451,10 @@ public class Test {
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setVisible(true);
 
+		
+		
+		
+		
 		/*
 		new Thread(new Runnable() {
 			@Override

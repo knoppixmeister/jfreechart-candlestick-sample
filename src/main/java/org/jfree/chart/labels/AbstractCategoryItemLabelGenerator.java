@@ -1,49 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------------------------
- * AbstractCategoryItemLabelGenerator.java
- * ---------------------------------------
- * (C) Copyright 2005-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 11-May-2004 : Version 1, distilled from StandardCategoryLabelGenerator (DG);
- * 31-Jan-2005 : Added methods to return row and column labels (DG);
- * 17-May-2005 : Added percentage to item array (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 03-May-2006 : Added new constructor (DG);
- * 23-Nov-2007 : Implemented hashCode() (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.labels;
 
 import java.io.Serializable;
@@ -63,10 +17,7 @@ import org.jfree.data.category.CategoryDataset;
  * can be assigned to a
  * {@link org.jfree.chart.renderer.category.CategoryItemRenderer}.
  */
-public abstract class AbstractCategoryItemLabelGenerator
-        implements PublicCloneable, Cloneable, Serializable {
-
-    /** For serialization. */
+public abstract class AbstractCategoryItemLabelGenerator implements PublicCloneable, Cloneable, Serializable {
     private static final long serialVersionUID = -7108591260223293197L;
 
     /**
@@ -104,8 +55,7 @@ public abstract class AbstractCategoryItemLabelGenerator
      *                     permitted).
      * @param formatter  the number formatter ({@code null} not permitted).
      */
-    protected AbstractCategoryItemLabelGenerator(String labelFormat,
-                                                 NumberFormat formatter) {
+    protected AbstractCategoryItemLabelGenerator(String labelFormat, NumberFormat formatter) {
         this(labelFormat, formatter, NumberFormat.getPercentInstance());
     }
 
@@ -120,16 +70,16 @@ public abstract class AbstractCategoryItemLabelGenerator
      *
      * @since 1.0.2
      */
-    protected AbstractCategoryItemLabelGenerator(String labelFormat,
-            NumberFormat formatter, NumberFormat percentFormatter) {
+    protected AbstractCategoryItemLabelGenerator(String labelFormat, NumberFormat formatter, NumberFormat percentFormatter) {
         Args.nullNotPermitted(labelFormat, "labelFormat");
         Args.nullNotPermitted(formatter, "formatter");
         Args.nullNotPermitted(percentFormatter, "percentFormatter");
+        
         this.labelFormat = labelFormat;
-        this.numberFormat = formatter;
-        this.percentFormat = percentFormatter;
-        this.dateFormat = null;
-        this.nullValueString = "-";
+        numberFormat = formatter;
+        percentFormat = percentFormatter;
+        dateFormat = null;
+        nullValueString = "-";
     }
 
     /**
@@ -139,15 +89,15 @@ public abstract class AbstractCategoryItemLabelGenerator
      *                     permitted).
      * @param formatter  the date formatter ({@code null} not permitted).
      */
-    protected AbstractCategoryItemLabelGenerator(String labelFormat,
-            DateFormat formatter) {
+    protected AbstractCategoryItemLabelGenerator(String labelFormat, DateFormat formatter) {
         Args.nullNotPermitted(labelFormat, "labelFormat");
         Args.nullNotPermitted(formatter, "formatter");
+        
         this.labelFormat = labelFormat;
-        this.numberFormat = null;
-        this.percentFormat = NumberFormat.getPercentInstance();
-        this.dateFormat = formatter;
-        this.nullValueString = "-";
+        numberFormat = null;
+        percentFormat = NumberFormat.getPercentInstance();
+        dateFormat = formatter;
+        nullValueString = "-";
     }
 
     /**
@@ -159,7 +109,7 @@ public abstract class AbstractCategoryItemLabelGenerator
      * @return The label.
      */
     public String generateRowLabel(CategoryDataset dataset, int row) {
-        return dataset.getRowKey(row).toString();
+    	return dataset.getRowKey(row).toString();
     }
 
     /**
@@ -180,7 +130,7 @@ public abstract class AbstractCategoryItemLabelGenerator
      * @return The label format string (never {@code null}).
      */
     public String getLabelFormat() {
-        return this.labelFormat;
+        return labelFormat;
     }
 
     /**
@@ -189,7 +139,7 @@ public abstract class AbstractCategoryItemLabelGenerator
      * @return The number formatter (possibly {@code null}).
      */
     public NumberFormat getNumberFormat() {
-        return this.numberFormat;
+        return numberFormat;
     }
 
     /**
@@ -198,7 +148,7 @@ public abstract class AbstractCategoryItemLabelGenerator
      * @return The date formatter (possibly {@code null}).
      */
     public DateFormat getDateFormat() {
-        return this.dateFormat;
+        return dateFormat;
     }
 
     /**
@@ -210,14 +160,14 @@ public abstract class AbstractCategoryItemLabelGenerator
      *
      * @return The label (possibly {@code null}).
      */
-    protected String generateLabelString(CategoryDataset dataset,
-                                         int row, int column) {
+    protected String generateLabelString(CategoryDataset dataset, int row, int column) {
         Args.nullNotPermitted(dataset, "dataset");
+        
         String result;
         Object[] items = createItemArray(dataset, row, column);
-        result = MessageFormat.format(this.labelFormat, items);
+        result = MessageFormat.format(labelFormat, items);
+        
         return result;
-
     }
 
     /**
@@ -230,32 +180,39 @@ public abstract class AbstractCategoryItemLabelGenerator
      *
      * @return The items (never {@code null}).
      */
-    protected Object[] createItemArray(CategoryDataset dataset,
-                                       int row, int column) {
-        Object[] result = new Object[4];
-        result[0] = dataset.getRowKey(row).toString();
-        result[1] = dataset.getColumnKey(column).toString();
-        Number value = dataset.getValue(row, column);
-        if (value != null) {
-            if (this.numberFormat != null) {
-                result[2] = this.numberFormat.format(value);
-            }
-            else if (this.dateFormat != null) {
-                result[2] = this.dateFormat.format(value);
-            }
+    protected Object[] createItemArray(CategoryDataset dataset, int row, int column) {
+    	Object[] result = new Object[4];
+    	result[0] = dataset.getRowKey(row).toString();
+    	result[1] = dataset.getColumnKey(column).toString();
+    	Number value = dataset.getValue(row, column);
+    	
+    	if(value != null) {
+            if(numberFormat != null) result[2] = numberFormat.format(value);
+            else if(dateFormat != null) result[2] = dateFormat.format(value);
         }
-        else {
-            result[2] = this.nullValueString;
-        }
-        if (value != null) {
+        else result[2] = nullValueString;
+
+        if(value != null) {
             double total = DataUtils.calculateColumnTotal(dataset, column);
             double percent = value.doubleValue() / total;
-            result[3] = this.percentFormat.format(percent);
+            result[3] = percentFormat.format(percent);
         }
 
         return result;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this object for equality with an arbitrary object.
      *

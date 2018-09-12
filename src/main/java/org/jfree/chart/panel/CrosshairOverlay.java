@@ -305,7 +305,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     	//System.out.println("vert: X: "+x+"; DA_minX: "+dataArea.getMinX()+"; DA_maxX: "+dataArea.getMaxX());
     	
         if(x >= dataArea.getMinX() && x <= dataArea.getMaxX()) {
-        	System.out.println("OVERLAY_111");
+        	//System.out.println("OVERLAY_111");
         	
             Line2D line = new Line2D.Double(x, dataArea.getMinY(), x, dataArea.getMaxY());
             Paint savedPaint = g2.getPaint();
@@ -313,9 +313,9 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
             g2.setPaint(crosshair.getPaint());
             g2.setStroke(crosshair.getStroke());
             g2.draw(line);
-            
+
             if(crosshair.isLabelVisible()) {
-            	System.out.println("OVERLAY_2222");
+            	//System.out.println("OVERLAY_2222");
             	
                 Font savedFont = g2.getFont();
                 g2.setFont(crosshair.getLabelFont());

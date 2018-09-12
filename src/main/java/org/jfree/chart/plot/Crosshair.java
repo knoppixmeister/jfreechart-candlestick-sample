@@ -118,7 +118,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
     public Crosshair(double value, Paint paint, Stroke stroke) {
         Args.nullNotPermitted(paint, "paint");
         Args.nullNotPermitted(stroke, "stroke");
-        
+
         visible = true;
         this.value = value;
         this.paint = paint;
@@ -136,7 +136,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         labelOutlineStroke = new BasicStroke(0.5f);
         
         pcs = new PropertyChangeSupport(this);
-    }
+	}
 
     /**
      * Returns the flag that indicates whether or not the crosshair is
@@ -299,6 +299,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         
         CrosshairLabelGenerator old = labelGenerator;
         labelGenerator = generator;
+        
         pcs.firePropertyChange("labelGenerator", old, generator);
     }
 

@@ -1,46 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------------------------
- * StandardCategoryItemLabelGenerator.java
- * ---------------------------------------
- * (C) Copyright 2004-2008, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 11-May-2004 : Version 1 (DG);
- * 20-Apr-2005 : Renamed StandardCategoryLabelGenerator
- *               --> StandardCategoryItemLabelGenerator (DG);
- * ------------- JFREECHART 1.0.0 ---------------------------------------------
- * 03-May-2005 : Added equals() implementation, to fix bug 1481087 (DG);
- */
-
 package org.jfree.chart.labels;
 
 import java.io.Serializable;
@@ -54,12 +11,12 @@ import org.jfree.data.category.CategoryDataset;
  * A standard label generator that can be used with a
  * {@link org.jfree.chart.renderer.category.CategoryItemRenderer}.
  */
-public class StandardCategoryItemLabelGenerator
-    extends AbstractCategoryItemLabelGenerator
-    implements CategoryItemLabelGenerator, Cloneable, PublicCloneable,
-               Serializable {
-
-    /** For serialization. */
+public class StandardCategoryItemLabelGenerator extends AbstractCategoryItemLabelGenerator implements
+	CategoryItemLabelGenerator,
+	Cloneable,
+	PublicCloneable,
+	Serializable
+{
     private static final long serialVersionUID = 3499701401211412882L;
 
     /** The default format string. */
@@ -79,9 +36,8 @@ public class StandardCategoryItemLabelGenerator
      *                     permitted).
      * @param formatter  the number formatter ({@code null} not permitted).
      */
-    public StandardCategoryItemLabelGenerator(String labelFormat,
-                                              NumberFormat formatter) {
-        super(labelFormat, formatter);
+    public StandardCategoryItemLabelGenerator(String labelFormat, NumberFormat formatter) {
+    	super(labelFormat, formatter);
     }
 
     /**
@@ -95,9 +51,8 @@ public class StandardCategoryItemLabelGenerator
      *
      * @since 1.0.2
      */
-    public StandardCategoryItemLabelGenerator(String labelFormat,
-            NumberFormat formatter, NumberFormat percentFormatter) {
-        super(labelFormat, formatter, percentFormatter);
+    public StandardCategoryItemLabelGenerator(String labelFormat, NumberFormat formatter, NumberFormat percentFormatter) {
+    	super(labelFormat, formatter, percentFormatter);
     }
 
     /**
@@ -107,9 +62,8 @@ public class StandardCategoryItemLabelGenerator
      *                     permitted).
      * @param formatter  the date formatter ({@code null} not permitted).
      */
-    public StandardCategoryItemLabelGenerator(String labelFormat,
-                                              DateFormat formatter) {
-        super(labelFormat, formatter);
+    public StandardCategoryItemLabelGenerator(String labelFormat, DateFormat formatter) {
+    	super(labelFormat, formatter);
     }
 
     /**
@@ -125,9 +79,23 @@ public class StandardCategoryItemLabelGenerator
      */
     @Override
     public String generateLabel(CategoryDataset dataset, int row, int column) {
-        return generateLabelString(dataset, row, column);
+    	return generateLabelString(dataset, row, column);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this generator for equality with an arbitrary object.
      *

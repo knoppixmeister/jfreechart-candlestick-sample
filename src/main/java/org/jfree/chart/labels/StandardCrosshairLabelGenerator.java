@@ -1,15 +1,12 @@
 package org.jfree.chart.labels;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
-import java.text.NumberFormat;
+import java.text.*;
 import org.jfree.chart.plot.Crosshair;
-//import com.orsonpdf.util.Args;
+import org.jfree.chart.util.Args;
 
 /**
  * A default label generator.
- *
- * @since 1.0.13
  */
 public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator, Serializable {
 	private static final long serialVersionUID = -3759646778571809347L;
@@ -24,7 +21,7 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      * Creates a new instance with default attributes.
      */
     public StandardCrosshairLabelGenerator() {
-        this("{0}", NumberFormat.getNumberInstance());
+    	this("{0}", NumberFormat.getNumberInstance());
     }
 
     /**
@@ -55,7 +52,7 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      * @return The label template string (never {@code null}).
      */
     public String getLabelTemplate() {
-        return this.labelTemplate;
+        return labelTemplate;
     }
 
     /**
@@ -76,11 +73,37 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      */
     @Override
     public String generateLabel(Crosshair crosshair) {
-    	//Args.nullNotPermitted(crosshair, "crosshair");
+    	Args.nullNotPermitted(crosshair, "crosshair");
 
-    	return " "+MessageFormat.format(labelTemplate, new Object[] {numberFormat.format(crosshair.getValue())})+" ";
+    	return MessageFormat.format(
+								labelTemplate,
+								new Object[] {
+									numberFormat.format(crosshair.getValue())
+								}
+    						);
 	}
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this generator for equality with an arbitrary object.
      * 
@@ -114,6 +137,6 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      */
     @Override
     public int hashCode() {
-        return this.labelTemplate.hashCode();
+        return labelTemplate.hashCode();
     }
 }
