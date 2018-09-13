@@ -90,8 +90,7 @@ import org.jfree.data.Range;
 /**
  * A combined category plot where the domain axis is shared.
  */
-public class CombinedDomainCategoryPlot extends CategoryPlot
-        implements PlotChangeListener {
+public class CombinedDomainCategoryPlot extends CategoryPlot implements PlotChangeListener {
 
     /** For serialization. */
     private static final long serialVersionUID = 8207194522653701572L;
