@@ -33,17 +33,17 @@ public class StandardCrosshairLabelGenerator implements CrosshairLabelGenerator,
      *     permitted).
      */
     public StandardCrosshairLabelGenerator(String labelTemplate, NumberFormat numberFormat) {
-        super();
-        
-        if(labelTemplate == null) {
+    	super();
+
+    	if(labelTemplate == null) {
             throw new IllegalArgumentException("Null 'labelTemplate' argument.");
-        }
-        if(numberFormat == null) {
+    	}
+    	if(numberFormat == null) {
             throw new IllegalArgumentException("Null 'numberFormat' argument.");
-        }
-        
-        this.labelTemplate = labelTemplate;
-        this.numberFormat = numberFormat;
+    	}
+
+    	this.labelTemplate = labelTemplate;
+    	this.numberFormat = numberFormat;
     }
 
     /**
