@@ -1,52 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------------
- * ChartRenderingInfo.java
- * -----------------------
- * (C) Copyright 2002-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 22-Jan-2002 : Version 1 (DG);
- * 05-Feb-2002 : Added a new constructor, completed Javadoc comments (DG);
- * 05-Mar-2002 : Added a clear() method (DG);
- * 23-May-2002 : Renamed DrawInfo --> ChartRenderingInfo (DG);
- * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 17-Sep-2003 : Added PlotRenderingInfo (DG);
- * 01-Nov-2005 : Updated equals() method (DG);
- * 30-Nov-2005 : Removed get/setPlotArea() (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 01-Dec-2006 : Fixed equals() and clone() (DG);
- *
- */
-
 package org.jfree.chart;
 
 import java.awt.geom.Rectangle2D;
@@ -76,8 +27,6 @@ import org.jfree.chart.util.SerialUtils;
  * {@code ChartRenderingInfo} class.
  */
 public class ChartRenderingInfo implements Cloneable, Serializable {
-
-    /** For serialization. */
     private static final long serialVersionUID = 2751952018173406822L;
 
     /** The area in which the chart is drawn. */
@@ -111,9 +60,9 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @param entities  an entity collection ({@code null} permitted).
      */
     public ChartRenderingInfo(EntityCollection entities) {
-        this.chartArea = new Rectangle2D.Double();
-        this.plotInfo = new PlotRenderingInfo(this);
-        this.entities = entities;
+    	chartArea 		= new Rectangle2D.Double();
+    	plotInfo 		= new PlotRenderingInfo(this);
+    	this.entities 	= entities;
     }
 
     /**
@@ -124,7 +73,7 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @see #setChartArea(Rectangle2D)
      */
     public Rectangle2D getChartArea() {
-        return this.chartArea;
+        return chartArea;
     }
 
     /**
@@ -135,7 +84,7 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @see #getChartArea()
      */
     public void setChartArea(Rectangle2D area) {
-        this.chartArea.setRect(area);
+    	chartArea.setRect(area);
     }
 
     /**
@@ -146,7 +95,7 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @see #setEntityCollection(EntityCollection)
      */
     public EntityCollection getEntityCollection() {
-        return this.entities;
+        return entities;
     }
 
     /**
@@ -164,11 +113,9 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * Clears the information recorded by this object.
      */
     public void clear() {
-        this.chartArea.setRect(0.0, 0.0, 0.0, 0.0);
-        this.plotInfo = new PlotRenderingInfo(this);
-        if (this.entities != null) {
-            this.entities.clear();
-        }
+    	chartArea.setRect(0.0, 0.0, 0.0, 0.0);
+    	plotInfo = new PlotRenderingInfo(this);
+        if(entities != null) entities.clear();
     }
 
     /**
@@ -177,9 +124,26 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @return The rendering info for the plot.
      */
     public PlotRenderingInfo getPlotInfo() {
-        return this.plotInfo;
+        return plotInfo;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this object for equality with an arbitrary object.
      *
@@ -218,13 +182,14 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         ChartRenderingInfo clone = (ChartRenderingInfo) super.clone();
-        if (this.chartArea != null) {
+        if(chartArea != null) {
             clone.chartArea = (Rectangle2D) this.chartArea.clone();
         }
-        if (this.entities instanceof PublicCloneable) {
+        if(entities instanceof PublicCloneable) {
             PublicCloneable pc = (PublicCloneable) this.entities;
             clone.entities = (EntityCollection) pc.clone();
         }
+        
         return clone;
     }
 
@@ -237,7 +202,8 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      */
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        SerialUtils.writeShape(this.chartArea, stream);
+        
+        SerialUtils.writeShape(chartArea, stream);
     }
 
     /**
@@ -248,10 +214,8 @@ public class ChartRenderingInfo implements Cloneable, Serializable {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.chartArea = (Rectangle2D) SerialUtils.readShape(stream);
+        chartArea = (Rectangle2D) SerialUtils.readShape(stream);
     }
-
 }

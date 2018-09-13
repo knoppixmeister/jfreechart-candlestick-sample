@@ -474,8 +474,14 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public void panRangeAxes(double panRange, PlotRenderingInfo info, Point2D source) {
+    	System.out.println("COMB_PANN");
+
     	XYPlot subplot = findSubplot(info, source);
-    	if(subplot == null) return;
+    	if(subplot == null) {
+    		System.out.println("NO_PLOTTT");
+
+    		return;
+    	}
 
     	if(!subplot.isRangePannable()) return;
 
@@ -498,15 +504,18 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      * @return A subplot (possibly {@code null}).
      */
     public XYPlot findSubplot(PlotRenderingInfo info, Point2D source) {
-        Args.nullNotPermitted(info, "info");
-        Args.nullNotPermitted(source, "source");
-        
-        XYPlot result = null;
-        int subplotIndex = info.getSubplotIndex(source);
-        if(subplotIndex >= 0) result =  (XYPlot)subplots.get(subplotIndex);
-        
-        return result;
-    }
+    	Args.nullNotPermitted(info, "info");
+    	Args.nullNotPermitted(source, "source");
+
+    	XYPlot result = null;
+    	int subplotIndex = info.getSubplotIndex(source);
+    	
+    	System.out.println("SBP_IDX: "+subplotIndex);
+    	
+    	if(subplotIndex >= 0) result = (XYPlot) subplots.get(subplotIndex);
+
+    	return result;
+	}
 
     /**
      * Sets the item renderer FOR ALL SUBPLOTS.  Registered listeners are

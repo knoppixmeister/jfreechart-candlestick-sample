@@ -139,18 +139,24 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
      *
      * @return The subplot index (or -1 if no subplot contains {@code source}).
      */
-    public int getSubplotIndex(Point2D source) {
-    	Args.nullNotPermitted(source, "source");
+	public int getSubplotIndex(Point2D source) {
+		Args.nullNotPermitted(source, "source");
 
-    	int subplotCount = getSubplotCount();
-        for(int i = 0; i<subplotCount; i++) {
-        	PlotRenderingInfo info = getSubplotInfo(i);
-            Rectangle2D area = info.getDataArea();
-            if(area.contains(source)) return i;
-        }
+		int subplotCount = getSubplotCount();
+		for(int i=0; i<subplotCount; i++) {
+        	//PlotRenderingInfo info = getSubplotInfo(i);
+    		Rectangle2D area = getSubplotInfo(i).getDataArea();
 
-        return -1;
-    }
+    		System.out.println("");
+    		System.out.println("SRC_X: "+source.getX()+"; _Y: "+source.getY());
+    		System.out.println("AREA_X: "+area.getX()+"; AREA_WIDTH: "+area.getWidth());
+    		System.out.println("");
+
+    		if(area.contains(source)) return i;
+		}
+
+		return -1;
+	}
 
     
     

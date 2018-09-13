@@ -1712,8 +1712,8 @@ public class ChartPanel extends JPanel implements
      *
      * @param e  the mouse event.
      */
-    @Override
-    public void mouseDragged(MouseEvent e) {
+	@Override
+	public void mouseDragged(MouseEvent e) {
     	System.out.println("M_DRG");
 
     	//if the popup menu has already been triggered, then ignore dragging...
@@ -1738,10 +1738,12 @@ public class ChartPanel extends JPanel implements
 
             Pannable p = (Pannable)chart.getPlot();
             if(p.getOrientation() == PlotOrientation.VERTICAL) {
-            	System.out.println("VERT");
-            	
-                p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
-                p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
+            	System.out.println("VERT_ORIENT. H_PERC: "+hPercent);
+
+            	System.out.println("PAN_LAST: "+panLast.getX());
+
+            	//p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
+            	//p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
             /*
             else {
@@ -1760,7 +1762,7 @@ public class ChartPanel extends JPanel implements
 
     		Zoomable zoomable = (Zoomable)getChart().getPlot();
 			PlotRenderingInfo plotRenderingInfo = getChartRenderingInfo().getPlotInfo();
-   
+
     		if(panRangeAxisLast != null) {
     			System.out.println("PAN RANGE AXIS");
     			

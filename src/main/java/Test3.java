@@ -44,7 +44,7 @@ public class Test3 {
 		chOverlay.addRangeCrosshair(crosshair2);
 		*/
 
-	//-----------------------------------------------------------
+	//--------------------------------------------------------------------------------------------
 
 		OHLCSeriesCollection collection = new OHLCSeriesCollection();
 		OHLCSeries series = new OHLCSeries("");
@@ -163,10 +163,10 @@ public class Test3 {
 		//combinedPlot.setInsets(new RectangleInsets(-20, -10, 0, -10));
 
 		//combinedPlot.setDomainCrosshairVisible(true);
-		
-		//combinedPlot.setDomainPannable(true);
-		//combinedPlot.setRangePannable(true);
-		
+
+		combinedPlot.setDomainPannable(true);
+		combinedPlot.setRangePannable(true);
+
 		combinedPlot.add(plot1, 5);
 		combinedPlot.add(plot2, 1);
 		combinedPlot.add(plot3, 1);
