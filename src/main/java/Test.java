@@ -188,11 +188,13 @@ public class Test {
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
 			3,		//CandlestickRenderer.WIDTHMETHOD_AVERAGE,
 			true,	
-			//null
+			null
+			/*
 			new CustomHighLowItemLabelGenerator(
 				new SimpleDateFormat("kk:mm"),
 				new DecimalFormat("0.0")
 			)
+			*/
 		);
 
 		//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"));
@@ -356,7 +358,7 @@ public class Test {
 				}
 				else crosshair2.setVisible(true);
 
-				System.out.println("LOAD_PERC: "+event.getPercent());
+				//System.out.println("LOAD_PERC: "+event.getPercent());
 			}
 		});
 
@@ -378,7 +380,7 @@ public class Test {
 		b.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("BTN_CLK");
+				//System.out.println("BTN_CLK");
 			}
 		});
 		panel.add(b);
@@ -430,6 +432,8 @@ public class Test {
 			public void chartMouseClicked(ChartMouseEvent event) {
 			}
 		});
+		panel.setRefreshBuffer(true);
+		panel.setDoubleBuffered(true);
 
 		//fr.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -506,6 +510,7 @@ public class Test {
 		//https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=10000
 		//https://min-api.cryptocompare.com/data/histohour?fsym=BTC&tsym=USD&limit=10000
 
+		/*
 		client.newCall(new Request.Builder().url("https://min-api.cryptocompare.com/data/histohour?fsym=BTC&tsym=USD&limit=10000").build()).enqueue(new Callback() {
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
@@ -516,10 +521,10 @@ public class Test {
 				JsonAdapter<CCResponse> jsonAdapter = moshi.adapter(CCResponse.class);
 				CCResponse resp = jsonAdapter.fromJson(json);
 
-				System.out.println(json);
-				System.out.println("");
+				//System.out.println(json);
+				//System.out.println("");
 
-				System.out.println(	"Len: "+resp.Data.get(0).close	);
+				//System.out.println(	"Len: "+resp.Data.get(0).close	);
 
 				OHLCSeries ser = new OHLCSeries("");
 				for(int i=0; i<resp.Data.size(); i++) {
@@ -545,8 +550,9 @@ public class Test {
 				e.printStackTrace();
 			}
 		});
+		*/
 
-		/*
+		
 		client.newWebSocket(
 			new Request.Builder().url("wss://api.bitfinex.com/ws/2")
 								//.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_5m")
@@ -554,7 +560,7 @@ public class Test {
 			new BFWebSocketListener(collection)
 			//new BNWebSocketListener()
 		);
-		*/
+		
 
 		//---------------------------------------------------------------------------------------------------------------
 	}

@@ -1,51 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ------------------------
- * XYItemRendererState.java
- * ------------------------
- * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Ulrich Voigt;
- *                   Greg Darke;
- *
- * Changes:
- * --------
- * 07-Oct-2003 : Version 1 (DG);
- * 27-Jan-2004 : Added workingLine attribute (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 04-May-2007 : Added processVisibleItemsOnly flag (DG);
- * 09-Jul-2008 : Added start/endSeriesPass() methods - see patch 1997549 by
- *               Ulrich Voigt (DG);
- * 19-Sep-2008 : Added first and last item indices, based on patch by Greg
- *               Darke (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.geom.Line2D;
@@ -59,7 +11,6 @@ import org.jfree.data.xy.XYDataset;
  * The state for an {@link XYItemRenderer}.
  */
 public class XYItemRendererState extends RendererState {
-
     /**
      * The first item in the series that will be displayed.
      *
@@ -95,8 +46,9 @@ public class XYItemRendererState extends RendererState {
      */
     public XYItemRendererState(PlotRenderingInfo info) {
         super(info);
-        this.workingLine = new Line2D.Double();
-        this.processVisibleItemsOnly = true;
+        
+        workingLine 			= new Line2D.Double();
+        processVisibleItemsOnly = true;
     }
 
     /**
@@ -111,7 +63,7 @@ public class XYItemRendererState extends RendererState {
      * @see #setProcessVisibleItemsOnly(boolean)
      */
     public boolean getProcessVisibleItemsOnly() {
-        return this.processVisibleItemsOnly;
+        return processVisibleItemsOnly;
     }
 
     /**
@@ -123,7 +75,7 @@ public class XYItemRendererState extends RendererState {
      * @since 1.0.6
      */
     public void setProcessVisibleItemsOnly(boolean flag) {
-        this.processVisibleItemsOnly = flag;
+    	processVisibleItemsOnly = flag;
     }
 
     /**
@@ -135,7 +87,7 @@ public class XYItemRendererState extends RendererState {
      * @since 1.0.11
      */
     public int getFirstItemIndex() {
-        return this.firstItemIndex;
+        return firstItemIndex;
     }
 
     /**
@@ -147,7 +99,7 @@ public class XYItemRendererState extends RendererState {
      * @since 1.0.11
      */
     public int getLastItemIndex() {
-        return this.lastItemIndex;
+        return lastItemIndex;
     }
 
     /**
@@ -167,10 +119,9 @@ public class XYItemRendererState extends RendererState {
      *
      * @since 1.0.11
      */
-    public void startSeriesPass(XYDataset dataset, int series, int firstItem,
-            int lastItem, int pass, int passCount) {
-        this.firstItemIndex = firstItem;
-        this.lastItemIndex = lastItem;
+    public void startSeriesPass(XYDataset dataset, int series, int firstItem, int lastItem, int pass, int passCount) {
+    	firstItemIndex = firstItem;
+        lastItemIndex = lastItem;
     }
 
     /**
@@ -190,9 +141,7 @@ public class XYItemRendererState extends RendererState {
      *
      * @since 1.0.11
      */
-    public void endSeriesPass(XYDataset dataset, int series, int firstItem,
-            int lastItem, int pass, int passCount) {
+    public void endSeriesPass(XYDataset dataset, int series, int firstItem, int lastItem, int pass, int passCount) {
         // do nothing...this is just a hook for subclasses
     }
-
 }

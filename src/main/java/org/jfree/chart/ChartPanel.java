@@ -1598,8 +1598,8 @@ public class ChartPanel extends JPanel implements
 
         System.out.println("MOUSE_PRESS");
 
-        System.out.println("IS_RGT_MOUSE: "+SwingUtilities.isRightMouseButton(e));
-        System.out.println("POPUP_TRG: "+e.isPopupTrigger());
+        //System.out.println("IS_RGT_MOUSE: "+SwingUtilities.isRightMouseButton(e));
+        //System.out.println("POPUP_TRG: "+e.isPopupTrigger());
 
         if(SwingUtilities.isRightMouseButton(e)) {//&& e.isPopupTrigger()
         	if(popup != null) displayPopupMenu(e.getX(), e.getY());
@@ -1607,7 +1607,7 @@ public class ChartPanel extends JPanel implements
         else {
 
         //if((mods & panMask) == panMask) {
-        	System.out.println("PANN_YYYY");
+        	System.out.println("PAN_START");
 
         	//can we pan this plot?
         	if(plot instanceof Pannable) {
@@ -1714,13 +1714,13 @@ public class ChartPanel extends JPanel implements
      */
 	@Override
 	public void mouseDragged(MouseEvent e) {
-    	System.out.println("M_DRG");
+		System.out.println("M_DRG");
 
-    	//if the popup menu has already been triggered, then ignore dragging...
-    	if(popup != null && popup.isShowing()) return;
+		//if the popup menu has already been triggered, then ignore dragging...
+		if(popup != null && popup.isShowing()) return;
 
-    	//handle panning if we have a start point
-    	if(panLast != null) {
+		//handle panning if we have a start point
+		if(panLast != null) {
     		System.out.println("PAN_LAST");
 
     		setCursor(moveCursor);
@@ -1728,11 +1728,11 @@ public class ChartPanel extends JPanel implements
     		double dx = e.getX() - panLast.getX();
     		double dy = e.getY() - panLast.getY();
 
-        	if(dx == 0.0 && dy == 0.0) return;
+    		if(dx == 0.0 && dy == 0.0) return;
 
-        	double wPercent	=	-dx / panW;
-        	double hPercent	=	dy / panH;
-        	boolean old 	=	chart.getPlot().isNotify();
+    		double wPercent	=	-dx / panW;
+    		double hPercent	=	dy / panH;
+    		boolean old 	=	chart.getPlot().isNotify();
 
             chart.getPlot().setNotify(false);
 
@@ -1742,7 +1742,7 @@ public class ChartPanel extends JPanel implements
 
             	System.out.println("PAN_LAST: "+panLast.getX());
 
-            	//p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
+            	p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
             	p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
             /*
@@ -1804,7 +1804,7 @@ public class ChartPanel extends JPanel implements
     			
     			if(dx > 0) {
     				zoomable.zoomDomainAxes(
-    					0.95,
+    					1.05 ,
     					plotRenderingInfo,
     					null,
     					false
@@ -1812,7 +1812,7 @@ public class ChartPanel extends JPanel implements
     			}
     			else {
     				zoomable.zoomDomainAxes(
-    					1.05,
+    					0.95,
     					plotRenderingInfo,
     					null,
     					false

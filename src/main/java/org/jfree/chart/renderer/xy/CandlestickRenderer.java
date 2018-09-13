@@ -44,7 +44,6 @@ import org.jfree.data.xy.XYDataset;
  * This renderer does not include code to calculate the crosshair point for the
  * plot.
  */
-
 public class CandlestickRenderer extends AbstractXYItemRenderer implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = 50390395841817121L;
 
@@ -150,12 +149,12 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
 
         setDefaultToolTipGenerator(toolTipGenerator);
 
-        this.candleWidth		=	candleWidth;
-        this.drawVolume			=	drawVolume;
-        this.volumePaint		=	Color.GRAY;
-        this.upPaint 			=	Color.GREEN;
-        this.downPaint			=	Color.RED;
-        this.useOutlinePaint	=	false;  // false preserves the old behaviour
+        this.candleWidth	=	candleWidth;
+        this.drawVolume		=	drawVolume;
+        volumePaint			=	Color.GRAY;
+        upPaint 			=	Color.GREEN;
+        downPaint			=	Color.RED;
+        useOutlinePaint		=	false;  // false preserves the old behaviour
                                        		// prior to introducing this flag
     }
 
@@ -391,7 +390,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #setDrawVolume(boolean)
      */
     public boolean getDrawVolume() {
-        return this.drawVolume;
+        return drawVolume;
     }
 
     /**
@@ -404,8 +403,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      * @see #getDrawVolume()
      */
     public void setDrawVolume(boolean flag) {
-    	if(this.drawVolume != flag) {
-            this.drawVolume = flag;
+    	if(drawVolume != flag) {
+    		drawVolume = flag;
             
             fireChangeEvent();
     	}
@@ -439,7 +438,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
 	public void setVolumePaint(Paint paint) {
     	Args.nullNotPermitted(paint, "paint");
 
-    	this.volumePaint = paint;
+    	volumePaint = paint;
 
     	fireChangeEvent();
 	}
@@ -510,33 +509,31 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
      */
     @Override
     public XYItemRendererState initialise(
-    	Graphics2D g2, Rectangle2D dataArea,
-    	XYPlot plot, XYDataset dataset, PlotRenderingInfo info)
+    	Graphics2D g2,
+    	Rectangle2D dataArea,
+    	XYPlot plot,
+    	XYDataset dataset,
+    	PlotRenderingInfo info)
     {
         // calculate the maximum allowed candle width from the axis...
         ValueAxis axis = plot.getDomainAxis();
         double x1 = axis.getLowerBound();
-        double x2 = x1 + this.maxCandleWidthInMilliseconds;
+        double x2 = x1 + maxCandleWidthInMilliseconds;
         RectangleEdge edge = plot.getDomainAxisEdge();
         double xx1 = axis.valueToJava2D(x1, dataArea, edge);
         double xx2 = axis.valueToJava2D(x2, dataArea, edge);
-        this.maxCandleWidth = Math.abs(xx2 - xx1);
-            // Absolute value, since the relative x
-            // positions are reversed for horizontal orientation
+        maxCandleWidth = Math.abs(xx2 - xx1);
+            			// Absolute value, since the relative x
+            			// positions are reversed for horizontal orientation
 
         // calculate the highest volume in the dataset...
-        if(this.drawVolume) {
+        if(drawVolume) {
             OHLCDataset highLowDataset = (OHLCDataset) dataset;
-            this.maxVolume = 0.0;
-            for (int series = 0; series < highLowDataset.getSeriesCount();
-                 series++) {
-                for (int item = 0; item < highLowDataset.getItemCount(series);
-                     item++) {
+            maxVolume = 0.0;
+            for(int series = 0; series < highLowDataset.getSeriesCount(); series++) {
+                for(int item = 0; item < highLowDataset.getItemCount(series); item++) {
                     double volume = highLowDataset.getVolumeValue(series, item);
-                    if (volume > this.maxVolume) {
-                        this.maxVolume = volume;
-                    }
-
+                    if(volume > maxVolume) maxVolume = volume;
                 }
             }
         }
