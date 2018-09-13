@@ -8,7 +8,7 @@ import org.jfree.chart.util.*;
 
 /**
  * Stores information about the dimensions of a plot and its subplots.
- */
+*/
 public class PlotRenderingInfo implements Cloneable, Serializable {
 	private static final long serialVersionUID = 8446720134379617220L;
 
@@ -18,20 +18,20 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
     /** The plot area. */
     private transient Rectangle2D plotArea;
 
-    /** The data area. */
-    private transient Rectangle2D dataArea;
+	/** The data area. */
+	private transient Rectangle2D dataArea;
 
-    /**
+	/**
      * Storage for the plot rendering info objects belonging to the subplots.
-     */
+	*/
 	private List subplotInfo;
 
     /**
      * Creates a new instance.
      *
      * @param owner  the owner ({@code null} permitted).
-     */
-    public PlotRenderingInfo(ChartRenderingInfo owner) {
+	*/
+	public PlotRenderingInfo(ChartRenderingInfo owner) {
     	this.owner = owner;
 
     	dataArea = new Rectangle2D.Double();
@@ -43,7 +43,7 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
      * Returns the owner (as specified in the constructor).
      *
      * @return The owner (possibly {@code null}).
-     */
+	*/
 	public ChartRenderingInfo getOwner() {
 		return owner;
 	}
@@ -144,8 +144,7 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
 
 		int subplotCount = getSubplotCount();
 		for(int i=0; i<subplotCount; i++) {
-        	//PlotRenderingInfo info = getSubplotInfo(i);
-    		Rectangle2D area = getSubplotInfo(i).getDataArea();
+			Rectangle2D area = getSubplotInfo(i).getDataArea();
 
     		System.out.println("");
     		System.out.println("SRC_X: "+source.getX()+"; _Y: "+source.getY());

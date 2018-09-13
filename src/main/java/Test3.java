@@ -216,7 +216,7 @@ public class Test3 {
 		panel.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				System.out.println("MOSE MOVED");
+				//System.out.println("MOSE MOVED");
 
 				//panel.getScreenDataArea(x, y);
 
@@ -241,7 +241,7 @@ public class Test3 {
 
 					//combinedPlot.setDomainCrosshairValue(x);
 				}
-				else System.out.println("NO DATA AREA");
+				//else System.out.println("NO DATA AREA");
 			}
 
 			@Override
@@ -262,7 +262,7 @@ public class Test3 {
 
 		JFrame fr = new JFrame();
 
-		fr.setBounds(10, 10, 1300, 600);
+		fr.setBounds(10, 10, 1000, 600);
 
 		fr.add(panel);
 

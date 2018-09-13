@@ -1743,7 +1743,7 @@ public class ChartPanel extends JPanel implements
             	System.out.println("PAN_LAST: "+panLast.getX());
 
             	//p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
-            	//p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
+            	p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
             /*
             else {
