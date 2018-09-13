@@ -53,7 +53,7 @@ public class BFWebSocketListener extends WebSocketListener {
 			//OHLCSeriesCollection col = new OHLCSeriesCollection();
 			OHLCSeries ser = new OHLCSeries("");
 			//col.addSeries(ser);
-			
+
 			for(int i=0; i<arr2.length(); i++) {
 				arr3 = new org.json.JSONArray(arr2.get(i).toString().trim());
 

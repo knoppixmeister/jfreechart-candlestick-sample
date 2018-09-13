@@ -1,13 +1,13 @@
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.concurrent.TimeUnit;
@@ -58,10 +58,12 @@ import org.jfree.data.time.ohlc.OHLCSeries;
 import org.jfree.data.time.ohlc.OHLCSeriesCollection;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
 import com.fx.jfree.chart.candlestick.CustomHighLowItemLabelGenerator;
-import com.sun.jmx.snmp.Timestamp;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -112,23 +114,21 @@ public class Test {
 		}
 
 		JFrame fr = new JFrame("");
-		
+
 	//--------------------------------------------------------------------------------------------
-		
+
 		CrosshairOverlay overlay = new CrosshairOverlay();
 
 		Crosshair domainCrosshair = new Crosshair(0);
-		
+
 		domainCrosshair.setPaint(Color.BLACK);
 		domainCrosshair.setLabelVisible(true);
 		domainCrosshair.setLabelPaint(Color.WHITE);
 		domainCrosshair.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
 		domainCrosshair.setLabelBackgroundPaint(Color.decode("#4a4a4a"));
-		
-		//StandardCrosshairLabelGenerator sclg = new StandardCrosshairLabelGenerator("{0,date}", NumberFormat.getNumberInstance());
-		
+
 		domainCrosshair.setLabelGenerator(new DateDomainCrossharLabelGenerator());
-		
+
 		//((StandardCrosshairLabelGenerator)domainCrosshair.getLabelGenerator())
 
 		overlay.addDomainCrosshair(domainCrosshair);
@@ -142,12 +142,14 @@ public class Test {
 
 		crosshair2.setLabelVisible(true);
 		//crosshair2.setStroke(new BasicStroke(1));
-		crosshair2.setLabelOutlineVisible(true);
-		crosshair2.setLabelOutlinePaint(ChartColor.DARK_MAGENTA);
+		crosshair2.setLabelOutlineVisible(false);
+		//crosshair2.setLabelOutlinePaint(ChartColor.DARK_MAGENTA);
+		crosshair2.setLabelPaint(Color.WHITE);
 		//crosshair2.setLabelXOffset(10);
 		//crosshair2.setLabelYOffset(20);
-		crosshair2.setLabelBackgroundPaint(Color.CYAN);//new Color(255, 255, 0, 100)
+		crosshair2.setLabelBackgroundPaint(Color.decode("#4a4a4a"));//new Color(255, 255, 0, 100)
 		crosshair2.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+		crosshair2.setLabelGenerator(new StandardCrosshairLabelGenerator(" {0} ", NumberFormat.getInstance()) 	);
 		//crosshair2.setValue(6340);
 
 	//---------------------------------------------------------------------------------------------------------------------
@@ -495,12 +497,56 @@ public class Test {
 		}).start();
 		*/
 
-		//--------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------
 
 		OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
 														.retryOnConnectionFailure(true)
 														.build();
 
+		//https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=10000
+		//https://min-api.cryptocompare.com/data/histohour?fsym=BTC&tsym=USD&limit=10000
+
+		client.newCall(new Request.Builder().url("https://min-api.cryptocompare.com/data/histohour?fsym=BTC&tsym=USD&limit=10000").build()).enqueue(new Callback() {
+			@Override
+			public void onResponse(Call call, Response response) throws IOException {
+				String json = response.body().string();
+
+				Moshi moshi = new Moshi.Builder().build();
+
+				JsonAdapter<CCResponse> jsonAdapter = moshi.adapter(CCResponse.class);
+				CCResponse resp = jsonAdapter.fromJson(json);
+
+				System.out.println(json);
+				System.out.println("");
+
+				System.out.println(	"Len: "+resp.Data.get(0).close	);
+
+				OHLCSeries ser = new OHLCSeries("");
+				for(int i=0; i<resp.Data.size(); i++) {
+					OHLCItem ohlcItem = new OHLCItem(
+						new FixedMillisecond(resp.Data.get(i).time),
+						resp.Data.get(i).open,	//open,
+						resp.Data.get(i).high,	//high,
+						resp.Data.get(i).low,	//low,
+						resp.Data.get(i).close	//close
+					);
+
+					ser.add(ohlcItem);
+				}
+
+				if(ser.getItemCount() > 0) {
+					collection.removeAllSeries();
+					collection.addSeries(ser);
+				}
+			}
+
+			@Override
+			public void onFailure(Call call, IOException e) {
+				e.printStackTrace();
+			}
+		});
+
+		/*
 		client.newWebSocket(
 			new Request.Builder().url("wss://api.bitfinex.com/ws/2")
 								//.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_5m")
@@ -508,6 +554,7 @@ public class Test {
 			new BFWebSocketListener(collection)
 			//new BNWebSocketListener()
 		);
+		*/
 
 		//---------------------------------------------------------------------------------------------------------------
 	}
