@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -421,7 +423,9 @@ public class Test {
 				
 				c = (priceAxis.getLowerBound() + (percentY / 100.0) * range2.getLength());
 				
-				crosshair2.setValue(c);
+				BigDecimal bd =	new BigDecimal(c).setScale(1, RoundingMode.HALF_EVEN);
+				
+				crosshair2.setValue(bd.doubleValue());
 				
 				//plot.setRangeCrosshairValue(c);
 				
