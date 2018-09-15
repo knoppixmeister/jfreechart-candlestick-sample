@@ -1732,13 +1732,13 @@ public class ChartPanel extends JPanel implements
 
     		double wPercent	=	-dx / panW;
     		double hPercent	=	dy / panH;
-    		boolean old 	=	chart.getPlot().isNotify();
+    		boolean old		=	chart.getPlot().isNotify();
 
             chart.getPlot().setNotify(false);
 
             Pannable p = (Pannable)chart.getPlot();
             if(p.getOrientation() == PlotOrientation.VERTICAL) {
-            	System.out.println("VERT_ORIENT. H_PERC: "+hPercent);
+            	//System.out.println("VERT_ORIENT. H_PERC: "+hPercent);
 
             	System.out.println("PAN_LAST: "+panLast.getX());
 

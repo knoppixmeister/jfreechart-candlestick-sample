@@ -148,7 +148,7 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
 
     		System.out.println("");
     		System.out.println("SRC_X: "+source.getX()+"; _Y: "+source.getY());
-    		System.out.println("AREA_X: "+area.getX()+"; AREA_WIDTH: "+area.getWidth());
+    		System.out.println("AREA_X: "+area.getX()+"; AREA_WIDTH: "+area.getWidth()+"; AREA_HEIGHT: "+area.getHeight());
     		System.out.println("");
 
     		if(area.contains(source)) return i;

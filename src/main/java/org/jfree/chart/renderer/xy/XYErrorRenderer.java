@@ -67,11 +67,11 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     public XYErrorRenderer() {
         super(false, true);
         
-        this.drawXError = true;
-        this.drawYError = true;
-        this.errorPaint = null;
-        this.errorStroke = null;
-        this.capLength = 4.0;
+        drawXError = true;
+        drawYError = true;
+        errorPaint = null;
+        errorStroke = null;
+        capLength = 4.0;
     }
 
     /**
@@ -82,9 +82,9 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      *
      * @see #setDrawXError(boolean)
      */
-    public boolean getDrawXError() {
-        return drawXError;
-    }
+	public boolean getDrawXError() {
+    	return drawXError;
+	}
 
     /**
      * Sets the flag that controls whether or not the renderer draws error
@@ -226,7 +226,6 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     @Override
     public Range findDomainBounds(XYDataset dataset) {
-        // include the interval if there is one
         return findDomainBounds(dataset, true);
     }
 
@@ -241,7 +240,6 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     @Override
     public Range findRangeBounds(XYDataset dataset) {
-        // include the interval if there is one
         return findRangeBounds(dataset, true);
     }
 
@@ -262,16 +260,25 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      * @param pass  the pass index.
      */
     @Override
-    public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
-
-        if (pass == 0 && dataset instanceof IntervalXYDataset
-                && getItemVisible(series, item)) {
+    public void drawItem(
+    	Graphics2D g2,
+    	XYItemRendererState state,
+    	Rectangle2D dataArea,
+    	PlotRenderingInfo info,
+    	XYPlot plot,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	XYDataset dataset,
+    	int series,
+    	int item,
+    	CrosshairState crosshairState,
+    	int pass)
+    {
+        if(pass == 0 && dataset instanceof IntervalXYDataset && getItemVisible(series, item)) {
             IntervalXYDataset ixyd = (IntervalXYDataset) dataset;
             PlotOrientation orientation = plot.getOrientation();
-            if (this.drawXError) {
+            
+            if(drawXError) {
                 // draw the error bar for the x-interval
                 double x0 = ixyd.getStartXValue(series, item);
                 double x1 = ixyd.getEndXValue(series, item);
@@ -279,13 +286,13 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                 RectangleEdge edge = plot.getDomainAxisEdge();
                 double xx0 = domainAxis.valueToJava2D(x0, dataArea, edge);
                 double xx1 = domainAxis.valueToJava2D(x1, dataArea, edge);
-                double yy = rangeAxis.valueToJava2D(y, dataArea,
-                        plot.getRangeAxisEdge());
+                double yy = rangeAxis.valueToJava2D(y, dataArea, plot.getRangeAxisEdge());
                 Line2D line;
                 Line2D cap1;
                 Line2D cap2;
-                double adj = this.capLength / 2.0;
-                if (orientation == PlotOrientation.VERTICAL) {
+                double adj = capLength / 2.0;
+                
+                if(orientation == PlotOrientation.VERTICAL) {
                     line = new Line2D.Double(xx0, yy, xx1, yy);
                     cap1 = new Line2D.Double(xx0, yy - adj, xx0, yy + adj);
                     cap2 = new Line2D.Double(xx1, yy - adj, xx1, yy + adj);
@@ -295,23 +302,19 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                     cap1 = new Line2D.Double(yy - adj, xx0, yy + adj, xx0);
                     cap2 = new Line2D.Double(yy - adj, xx1, yy + adj, xx1);
                 }
-                if (this.errorPaint != null) {
-                    g2.setPaint(this.errorPaint);
-                }
-                else {
-                    g2.setPaint(getItemPaint(series, item));
-                }
-                if (this.errorStroke != null) {
-                    g2.setStroke(this.errorStroke);
-                }
-                else {
-                    g2.setStroke(getItemStroke(series, item));
-                }
+                
+                if(errorPaint != null) g2.setPaint(errorPaint);
+                else g2.setPaint(getItemPaint(series, item));
+                
+                if(errorStroke != null) g2.setStroke(errorStroke);
+                else g2.setStroke(getItemStroke(series, item));
+                
                 g2.draw(line);
                 g2.draw(cap1);
                 g2.draw(cap2);
             }
-            if (this.drawYError) {
+            
+            if(drawYError) {
                 // draw the error bar for the y-interval
                 double y0 = ixyd.getStartYValue(series, item);
                 double y1 = ixyd.getEndYValue(series, item);
@@ -319,13 +322,13 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                 RectangleEdge edge = plot.getRangeAxisEdge();
                 double yy0 = rangeAxis.valueToJava2D(y0, dataArea, edge);
                 double yy1 = rangeAxis.valueToJava2D(y1, dataArea, edge);
-                double xx = domainAxis.valueToJava2D(x, dataArea,
-                        plot.getDomainAxisEdge());
+                double xx = domainAxis.valueToJava2D(x, dataArea, plot.getDomainAxisEdge());
                 Line2D line;
                 Line2D cap1;
                 Line2D cap2;
-                double adj = this.capLength / 2.0;
-                if (orientation == PlotOrientation.VERTICAL) {
+                double adj = capLength / 2.0;
+                
+                if(orientation == PlotOrientation.VERTICAL) {
                     line = new Line2D.Double(xx, yy0, xx, yy1);
                     cap1 = new Line2D.Double(xx - adj, yy0, xx + adj, yy0);
                     cap2 = new Line2D.Double(xx - adj, yy1, xx + adj, yy1);
@@ -335,18 +338,13 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
                     cap1 = new Line2D.Double(yy0, xx - adj, yy0, xx + adj);
                     cap2 = new Line2D.Double(yy1, xx - adj, yy1, xx + adj);
                 }
-                if (this.errorPaint != null) {
-                    g2.setPaint(this.errorPaint);
-                }
-                else {
-                    g2.setPaint(getItemPaint(series, item));
-                }
-                if (this.errorStroke != null) {
-                    g2.setStroke(this.errorStroke);
-                }
-                else {
-                    g2.setStroke(getItemStroke(series, item));
-                }
+                
+                if(errorPaint != null) g2.setPaint(errorPaint);
+                else g2.setPaint(getItemPaint(series, item));
+
+                if(errorStroke != null) g2.setStroke(errorStroke);
+                else g2.setStroke(getItemStroke(series, item));
+
                 g2.draw(line);
                 g2.draw(cap1);
                 g2.draw(cap2);

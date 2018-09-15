@@ -262,11 +262,11 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      *
      * @see #isPositiveArrowVisible()
      */
-    public void setPositiveArrowVisible(boolean visible) {
-    	positiveArrowVisible = visible;
+	public void setPositiveArrowVisible(boolean visible) {
+		positiveArrowVisible = visible;
     	
         fireChangeEvent();
-    }
+	}
 
     /**
      * Returns a flag that controls whether or not the axis line has an arrow
@@ -523,11 +523,11 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
             result[0] = (float) valueToJava2D(tick.getValue(), dataArea, edge);
             result[1] = (float) (cursor - insets.getBottom() - 2.0);
         }
-        else if (edge == RectangleEdge.BOTTOM) {
+        else if(edge == RectangleEdge.BOTTOM) {
             result[0] = (float) valueToJava2D(tick.getValue(), dataArea, edge);
             result[1] = (float) (cursor + insets.getTop() + 2.0);
         }
-        else if (edge == RectangleEdge.LEFT) {
+        else if(edge == RectangleEdge.LEFT) {
             result[0] = (float) (cursor - insets.getLeft() - 2.0);
             result[1] = (float) valueToJava2D(tick.getValue(), dataArea, edge);
         }
@@ -580,42 +580,46 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
                 else {
                     if(tick.getText() == null) continue;
 
-                    TextUtils.drawRotatedString(tick.getText(), g2,
-                            anchorPoint[0], anchorPoint[1], 
-                            tick.getTextAnchor(), tick.getAngle(), 
-                            tick.getRotationAnchor());
+                    TextUtils.drawRotatedString(
+                    	tick.getText(),
+                    	g2,
+                    	anchorPoint[0],
+                    	anchorPoint[1], 
+                    	tick.getTextAnchor(),
+                    	tick.getAngle(), 
+                    	tick.getRotationAnchor()
+                    );
                 }
             }
 
-            if((isTickMarksVisible() && tick.getTickType().equals(
-                    TickType.MAJOR)) || (isMinorTickMarksVisible()
-                    && tick.getTickType().equals(TickType.MINOR))) {
+            if((isTickMarksVisible() && 
+            	tick.getTickType().equals(TickType.MAJOR)) || (isMinorTickMarksVisible() && tick.getTickType().equals(TickType.MINOR)))
+            {
+                double ol = (tick.getTickType().equals(TickType.MINOR)) ?
+                			getMinorTickMarkOutsideLength() :
+                			getTickMarkOutsideLength();
 
-                double ol = (tick.getTickType().equals(TickType.MINOR)) 
-                        ? getMinorTickMarkOutsideLength()
-                        : getTickMarkOutsideLength();
+                double il = (tick.getTickType().equals(TickType.MINOR)) ?
+                			getMinorTickMarkInsideLength() :
+                			getTickMarkInsideLength();
 
-                double il = (tick.getTickType().equals(TickType.MINOR)) 
-                        ? getMinorTickMarkInsideLength()
-                        : getTickMarkInsideLength();
-
-                float xx = (float) valueToJava2D(tick.getValue(), dataArea,
-                        edge);
+                float xx = (float) valueToJava2D(tick.getValue(), dataArea, edge);
                 Line2D mark = null;
                 g2.setStroke(getTickMarkStroke());
                 g2.setPaint(getTickMarkPaint());
-                if (edge == RectangleEdge.LEFT) {
+                if(edge == RectangleEdge.LEFT) {
                     mark = new Line2D.Double(cursor - ol, xx, cursor + il, xx);
                 }
-                else if (edge == RectangleEdge.RIGHT) {
+                else if(edge == RectangleEdge.RIGHT) {
                     mark = new Line2D.Double(cursor + ol, xx, cursor - il, xx);
                 }
-                else if (edge == RectangleEdge.TOP) {
+                else if(edge == RectangleEdge.TOP) {
                     mark = new Line2D.Double(xx, cursor - ol, xx, cursor + il);
                 }
-                else if (edge == RectangleEdge.BOTTOM) {
+                else if(edge == RectangleEdge.BOTTOM) {
                     mark = new Line2D.Double(xx, cursor + ol, xx, cursor - il);
                 }
+                
                 g2.draw(mark);
             }
         }
@@ -692,7 +696,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
             double labelHeight = labelEnclosure.getHeight();
             space.add(labelHeight + tickLabelHeight, edge);
         }
-        else if (RectangleEdge.isLeftOrRight(edge)) {
+        else if(RectangleEdge.isLeftOrRight(edge)) {
             double labelWidth = labelEnclosure.getWidth();
             space.add(labelWidth + tickLabelWidth, edge);
         }

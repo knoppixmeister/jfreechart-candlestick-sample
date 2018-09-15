@@ -1,114 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------------
- * StandardXYItemRenderer.java
- * ---------------------------
- * (C) Copyright 2001-2017, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Mark Watson (www.markwatson.com);
- *                   Jonathan Nash;
- *                   Andreas Schneider;
- *                   Norbert Kiesel (for TBD Networks);
- *                   Christian W. Zuckschwerdt;
- *                   Bill Kelemen;
- *                   Nicolas Brodu (for Astrium and EADS Corporate Research
- *                   Center);
- *
- * Changes:
- * --------
- * 19-Oct-2001 : Version 1, based on code by Mark Watson (DG);
- * 22-Oct-2001 : Renamed DataSource.java --> Dataset.java etc. (DG);
- * 21-Dec-2001 : Added working line instance to improve performance (DG);
- * 22-Jan-2002 : Added code to lock crosshairs to data points.  Based on code
- *               by Jonathan Nash (DG);
- * 23-Jan-2002 : Added DrawInfo parameter to drawItem() method (DG);
- * 28-Mar-2002 : Added a property change listener mechanism so that the
- *               renderer no longer needs to be immutable (DG);
- * 02-Apr-2002 : Modified to handle null values (DG);
- * 09-Apr-2002 : Modified draw method to return void.  Removed the translated
- *               zero from the drawItem method.  Override the initialise()
- *               method to calculate it (DG);
- * 13-May-2002 : Added code from Andreas Schneider to allow changing
- *               shapes/colors per item (DG);
- * 24-May-2002 : Incorporated tooltips into chart entities (DG);
- * 25-Jun-2002 : Removed redundant code (DG);
- * 05-Aug-2002 : Incorporated URLs for HTML image maps into chart entities (RA);
- * 08-Aug-2002 : Added discontinuous lines option contributed by
- *               Norbert Kiesel (DG);
- * 20-Aug-2002 : Added user definable default values to be returned by
- *               protected methods unless overridden by a subclass (DG);
- * 23-Sep-2002 : Updated for changes in the XYItemRenderer interface (DG);
- * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
- * 25-Mar-2003 : Implemented Serializable (DG);
- * 01-May-2003 : Modified drawItem() method signature (DG);
- * 15-May-2003 : Modified to take into account the plot orientation (DG);
- * 29-Jul-2003 : Amended code that doesn't compile with JDK 1.2.2 (DG);
- * 30-Jul-2003 : Modified entity constructor (CZ);
- * 20-Aug-2003 : Implemented Cloneable and PublicCloneable (DG);
- * 24-Aug-2003 : Added null/NaN checks in drawItem (BK);
- * 08-Sep-2003 : Fixed serialization (NB);
- * 16-Sep-2003 : Changed ChartRenderingInfo --> PlotRenderingInfo (DG);
- * 21-Jan-2004 : Override for getLegendItem() method (DG);
- * 27-Jan-2004 : Moved working line into state object (DG);
- * 10-Feb-2004 : Changed drawItem() method to make cut-and-paste overriding
- *               easier (DG);
- * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState.  Renamed
- *               XYToolTipGenerator --> XYItemLabelGenerator (DG);
- * 08-Jun-2004 : Modified to use getX() and getY() methods (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * 25-Aug-2004 : Created addEntity() method in superclass (DG);
- * 08-Oct-2004 : Added 'gapThresholdType' as suggested by Mike Watts (DG);
- * 11-Nov-2004 : Now uses ShapeUtilities to translate shapes (DG);
- * 23-Feb-2005 : Fixed getLegendItem() method to show lines.  Fixed bug
- *               1077108 (shape not visible for first item in series) (DG);
- * 10-Apr-2005 : Fixed item label positioning with horizontal orientation (DG);
- * 20-Apr-2005 : Use generators for legend tooltips and URLs (DG);
- * 27-Apr-2005 : Use generator for series label in legend (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 15-Jun-2006 : Fixed bug (1380480) for rendering series as path (DG);
- * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
- * 14-Mar-2007 : Fixed problems with the equals() and clone() methods (DG);
- * 23-Mar-2007 : Clean-up of shapesFilled attributes (DG);
- * 20-Apr-2007 : Updated getLegendItem() and drawItem() for renderer
- *               change (DG);
- * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem()
- *               method (DG);
- * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
- * 08-Jun-2007 : Fixed bug in entity creation (DG);
- * 21-Nov-2007 : Deprecated override flag methods (DG);
- * 02-Jun-2008 : Fixed tooltips for data items at lower edges of data area (DG);
- * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- * 18-Feb-2017 : Updates for crosshairs (bug #36) (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.Graphics2D;
@@ -153,10 +42,7 @@ import org.jfree.data.xy.XYDataset;
  * This renderer has been retained for historical reasons and, in general, you
  * should use the {@link XYLineAndShapeRenderer} class instead.
  */
-public class StandardXYItemRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
-
-    /** For serialization. */
+public class StandardXYItemRenderer extends AbstractXYItemRenderer implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = -3271351259436865995L;
 
     /** Constant for the type of rendering (shapes only). */
@@ -243,8 +129,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @param toolTipGenerator  the item label generator ({@code null}
      *                          permitted).
      */
-    public StandardXYItemRenderer(int type,
-                                  XYToolTipGenerator toolTipGenerator) {
+    public StandardXYItemRenderer(int type, XYToolTipGenerator toolTipGenerator) {
         this(type, toolTipGenerator, null);
     }
 
@@ -258,29 +143,21 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      *                          permitted).
      * @param urlGenerator  the URL generator.
      */
-    public StandardXYItemRenderer(int type, XYToolTipGenerator toolTipGenerator,
-           XYURLGenerator urlGenerator) {
-
+    public StandardXYItemRenderer(int type, XYToolTipGenerator toolTipGenerator, XYURLGenerator urlGenerator) {
         super();
+        
         setDefaultToolTipGenerator(toolTipGenerator);
         setURLGenerator(urlGenerator);
-        if ((type & SHAPES) != 0) {
-            this.baseShapesVisible = true;
-        }
-        if ((type & LINES) != 0) {
-            this.plotLines = true;
-        }
-        if ((type & IMAGES) != 0) {
-            this.plotImages = true;
-        }
-        if ((type & DISCONTINUOUS) != 0) {
-            this.plotDiscontinuous = true;
-        }
+        
+        if((type & SHAPES) != 0) baseShapesVisible = true;
+        if((type & LINES) != 0) plotLines = true;
+        if((type & IMAGES) != 0) plotImages = true;
+        if((type & DISCONTINUOUS) != 0) plotDiscontinuous = true;
 
-        this.seriesShapesFilled = new BooleanList();
-        this.baseShapesFilled = true;
-        this.legendLine = new Line2D.Double(-7.0, 0.0, 7.0, 0.0);
-        this.drawSeriesLineAsPath = false;
+        seriesShapesFilled 		= new BooleanList();
+        baseShapesFilled 		= true;
+        legendLine 				= new Line2D.Double(-7.0, 0.0, 7.0, 0.0);
+        drawSeriesLineAsPath 	= false;
     }
 
     /**
@@ -291,7 +168,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setBaseShapesVisible
      */
     public boolean getBaseShapesVisible() {
-        return this.baseShapesVisible;
+        return baseShapesVisible;
     }
 
     /**
@@ -303,8 +180,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getBaseShapesVisible
      */
     public void setBaseShapesVisible(boolean flag) {
-        if (this.baseShapesVisible != flag) {
-            this.baseShapesVisible = flag;
+        if(baseShapesVisible != flag) {
+        	baseShapesVisible = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -327,15 +205,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getSeriesShapesFilled(int)
      */
     public boolean getItemShapeFilled(int series, int item) {
-
-        // otherwise look up the paint table
-        Boolean flag = this.seriesShapesFilled.getBoolean(series);
-        if (flag != null) {
-            return flag.booleanValue();
-        }
-        else {
-            return this.baseShapesFilled;
-        }
+        Boolean flag = seriesShapesFilled.getBoolean(series);
+        if(flag != null) return flag.booleanValue();
+        else return baseShapesFilled;
     }
 
     /**
@@ -347,7 +219,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @return A boolean.
      */
     public Boolean getSeriesShapesFilled(int series) {
-        return this.seriesShapesFilled.getBoolean(series);
+        return seriesShapesFilled.getBoolean(series);
     }
 
     /**
@@ -360,7 +232,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getSeriesShapesFilled(int)
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
-        this.seriesShapesFilled.setBoolean(series, flag);
+    	seriesShapesFilled.setBoolean(series, flag);
+    	
         fireChangeEvent();
     }
 
@@ -372,7 +245,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setBaseShapesFilled(boolean)
      */
     public boolean getBaseShapesFilled() {
-        return this.baseShapesFilled;
+        return baseShapesFilled;
     }
 
     /**
@@ -384,7 +257,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getBaseShapesFilled()
      */
     public void setBaseShapesFilled(boolean flag) {
-        this.baseShapesFilled = flag;
+    	baseShapesFilled = flag;
     }
 
     /**
@@ -395,7 +268,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setPlotLines(boolean)
      */
     public boolean getPlotLines() {
-        return this.plotLines;
+        return plotLines;
     }
 
     /**
@@ -408,8 +281,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getPlotLines()
      */
     public void setPlotLines(boolean flag) {
-        if (this.plotLines != flag) {
-            this.plotLines = flag;
+        if(plotLines != flag) {
+        	plotLines = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -422,7 +296,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setGapThresholdType(UnitType)
      */
     public UnitType getGapThresholdType() {
-        return this.gapThresholdType;
+        return gapThresholdType;
     }
 
     /**
@@ -435,7 +309,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setGapThresholdType(UnitType thresholdType) {
         Args.nullNotPermitted(thresholdType, "thresholdType");
-        this.gapThresholdType = thresholdType;
+        
+        gapThresholdType = thresholdType;
+        
         fireChangeEvent();
     }
 
@@ -447,7 +323,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setGapThreshold(double)
      */
     public double getGapThreshold() {
-        return this.gapThreshold;
+        return gapThreshold;
     }
 
     /**
@@ -459,7 +335,8 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getGapThreshold()
      */
     public void setGapThreshold(double t) {
-        this.gapThreshold = t;
+    	gapThreshold = t;
+    	
         fireChangeEvent();
     }
 
@@ -471,7 +348,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setPlotImages(boolean)
      */
     public boolean getPlotImages() {
-        return this.plotImages;
+        return plotImages;
     }
 
     /**
@@ -484,8 +361,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getPlotImages()
      */
     public void setPlotImages(boolean flag) {
-        if (this.plotImages != flag) {
-            this.plotImages = flag;
+        if(plotImages != flag) {
+        	plotImages = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -497,7 +375,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @return {@code true} if lines should be discontinuous.
      */
     public boolean getPlotDiscontinuous() {
-        return this.plotDiscontinuous;
+        return plotDiscontinuous;
     }
 
     /**
@@ -510,8 +388,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @since 1.0.5
      */
     public void setPlotDiscontinuous(boolean flag) {
-        if (this.plotDiscontinuous != flag) {
-            this.plotDiscontinuous = flag;
+        if(plotDiscontinuous != flag) {
+        	plotDiscontinuous = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -525,7 +404,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setDrawSeriesLineAsPath(boolean)
      */
     public boolean getDrawSeriesLineAsPath() {
-        return this.drawSeriesLineAsPath;
+        return drawSeriesLineAsPath;
     }
 
     /**
@@ -537,7 +416,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #getDrawSeriesLineAsPath()
      */
     public void setDrawSeriesLineAsPath(boolean flag) {
-        this.drawSeriesLineAsPath = flag;
+    	drawSeriesLineAsPath = flag;
     }
 
     /**
@@ -548,7 +427,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @see #setLegendLine(Shape)
      */
     public Shape getLegendLine() {
-        return this.legendLine;
+        return legendLine;
     }
 
     /**
@@ -561,7 +440,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
-        this.legendLine = line;
+        
+        legendLine = line;
+        
         fireChangeEvent();
     }
 
@@ -576,25 +457,22 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     @Override
     public LegendItem getLegendItem(int datasetIndex, int series) {
         XYPlot plot = getPlot();
-        if (plot == null) {
-            return null;
-        }
+        if(plot == null) return null;
+
         LegendItem result = null;
         XYDataset dataset = plot.getDataset(datasetIndex);
-        if (dataset != null) {
-            if (getItemVisible(series, 0)) {
-                String label = getLegendItemLabelGenerator().generateLabel(
-                        dataset, series);
+        
+        if(dataset != null) {
+            if(getItemVisible(series, 0)) {
+                String label = getLegendItemLabelGenerator().generateLabel(dataset, series);
                 String description = label;
                 String toolTipText = null;
-                if (getLegendItemToolTipGenerator() != null) {
-                    toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                            dataset, series);
+                if(getLegendItemToolTipGenerator() != null) {
+                    toolTipText = getLegendItemToolTipGenerator().generateLabel(dataset, series);
                 }
                 String urlText = null;
-                if (getLegendItemURLGenerator() != null) {
-                    urlText = getLegendItemURLGenerator().generateLabel(
-                            dataset, series);
+                if(getLegendItemURLGenerator() != null) {
+                    urlText = getLegendItemURLGenerator().generateLabel(dataset, series);
                 }
                 Shape shape = lookupLegendShape(series);
                 boolean shapeFilled = getItemShapeFilled(series, 0);
@@ -607,15 +485,15 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                         this.plotLines, this.legendLine, lineStroke, linePaint);
                 result.setLabelFont(lookupLegendTextFont(series));
                 Paint labelPaint = lookupLegendTextPaint(series);
-                if (labelPaint != null) {
-                    result.setLabelPaint(labelPaint);
-                }
+                if(labelPaint != null) result.setLabelPaint(labelPaint);
+
                 result.setDataset(dataset);
                 result.setDatasetIndex(datasetIndex);
                 result.setSeriesKey(dataset.getSeriesKey(series));
                 result.setSeriesIndex(series);
             }
         }
+        
         return result;
     }
 
@@ -625,7 +503,6 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * drawing.
      */
     public static class State extends XYItemRendererState {
-
         /** The path for the current series. */
         public GeneralPath seriesPath;
 
@@ -703,14 +580,12 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      * @return The renderer state.
      */
     @Override
-    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
-            XYPlot plot, XYDataset data, PlotRenderingInfo info) {
-
+    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea, XYPlot plot, XYDataset data, PlotRenderingInfo info) {
         State state = new State(info);
         state.seriesPath = new GeneralPath();
         state.seriesIndex = -1;
+        
         return state;
-
     }
 
     /**

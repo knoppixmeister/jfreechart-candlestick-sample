@@ -7,7 +7,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * A utility class for calculating moving averages of time series data.
- */
+*/
 public class MovingAverage {
     /**
      * Creates a new {@link TimeSeriesCollection} containing a moving average

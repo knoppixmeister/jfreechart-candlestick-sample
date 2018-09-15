@@ -77,7 +77,7 @@ public strictfp class Range implements Serializable {
      * @return {@code true} if the range contains the specified value.
      */
     public boolean contains(double value) {
-        return (value >= lower && value <= upper);
+        return value >= lower && value <= upper;
     }
 
     /**
@@ -195,22 +195,16 @@ public strictfp class Range implements Serializable {
      * @return The minimum of the two values. 
      */
     private static double min(double d1, double d2) {
-        if (Double.isNaN(d1)) {
-            return d2;
-        }
-        if (Double.isNaN(d2)) {
-            return d1;
-        }
+        if(Double.isNaN(d1)) return d2;
+        if(Double.isNaN(d2)) return d1;
+
         return Math.min(d1, d2);
     }
 
     private static double max(double d1, double d2) {
-        if(Double.isNaN(d1)) {
-            return d2;
-        }
-        if (Double.isNaN(d2)) {
-            return d1;
-        }
+        if(Double.isNaN(d1)) return d2;
+        if(Double.isNaN(d2)) return d1;
+
         return Math.max(d1, d2);
     }
 
@@ -226,18 +220,11 @@ public strictfp class Range implements Serializable {
      * @since 1.0.1
      */
     public static Range expandToInclude(Range range, double value) {
-        if (range == null) {
-            return new Range(value, value);
-        }
-        if (value < range.getLowerBound()) {
-            return new Range(value, range.getUpperBound());
-        }
-        else if (value > range.getUpperBound()) {
-            return new Range(range.getLowerBound(), value);
-        }
-        else {
-            return range;
-        }
+        if(range == null) return new Range(value, value);
+
+        if(value < range.getLowerBound()) return new Range(value, range.getUpperBound());
+        else if (value > range.getUpperBound()) return new Range(range.getLowerBound(), value);
+        else return range;
     }
 
     /**
@@ -251,16 +238,18 @@ public strictfp class Range implements Serializable {
      *
      * @return The expanded range.
      */
-    public static Range expand(Range range,
-                               double lowerMargin, double upperMargin) {
+    public static Range expand(Range range, double lowerMargin, double upperMargin) {
         Args.nullNotPermitted(range, "range");
+        
         double length = range.getLength();
         double lower = range.getLowerBound() - length * lowerMargin;
         double upper = range.getUpperBound() + length * upperMargin;
-        if (lower > upper) {
+        
+        if(lower > upper) {
             lower = lower / 2.0 + upper / 2.0;
             upper = lower;
         }
+        
         return new Range(lower, upper);
     }
 
@@ -386,8 +375,8 @@ public strictfp class Range implements Serializable {
      * @return A String "Range[lower,upper]" where lower=lower range and
      *         upper=upper range.
      */
-    @Override
-    public String toString() {
-        return ("Range[" + lower + "," + upper + "]");
-    }
+	@Override
+	public String toString() {
+    	return ("Range[" + lower + "," + upper + "]");
+	}
 }

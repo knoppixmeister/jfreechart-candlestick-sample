@@ -88,9 +88,9 @@ class DateDomainCrossharLabelGenerator implements CrosshairLabelGenerator {
 		Args.nullNotPermitted(crosshair, "crosshair");
 
 		return	MessageFormat.format(
-									labelTextFormat,
-									DateTimeFormat.forPattern("dd-MM-YYYY HH:mm").print(new DateTime(Long.parseLong(((long)crosshair.getValue())+"")))
-								);
+			labelTextFormat,
+			DateTimeFormat.forPattern("dd-MM-YYYY HH:mm").print(new DateTime(Long.parseLong(((long)crosshair.getValue())+"")))
+		);
 	}
 }
 

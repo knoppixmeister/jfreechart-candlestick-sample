@@ -253,7 +253,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      *
      * @return An unmodifiable list of subplots.
      */
-    public List getSubplots() {
+    public List<XYPlot> getSubplots() {
         return Collections.unmodifiableList(subplots);
     }
 
@@ -273,9 +273,9 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         // work out the space required by the domain axis...
         AxisSpace fixed = getFixedDomainAxisSpace();
         if(fixed != null) {
-            if(orientation == PlotOrientation.HORIZONTAL) {
-                space.setLeft(fixed.getLeft());
-                space.setRight(fixed.getRight());
+        	if(orientation == PlotOrientation.HORIZONTAL) {
+        		space.setLeft(fixed.getLeft());
+        		space.setRight(fixed.getRight());
             }
             else if(orientation == PlotOrientation.VERTICAL) {
                 space.setTop(fixed.getTop());
@@ -369,8 +369,8 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
 
         // draw all the subplots
         for(int i = 0; i < subplots.size(); i++) {
-            XYPlot plot = (XYPlot)subplots.get(i);
-            PlotRenderingInfo subplotInfo = null;
+        	XYPlot plot = (XYPlot)subplots.get(i);
+        	PlotRenderingInfo subplotInfo = null;
             if(info != null) {
                 subplotInfo = new PlotRenderingInfo(info.getOwner());
                 info.addSubplotInfo(subplotInfo);
@@ -414,7 +414,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public void zoomRangeAxes(double factor, PlotRenderingInfo info, Point2D source) {
-        zoomRangeAxes(factor, info, source, false);
+    	zoomRangeAxes(factor, info, source, false);
     }
 
     /**
