@@ -93,12 +93,12 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     public NumberAxis(String label) {
         super(label, NumberAxis.createStandardTickUnits());
 
-        this.rangeType				= RangeType.FULL;
-        this.autoRangeIncludesZero	= DEFAULT_AUTO_RANGE_INCLUDES_ZERO;
-        this.autoRangeStickyZero	= DEFAULT_AUTO_RANGE_STICKY_ZERO;
-        this.tickUnit				= DEFAULT_TICK_UNIT;
-        this.numberFormatOverride	= null;
-        this.markerBand				= null;
+        rangeType				= RangeType.FULL;
+        autoRangeIncludesZero	= DEFAULT_AUTO_RANGE_INCLUDES_ZERO;
+        autoRangeStickyZero		= DEFAULT_AUTO_RANGE_STICKY_ZERO;
+        tickUnit				= DEFAULT_TICK_UNIT;
+        numberFormatOverride	= null;
+        markerBand				= null;
     }
 
     /**

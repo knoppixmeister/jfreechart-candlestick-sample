@@ -1,44 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------
- * ModuloAxis.java
- * ---------------
- * (C) Copyright 2004-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 13-Aug-2004 : Version 1 (DG);
- * 13-Nov-2007 : Implemented equals() (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.awt.geom.Rectangle2D;
@@ -52,8 +11,9 @@ import org.jfree.data.Range;
  * calculation.
  */
 public class ModuloAxis extends NumberAxis {
+	private static final long serialVersionUID = 2004814049636893324L;
 
-    /**
+	/**
      * The fixed range for the axis - all data values will be mapped to this
      * range using a modulo calculation.
      */
@@ -78,9 +38,10 @@ public class ModuloAxis extends NumberAxis {
      */
     public ModuloAxis(String label, Range fixedRange) {
         super(label);
+        
         this.fixedRange = fixedRange;
-        this.displayStart = 270.0;
-        this.displayEnd = 90.0;
+        displayStart 	= 270.0;
+        displayEnd 		= 90.0;
     }
 
     /**
@@ -89,7 +50,7 @@ public class ModuloAxis extends NumberAxis {
      * @return The display start value.
      */
     public double getDisplayStart() {
-        return this.displayStart;
+        return displayStart;
     }
 
     /**
@@ -98,7 +59,7 @@ public class ModuloAxis extends NumberAxis {
      * @return The display end value.
      */
     public double getDisplayEnd() {
-        return this.displayEnd;
+        return displayEnd;
     }
 
     /**
@@ -109,15 +70,12 @@ public class ModuloAxis extends NumberAxis {
      * @param end  the end value.
      */
     public void setDisplayRange(double start, double end) {
-        this.displayStart = mapValueToFixedRange(start);
-        this.displayEnd = mapValueToFixedRange(end);
-        if (this.displayStart < this.displayEnd) {
-            setRange(this.displayStart, this.displayEnd);
-        }
-        else {
-            setRange(this.displayStart, this.fixedRange.getUpperBound()
-                  + (this.displayEnd - this.fixedRange.getLowerBound()));
-        }
+    	displayStart = mapValueToFixedRange(start);
+    	displayEnd = mapValueToFixedRange(end);
+    	
+        if(displayStart < this.displayEnd) setRange(this.displayStart, this.displayEnd);
+        else setRange(displayStart, fixedRange.getUpperBound() + (displayEnd - fixedRange.getLowerBound()));
+        
         notifyListeners(new AxisChangeEvent(this));
     }
 
@@ -127,7 +85,7 @@ public class ModuloAxis extends NumberAxis {
      */
     @Override
     protected void autoAdjustRange() {
-        setRange(this.fixedRange, false, false);
+        setRange(fixedRange, false, false);
     }
 
     /**
@@ -140,25 +98,22 @@ public class ModuloAxis extends NumberAxis {
      * @return A Java2D coordinate.
      */
     @Override
-    public double valueToJava2D(double value, Rectangle2D area,
-                                RectangleEdge edge) {
+    public double valueToJava2D(double value, Rectangle2D area, RectangleEdge edge) {
         double result;
+        
         double v = mapValueToFixedRange(value);
-        if (this.displayStart < this.displayEnd) {  // regular number axis
+        if(displayStart < displayEnd) {  // regular number axis
             result = trans(v, area, edge);
         }
         else {  // displayStart > displayEnd, need to handle split
-            double cutoff = (this.displayStart + this.displayEnd) / 2.0;
-            double length1 = this.fixedRange.getUpperBound()
-                             - this.displayStart;
-            double length2 = this.displayEnd - this.fixedRange.getLowerBound();
-            if (v > cutoff) {
-                result = transStart(v, area, edge, length1, length2);
-            }
-            else {
-                result = transEnd(v, area, edge, length1, length2);
-            }
+            double cutoff = (displayStart + displayEnd) / 2.0;
+            double length1 = fixedRange.getUpperBound() - displayStart;
+            double length2 = displayEnd - fixedRange.getLowerBound();
+            
+            if(v > cutoff) result = transStart(v, area, edge, length1, length2);
+            else result = transEnd(v, area, edge, length1, length2);
         }
+        
         return result;
     }
 
@@ -174,23 +129,20 @@ public class ModuloAxis extends NumberAxis {
     private double trans(double value, Rectangle2D area, RectangleEdge edge) {
         double min = 0.0;
         double max = 0.0;
-        if (RectangleEdge.isTopOrBottom(edge)) {
+        
+        if(RectangleEdge.isTopOrBottom(edge)) {
             min = area.getX();
             max = area.getX() + area.getWidth();
         }
-        else if (RectangleEdge.isLeftOrRight(edge)) {
+        else if(RectangleEdge.isLeftOrRight(edge)) {
             min = area.getMaxY();
             max = area.getMaxY() - area.getHeight();
         }
-        if (isInverted()) {
-            return max - ((value - this.displayStart)
-                   / (this.displayEnd - this.displayStart)) * (max - min);
-        }
+        
+        if(isInverted()) return max - ((value - displayStart) / (displayEnd - displayStart)) * (max - min);
         else {
-            return min + ((value - this.displayStart)
-                   / (this.displayEnd - this.displayStart)) * (max - min);
+            return min + ((value - this.displayStart) / (this.displayEnd - this.displayStart)) * (max - min);
         }
-
     }
 
     /**

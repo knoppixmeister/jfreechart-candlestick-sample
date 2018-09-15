@@ -28,6 +28,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYPointerAnnotation;
 import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.LogarithmicAxis;
+import org.jfree.chart.axis.ModuloAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.event.ChartProgressEvent;
@@ -48,6 +50,7 @@ import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.chart.ui.TextAnchor;
 import org.jfree.chart.util.Args;
 import org.jfree.data.Range;
+import org.jfree.data.RangeType;
 import org.jfree.data.category.SlidingCategoryDataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
@@ -78,11 +81,11 @@ class DateDomainCrossharLabelGenerator implements CrosshairLabelGenerator {
 	public DateDomainCrossharLabelGenerator() {
 		this(" {0} ");
 	}
-	
+
 	public DateDomainCrossharLabelGenerator(String labelTextFormat) {
 		this.labelTextFormat = labelTextFormat;
 	}
-	
+
 	@Override
 	public String generateLabel(Crosshair crosshair) {
 		Args.nullNotPermitted(crosshair, "crosshair");
@@ -104,11 +107,10 @@ public class Test {
 		catch(ClassNotFoundException e1) {
 			e1.printStackTrace();
 		}
-		catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
+		catch(InstantiationException e1) {
 			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
+		}
+		catch(IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
 		catch(UnsupportedLookAndFeelException e1) {
@@ -175,11 +177,23 @@ public class Test {
 		collection.addSeries(series);
 
 		DateAxis dateAxis = new DateAxis();
+		//dateAxis.setTickLabelsVisible(true);
+		dateAxis.setAxisLinePaint(ChartColor.BLUE);
+		//dateAxis.setVisible(false);
+		//dateAxis.setUpperMargin(5);
+		//dateAxis.setAutoRange(false);
+
+		//dateAxis.setDownArrow(new Rectangle2D.Float(10, 10, 50, 50));
+		//dateAxis.setVerticalTickLabels(true);
+
 		//dateAxis.setAxisLineVisible(false);
 		//dateAxis.setAxisLinePaint(ChartColor.BLUE);
-		
-		NumberAxis priceAxis = new NumberAxis("");
+
+		NumberAxis priceAxis =	//new LogarithmicAxis("");
+								//new ModuloAxis("", new Range(0, 3000));
+								new NumberAxis("");
 		priceAxis.setAutoRangeIncludesZero(false);
+		priceAxis.setRangeType(RangeType.POSITIVE);
 		//priceAxis.setAxisLineVisible(true);
 		//priceAxis.setAxisLinePaint(ChartColor.DARK_RED);
 		//priceAxis.setVisible(false);
@@ -188,7 +202,7 @@ public class Test {
 		//leftPriceAxis.setAutoRangeIncludesZero(false);
 
 		CandlestickRenderer candlestickRenderer = new CandlestickRenderer(
-			3,		//CandlestickRenderer.WIDTHMETHOD_AVERAGE,
+			CandlestickRenderer.WIDTHMETHOD_AVERAGE,
 			true,	
 			null
 			/*
@@ -198,6 +212,7 @@ public class Test {
 			)
 			*/
 		);
+		candlestickRenderer.setDrawVolume(true);
 
 		//new CustomHighLowItemLabelGenerator(new SimpleDateFormat("kk:mm"), new DecimalFormat("0.000"));
 
