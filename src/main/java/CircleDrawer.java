@@ -6,7 +6,7 @@ import org.jfree.ui.Drawable;
  * An implementation of the {@link Drawable} interface, to illustrate the use
  * of the {@link org.jfree.chart.annotations.XYDrawableAnnotation} class.  Used
  * by MarkerDemo1.java.
- */
+*/
 public class CircleDrawer implements Drawable {
     /** The outline paint. */
     private Paint outlinePaint;
@@ -25,9 +25,9 @@ public class CircleDrawer implements Drawable {
      * @param fillPaint  the fill paint.
      */
     public CircleDrawer(Paint outlinePaint, Stroke outlineStroke, Paint fillPaint) {
-        this.outlinePaint = outlinePaint;
-        this.outlineStroke = outlineStroke;
-        this.fillPaint = fillPaint;
+        this.outlinePaint 	= outlinePaint;
+        this.outlineStroke 	= outlineStroke;
+        this.fillPaint 		= fillPaint;
     }
 
     /**
