@@ -114,9 +114,15 @@ public class OHLCItem extends ComparableObjectItem {
 		setObject(ohlc);
 	}
 
-	public boolean isDoji() {
-		OHLC ohlc = (OHLC)getObject();
+	public boolean isBullCandle() {
+		return ((OHLC)getObject()).isBullCandle();
+	}
 
-		return ohlc.getOpen() == ohlc.getClose();
+	public boolean isBearCandle() {
+		return ((OHLC)getObject()).isBearCandle();
+	}
+
+	public boolean isDoji() {
+		return ((OHLC)getObject()).isDojee();
 	}
 }

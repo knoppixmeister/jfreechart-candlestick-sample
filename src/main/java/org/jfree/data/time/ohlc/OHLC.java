@@ -125,6 +125,10 @@ public class OHLC implements Serializable {
 		return open == close;
 	}
 
+	
+	
+	
+	
     /**
      * Tests this instance for equality with an arbitrary object.
      *
@@ -164,12 +168,12 @@ public class OHLC implements Serializable {
      */
 	@Override
 	public int hashCode() {
-        int result = 193;
-        
-        result = HashUtils.hashCode(result, this.open);
-        result = HashUtils.hashCode(result, this.high);
-        result = HashUtils.hashCode(result, this.low);
-        result = HashUtils.hashCode(result, this.close);
+		int result = 193;
+
+		result = HashUtils.hashCode(result, open);
+		result = HashUtils.hashCode(result, high);
+		result = HashUtils.hashCode(result, low);
+		result = HashUtils.hashCode(result, close);
 
         return result;
 	}
