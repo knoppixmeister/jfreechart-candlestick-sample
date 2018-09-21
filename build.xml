@@ -1,12 +1,12 @@
-<project name="builder" default="build">
+<project name="builder" default="build_jar">
 
 	<target name="clean">
-		<delete dir="bin"/>
-		<mkdir dir="bin"/>
+		<delete dir="build"/>
+		<mkdir dir="build"/>
 	</target>
 
 	<target name="compile" depends="clean">
-		<javac srcdir="src" destdir="bin" debug="on">
+		<javac srcdir="src" destdir="build">
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar"/>
@@ -15,10 +15,23 @@
 		</javac>
 	</target>
 
-	<target name="build" depends="compile">
+	<target name="build_jar" depends="compile">
 		<delete file="jfree.jar"/>
+
+		<copy todir="build/org/jfree/chart/plot">
+			<fileset dir="src/main/java/org/jfree/chart/plot">
+			    <include name="**/*.properties"/>
+			</fileset>
+		</copy>
+
+		<copy todir="build/org/jfree/chart">
+			<fileset dir="src/main/java/org/jfree/chart">
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+
 		<jar destfile="jfree.jar">
-			<fileset dir="bin"></fileset>
+			<fileset dir="build"></fileset>
 		</jar>
 	</target>
 
