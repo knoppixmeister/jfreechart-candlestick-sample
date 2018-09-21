@@ -96,7 +96,7 @@ public class OHLCItem extends ComparableObjectItem {
 		else if(newPrice < ohlc.getLow()) ohlc.setLow(newPrice);
 
 		ohlc.setClose(newPrice);
-		
+
 		setObject(ohlc);
 	}
 
@@ -105,12 +105,18 @@ public class OHLCItem extends ComparableObjectItem {
 
 		return ohlc.getVolume();
 	}
-	
+
 	public void setVolume(double volume) {
 		OHLC ohlc = (OHLC)getObject();
 
 		ohlc.setVolume(volume);
-		
+
 		setObject(ohlc);
+	}
+
+	public boolean isDoji() {
+		OHLC ohlc = (OHLC)getObject();
+
+		return ohlc.getOpen() == ohlc.getClose();
 	}
 }
