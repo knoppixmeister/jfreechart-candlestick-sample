@@ -46,9 +46,9 @@ public class HighLowItemLabelGenerator implements XYItemLabelGenerator, XYToolTi
         if(numberFormatter == null) {
             throw new IllegalArgumentException("Null 'numberFormatter' argument.");
         }
-        
-        this.dateFormatter = dateFormatter;
-        this.numberFormatter = numberFormatter;
+
+        this.dateFormatter 		= dateFormatter;
+        this.numberFormatter 	= numberFormatter;
     }
 
     /**
