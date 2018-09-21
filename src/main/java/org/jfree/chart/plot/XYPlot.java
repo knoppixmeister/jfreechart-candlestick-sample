@@ -487,7 +487,8 @@ public class XYPlot extends Plot implements
      */
     @Override
     public String getPlotType() {
-        return localizationResources.getString("XY_Plot");
+        return "XY_Plot";
+        		//localizationResources.getString("XY_Plot");
     }
 
     /**

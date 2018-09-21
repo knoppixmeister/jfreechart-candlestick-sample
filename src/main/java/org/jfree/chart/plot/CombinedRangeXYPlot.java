@@ -127,10 +127,7 @@ import org.jfree.data.Range;
  * An extension of {@link XYPlot} that contains multiple subplots that share a
  * common range axis.
  */
-public class CombinedRangeXYPlot extends XYPlot
-        implements PlotChangeListener {
-
-    /** For serialization. */
+public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
     private static final long serialVersionUID = -5177814085082031168L;
 
     /** Storage for the subplot references. */
@@ -169,7 +166,8 @@ public class CombinedRangeXYPlot extends XYPlot
      */
     @Override
     public String getPlotType() {
-        return localizationResources.getString("Combined_Range_XYPlot");
+        return	//"Combined_Range_XYPlot";
+        		localizationResources.getString("Combined_Range_XYPlot");
     }
 
     /**

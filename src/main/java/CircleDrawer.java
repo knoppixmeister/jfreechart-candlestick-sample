@@ -44,7 +44,7 @@ public class CircleDrawer implements Drawable {
         	g2.fill(ellipse);
         }
 
-        if(this.outlinePaint != null && this.outlineStroke != null) {
+        if(outlinePaint != null && outlineStroke != null) {
         	g2.setPaint(this.outlinePaint);
         	g2.setStroke(this.outlineStroke);
         	g2.draw(ellipse);

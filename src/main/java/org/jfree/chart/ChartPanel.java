@@ -347,7 +347,7 @@ public class ChartPanel extends JPanel implements
     private transient Paint zoomFillPaint;
 
     /** The resourceBundle for the localization. */
-    protected static ResourceBundle localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle");
+	protected static ResourceBundle localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle");
 
     /** 
      * Temporary storage for the width and height of the chart 

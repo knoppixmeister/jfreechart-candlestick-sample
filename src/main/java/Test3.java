@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
@@ -19,12 +22,27 @@ import org.jfree.chart.ui.*;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
+import org.joda.time.DateTime;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 public class Test3 {
+	private static WebSocket socket;
+	private static OkHttpClient client;
+	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
+
 	public static void main(String[] args) {
+		socket = null;
+
+		/*
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
@@ -41,6 +59,7 @@ public class Test3 {
 		catch(UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
 		}
+		*/
 		
 		/*
 		CrosshairOverlay chOverlay = new CrosshairOverlay();
@@ -65,7 +84,6 @@ public class Test3 {
 
 	//--------------------------------------------------------------------------------------------
 
-		OHLCSeriesCollection collection = new OHLCSeriesCollection();
 		OHLCSeries series = new OHLCSeries("");
 		collection.addSeries(series);
 
@@ -118,7 +136,7 @@ public class Test3 {
 
 		plot1.setDomainCrosshairVisible(true);
 		plot1.setDomainCrosshairLockedOnData(true);
-		
+
 		plot1.setRangeCrosshairVisible(true);
 		//plot1.setRangeCrosshairValue(4000);
 		//plot1.setRangeC
@@ -294,7 +312,7 @@ public class Test3 {
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setVisible(true);
 
-		
+
 		/*
 		new Thread(new Runnable() {
 			@Override
@@ -305,22 +323,153 @@ public class Test3 {
 				catch(Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				combinedPlot.remove(plot3);
-				
 			}
 		}).start();
 		*/
 
-		OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
-														.retryOnConnectionFailure(true)
-														.build();
-		client.newWebSocket(
-			new Request.Builder().url("wss://api.bitfinex.com/ws/2")
-								//.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_5m")
+		/*
+		client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
+											.retryOnConnectionFailure(true)
+											.pingInterval(20, TimeUnit.SECONDS)
+											.build();
+		socket = client.newWebSocket(
+			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
+								.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
 								.build(),
-			new BFWebSocketListener(collection)
-			//new BNWebSocketListener()
+			//new BFWebSocketListener(collection)
+			new BNWebSocketListener(collection)
 		);
+		*/
+
+		reconnect();
+	}
+
+	public static void reconnect() {
+		if(socket != null) socket.cancel();
+		socket = null;
+
+		client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
+											.retryOnConnectionFailure(true)
+											.pingInterval(20, TimeUnit.SECONDS)
+											.build();
+		socket = client.newWebSocket(
+			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
+									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
+									.build(),
+			//new BFWebSocketListener(collection)
+			new BNWebSocketListener(collection)
+		);
+	}
+}
+
+class BNWebSocketListener extends WebSocketListener {
+	private OHLCSeriesCollection collection;
+	private Moshi moshi = new Moshi.Builder().build();
+	private JsonAdapter<BNCandleResult> jsonAdapter = moshi.adapter(BNCandleResult.class);
+
+	private OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
+															.retryOnConnectionFailure(true)
+															.pingInterval(20, TimeUnit.SECONDS)
+															.build();
+	
+
+	public BNWebSocketListener(OHLCSeriesCollection collection) {
+		this.collection = collection;
+
+		Response response;
+
+		try {
+			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1m&limit=1000").build()).execute();
+			if(!response.isSuccessful()) {
+				System.out.println("COULD NOT GET PAIR HISTORY CANDLES");
+				System.exit(1);
+			}
+
+			JsonAdapter<List<List>> bnJsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, List.class));
+			List<List> res = bnJsonAdapter.fromJson(response.body().string());
+
+			for(int j=0; j<res.size(); j++) {
+				List subRes = res.get(j);
+
+				DateTime dt = new DateTime(new BigDecimal(subRes.get(0).toString()).longValue());
+				//System.out.println( "TS: "+	dt.getMillis() +"; "+dt.getYear()+"-"+dt.getMonthOfYear()+"-"+dt.getDayOfMonth()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()  + "; OP: " + subRes.get(1).toString()	);
+
+				collection.getSeries(0).add(new OHLCItem(
+					new FixedMillisecond(dt.getMillis()),
+					Double.parseDouble(subRes.get(1).toString()),	//open,
+					Double.parseDouble(subRes.get(2).toString()),	//high,
+					Double.parseDouble(subRes.get(3).toString()),	//low,
+					Double.parseDouble(subRes.get(4).toString())	//close
+				));
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onFailure(WebSocket socket, Throwable t, Response response) {
+		t.printStackTrace();
+		
+		Test3.reconnect();
+	}
+
+	@Override
+	public void onClosed(WebSocket webSocket, int code, String reason) {
+		Test3.reconnect();
+	}
+
+	@Override
+	public void onOpen(WebSocket socket, Response response) {
+		System.out.println("BN_ON_OPEN");
+	}
+
+	@Override
+	public void onMessage(WebSocket socket, String text) {
+		System.out.println("BN_ON_MESSAGE. "+text);
+
+		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
+		
+		BNCandleResult candleResult;
+		try {
+			candleResult = jsonAdapter.fromJson(text);
+
+			long lastHistoryCandleTS = ((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getPeriod().getFirstMillisecond();
+
+			if(lastHistoryCandleTS == candleResult.data.k.t) {
+				System.out.println("UPD_CANDLE_PRICE");
+
+				System.out.println(	"OLD_CL_VAL: "+	String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
+
+				((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).updatePrice(	new BigDecimal(candleResult.data.k.c).doubleValue()		);
+
+				System.out.println(	"NEW_CL_VAL: "+ String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
+			}
+			else if(candleResult.data.k.t  > lastHistoryCandleTS) {
+				System.out.println("ADD_NEW_CANDLE");
+
+				collection.getSeries(0).add(new OHLCItem(
+					new FixedMillisecond(new BigDecimal(candleResult.data.k.t).longValue()),	//period,
+					Double.parseDouble(candleResult.data.k.o),									//open,
+					Double.parseDouble(candleResult.data.k.h),									//high,
+					Double.parseDouble(candleResult.data.k.l),									//low,
+					Double.parseDouble(candleResult.data.k.c)									//close
+				));
+			}
+			else {
+				System.out.println("");
+				System.out.println("NO_TODO");
+
+				//System.exit(0);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("---------------------------------------------------------------------------------");
 	}
 }

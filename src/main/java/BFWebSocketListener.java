@@ -17,7 +17,7 @@ public class BFWebSocketListener extends WebSocketListener {
 	public void onOpen(WebSocket socket, Response response) {
 		System.out.println("BF_ON_OPEN");
 
-		socket.send("{\"event\":\"subscribe\",\"channel\":\"candles\",\"key\":\"trade:1m:tBTCUSD\"}");
+		socket.send("{\"event\":\"subscribe\",\"channel\":\"candles\",\"key\":\"trade:1m:tETHUSD\"}");
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class BFWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
-		//System.out.println("BF_ON_MESSAGE. "+text);
+		System.out.println("BF_ON_MESSAGE. "+text);
 
 		if(text.contains("event") || text.contains("hb")) return;
 		
