@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.Socket;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -100,7 +101,11 @@ class DateDomainCrossharLabelGenerator implements CrosshairLabelGenerator {
 public class Test {
 	public static double oldPrice = 0;
 
+	private static WebSocket socket;
+
 	public static void main(String[] args) {
+		socket = null;
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
@@ -524,6 +529,7 @@ public class Test {
 
 		OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
 														.retryOnConnectionFailure(true)
+														.pingInterval(20, TimeUnit.SECONDS)
 														.build();
 
 		//https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=10000
@@ -573,19 +579,24 @@ public class Test {
 
 		
 		client.newWebSocket(
-			new Request.Builder().url("wss://api.bitfinex.com/ws/2")
-								//.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_5m")
+			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
+								.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
 								.build(),
 			new BFWebSocketListener(collection)
-			//new BNWebSocketListener()
+			//new BNWebSocketListener(collection)
 		);
-		
 
 		//---------------------------------------------------------------------------------------------------------------
 	}
 }
-
+/*
 class BNWebSocketListener extends WebSocketListener {
+	private OHLCSeriesCollection collection;
+
+	public BNWebSocketListener(OHLCSeriesCollection collection) {
+		this.collection = collection;
+	}
+
 	@Override
 	public void onOpen(WebSocket socket, Response response) {
 		System.out.println("BN_ON_OPEN");
@@ -596,3 +607,4 @@ class BNWebSocketListener extends WebSocketListener {
 		System.out.println("BN_ON_MESSAGE. "+text);
 	}
 }
+*/
