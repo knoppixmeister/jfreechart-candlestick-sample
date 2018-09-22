@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
@@ -19,6 +20,8 @@ import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.chart.ui.*;
+import org.jfree.data.general.SeriesChangeEvent;
+import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
@@ -97,6 +100,23 @@ public class Test3 {
         collection3.addSeries(series2);
         collection3.addSeries(series3);
 
+        series.addChangeListener(new SeriesChangeListener() {
+			@Override
+			public void seriesChanged(SeriesChangeEvent event) {
+				//System.out.println(	event.getSource().toString()	);
+
+				Map<Long, Double> rsiRes = RSI.run(series, 14);
+				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {
+					//System.out.println(entry.getKey() + "/" + entry.getValue());
+
+					//series1.add(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
+					
+					series1.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
+				}
+			}
+        });
+        
+        /*
         for(int i=0; i<200; i++) {
         	long tm = System.currentTimeMillis()+1000+i;
 
@@ -108,13 +128,14 @@ public class Test3 {
 				3000,	//low,
 				7000	//close
 			));
-			*/
+			*
 
 			//series1.add(new TimeSeriesDataItem(new FixedMillisecond(tm), i % 2 == 0 ? 75 : 10));
 
 			//series3.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 75));
 			//series2.add(new TimeSeriesDataItem(new FixedMillisecond(tm), 10));
         }
+		*/
 
         DateAxis dateAxis 		= new DateAxis();
         NumberAxis priceAxis 	= new NumberAxis();
@@ -178,6 +199,7 @@ public class Test3 {
 		*/
 
 		IntervalMarker target = new IntervalMarker(30.0, 70.0);
+		target.setPaint(ChartColor.LIGHT_GRAY);
 		//target.setLabel("Target Range");
 		//target.setLabelFont(new Font("SansSerif", Font.ITALIC, 11));
 		//target.setLabelAnchor(RectangleAnchor.LEFT);
@@ -207,10 +229,11 @@ public class Test3 {
 		combinedPlot.add(plot1, 5);
 		combinedPlot.add(plot2, 1);
 		combinedPlot.add(plot3, 1);
-
+		
 		JFreeChart chart = new JFreeChart(combinedPlot);
 
 		ChartPanel panel = new ChartPanel(chart);
+		panel.setDoubleBuffered(true);
 
 		//panel.addOverlay(chOverlay);
 
@@ -404,6 +427,8 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(subRes.get(4).toString()),	//close
 					1000
 				));
+				
+				Thread.sleep(1);
 			}
 		}
 		catch(Exception e) {

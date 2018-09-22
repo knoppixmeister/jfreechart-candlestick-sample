@@ -571,14 +571,14 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         
         item = (TimeSeriesDataItem) item.clone();
         Class c = item.getPeriod().getClass();
-        if(this.timePeriodClass == null) this.timePeriodClass = c;
-        else if(!this.timePeriodClass.equals(c)) {
+        if(timePeriodClass == null) timePeriodClass = c;
+        else if(!timePeriodClass.equals(c)) {
             StringBuilder b = new StringBuilder();
             b.append("You are trying to add data where the time period class ");
             b.append("is ");
             b.append(item.getPeriod().getClass().getName());
             b.append(", but the TimeSeries is expecting an instance of ");
-            b.append(this.timePeriodClass.getName());
+            b.append(timePeriodClass.getName());
             b.append(".");
             
             throw new SeriesException(b.toString());
