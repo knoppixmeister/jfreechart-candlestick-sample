@@ -125,7 +125,7 @@ public class Test3 {
 			null,			//domainAxis,
 			priceAxis,		//rangeAxis,
 			new CandlestickRenderer(
-				3,		//candleWidth,
+				CandlestickRenderer.WIDTHMETHOD_AVERAGE,		//candleWidth,
 				true,	//drawVolume,
 				null	//toolTipGenerator
 			)//renderer
@@ -148,7 +148,7 @@ public class Test3 {
 		plot1.setRenderer(1, new StandardXYItemRenderer());
 
 		//------------------------------------------------------------
-		TimeSeriesCollection dataset = new TimeSeriesCollection();
+		//TimeSeriesCollection dataset = new TimeSeriesCollection();
 
 		XYPlot plot2 = new XYPlot(
 			collection2,								//dataset,
@@ -356,7 +356,7 @@ public class Test3 {
 											.build();
 		socket = client.newWebSocket(
 			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
-									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
+									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1m")
 									.build(),
 			//new BFWebSocketListener(collection)
 			new BNWebSocketListener(collection)
@@ -401,7 +401,8 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(subRes.get(1).toString()),	//open,
 					Double.parseDouble(subRes.get(2).toString()),	//high,
 					Double.parseDouble(subRes.get(3).toString()),	//low,
-					Double.parseDouble(subRes.get(4).toString())	//close
+					Double.parseDouble(subRes.get(4).toString()),	//close
+					1000
 				));
 			}
 		}
@@ -444,7 +445,7 @@ class BNWebSocketListener extends WebSocketListener {
 
 				System.out.println(	"OLD_CL_VAL: "+	String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 
-				((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).updatePrice(	new BigDecimal(candleResult.data.k.c).doubleValue()		);
+				collection.getSeries(0).updatePrice(new BigDecimal(candleResult.data.k.c).doubleValue());
 
 				System.out.println(	"NEW_CL_VAL: "+ String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 			}
@@ -456,7 +457,8 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(candleResult.data.k.o),									//open,
 					Double.parseDouble(candleResult.data.k.h),									//high,
 					Double.parseDouble(candleResult.data.k.l),									//low,
-					Double.parseDouble(candleResult.data.k.c)									//close
+					Double.parseDouble(candleResult.data.k.c),									//close
+					1000
 				));
 			}
 			else {
