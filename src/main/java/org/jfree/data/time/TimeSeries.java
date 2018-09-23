@@ -97,14 +97,14 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
     public TimeSeries(Comparable name, String domain, String range) {
         super(name);
         
-        this.domain = domain;
-        this.range = range;
-        this.timePeriodClass = null;
-        this.data = new java.util.ArrayList();
-        this.maximumItemCount = Integer.MAX_VALUE;
-        this.maximumItemAge = Long.MAX_VALUE;
-        this.minY = Double.NaN;
-        this.maxY = Double.NaN;
+        this.domain 		= domain;
+        this.range 			= range;
+        timePeriodClass 	= null;
+        data 				= new java.util.ArrayList();
+        maximumItemCount 	= Integer.MAX_VALUE;
+        maximumItemAge 		= Long.MAX_VALUE;
+        minY 				= Double.NaN;
+        maxY 				= Double.NaN;
     }
 
     /**
@@ -155,8 +155,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @see #getRangeDescription()
      */
     public void setRangeDescription(String description) {
-        String old = this.range;
-        this.range = description;
+        String old = range;
+        
+        range = description;
+        
         firePropertyChange("Range", old, description);
     }
 
@@ -178,7 +180,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     public List getItems() {
         // FIXME: perhaps we should clone the data list
-        return Collections.unmodifiableList(this.data);
+        return Collections.unmodifiableList(data);
     }
 
     /**
@@ -302,7 +304,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         Args.nullNotPermitted(xAnchor, "xAnchor");
         Args.nullNotPermitted(zone, "zone");
         
-        if(this.data.isEmpty()) return null;
+        if(data.isEmpty()) return null;
 
         Calendar calendar = Calendar.getInstance(zone);
         // since the items are ordered, we could be more clever here and avoid
@@ -311,7 +313,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         double highY = Double.NEGATIVE_INFINITY;
 
         for(int i=0; i<data.size(); i++) {
-            TimeSeriesDataItem item = (TimeSeriesDataItem)data.get(i);
+            TimeSeriesDataItem item = (TimeSeriesDataItem) data.get(i);
             long millis = item.getPeriod().getMillisecond(xAnchor, calendar);
             
             if(xRange.contains(millis)) {
@@ -388,7 +390,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @return The data item.
      */
     public TimeSeriesDataItem getDataItem(int index) {
-        TimeSeriesDataItem item = (TimeSeriesDataItem)data.get(index);
+        TimeSeriesDataItem item = (TimeSeriesDataItem) data.get(index);
         
         return (TimeSeriesDataItem) item.clone();
     }
@@ -426,7 +428,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @since 1.0.14
      */
     TimeSeriesDataItem getRawDataItem(int index) {
-        return (TimeSeriesDataItem)data.get(index);
+        return (TimeSeriesDataItem) data.get(index);
     }
 
     /**
@@ -444,7 +446,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     TimeSeriesDataItem getRawDataItem(RegularTimePeriod period) {
         int index = getIndex(period);
-        if(index >= 0) return (TimeSeriesDataItem)data.get(index);
+        if(index >= 0) return (TimeSeriesDataItem) data.get(index);
 
         return null;
     }
@@ -496,12 +498,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     public Collection getTimePeriodsUniqueToOtherSeries(TimeSeries series) {
         Collection result = new java.util.ArrayList();
-        for (int i = 0; i < series.getItemCount(); i++) {
+        for(int i = 0; i < series.getItemCount(); i++) {
             RegularTimePeriod period = series.getTimePeriod(i);
             int index = getIndex(period);
-            if (index < 0) {
-                result.add(period);
-            }
+            if(index < 0) result.add(period);
         }
         
         return result;
@@ -520,7 +520,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         
         TimeSeriesDataItem dummy = new TimeSeriesDataItem(period, Integer.MIN_VALUE);
         
-        return Collections.binarySearch(this.data, dummy);
+        return Collections.binarySearch(data, dummy);
     }
 
     /**
@@ -571,6 +571,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         
         item = (TimeSeriesDataItem) item.clone();
         Class c = item.getPeriod().getClass();
+        
         if(timePeriodClass == null) timePeriodClass = c;
         else if(!timePeriodClass.equals(c)) {
             StringBuilder b = new StringBuilder();
@@ -813,7 +814,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             String msg = "You are trying to add data where the time "
                     + "period class is " + periodClass.getName()
                     + ", but the TimeSeries is expecting an instance of "
-                    + this.timePeriodClass.getName() + ".";
+                    + timePeriodClass.getName() + ".";
             
             throw new SeriesException(msg);
         }

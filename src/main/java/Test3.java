@@ -106,11 +106,7 @@ public class Test3 {
 				//System.out.println(	event.getSource().toString()	);
 
 				Map<Long, Double> rsiRes = RSI.run(series, 14);
-				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {
-					//System.out.println(entry.getKey() + "/" + entry.getValue());
-
-					//series1.add(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
-					
+				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {			
 					series1.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
 				}
 			}
@@ -164,9 +160,11 @@ public class Test3 {
 
 		plot1.setNoDataMessage("No data ...");
 
+		/*
 		XYDataset dataset2 = MovingAverage.createMovingAverage(collection, "-MAVG", 3 * 24 * 60 * 60 * 1000L, 0L);
 		plot1.setDataset(1, dataset2);
 		plot1.setRenderer(1, new StandardXYItemRenderer());
+		*/
 
 		//------------------------------------------------------------
 		//TimeSeriesCollection dataset = new TimeSeriesCollection();
