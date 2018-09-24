@@ -274,8 +274,31 @@ public class Test3 {
 				//System.out.println(dataArea.getX());
 
 				double x = dateAxis.java2DToValue(dataArea.getX(), dataArea, combinedPlot.getDomainAxisEdge());
+
+				long firstTm = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getPeriod().getFirstMillisecond();
+				DateTime dtFtm = new DateTime(firstTm);
 				
-				System.out.println("DAX: "+ new BigDecimal(x).longValue());
+				System.out.println("DAX: "+ new BigDecimal(x).longValue() +" : F_TM: "+firstTm+"; T_TM_D: "+dtFtm.getHourOfDay()+":"+dtFtm.getMinuteOfHour());
+
+				if(new BigDecimal(x).longValue() < firstTm) System.out.println("LESS");
+				else System.out.println("MORE");
+
+				if(new BigDecimal(x).longValue() > firstTm) return;
+
+				Request request = new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1m&limit=1000&endTime="+firstTm)
+														.build();
+				try {
+					Response response = client.newCall(request).execute();
+					if(!response.isSuccessful()) return;
+					
+					System.out.println(	response.body().string()	);
+				}
+				catch(Exception e1) {
+					e1.printStackTrace();
+				}
+
+				
+				System.exit(0);
 
 				/*
 				DateTime dt = new DateTime(new BigDecimal(x).longValue());
