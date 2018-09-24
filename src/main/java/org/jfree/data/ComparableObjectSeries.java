@@ -67,7 +67,7 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @return A boolean.
      */
     public boolean getAutoSort() {
-        return this.autoSort;
+        return autoSort;
     }
 
     /**
@@ -77,7 +77,7 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @return A boolean.
      */
     public boolean getAllowDuplicateXValues() {
-        return this.allowDuplicateXValues;
+        return allowDuplicateXValues;
     }
 
     /**
@@ -98,7 +98,7 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @see #setMaximumItemCount(int)
      */
     public int getMaximumItemCount() {
-        return this.maximumItemCount;
+        return maximumItemCount;
     }
 
     /**
@@ -116,10 +116,11 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @param maximum  the maximum number of items for the series.
      */
     public void setMaximumItemCount(int maximum) {
-        this.maximumItemCount = maximum;
+    	maximumItemCount = maximum;
         boolean dataRemoved = false;
-        while (this.data.size() > maximum) {
-            this.data.remove(0);
+        
+        while(data.size() > maximum) {
+        	data.remove(0);
             dataRemoved = true;
         }
         
@@ -137,7 +138,6 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @param y  the y-value ({@code null} permitted).
      */
     protected void add(Comparable x, Object y) {
-        // argument checking delegated...
         add(x, y, true);
     }
 
@@ -180,16 +180,12 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
                 if(this.allowDuplicateXValues) {
                     // need to make sure we are adding *after* any duplicates
                     int size = this.data.size();
-                    while (index < size
-                           && item.compareTo(this.data.get(index)) == 0) {
+                    while(index < size && item.compareTo(this.data.get(index)) == 0) {
                         index++;
                     }
-                    if (index < this.data.size()) {
-                        this.data.add(index, item);
-                    }
-                    else {
-                        this.data.add(item);
-                    }
+                    
+                    if(index < data.size()) data.add(index, item);
+                    else data.add(item);
                 }
                 else throw new SeriesException("X-value already exists.");
             }
@@ -221,12 +217,10 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      * @return The index.
      */
     public int indexOf(Comparable x) {
-        if(this.autoSort) {
-            return Collections.binarySearch(this.data, new ComparableObjectItem(x, null));
-        }
+        if(autoSort) return Collections.binarySearch(data, new ComparableObjectItem(x, null));
         else {
-            for (int i = 0; i < this.data.size(); i++) {
-                ComparableObjectItem item = (ComparableObjectItem)this.data.get(i);
+            for(int i = 0; i < data.size(); i++) {
+                ComparableObjectItem item = (ComparableObjectItem) data.get(i);
                 if(item.getComparable().equals(x)) return i;
             }
 
@@ -245,9 +239,7 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
      */
     protected void update(Comparable x, Object y) {
         int index = indexOf(x);
-        if(index < 0) {
-            throw new SeriesException("No observation for x = " + x);
-        }
+        if(index < 0) throw new SeriesException("No observation for x = " + x);
         else {
             ComparableObjectItem item = getDataItem(index);
             item.setObject(y);

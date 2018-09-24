@@ -137,16 +137,20 @@ public class Test3 {
         NumberAxis priceAxis 	= new NumberAxis();
         priceAxis.setAutoRangeIncludesZero(false);
 
+        CandlestickRenderer renderer = new CandlestickRenderer(
+			CandlestickRenderer.WIDTHMETHOD_AVERAGE,		//candleWidth,
+			true,	//drawVolume,
+			null	//toolTipGenerator
+		);
+        renderer.setVolumePaint(ChartColor.BLACK);
+        
 		XYPlot plot1 = new XYPlot(
 			collection,		//dataset,
 			null,			//domainAxis,
 			priceAxis,		//rangeAxis,
-			new CandlestickRenderer(
-				CandlestickRenderer.WIDTHMETHOD_AVERAGE,		//candleWidth,
-				true,	//drawVolume,
-				null	//toolTipGenerator
-			)//renderer
+			renderer		//renderer
 		);
+		
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
 		plot1.setDomainPannable(true);
@@ -166,7 +170,8 @@ public class Test3 {
 		plot1.setRenderer(1, new StandardXYItemRenderer());
 		*/
 
-		//------------------------------------------------------------
+	//------------------------------------------------------------
+
 		//TimeSeriesCollection dataset = new TimeSeriesCollection();
 
 		XYPlot plot2 = new XYPlot(
@@ -213,6 +218,16 @@ public class Test3 {
 			//rangeAxis,
 			//renderer
 		);
+		
+		
+	//----------------------------------------------------------------------------------------------------------------------
+		
+		XYPlot plot4 = new XYPlot(
+			//dataset,
+			//domainAxis,
+			//rangeAxis,
+			//renderer
+		);
 
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(-9);
@@ -227,6 +242,7 @@ public class Test3 {
 		combinedPlot.add(plot1, 5);
 		combinedPlot.add(plot2, 1);
 		combinedPlot.add(plot3, 1);
+		combinedPlot.add(plot4, 1);
 		
 		JFreeChart chart = new JFreeChart(combinedPlot);
 
@@ -251,6 +267,28 @@ public class Test3 {
 		panel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				System.out.println("MS_RELEASED");
+				
+				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
+				
+				//System.out.println(dataArea.getX());
+
+				double x = dateAxis.java2DToValue(dataArea.getX(), dataArea, combinedPlot.getDomainAxisEdge());
+				
+				System.out.println("DAX: "+ new BigDecimal(x).longValue());
+
+				/*
+				DateTime dt = new DateTime(new BigDecimal(x).longValue());
+				System.out.println("DT: "+dt.getHourOfDay()+":"+dt.getMinuteOfHour());
+				*/
+
+				/*
+				dateAxis.valueToJava2D(
+					//value,
+					//area,
+					//edge
+				);
+				*/
 			}
 
 			@Override
@@ -296,7 +334,10 @@ public class Test3 {
 
 					plot3.setDomainCrosshairVisible(true);
 					plot3.setDomainCrosshairValue(x);
-
+					
+					plot4.setDomainCrosshairVisible(true);
+					plot4.setDomainCrosshairValue(x);
+					
 					//combinedPlot.setDomainCrosshairValue(x);
 				}
 				//else System.out.println("NO DATA AREA");
@@ -402,6 +443,8 @@ class BNWebSocketListener extends WebSocketListener {
 		Response response;
 
 		try {
+			System.out.println("START INITIAL FETCH OF CANDLES ....");
+			
 			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1m&limit=1000").build()).execute();
 			if(!response.isSuccessful()) {
 				System.out.println("COULD NOT GET PAIR HISTORY CANDLES");
@@ -411,10 +454,13 @@ class BNWebSocketListener extends WebSocketListener {
 			JsonAdapter<List<List>> bnJsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, List.class));
 			List<List> res = bnJsonAdapter.fromJson(response.body().string());
 
+			((OHLCSeries)collection.getSeries(0)).setNotify(false);
+
+			DateTime dt;
 			for(int j=0; j<res.size(); j++) {
 				List subRes = res.get(j);
 
-				DateTime dt = new DateTime(new BigDecimal(subRes.get(0).toString()).longValue());
+				dt = new DateTime(new BigDecimal(subRes.get(0).toString()).longValue());
 				//System.out.println( "TS: "+	dt.getMillis() +"; "+dt.getYear()+"-"+dt.getMonthOfYear()+"-"+dt.getDayOfMonth()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()  + "; OP: " + subRes.get(1).toString()	);
 
 				collection.getSeries(0).add(new OHLCItem(
@@ -423,11 +469,13 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(subRes.get(2).toString()),	//high,
 					Double.parseDouble(subRes.get(3).toString()),	//low,
 					Double.parseDouble(subRes.get(4).toString()),	//close
-					1000
+					Double.parseDouble(subRes.get(5).toString())	//volume
 				));
-				
-				Thread.sleep(1);
 			}
+			
+			((OHLCSeries)collection.getSeries(0)).setNotify(true);
+			
+			System.out.println("DONE");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -481,7 +529,7 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(candleResult.data.k.h),									//high,
 					Double.parseDouble(candleResult.data.k.l),									//low,
 					Double.parseDouble(candleResult.data.k.c),									//close
-					1000
+					Double.parseDouble(candleResult.data.k.l)									//volume
 				));
 			}
 			else {

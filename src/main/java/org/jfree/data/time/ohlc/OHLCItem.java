@@ -107,7 +107,7 @@ public class OHLCItem extends ComparableObjectItem {
 	}
 
 	public void setVolume(double volume) {
-		OHLC ohlc = (OHLC)getObject();
+		OHLC ohlc = (OHLC) getObject();
 
 		ohlc.setVolume(volume);
 

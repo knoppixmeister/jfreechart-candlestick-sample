@@ -105,7 +105,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
     		throw new IllegalArgumentException("Series index out of bounds");
     	}
 
-    	return (OHLCSeries)data.get(series);
+    	return (OHLCSeries) data.get(series);
     }
 
     /**
@@ -137,7 +137,8 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public int getItemCount(int series) {
-        // defer argument checking
+    	if(series < 0) return 0;
+    	
         return getSeries(series).getItemCount();
     }
 
@@ -331,7 +332,7 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public Number getVolume(int series, int item) {
-        return null;
+    	return new Double(getVolumeValue(series, item));
     }
 
     /**
@@ -345,7 +346,10 @@ public class OHLCSeriesCollection extends AbstractXYDataset implements OHLCDatas
      */
     @Override
     public double getVolumeValue(int series, int item) {
-        return Double.NaN;
+    	OHLCSeries s = (OHLCSeries) data.get(series);
+    	OHLCItem di = (OHLCItem) s.getDataItem(item);
+    	
+        return di.getVolume();
     }
 
     /**

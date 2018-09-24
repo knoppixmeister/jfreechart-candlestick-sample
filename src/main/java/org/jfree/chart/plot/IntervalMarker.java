@@ -175,10 +175,10 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
         if (this.endValue != that.endValue) {
             return false;
         }
-        if (!ObjectUtils.equal(this.gradientPaintTransformer,
-                that.gradientPaintTransformer)) {
+        if(!ObjectUtils.equal(this.gradientPaintTransformer, that.gradientPaintTransformer)) {
             return false;
         }
+        
         return true;
     }
 

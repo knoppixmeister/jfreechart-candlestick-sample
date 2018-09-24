@@ -57,7 +57,7 @@ public class OHLCSeries extends ComparableObjectSeries {
      * @param low  the low-value.
      * @param close  the close-value.
 	*/
-    public void add(RegularTimePeriod period, double open, double high, double low, double close) {
+	public void add(RegularTimePeriod period, double open, double high, double low, double close) {
     	if(getItemCount() > 0) {
     		OHLCItem item0 = (OHLCItem) this.getDataItem(0);
             if(!period.getClass().equals(item0.getPeriod().getClass())) {
@@ -65,9 +65,20 @@ public class OHLCSeries extends ComparableObjectSeries {
             }
     	}
 
-        super.add(new OHLCItem(period, open, high, low, close), true);
+        super.add(new OHLCItem(period, open, high, low, close, 0), true);
 	}
 
+	public void add(RegularTimePeriod period, double open, double high, double low, double close, double volume) {
+    	if(getItemCount() > 0) {
+    		OHLCItem item0 = (OHLCItem) this.getDataItem(0);
+            if(!period.getClass().equals(item0.getPeriod().getClass())) {
+            	throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
+            }
+    	}
+
+        super.add(new OHLCItem(period, open, high, low, close, volume), true);
+	}
+	
 	/**
      * Adds a data item to the series.  The values from the item passed to
      * this method will be copied into a new object.
@@ -84,7 +95,8 @@ public class OHLCSeries extends ComparableObjectSeries {
         	item.getOpenValue(),
         	item.getHighValue(),
         	item.getLowValue(),
-        	item.getCloseValue()
+        	item.getCloseValue(),
+        	item.getVolume()
         );
     }
 

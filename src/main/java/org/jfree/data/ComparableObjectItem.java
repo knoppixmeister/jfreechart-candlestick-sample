@@ -8,7 +8,6 @@ import org.jfree.chart.util.*;
  * {@link ComparableObjectSeries}.
  */
 public class ComparableObjectItem implements Cloneable, Comparable, Serializable {
-	/** For serialization. */
 	private static final long serialVersionUID = 2751513470325494890L;
 
     /** The x-value. */
@@ -27,7 +26,7 @@ public class ComparableObjectItem implements Cloneable, Comparable, Serializable
         Args.nullNotPermitted(x, "x");
 
         this.x = x;
-        this.obj = y;
+        obj = y;
     }
 
     /**
@@ -36,7 +35,7 @@ public class ComparableObjectItem implements Cloneable, Comparable, Serializable
      * @return The x-value (never {@code null}).
      */
     protected Comparable getComparable() {
-        return this.x;
+        return x;
     }
 
     /**
@@ -105,6 +104,11 @@ public class ComparableObjectItem implements Cloneable, Comparable, Serializable
         return super.clone();
     }
 
+    
+    
+    
+    
+    
     /**
      * Tests if this object is equal to another.
      *

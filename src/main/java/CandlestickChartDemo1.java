@@ -1,11 +1,14 @@
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JPanel;
+
+import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.CandlestickRenderer;
 import org.jfree.data.xy.DefaultHighLowDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.ui.ApplicationFrame;
@@ -34,18 +37,20 @@ public class CandlestickChartDemo1 extends ApplicationFrame {
      * @return The dataset.
      */
     private static JFreeChart createChart(OHLCDataset dataset) {
-        JFreeChart chart = ChartFactory.createCandlestickChart(
-            "Candlestick Demo 1",
-            "Time",
-            "Value",
+    	JFreeChart chart = ChartFactory.createCandlestickChart(
+            "",
+            "",
+            "",
             dataset,
-            true
-        );
-        
-        XYPlot plot = (XYPlot)chart.getPlot();
-        plot.setDomainPannable(false);
-        //plot.getRenderer().
-        
+            false
+		);
+
+    	XYPlot plot = chart.getXYPlot();
+    	plot.setDomainPannable(true);
+    	plot.setBackgroundPaint(ChartColor.BLACK);
+    
+        //((CandlestickRenderer)plot.getRenderer()).setDrawVolume(false);
+	
         NumberAxis axis = (NumberAxis) plot.getRangeAxis();
         axis.setAutoRangeIncludesZero(true);
         axis.setUpperMargin(1.0);

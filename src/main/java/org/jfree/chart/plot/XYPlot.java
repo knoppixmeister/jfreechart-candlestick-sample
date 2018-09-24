@@ -2877,6 +2877,7 @@ public class XYPlot extends Plot implements
 
         crosshairState.setAnchorX(Double.NaN);
         crosshairState.setAnchorY(Double.NaN);
+        
         if(anchor != null) {
             ValueAxis domainAxis = getDomainAxis();
             if(domainAxis != null) {
@@ -2944,7 +2945,7 @@ public class XYPlot extends Plot implements
         Graphics2D savedG2 = g2;
         BufferedImage dataImage = null;
         boolean suppressShadow = Boolean.TRUE.equals(g2.getRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION));
-        if (this.shadowGenerator != null && !suppressShadow) {
+        if(shadowGenerator != null && !suppressShadow) {
             dataImage = new BufferedImage((int) dataArea.getWidth(), (int)dataArea.getHeight(), BufferedImage.TYPE_INT_ARGB);
             g2 = dataImage.createGraphics();
             g2.translate(-dataArea.getX(), -dataArea.getY());
@@ -2956,6 +2957,7 @@ public class XYPlot extends Plot implements
             int datasetIndex = indexOf(dataset);
             drawDomainMarkers(g2, dataArea, datasetIndex, Layer.BACKGROUND);
         }
+        
         for(XYDataset dataset: datasets.values()) {
             int datasetIndex = indexOf(dataset);
             drawRangeMarkers(g2, dataArea, datasetIndex, Layer.BACKGROUND);
@@ -3044,13 +3046,15 @@ public class XYPlot extends Plot implements
         }
 
         drawAnnotations(g2, dataArea, info);
-        if(this.shadowGenerator != null && !suppressShadow) {
-            BufferedImage shadowImage = this.shadowGenerator.createDropShadow(dataImage);
+        if(shadowGenerator != null && !suppressShadow) {
+            BufferedImage shadowImage = shadowGenerator.createDropShadow(dataImage);
             g2 = savedG2;
-            g2.drawImage(shadowImage, (int) dataArea.getX()
-                    + this.shadowGenerator.calculateOffsetX(),
-                    (int) dataArea.getY()
-                    + this.shadowGenerator.calculateOffsetY(), null);
+            g2.drawImage(
+            	shadowImage,
+            	(int) dataArea.getX() + shadowGenerator.calculateOffsetX(),
+            	(int) dataArea.getY() + shadowGenerator.calculateOffsetY(),
+            	null
+            );
             g2.drawImage(dataImage, (int) dataArea.getX(), (int) dataArea.getY(), null);
         }
         g2.setClip(originalClip);

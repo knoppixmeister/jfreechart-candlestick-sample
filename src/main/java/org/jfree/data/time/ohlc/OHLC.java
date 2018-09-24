@@ -144,6 +144,7 @@ public class OHLC implements Serializable {
         if (!(obj instanceof OHLC)) {
             return false;
         }
+        
         OHLC that = (OHLC) obj;
         if (this.open != that.open) {
             return false;
@@ -157,6 +158,7 @@ public class OHLC implements Serializable {
         if (this.low != that.low) {
             return false;
         }
+        if(volume != that.volume) return false;
         
         return true;
 	}
@@ -174,6 +176,7 @@ public class OHLC implements Serializable {
 		result = HashUtils.hashCode(result, high);
 		result = HashUtils.hashCode(result, low);
 		result = HashUtils.hashCode(result, close);
+		result = HashUtils.hashCode(result, volume);
 
         return result;
 	}
