@@ -62,12 +62,12 @@ public abstract class Series implements Cloneable, Serializable {
     protected Series(Comparable key, String description) {
         Args.nullNotPermitted(key, "key");
         
-        this.key = key;
-        this.description = description;
-        this.listeners = new EventListenerList();
-        this.propertyChangeSupport = new PropertyChangeSupport(this);
-        this.vetoableChangeSupport = new VetoableChangeSupport(this);
-        this.notify = true;
+        this.key 				= key;
+        this.description 		= description;
+        listeners 				= new EventListenerList();
+        propertyChangeSupport 	= new PropertyChangeSupport(this);
+        vetoableChangeSupport 	= new VetoableChangeSupport(this);
+        notify 					= true;
     }
 
     /**
@@ -101,13 +101,13 @@ public abstract class Series implements Cloneable, Serializable {
             // if this series belongs to a dataset, the dataset might veto the
             // change if it results in two series within the dataset having the
             // same key
-            this.vetoableChangeSupport.fireVetoableChange("Key", old, key);
+        	vetoableChangeSupport.fireVetoableChange("Key", old, key);
             this.key = key;
             // prior to 1.0.14, we just fired a PropertyChange - so we need to
             // keep doing this
-            this.propertyChangeSupport.firePropertyChange("Key", old, key);
+            propertyChangeSupport.firePropertyChange("Key", old, key);
         }
-        catch (PropertyVetoException e) {
+        catch(PropertyVetoException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -134,7 +134,8 @@ public abstract class Series implements Cloneable, Serializable {
     public void setDescription(String description) {
         String old = this.description;
         this.description = description;
-        this.propertyChangeSupport.firePropertyChange("Description", old, description);
+        
+        propertyChangeSupport.firePropertyChange("Description", old, description);
     }
 
     /**
@@ -211,6 +212,19 @@ public abstract class Series implements Cloneable, Serializable {
         return clone;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests the series for equality with another object.
      *

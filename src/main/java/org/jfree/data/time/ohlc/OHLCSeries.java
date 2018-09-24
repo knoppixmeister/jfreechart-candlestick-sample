@@ -4,6 +4,8 @@ import org.jfree.chart.util.Args;
 import org.jfree.data.*;
 import org.jfree.data.time.RegularTimePeriod;
 
+import com.sun.org.apache.xpath.internal.Arg;
+
 /**
  * A list of ({@link RegularTimePeriod}, open, high, low, close) data items.
  *
@@ -59,7 +61,7 @@ public class OHLCSeries extends ComparableObjectSeries {
 	*/
 	public void add(RegularTimePeriod period, double open, double high, double low, double close) {
     	if(getItemCount() > 0) {
-    		OHLCItem item0 = (OHLCItem) this.getDataItem(0);
+    		OHLCItem item0 = (OHLCItem) getDataItem(0);
             if(!period.getClass().equals(item0.getPeriod().getClass())) {
             	throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
             }
@@ -70,7 +72,7 @@ public class OHLCSeries extends ComparableObjectSeries {
 
 	public void add(RegularTimePeriod period, double open, double high, double low, double close, double volume) {
     	if(getItemCount() > 0) {
-    		OHLCItem item0 = (OHLCItem) this.getDataItem(0);
+    		OHLCItem item0 = (OHLCItem) getDataItem(0);
             if(!period.getClass().equals(item0.getPeriod().getClass())) {
             	throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
             }
@@ -79,6 +81,17 @@ public class OHLCSeries extends ComparableObjectSeries {
         super.add(new OHLCItem(period, open, high, low, close, volume), true);
 	}
 	
+	public void add(RegularTimePeriod period, double open, double high, double low, double close, double volume, int position) {
+    	if(getItemCount() > 0) {
+    		OHLCItem item0 = (OHLCItem) getDataItem(0);
+            if(!period.getClass().equals(item0.getPeriod().getClass())) {
+            	throw new IllegalArgumentException("Can't mix RegularTimePeriod class types.");
+            }
+    	}
+
+    	super.add(new OHLCItem(period, open, high, low, close, volume), position, true);
+	}
+
 	/**
      * Adds a data item to the series.  The values from the item passed to
      * this method will be copied into a new object.
@@ -98,6 +111,21 @@ public class OHLCSeries extends ComparableObjectSeries {
         	item.getCloseValue(),
         	item.getVolume()
         );
+	}
+
+	public void add(OHLCItem item, int position) {
+        Args.nullNotPermitted(item, "item");
+        Args.requireNonNegative(position, "position");
+
+        add(
+        	item.getPeriod(),
+        	item.getOpenValue(),
+        	item.getHighValue(),
+        	item.getLowValue(),
+        	item.getCloseValue(),
+        	item.getVolume(),
+        	position
+		);
     }
 
     /*
@@ -124,6 +152,6 @@ public class OHLCSeries extends ComparableObjectSeries {
      */
 	@Override
 	public ComparableObjectItem remove(int index) {
-        return super.remove(index);
+		return super.remove(index);
 	}
 }

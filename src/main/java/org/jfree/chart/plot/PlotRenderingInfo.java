@@ -146,10 +146,10 @@ public class PlotRenderingInfo implements Cloneable, Serializable {
 		for(int i=0; i<subplotCount; i++) {
 			Rectangle2D area = getSubplotInfo(i).getDataArea();
 
-    		System.out.println("");
-    		System.out.println("SRC_X: "+source.getX()+"; _Y: "+source.getY());
-    		System.out.println("AREA_X: "+area.getX()+"; AREA_WIDTH: "+area.getWidth()+"; AREA_HEIGHT: "+area.getHeight());
-    		System.out.println("");
+    		//System.out.println("");
+    		//System.out.println("SRC_X: "+source.getX()+"; _Y: "+source.getY());
+    		//System.out.println("AREA_X: "+area.getX()+"; AREA_WIDTH: "+area.getWidth()+"; AREA_HEIGHT: "+area.getHeight());
+    		//System.out.println("");
 
     		if(area.contains(source)) return i;
 		}

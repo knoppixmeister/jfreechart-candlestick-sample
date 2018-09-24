@@ -1348,23 +1348,19 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
         Args.nullNotPermitted(orientation, "orientation");
 
         RectangleEdge result = null;
-        if (location == AxisLocation.TOP_OR_RIGHT) {
-            if (orientation == PlotOrientation.HORIZONTAL) {
-                result = RectangleEdge.RIGHT;
-            }
-            else if (orientation == PlotOrientation.VERTICAL) {
-                result = RectangleEdge.TOP;
-            }
+        if(location == AxisLocation.TOP_OR_RIGHT) {
+            if(orientation == PlotOrientation.HORIZONTAL) result = RectangleEdge.RIGHT;
+            else if(orientation == PlotOrientation.VERTICAL) result = RectangleEdge.TOP;
         }
-        else if (location == AxisLocation.TOP_OR_LEFT) {
-            if (orientation == PlotOrientation.HORIZONTAL) {
+        else if(location == AxisLocation.TOP_OR_LEFT) {
+            if(orientation == PlotOrientation.HORIZONTAL) {
                 result = RectangleEdge.LEFT;
             }
             else if (orientation == PlotOrientation.VERTICAL) {
                 result = RectangleEdge.TOP;
             }
         }
-        else if (location == AxisLocation.BOTTOM_OR_RIGHT) {
+        else if(location == AxisLocation.BOTTOM_OR_RIGHT) {
             if (orientation == PlotOrientation.HORIZONTAL) {
                 result = RectangleEdge.RIGHT;
             }
@@ -1372,16 +1368,17 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
                 result = RectangleEdge.BOTTOM;
             }
         }
-        else if (location == AxisLocation.BOTTOM_OR_LEFT) {
-            if (orientation == PlotOrientation.HORIZONTAL) {
+        else if(location == AxisLocation.BOTTOM_OR_LEFT) {
+            if(orientation == PlotOrientation.HORIZONTAL) {
                 result = RectangleEdge.LEFT;
             }
             else if (orientation == PlotOrientation.VERTICAL) {
                 result = RectangleEdge.BOTTOM;
             }
         }
+        
         // the above should cover all the options...
-        if (result == null) {
+        if(result == null) {
             throw new IllegalStateException("resolveDomainAxisLocation()");
         }
         

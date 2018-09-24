@@ -4,8 +4,11 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
@@ -42,6 +45,8 @@ public class Test3 {
 	private static OkHttpClient client;
 	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
 
+	private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
+	
 	public static void main(String[] args) {
 		socket = null;
 
@@ -271,10 +276,77 @@ public class Test3 {
 				
 				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
 				
-				//System.out.println(dataArea.getX());
+				System.out.println(						combinedPlot.getDomainAxisEdge()	);
 
-				double x = dateAxis.java2DToValue(dataArea.getX(), dataArea, combinedPlot.getDomainAxisEdge());
+				System.out.println("DATA_AREA: "+dataArea);
+				
+				if(dataArea != null) {
+					double x = dateAxis.java2DToValue(
+											dataArea.getX(),
+											dataArea,
+											combinedPlot.getDomainAxisEdge()
+										);
+					long firstTm = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getPeriod().getFirstMillisecond();
+				}
 
+
+				//dataFetchTimes.add(firstTm);
+
+				/*
+				if(dataFetchTimes.size() > 0) {
+					System.out.println("AAAAA");
+					
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							Request request = new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1m&limit=1000&endTime="+(dataFetchTimes.poll()-1))
+																	.build();
+							try {
+								Response response = client.newCall(request).execute();
+								if(!response.isSuccessful()) return;
+								
+								Moshi moshi = new Moshi.Builder().build();
+								JsonAdapter<List<List>> bnJsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, List.class));
+								List<List> res = bnJsonAdapter.fromJson(response.body().string());
+
+								((OHLCSeries) collection.getSeries(0)).setNotify(false);
+								
+								DateTime dt;
+								List subRes;
+								for(int j=res.size()-1; j>=0; j--) {
+									subRes = res.get(j);
+
+									dt = new DateTime(new BigDecimal(subRes.get(0).toString()).longValue());
+									//System.out.println( "TS: "+	dt.getMillis() +"; "+dt.getYear()+"-"+dt.getMonthOfYear()+"-"+dt.getDayOfMonth()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()  + "; OP: " + subRes.get(1).toString()	);
+
+									try {
+									collection.getSeries(0).add(new OHLCItem(
+										new FixedMillisecond(dt.getMillis()),
+										Double.parseDouble(subRes.get(1).toString()),	//open,
+										Double.parseDouble(subRes.get(2).toString()),	//high,
+										Double.parseDouble(subRes.get(3).toString()),	//low,
+										Double.parseDouble(subRes.get(4).toString()),	//close
+										Double.parseDouble(subRes.get(5).toString())	//volume
+									));
+									}
+									catch (Exception e) {
+										// TODO: handle exception
+									}
+								}
+								
+								((OHLCSeries) collection.getSeries(0)).setNotify(true);
+								
+								System.out.println("END OF FETCh");
+							}
+							catch(Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					}).start();
+				}
+				*/
+
+				/*
 				long firstTm = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getPeriod().getFirstMillisecond();
 				DateTime dtFtm = new DateTime(firstTm);
 				
@@ -296,9 +368,19 @@ public class Test3 {
 				catch(Exception e1) {
 					e1.printStackTrace();
 				}
-
+				*/
 				
-				System.exit(0);
+				/*
+				System.out.println("FALL TO SLEEP");
+				try {
+					Thread.sleep(10000);
+				}
+				catch(Exception e1) {
+					e1.printStackTrace();
+				}
+				*/
+				
+				//System.exit(0);
 
 				/*
 				DateTime dt = new DateTime(new BigDecimal(x).longValue());
@@ -342,7 +424,7 @@ public class Test3 {
 				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
 
 				if(dataArea != null) {
-					System.out.println("X: "+e.getX());
+					//System.out.println("X: "+e.getX());
 
 					double x = dateAxis.java2DToValue(e.getX(), dataArea, combinedPlot.getDomainAxisEdge());
 					//double y = priceAxis.java2DToValue(e.getY(), dataArea, plot1.getRangeAxisEdge());
@@ -524,6 +606,7 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
+		/*
 		System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
@@ -567,5 +650,6 @@ class BNWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("---------------------------------------------------------------------------------");
+		*/
 	}
 }
