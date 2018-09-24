@@ -680,9 +680,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
         g2.setStroke(s);
 
         if(drawVolume) {
-            int volume = (int)highLowData.getVolumeValue(series, item);
+            int volume 			= (int) highLowData.getVolumeValue(series, item);
             double volumeHeight = volume / maxVolume;
-
+            
             double min, max;
             if(horiz) {
                 min = dataArea.getMinX();
@@ -693,16 +693,16 @@ public class CandlestickRenderer extends AbstractXYItemRenderer implements XYIte
                 max = dataArea.getMaxY();
             }
 
-            double zzVolume = volumeHeight * (max - min);
+            double zzVolume = (volumeHeight * (max - min)) / 5;
 
             g2.setPaint(getVolumePaint());
-            Composite originalComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            //Composite originalComposite = g2.getComposite();
+            //g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 
             if(horiz) g2.fill(new Rectangle2D.Double(min, xx - volumeWidth / 2, zzVolume, volumeWidth));
             else g2.fill(new Rectangle2D.Double(xx - volumeWidth / 2, max - zzVolume, volumeWidth, zzVolume));
 
-            g2.setComposite(originalComposite);
+            //g2.setComposite(originalComposite);
         }
 
         if(useOutlinePaint) g2.setPaint(outlinePaint);
