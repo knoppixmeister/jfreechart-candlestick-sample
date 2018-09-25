@@ -1,57 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------------
- * RegularTimePeriod.java
- * ----------------------
- * (C) Copyright 2001-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 11-Oct-2001 : Version 1 (DG);
- * 26-Feb-2002 : Changed getStart(), getMiddle() and getEnd() methods to
- *               evaluate with reference to a particular time zone (DG);
- * 29-May-2002 : Implemented MonthConstants interface, so that these constants
- *               are conveniently available (DG);
- * 10-Sep-2002 : Added getSerialIndex() method (DG);
- * 10-Jan-2003 : Renamed TimePeriod --> RegularTimePeriod (DG);
- * 13-Mar-2003 : Moved to com.jrefinery.data.time package (DG);
- * 29-Apr-2004 : Changed getMiddleMillisecond() methods to fix bug 943985 (DG);
- * 25-Nov-2004 : Added utility methods (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 06-Oct-2006 : Deprecated the WORKING_CALENDAR field and several methods,
- *               added new peg() method (DG);
- * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
- * 23-Feb-2014 : Added getMillisecond() method (DG);
- * 
- */
-
 package org.jfree.data.time;
 
 import java.lang.reflect.Constructor;
@@ -70,7 +16,6 @@ import org.jfree.chart.date.MonthConstants;
  * This class is immutable, and all subclasses should be immutable also.
  */
 public abstract class RegularTimePeriod implements TimePeriod, Comparable, MonthConstants {
-
     /**
      * Creates a time period that includes the specified millisecond, assuming
      * the given time zone.
@@ -82,17 +27,17 @@ public abstract class RegularTimePeriod implements TimePeriod, Comparable, Month
      *
      * @return The time period.
      */
-    public static RegularTimePeriod createInstance(Class c, Date millisecond, TimeZone zone, Locale locale) {
-        RegularTimePeriod result = null;
-        try {
-            Constructor constructor = c.getDeclaredConstructor(
-                    new Class[] {Date.class, TimeZone.class, Locale.class});
-            result = (RegularTimePeriod) constructor.newInstance(
-                    new Object[] {millisecond, zone, locale});
+
+	public static RegularTimePeriod createInstance(Class c, Date millisecond, TimeZone zone, Locale locale) {
+		RegularTimePeriod result = null;
+
+		try {
+            Constructor constructor = c.getDeclaredConstructor(new Class[] {Date.class, TimeZone.class, Locale.class});
+            result = (RegularTimePeriod) constructor.newInstance(new Object[] {millisecond, zone, locale});
+		}
+		catch(Exception e) {
         }
-        catch (Exception e) {
-            // do nothing, so null is returned
-        }
+
         return result;
     }
 
@@ -104,32 +49,16 @@ public abstract class RegularTimePeriod implements TimePeriod, Comparable, Month
      *
      * @return A class.
      */
-    public static Class downsize(Class c) {
-        if (c.equals(Year.class)) {
-            return Quarter.class;
-        }
-        else if (c.equals(Quarter.class)) {
-            return Month.class;
-        }
-        else if (c.equals(Month.class)) {
-            return Day.class;
-        }
-        else if (c.equals(Day.class)) {
-            return Hour.class;
-        }
-        else if (c.equals(Hour.class)) {
-            return Minute.class;
-        }
-        else if (c.equals(Minute.class)) {
-            return Second.class;
-        }
-        else if (c.equals(Second.class)) {
-            return Millisecond.class;
-        }
-        else {
-            return Millisecond.class;
-        }
-    }
+	public static Class downsize(Class c) {
+        if(c.equals(Year.class)) return Quarter.class;
+        else if(c.equals(Quarter.class)) return Month.class;
+        else if(c.equals(Month.class)) return Day.class;
+        else if(c.equals(Day.class)) return Hour.class;
+        else if(c.equals(Hour.class)) return Minute.class;
+        else if(c.equals(Minute.class)) return Second.class;
+        else if(c.equals(Second.class)) return Millisecond.class;
+        else return Millisecond.class;
+	}
 
     /**
      * Returns the time period preceding this one, or {@code null} if some
