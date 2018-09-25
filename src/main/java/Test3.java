@@ -110,13 +110,20 @@ public class Test3 {
 			public void seriesChanged(SeriesChangeEvent event) {
 				//System.out.println(	event.getSource().toString()	);
 
+				series1.setNotify(false);
+				
 				Map<Long, Double> rsiRes = RSI.run(series, 14);
-				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {			
-					series1.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
+				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {
+					//TimeSeriesDataItem tsdi = series1.getDataItem(new FixedMillisecond(entry.getKey()));
+					//if(tsdi != null) {
+						series1.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
+					//}
 				}
+				
+				series1.setNotify(true);
 			}
         });
-        
+
         /*
         for(int i=0; i<200; i++) {
         	long tm = System.currentTimeMillis()+1000+i;
@@ -143,11 +150,13 @@ public class Test3 {
         priceAxis.setAutoRangeIncludesZero(false);
 
         CandlestickRenderer renderer = new CandlestickRenderer(
-			CandlestickRenderer.WIDTHMETHOD_AVERAGE,		//candleWidth,
-			true,	//drawVolume,
-			null	//toolTipGenerator
+			-1,	//candleWidth,
+			true,										//drawVolume,
+			null										//toolTipGenerator
 		);
         renderer.setVolumePaint(ChartColor.BLACK);
+       
+        
         
 		XYPlot plot1 = new XYPlot(
 			collection,		//dataset,
@@ -155,6 +164,7 @@ public class Test3 {
 			priceAxis,		//rangeAxis,
 			renderer		//renderer
 		);
+		
 		
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
@@ -250,6 +260,7 @@ public class Test3 {
 		combinedPlot.add(plot4, 1);
 		
 		JFreeChart chart = new JFreeChart(combinedPlot);
+		chart.setPadding(new RectangleInsets(-7, -15, 0, 0));
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setDoubleBuffered(true);
@@ -286,7 +297,7 @@ public class Test3 {
 											dataArea,
 											combinedPlot.getDomainAxisEdge()
 										);
-					long firstTm = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getPeriod().getFirstMillisecond();
+					//long firstTm = ((OHLCItem)collection.getSeries(0).getDataItem(0)).getPeriod().getFirstMillisecond();
 				}
 
 
@@ -479,37 +490,6 @@ public class Test3 {
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setVisible(true);
 
-
-		/*
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(2000);
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-
-				combinedPlot.remove(plot3);
-			}
-		}).start();
-		*/
-
-		/*
-		client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS)
-											.retryOnConnectionFailure(true)
-											.pingInterval(20, TimeUnit.SECONDS)
-											.build();
-		socket = client.newWebSocket(
-			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
-								.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
-								.build(),
-			//new BFWebSocketListener(collection)
-			new BNWebSocketListener(collection)
-		);
-		*/
-
 		reconnect();
 	}
 
@@ -606,7 +586,6 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
-		/*
 		System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
@@ -650,6 +629,5 @@ class BNWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("---------------------------------------------------------------------------------");
-		*/
 	}
 }
