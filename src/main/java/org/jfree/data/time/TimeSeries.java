@@ -408,10 +408,9 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @see #getDataItem(int)
      */
     public TimeSeriesDataItem getDataItem(RegularTimePeriod period) {
-        int index = getIndex(period);
-        if(index >= 0) return getDataItem(index);
+    	int index = getIndex(period);
 
-        return null;
+    	return index >= 0 ? getDataItem(index) : null;
     }
 
     /**
@@ -811,10 +810,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
         Class periodClass = item.getPeriod().getClass();
         if(timePeriodClass == null) timePeriodClass = periodClass;
         else if(!this.timePeriodClass.equals(periodClass)) {
-            String msg = "You are trying to add data where the time "
-                    + "period class is " + periodClass.getName()
-                    + ", but the TimeSeries is expecting an instance of "
-                    + timePeriodClass.getName() + ".";
+            String msg = "You are trying to add data where the time period class is " + periodClass.getName()+ ", but the TimeSeries is expecting an instance of "+ timePeriodClass.getName() + ".";
             
             throw new SeriesException(msg);
         }
@@ -882,6 +878,7 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             
             if(removed) {
                 updateMinMaxYByIteration();
+                
                 if(notify) fireSeriesChanged();
             }
         }
@@ -1193,7 +1190,8 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      */
     private void updateBoundsForAddedItem(TimeSeriesDataItem item) {
         Number yN = item.getValue();
-        if (item.getValue() != null) {
+        
+        if(item.getValue() != null) {
             double y = yN.doubleValue();
             this.minY = minIgnoreNaN(this.minY, y);
             this.maxY = maxIgnoreNaN(this.maxY, y);
@@ -1227,10 +1225,10 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @since 1.0.14
      */
     private void updateMinMaxYByIteration() {
-        this.minY = Double.NaN;
-        this.maxY = Double.NaN;
+    	minY = Double.NaN;
+    	maxY = Double.NaN;
         Iterator iterator = this.data.iterator();
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             TimeSeriesDataItem item = (TimeSeriesDataItem) iterator.next();
             updateBoundsForAddedItem(item);
         }
@@ -1246,12 +1244,9 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
      * @return The minimum of the two values.
      */
     private double minIgnoreNaN(double a, double b) {
-        if (Double.isNaN(a)) {
-            return b;
-        }
-        if (Double.isNaN(b)) {
-            return a;
-        }
+        if(Double.isNaN(a)) return b;
+        if(Double.isNaN(b)) return a;
+
         return Math.min(a, b);
     }
 
@@ -1275,5 +1270,4 @@ public class TimeSeries extends Series implements Cloneable, Serializable {
             return Math.max(a, b);
         }
     }
-
 }
