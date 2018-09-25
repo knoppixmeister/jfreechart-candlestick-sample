@@ -4,8 +4,6 @@ import org.jfree.chart.util.Args;
 import org.jfree.data.*;
 import org.jfree.data.time.RegularTimePeriod;
 
-import com.sun.org.apache.xpath.internal.Arg;
-
 /**
  * A list of ({@link RegularTimePeriod}, open, high, low, close) data items.
  *
