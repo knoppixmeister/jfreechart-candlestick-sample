@@ -2034,19 +2034,24 @@ public abstract class ChartFactory {
      *
      * @return The chart.
      */
-    public static JFreeChart createHistogram(String title,
-            String xAxisLabel, String yAxisLabel, IntervalXYDataset dataset,
-            PlotOrientation orientation, boolean legend, boolean tooltips,
-            boolean urls)
+    public static JFreeChart createHistogram(
+    	String title,
+    	String xAxisLabel,
+    	String yAxisLabel,
+    	IntervalXYDataset dataset,
+    	PlotOrientation orientation,
+    	boolean legend,
+    	boolean tooltips,
+    	boolean urls)
 	{
-        Args.nullNotPermitted(orientation, "orientation");
+    	Args.nullNotPermitted(orientation, "orientation");
         
-        NumberAxis xAxis = new NumberAxis(xAxisLabel);
-        xAxis.setAutoRangeIncludesZero(false);
-        ValueAxis yAxis = new NumberAxis(yAxisLabel);
+    	NumberAxis xAxis = new NumberAxis(xAxisLabel);
+    	xAxis.setAutoRangeIncludesZero(false);
+    	ValueAxis yAxis = new NumberAxis(yAxisLabel);
 
-        XYItemRenderer renderer = new XYBarRenderer();
-        if(tooltips) renderer.setDefaultToolTipGenerator(new StandardXYToolTipGenerator());
+    	XYItemRenderer renderer = new XYBarRenderer();
+    	if(tooltips) renderer.setDefaultToolTipGenerator(new StandardXYToolTipGenerator());
 
         if(urls) renderer.setURLGenerator(new StandardXYURLGenerator());
 

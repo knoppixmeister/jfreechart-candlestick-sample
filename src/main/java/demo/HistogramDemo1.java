@@ -9,6 +9,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.panel.Overlay;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
@@ -32,7 +33,7 @@ public class HistogramDemo1 extends ApplicationFrame {
     public HistogramDemo1(String title) {
         super(title);
         JPanel chartPanel = createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
         setContentPane(chartPanel);
     }
 
@@ -73,22 +74,29 @@ public class HistogramDemo1 extends ApplicationFrame {
             null,
             null,
             dataset,
-            PlotOrientation.VERTICAL,
+            PlotOrientation.HORIZONTAL,
             false,
             true,
             false
     	);
         
+    	Overlay overlay;
+    	
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         plot.setForegroundAlpha(0.85f);
+        
+        //System.out.println(	plot.getRenderer()	);
+        
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
+        
         // flat bars look best...
-        //renderer.setBarPainter(new StandardXYBarPainter());
+        renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         
         return chart;
@@ -103,6 +111,7 @@ public class HistogramDemo1 extends ApplicationFrame {
         JFreeChart chart = createChart(createDataset());
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
+        
         return panel;
     }
 
@@ -114,13 +123,9 @@ public class HistogramDemo1 extends ApplicationFrame {
      * @throws IOException  if there is a problem saving the file.
      */
     public static void main(String[] args) throws IOException {
-
-        HistogramDemo1 demo = new HistogramDemo1(
-                "JFreeChart: HistogramDemo1.java");
+        HistogramDemo1 demo = new HistogramDemo1("");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
-
     }
-
 }

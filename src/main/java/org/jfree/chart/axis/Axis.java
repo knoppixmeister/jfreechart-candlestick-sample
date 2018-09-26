@@ -1162,7 +1162,7 @@ public abstract class Axis implements Cloneable, Serializable {
         else if(edge.equals(RectangleEdge.RIGHT)) {
             hotspot = new Rectangle2D.Double(cursor, dataArea.getY(), state.getCursor() - cursor, dataArea.getHeight());
         }
-        
+
         EntityCollection e = plotState.getOwner().getEntityCollection();
         
         if(e != null) e.add(new AxisEntity(hotspot, this));

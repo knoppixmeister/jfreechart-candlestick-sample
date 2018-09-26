@@ -1,65 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------
- * HistogramDataset.java
- * ---------------------
- * (C) Copyright 2003-2016, by Jelai Wang and Contributors.
- *
- * Original Author:  Jelai Wang (jelaiw AT mindspring.com);
- * Contributor(s):   David Gilbert (for Object Refinery Limited);
- *                   Cameron Hayne;
- *                   Rikard Bj?rklind;
- *                   Thomas A Caswell (patch 2902842);
- *
- * Changes
- * -------
- * 06-Jul-2003 : Version 1, contributed by Jelai Wang (DG);
- * 07-Jul-2003 : Changed package and added Javadocs (DG);
- * 15-Oct-2003 : Updated Javadocs and removed array sorting (JW);
- * 09-Jan-2004 : Added fix by "Z." posted in the JFreeChart forum (DG);
- * 01-Mar-2004 : Added equals() and clone() methods and implemented
- *               Serializable.  Also added new addSeries() method (DG);
- * 06-May-2004 : Now extends AbstractIntervalXYDataset (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * 20-May-2005 : Speed up binning - see patch 1026151 contributed by Cameron
- *               Hayne (DG);
- * 08-Jun-2005 : Fixed bug in getSeriesKey() method (DG);
- * 22-Nov-2005 : Fixed cast in getSeriesKey() method - see patch 1329287 (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 03-Aug-2006 : Improved precision of bin boundary calculation (DG);
- * 07-Sep-2006 : Fixed bug 1553088 (DG);
- * 22-May-2008 : Implemented clone() method override (DG);
- * 08-Dec-2009 : Fire change event in addSeries() - see patch 2902842
- *               contributed by Thomas A Caswell (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.data.statistics;
 
 import java.io.Serializable;
@@ -80,11 +18,7 @@ import org.jfree.data.xy.IntervalXYDataset;
  *
  * @see SimpleHistogramDataset
  */
-public class HistogramDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, Cloneable, PublicCloneable,
-                   Serializable {
-
-    /** For serialization. */
+public class HistogramDataset extends AbstractIntervalXYDataset implements IntervalXYDataset, Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = -6341668077370231153L;
 
     /** A list of maps. */
@@ -119,7 +53,9 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      */
     public void setType(HistogramType type) {
         Args.nullNotPermitted(type, "type");
+        
         this.type = type;
+        
         fireDatasetChanged();
     }
 
@@ -132,9 +68,9 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @param bins  the number of bins (must be at least 1).
      */
     public void addSeries(Comparable key, double[] values, int bins) {
-        // defer argument checking...
         double minimum = getMinimum(values);
         double maximum = getMaximum(values);
+        
         addSeries(key, values, bins, minimum, maximum);
     }
 
@@ -150,61 +86,59 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @param minimum  the lower bound of the bin range.
      * @param maximum  the upper bound of the bin range.
      */
-    public void addSeries(Comparable key, double[] values, int bins,
-            double minimum, double maximum) {
-
+    public void addSeries(Comparable key, double[] values, int bins, double minimum, double maximum) {
         Args.nullNotPermitted(key, "key");
         Args.nullNotPermitted(values, "values");
-        if (bins < 1) {
-            throw new IllegalArgumentException(
-                    "The 'bins' value must be at least 1.");
-        }
+        
+        if(bins < 1) throw new IllegalArgumentException("The 'bins' value must be at least 1.");
+        
         double binWidth = (maximum - minimum) / bins;
 
         double lower = minimum;
         double upper;
         List binList = new ArrayList(bins);
-        for (int i = 0; i < bins; i++) {
+        for(int i = 0; i < bins; i++) {
             HistogramBin bin;
             // make sure bins[bins.length]'s upper boundary ends at maximum
             // to avoid the rounding issue. the bins[0] lower boundary is
             // guaranteed start from min
-            if (i == bins - 1) {
-                bin = new HistogramBin(lower, maximum);
-            }
+            if(i == bins - 1) bin = new HistogramBin(lower, maximum);
             else {
                 upper = minimum + (i + 1) * binWidth;
                 bin = new HistogramBin(lower, upper);
                 lower = upper;
             }
+            
             binList.add(bin);
         }
+        
         // fill the bins
-        for (int i = 0; i < values.length; i++) {
+        for(int i=0; i<values.length; i++) {
             int binIndex = bins - 1;
-            if (values[i] < maximum) {
+            if(values[i] < maximum) {
                 double fraction = (values[i] - minimum) / (maximum - minimum);
-                if (fraction < 0.0) {
-                    fraction = 0.0;
-                }
+                if(fraction < 0.0) fraction = 0.0;
+
                 binIndex = (int) (fraction * bins);
                 // rounding could result in binIndex being equal to bins
                 // which will cause an IndexOutOfBoundsException - see bug
                 // report 1553088
-                if (binIndex >= bins) {
-                    binIndex = bins - 1;
-                }
+                if(binIndex >= bins) binIndex = bins - 1;
             }
+            
             HistogramBin bin = (HistogramBin) binList.get(binIndex);
             bin.incrementCount();
         }
+        
         // generic map for each series
         Map map = new HashMap();
         map.put("key", key);
         map.put("bins", binList);
         map.put("values.length", new Integer(values.length));
         map.put("bin width", new Double(binWidth));
-        this.list.add(map);
+        
+        list.add(map);
+        
         fireDatasetChanged();
     }
 
@@ -217,16 +151,15 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @return The minimum value.
      */
     private double getMinimum(double[] values) {
-        if (values == null || values.length < 1) {
-            throw new IllegalArgumentException(
-                    "Null or zero length 'values' argument.");
+        if(values == null || values.length < 1) {
+            throw new IllegalArgumentException("Null or zero length 'values' argument.");
         }
+        
         double min = Double.MAX_VALUE;
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] < min) {
-                min = values[i];
-            }
+        for(int i = 0; i < values.length; i++) {
+            if(values[i] < min) min = values[i];
         }
+        
         return min;
     }
 
@@ -239,16 +172,16 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @return The maximum value.
      */
     private double getMaximum(double[] values) {
-        if (values == null || values.length < 1) {
-            throw new IllegalArgumentException(
-                    "Null or zero length 'values' argument.");
-        }
+    	if(values == null || values.length < 1) {
+    		throw new IllegalArgumentException("Null or zero length 'values' argument.");
+    	}
+        
         double max = -Double.MAX_VALUE;
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] > max) {
-                max = values[i];
-            }
+        
+        for(int i = 0; i < values.length; i++) {
+            if(values[i] > max) max = values[i];
         }
+        
         return max;
     }
 
@@ -264,7 +197,8 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      *     specified range.
      */
     List getBins(int series) {
-        Map map = (Map) this.list.get(series);
+        Map map = (Map) list.get(series);
+        
         return (List) map.get("bins");
     }
 
@@ -276,7 +210,8 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @return The total.
      */
     private int getTotal(int series) {
-        Map map = (Map) this.list.get(series);
+        Map map = (Map) list.get(series);
+        
         return ((Integer) map.get("values.length")).intValue();
     }
 
@@ -288,8 +223,9 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      * @return The bin width.
      */
     private double getBinWidth(int series) {
-        Map map = (Map) this.list.get(series);
-        return ((Double) map.get("bin width")).doubleValue();
+    	Map map = (Map) list.get(series);
+
+    	return ((Double) map.get("bin width")).doubleValue();
     }
 
     /**
@@ -299,7 +235,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      */
     @Override
     public int getSeriesCount() {
-        return this.list.size();
+        return list.size();
     }
 
     /**
@@ -315,7 +251,8 @@ public class HistogramDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Comparable getSeriesKey(int series) {
-        Map map = (Map) this.list.get(series);
+        Map map = (Map) list.get(series);
+        
         return (Comparable) map.get("key");
     }
 
@@ -355,6 +292,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
         List bins = getBins(series);
         HistogramBin bin = (HistogramBin) bins.get(item);
         double x = (bin.getStartBoundary() + bin.getEndBoundary()) / 2.;
+        
         return new Double(x);
     }
 
@@ -408,6 +346,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
     public Number getStartX(int series, int item) {
         List bins = getBins(series);
         HistogramBin bin = (HistogramBin) bins.get(item);
+        
         return new Double(bin.getStartBoundary());
     }
 
@@ -427,6 +366,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
     public Number getEndX(int series, int item) {
         List bins = getBins(series);
         HistogramBin bin = (HistogramBin) bins.get(item);
+        
         return new Double(bin.getEndBoundary());
     }
 
@@ -468,6 +408,12 @@ public class HistogramDataset extends AbstractIntervalXYDataset
         return getY(series, item);
     }
 
+    
+    
+    
+    
+    
+    
     /**
      * Tests this dataset for equality with an arbitrary object.
      *
@@ -490,6 +436,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset
         if (!ObjectUtils.equal(this.list, that.list)) {
             return false;
         }
+        
         return true;
     }
 
@@ -505,10 +452,10 @@ public class HistogramDataset extends AbstractIntervalXYDataset
         HistogramDataset clone = (HistogramDataset) super.clone();
         int seriesCount = getSeriesCount();
         clone.list = new java.util.ArrayList(seriesCount);
-        for (int i = 0; i < seriesCount; i++) {
-            clone.list.add(new HashMap((Map) this.list.get(i)));
+        for(int i = 0; i < seriesCount; i++) {
+            clone.list.add(new HashMap((Map) list.get(i)));
         }
+        
         return clone;
     }
-
 }

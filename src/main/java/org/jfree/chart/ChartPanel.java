@@ -1745,12 +1745,10 @@ public class ChartPanel extends JPanel implements
             	p.panDomainAxes(wPercent, info.getPlotInfo(), panLast);
             	p.panRangeAxes(hPercent, info.getPlotInfo(), panLast);
             }
-            /*
             else {
             	p.panDomainAxes(hPercent, info.getPlotInfo(), panLast);
             	p.panRangeAxes(wPercent, info.getPlotInfo(), panLast);
             }
-            */
 
             panLast = e.getPoint();
             chart.getPlot().setNotify(old);

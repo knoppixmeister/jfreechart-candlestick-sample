@@ -668,9 +668,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
 	@Override
 	public double java2DToValue(double java2DValue, Rectangle2D area, RectangleEdge edge) {
-    	DateRange range = (DateRange) getRange();
-    	double axisMin 	= timeline.toTimelineValue(range.getLowerMillis());
-    	double axisMax 	= timeline.toTimelineValue(range.getUpperMillis());
+		DateRange range = (DateRange) getRange();
+
+		double axisMin 	= timeline.toTimelineValue(range.getLowerMillis());
+		double axisMax 	= timeline.toTimelineValue(range.getUpperMillis());
 
     	double min = 0.0;
     	double max = 0.0;
@@ -679,10 +680,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     		min = area.getX();
     		max = area.getMaxX();
     	}
-        else if(RectangleEdge.isLeftOrRight(edge)) {
-        	min = area.getMaxY();
-        	max = area.getY();
-        }
+    	else if(RectangleEdge.isLeftOrRight(edge)) {
+    		min = area.getMaxY();
+    		max = area.getY();
+    	}
 
         double result;
 
@@ -993,10 +994,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         units.add(new DateTickUnit(DateTickUnitType.MILLISECOND, 500, DateTickUnitType.MILLISECOND, 50, f1));
 
         // seconds
-        units.add(new DateTickUnit(DateTickUnitType.SECOND, 1,
-                DateTickUnitType.MILLISECOND, 50, f2));
-        units.add(new DateTickUnit(DateTickUnitType.SECOND, 5,
-                DateTickUnitType.SECOND, 1, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 1, DateTickUnitType.MILLISECOND, 50, f2));
+        units.add(new DateTickUnit(DateTickUnitType.SECOND, 5, DateTickUnitType.SECOND, 1, f2));
         units.add(new DateTickUnit(DateTickUnitType.SECOND, 10,
                 DateTickUnitType.SECOND, 1, f2));
         units.add(new DateTickUnit(DateTickUnitType.SECOND, 30,
@@ -1575,19 +1574,20 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     	RectangleEdge edge,
     	PlotRenderingInfo plotState)
     {
-        // if the axis is not visible, don't draw it...
-        if(!isVisible()) {
-            AxisState state = new AxisState(cursor);
+    	// if the axis is not visible, don't draw it...
+    	if(!isVisible()) {
+    		AxisState state = new AxisState(cursor);
             // even though the axis is not visible, we need to refresh ticks in
             // case the grid is being drawn...
             List ticks = refreshTicks(g2, state, dataArea, edge);
             state.setTicks(ticks);
             
             return state;
-        }
+    	}
 
         // draw the tick marks and labels...
-        AxisState state = drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
+        AxisState state = 	//new AxisState(cursor);
+        					drawTickMarksAndLabels(g2, cursor, plotArea, dataArea, edge);
 
         // draw the axis label (note that 'state' is passed in *and*
         // returned)...
@@ -1612,7 +1612,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     public void zoomRange(double lowerPercent, double upperPercent) {
         double start 	= timeline.toTimelineValue((long) getRange().getLowerBound());
         double end 		= timeline.toTimelineValue((long) getRange().getUpperBound());
-        double length = end - start;
+        double length 	= end - start;
         Range adjusted;
         long adjStart, adjEnd;
 
@@ -1624,6 +1624,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             adjStart 	= (long) (start + length * lowerPercent);
             adjEnd 		= (long) (start + length * upperPercent);
         }
+        
         // when zooming to sub-millisecond ranges, it can be the case that
         // adjEnd == adjStart...and we can't have an axis with zero length
         // so we apply this instead:

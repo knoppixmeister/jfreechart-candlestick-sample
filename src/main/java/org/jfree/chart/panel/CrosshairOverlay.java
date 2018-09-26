@@ -153,7 +153,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * {@link OverlayChangeEvent} to all registered listeners.
      */
     public void clearRangeCrosshairs() {
-        if(this.yCrosshairs.isEmpty()) return;  // nothing to do
+        if(yCrosshairs.isEmpty()) return;  // nothing to do
 
         for(Crosshair c : getRangeCrosshairs()) {
         	yCrosshairs.remove(c);
@@ -374,12 +374,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         boolean right = (anchor == RectangleAnchor.BOTTOM_RIGHT 
                 || anchor == RectangleAnchor.RIGHT 
                 || anchor == RectangleAnchor.TOP_RIGHT);
-        boolean top = (anchor == RectangleAnchor.TOP_LEFT 
-                || anchor == RectangleAnchor.TOP 
-                || anchor == RectangleAnchor.TOP_RIGHT);
-        boolean bottom = (anchor == RectangleAnchor.BOTTOM_LEFT
-                || anchor == RectangleAnchor.BOTTOM
-                || anchor == RectangleAnchor.BOTTOM_RIGHT);
+        boolean top = (anchor == RectangleAnchor.TOP_LEFT || anchor == RectangleAnchor.TOP || anchor == RectangleAnchor.TOP_RIGHT);
+        boolean bottom = (anchor == RectangleAnchor.BOTTOM_LEFT || anchor == RectangleAnchor.BOTTOM || anchor == RectangleAnchor.BOTTOM_RIGHT);
         Rectangle rect = line.getBounds();
         
         // we expect the line to be vertical or horizontal
@@ -543,6 +539,11 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
         return result;
     }
 
+    
+    
+    
+    
+    
     /**
      * Tests this overlay for equality with an arbitrary object.
      *
