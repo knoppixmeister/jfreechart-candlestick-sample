@@ -46,7 +46,7 @@ public class Test3 {
 	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
 
 	private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
-	
+
 	public static void main(String[] args) {
 		socket = null;
 
@@ -68,7 +68,7 @@ public class Test3 {
 			e1.printStackTrace();
 		}
 		*/
-		
+
 		/*
 		CrosshairOverlay chOverlay = new CrosshairOverlay();
 
@@ -111,7 +111,7 @@ public class Test3 {
 				//System.out.println(	event.getSource().toString()	);
 
 				series1.setNotify(false);
-				
+
 				Map<Long, Double> rsiRes = RSI.run(series, 14);
 				for(Map.Entry<Long, Double> entry : rsiRes.entrySet()) {
 					//TimeSeriesDataItem tsdi = series1.getDataItem(new FixedMillisecond(entry.getKey()));
@@ -119,7 +119,7 @@ public class Test3 {
 						series1.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(entry.getKey()), entry.getValue()));
 					//}
 				}
-				
+
 				series1.setNotify(true);
 			}
         });
