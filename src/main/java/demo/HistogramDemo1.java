@@ -1,10 +1,3 @@
-/* -------------------
- * HistogramDemo1.java
- * -------------------
- * (C) Copyright 2004-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.io.IOException;
@@ -29,8 +22,9 @@ import org.jfree.ui.RefineryUtilities;
  * A demo of the {@link HistogramDataset} class.
  */
 public class HistogramDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = -4326977433520784990L;
 
-    /**
+	/**
      * Creates a new demo.
      *
      * @param title  the frame title.
@@ -49,17 +43,20 @@ public class HistogramDemo1 extends ApplicationFrame {
      */
     private static IntervalXYDataset createDataset() {
         HistogramDataset dataset = new HistogramDataset();
+        
         double[] values = new double[1000];
         Random generator = new Random(12345678L);
-        for (int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 5;
         }
+        
         dataset.addSeries("H1", values, 100, 2.0, 8.0);
         values = new double[1000];
-        for (int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 7;
         }
         dataset.addSeries("H2", values, 100, 4.0, 10.0);
+        
         return dataset;
     }
 
@@ -71,15 +68,17 @@ public class HistogramDemo1 extends ApplicationFrame {
      * @return The chart.
      */
     private static JFreeChart createChart(IntervalXYDataset dataset) {
-        JFreeChart chart = ChartFactory.createHistogram(
+    	JFreeChart chart = ChartFactory.createHistogram(
             "Histogram Demo 1",
             null,
             null,
             dataset,
             PlotOrientation.VERTICAL,
+            false,
             true,
-            true,
-            false);
+            false
+    	);
+        
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
@@ -89,8 +88,9 @@ public class HistogramDemo1 extends ApplicationFrame {
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         // flat bars look best...
-        renderer.setBarPainter(new StandardXYBarPainter());
+        //renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
+        
         return chart;
     }
 
