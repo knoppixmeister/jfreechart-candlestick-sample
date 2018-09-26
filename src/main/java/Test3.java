@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +26,7 @@ import org.jfree.chart.renderer.xy.*;
 import org.jfree.chart.ui.*;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.general.SeriesChangeListener;
+import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
@@ -155,17 +157,14 @@ public class Test3 {
 			null										//toolTipGenerator
 		);
         renderer.setVolumePaint(ChartColor.BLACK);
-       
-        
-        
+
 		XYPlot plot1 = new XYPlot(
 			collection,		//dataset,
 			null,			//domainAxis,
 			priceAxis,		//rangeAxis,
 			renderer		//renderer
 		);
-		
-		
+	
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
 		plot1.setDomainPannable(true);
@@ -179,6 +178,22 @@ public class Test3 {
 
 		plot1.setNoDataMessage("No data ...");
 
+		HistogramDataset dataset = new HistogramDataset();
+		
+		double[] values = new double[1000];
+        Random generator = new Random(12345678L);
+		for(int i = 0; i < 1000; i++) {
+            values[i] = generator.nextGaussian() + 5;
+        }
+        dataset.addSeries("H1", values, 100, 2.0, 8.0);
+		
+        XYBarRenderer xyRenderer = new XYBarRenderer();
+        xyRenderer.setBarPainter(new StandardXYBarPainter());
+        xyRenderer.setShadowVisible(false);
+        
+        //plot1.setDataset(1, dataset);
+        //plot1.setRenderer(1, xyRenderer);
+		
 		/*
 		XYDataset dataset2 = MovingAverage.createMovingAverage(collection, "-MAVG", 3 * 24 * 60 * 60 * 1000L, 0L);
 		plot1.setDataset(1, dataset2);
@@ -233,10 +248,9 @@ public class Test3 {
 			//rangeAxis,
 			//renderer
 		);
-		
-		
+
 	//----------------------------------------------------------------------------------------------------------------------
-		
+
 		XYPlot plot4 = new XYPlot(
 			//dataset,
 			//domainAxis,
@@ -246,7 +260,7 @@ public class Test3 {
 
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(-9);
-		
+
 		//combinedPlot.setInsets(new RectangleInsets(-20, -10, 0, -10));
 
 		//combinedPlot.setDomainCrosshairVisible(true);
@@ -258,7 +272,7 @@ public class Test3 {
 		combinedPlot.add(plot2, 1);
 		combinedPlot.add(plot3, 1);
 		combinedPlot.add(plot4, 1);
-		
+
 		JFreeChart chart = new JFreeChart(combinedPlot);
 		chart.setPadding(new RectangleInsets(-7, -15, 0, 0));
 
@@ -602,6 +616,7 @@ class BNWebSocketListener extends WebSocketListener {
 				System.out.println(	"OLD_CL_VAL: "+	String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 
 				collection.getSeries(0).updatePrice(new BigDecimal(candleResult.data.k.c).doubleValue());
+				collection.getSeries(0).updataVolume(new BigDecimal(candleResult.data.k.v).doubleValue());
 
 				System.out.println(	"NEW_CL_VAL: "+ String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 			}
@@ -614,7 +629,7 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(candleResult.data.k.h),									//high,
 					Double.parseDouble(candleResult.data.k.l),									//low,
 					Double.parseDouble(candleResult.data.k.c),									//close
-					Double.parseDouble(candleResult.data.k.l)									//volume
+					Double.parseDouble(candleResult.data.k.v)									//volume
 				));
 			}
 			else {

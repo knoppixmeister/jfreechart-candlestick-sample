@@ -259,8 +259,9 @@ public abstract class Series implements Cloneable, Serializable {
     @Override
     public int hashCode() {
         int result;
-        result = this.key.hashCode();
-        result = 29 * result + (this.description != null ? this.description.hashCode() : 0);
+        
+        result = key.hashCode();
+        result = 29 * result + (description != null ? description.hashCode() : 0);
         
         return result;
     }
@@ -337,7 +338,7 @@ public abstract class Series implements Cloneable, Serializable {
      * @param newValue  the new value.
      */
     protected void firePropertyChange(String property, Object oldValue, Object newValue) {
-        this.propertyChangeSupport.firePropertyChange(property, oldValue, newValue);
+    	propertyChangeSupport.firePropertyChange(property, oldValue, newValue);
     }
     
     /**
@@ -372,6 +373,6 @@ public abstract class Series implements Cloneable, Serializable {
      * @throws PropertyVetoException if the change was vetoed.
      */
 	protected void fireVetoableChange(String property, Object oldValue, Object newValue) throws PropertyVetoException {
-        this.vetoableChangeSupport.fireVetoableChange(property, oldValue, newValue);
+		vetoableChangeSupport.fireVetoableChange(property, oldValue, newValue);
 	}
 }

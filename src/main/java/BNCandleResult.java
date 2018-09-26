@@ -11,6 +11,6 @@ class BNCandleData {
 
 class BNKlineData {
 	public long t, T;
-	public String s, f, L, o, c, h, l, v, n, i;
+	public String s, f, L, o, c, h, l, v, n, i, q, V, Q;
 	public boolean x;
 }

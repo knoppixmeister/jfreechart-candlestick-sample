@@ -2,14 +2,11 @@ package demo;
 
 import java.io.IOException;
 import java.util.Random;
-
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.panel.Overlay;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
@@ -32,6 +29,7 @@ public class HistogramDemo1 extends ApplicationFrame {
      */
     public HistogramDemo1(String title) {
         super(title);
+        
         JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
         setContentPane(chartPanel);
@@ -47,11 +45,12 @@ public class HistogramDemo1 extends ApplicationFrame {
         
         double[] values = new double[1000];
         Random generator = new Random(12345678L);
+        
         for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 5;
         }
-        
         dataset.addSeries("H1", values, 100, 2.0, 8.0);
+        
         values = new double[1000];
         for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 7;
@@ -79,15 +78,11 @@ public class HistogramDemo1 extends ApplicationFrame {
             true,
             false
     	);
-        
-    	Overlay overlay;
     	
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         plot.setForegroundAlpha(0.85f);
-        
-        //System.out.println(	plot.getRenderer()	);
         
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -123,9 +118,9 @@ public class HistogramDemo1 extends ApplicationFrame {
      * @throws IOException  if there is a problem saving the file.
      */
     public static void main(String[] args) throws IOException {
-        HistogramDemo1 demo = new HistogramDemo1("");
-        demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
-        demo.setVisible(true);
+    	HistogramDemo1 demo = new HistogramDemo1("");
+    	demo.pack();
+    	RefineryUtilities.centerFrameOnScreen(demo);
+    	demo.setVisible(true);
     }
 }

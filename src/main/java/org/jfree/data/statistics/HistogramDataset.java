@@ -42,7 +42,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset implements Inter
      * @return The type (never {@code null}).
      */
     public HistogramType getType() {
-        return this.type;
+        return type;
     }
 
     /**
@@ -87,17 +87,18 @@ public class HistogramDataset extends AbstractIntervalXYDataset implements Inter
      * @param maximum  the upper bound of the bin range.
      */
     public void addSeries(Comparable key, double[] values, int bins, double minimum, double maximum) {
-        Args.nullNotPermitted(key, "key");
-        Args.nullNotPermitted(values, "values");
-        
-        if(bins < 1) throw new IllegalArgumentException("The 'bins' value must be at least 1.");
-        
-        double binWidth = (maximum - minimum) / bins;
+    	Args.nullNotPermitted(key, "key");
+    	Args.nullNotPermitted(values, "values");
 
-        double lower = minimum;
-        double upper;
-        List binList = new ArrayList(bins);
-        for(int i = 0; i < bins; i++) {
+    	if(bins < 1) throw new IllegalArgumentException("The 'bins' value must be at least 1.");
+        
+    	double binWidth = (maximum - minimum) / bins;
+
+    	double lower = minimum;
+    	double upper;
+    	List binList = new ArrayList(bins);
+    	
+    	for(int i = 0; i<bins; i++) {
             HistogramBin bin;
             // make sure bins[bins.length]'s upper boundary ends at maximum
             // to avoid the rounding issue. the bins[0] lower boundary is

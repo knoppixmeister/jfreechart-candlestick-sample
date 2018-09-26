@@ -139,6 +139,16 @@ public class OHLCSeries extends ComparableObjectSeries {
 		fireSeriesChanged();
 	}
 
+	public void updataVolume(double newVolume) {
+		updateVolume(newVolume, getItemCount()-1);
+	}
+	
+	public void updateVolume(double newVolume, int index) {
+		((OHLCItem)getDataItem(index)).setVolume(newVolume);
+
+		fireSeriesChanged();
+	}
+	
     /**
      * Removes the item with the specified index.
      *
