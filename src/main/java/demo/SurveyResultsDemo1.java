@@ -1,10 +1,3 @@
-/* -----------------------
- * SurveyResultsDemo1.java
- * -----------------------
- * (C) Copyright 2003, 2004, 2006, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.awt.BasicStroke;
@@ -34,10 +27,11 @@ import org.jfree.ui.TextAnchor;
 
 /**
  * A horizontal bar chart showing survey results.
- */
+*/
 public class SurveyResultsDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = -7140779640965847469L;
 
-    /**
+	/**
      * Creates a new demo.
      *
      * @param title  the frame title.
@@ -71,6 +65,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
         dataset.addValue(3.99, "Results", "Category 13");
         dataset.addValue(2.23, "Results", "Category 14");
         dataset.addValue(2.60, "Results", "Overall");
+        
         return dataset;
     }
     
@@ -82,7 +77,6 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
      * @return The chart.
      */
     private static JFreeChart createChart(CategoryDataset dataset) {
-
         JFreeChart chart = ChartFactory.createBarChart(
             null,                         // chart title
             null,                         // domain axis label
@@ -96,10 +90,8 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
         
         chart.setBackgroundPaint(Color.white);
         
-        TextTitle title = new TextTitle(
-                "Figure 7 | I. Resources - The site offers users relevant, "
-                + "informative and educational resources");
-        title.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        TextTitle title = new TextTitle("Figure 7 | I. Resources - The site offers users relevant, informative and educational resources");
+        //title.setHorizontalAlignment(HorizontalAlignment.LEFT);
         title.setBackgroundPaint(Color.red);
         title.setPaint(Color.white);
         
@@ -124,16 +116,14 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
         renderer.setSeriesPaint(0, new Color(0x9C, 0xA4, 0x4A));
         renderer.setDrawBarOutline(false);
         
-        renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelFont(new Font("SansSerif", Font.BOLD, 10));
-        ItemLabelPosition position = new ItemLabelPosition(
-                ItemLabelAnchor.INSIDE3, TextAnchor.CENTER_RIGHT);
-        renderer.setBasePositiveItemLabelPosition(position);
+        //renderer.setBaseItemLabelsVisible(true);
+        //renderer.setBaseItemLabelFont(new Font("SansSerif", Font.BOLD, 10));
+        //ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.INSIDE3, TextAnchor.CENTER_RIGHT);
+        //renderer.setBasePositiveItemLabelPosition(position);
         
-        CategoryTextAnnotation a1 = new CategoryTextAnnotation(
-                "1. White papers are available.", "Category 1", 0.0);
+        CategoryTextAnnotation a1 = new CategoryTextAnnotation("1. White papers are available.", "Category 1", 0.0);
         a1.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a1.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a1.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a1.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a1);
         
@@ -142,7 +132,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 + "understanding of the firm and its expertise.", "Category 2", 
                 0.0);
         a2.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a2.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a2.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a2.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a2);
 
@@ -150,7 +140,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "3. White papers are relevant to "
                 + "the firm's prospects and clients.", "Category 3", 0.0);
         a3.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a3.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a3.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a3.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a3);
 
@@ -158,14 +148,14 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "4. White papers are relevant to "
                 + "the firm's positioning.", "Category 4", 0.0);
         a4.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a4.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a4.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a4.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a4);
 
         CategoryTextAnnotation a5 = new CategoryTextAnnotation(
                 "5. Case studies are available.", "Category 5", 0.0);
         a5.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a5.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a5.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a5.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a5);
         
@@ -174,7 +164,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 + "understanding of the firm and its expertise.", "Category 6",
                 0.0);
         a6.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a6.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a6.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a6.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a6);
 
@@ -182,7 +172,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "7. Case studies are relevant to "
                 + "the firm's prospects and clients.", "Category 7", 0.0);
         a7.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a7.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a7.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a7.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a7);
 
@@ -190,14 +180,14 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "8. White papers are relevant to the firm's positioning.", 
                 "Category 8", 0.0);
         a8.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a8.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a8.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a8.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a8);
 
         CategoryTextAnnotation a9 = new CategoryTextAnnotation(
                 "9. Case studies are available.", "Category 9", 0.0);
         a9.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a9.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a9.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a9.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a9);
         
@@ -206,7 +196,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 + "understanding of the firm and its expertise.", 
                 "Category 10", 0.0);
         a10.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a10.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a10.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a10.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a10);
 
@@ -214,7 +204,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "11. Case studies are relevant "
                 + "to the firm's prospects and clients.", "Category 11", 0.0);
         a11.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a11.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a11.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a11.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a11);
 
@@ -222,7 +212,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "12. White papers are relevant to the firm's positioning.", 
                 "Category 12", 0.0);
         a12.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        a12.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a12.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a12.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a12);
 
@@ -230,7 +220,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "13. Users can easily access "
                 + "resources based on viewer interest.", "Category 13", 0.0);
         a13.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a13.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a13.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a13.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a13);
 
@@ -238,14 +228,14 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
                 "14. Access to additional hyperlinks enhances users's ability "
                 + "to find relevant information.", "Category 14", 0.0);
         a14.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a14.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a14.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a14.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a14);
 
         CategoryTextAnnotation a15 = new CategoryTextAnnotation(
                 "15. OVERALL EFFECTIVENESS.", "Overall", 0.0);
         a15.setFont(new Font("SansSerif", Font.BOLD, 12));
-        a15.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+        //a15.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         a15.setCategoryAnchor(CategoryAnchor.START);
         plot.addAnnotation(a15);
 
@@ -260,6 +250,7 @@ public class SurveyResultsDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart(createDataset());
+        
         return new ChartPanel(chart);
     }
     
