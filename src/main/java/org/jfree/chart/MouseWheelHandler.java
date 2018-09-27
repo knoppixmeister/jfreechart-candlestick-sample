@@ -94,12 +94,8 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
         double zf = 1.0 + zoomFactor;
         if(rotationDir < 0) zf = 1.0 / zf;
 
-        if(chartPanel.isDomainZoomable()) {
-        	zoomable.zoomDomainAxes(zf, plotRenderingInfo, p, true);
-        }
-        if(chartPanel.isRangeZoomable()) {
-        	zoomable.zoomRangeAxes(zf, plotRenderingInfo, p, true);
-        }
+        if(chartPanel.isDomainZoomable()) zoomable.zoomDomainAxes(zf, plotRenderingInfo, p, true);
+        if(chartPanel.isRangeZoomable()) zoomable.zoomRangeAxes(zf, plotRenderingInfo, p, true);
 
         plot.setNotify(notifyState);  // this generates the change event too
 	}
