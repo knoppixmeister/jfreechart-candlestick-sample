@@ -1059,7 +1059,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      * @param dataArea  the axis data area.
      */
     @Override
-    public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis rangeAxis, Marker marker, Rectangle2D dataArea) {
+    public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis rangeAxis, Marker marker, Rectangle2D dataArea) {	
         if(marker instanceof ValueMarker) {
             ValueMarker vm = (ValueMarker) marker;
             double value = vm.getValue();
@@ -1072,7 +1072,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
             if(orientation == PlotOrientation.HORIZONTAL) {
                 line = new Line2D.Double(v, dataArea.getMinY(), v, dataArea.getMaxY());
             }
-            else if(orientation == PlotOrientation.VERTICAL) line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            else if(orientation == PlotOrientation.VERTICAL) {
+            	line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            }
             else throw new IllegalStateException("Unrecognised orientation.");
 
             final Composite originalComposite = g2.getComposite();
@@ -1088,12 +1090,21 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                 Font labelFont = marker.getLabelFont();
                 g2.setFont(labelFont);
                 Point2D coords = calculateRangeMarkerTextAnchorPoint(
-                        g2, orientation, dataArea, line.getBounds2D(),
-                        marker.getLabelOffset(),
-                        LengthAdjustmentType.EXPAND, anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
+                	g2,
+                	orientation,
+                	dataArea,
+                	line.getBounds2D(),
+                	marker.getLabelOffset(),
+                	LengthAdjustmentType.EXPAND,
+                	anchor
+                );
+                Rectangle2D r = TextUtils.calcAlignedStringBounds(
+                	label, 
+                	g2,
+                	(float) coords.getX(),
+                	(float) coords.getY(), 
+                	marker.getLabelTextAnchor()
+                );
                 g2.setPaint(marker.getLabelBackgroundColor());
                 g2.fill(r);
                 g2.setPaint(marker.getLabelPaint());
@@ -1123,7 +1134,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                 high = Math.min(high, dataArea.getMaxX());
                 rect = new Rectangle2D.Double(low, dataArea.getMinY(), high - low, dataArea.getHeight());
             }
-            else if (orientation == PlotOrientation.VERTICAL) {
+            else if(orientation == PlotOrientation.VERTICAL) {
                 // clip top and bottom bounds to data area
                 low = Math.max(low, dataArea.getMinY());
                 high = Math.min(high, dataArea.getMaxY());
@@ -1209,10 +1220,14 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      *
      * @return The coordinates for drawing the marker label.
      */
-    private Point2D calculateRangeMarkerTextAnchorPoint(Graphics2D g2,
-           PlotOrientation orientation, Rectangle2D dataArea,
-           Rectangle2D markerArea, RectangleInsets markerOffset,
-           LengthAdjustmentType labelOffsetForRange, RectangleAnchor anchor)
+    private Point2D calculateRangeMarkerTextAnchorPoint(
+    	Graphics2D g2,
+    	PlotOrientation orientation,
+    	Rectangle2D dataArea,
+    	Rectangle2D markerArea,
+    	RectangleInsets markerOffset,
+    	LengthAdjustmentType labelOffsetForRange,
+    	RectangleAnchor anchor)
     {
         Rectangle2D anchorRect = null;
         
@@ -1226,6 +1241,13 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         return anchor.getAnchorPoint(anchorRect);
     }
 
+    
+    
+    
+    
+    
+    
+    
     /**
      * Returns a clone of the renderer.
      *

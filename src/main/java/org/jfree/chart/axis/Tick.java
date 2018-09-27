@@ -1,49 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------
- * Tick.java
- * ---------
- * (C) Copyright 2000-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Nicolas Brodu;
- *
- * Changes
- * -------
- * 18-Sep-2001 : Added standard header and fixed DOS encoding problem (DG);
- * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 12-Sep-2003 : Implemented Cloneable (NB);
- * 07-Nov-2003 : Added subclasses for particular types of ticks (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.io.Serializable;
@@ -55,7 +9,6 @@ import org.jfree.chart.util.Args;
  * The base class used to represent labeled ticks along an axis.
  */
 public abstract class Tick implements Serializable, Cloneable {
-    /** For serialization. */
     private static final long serialVersionUID = 6668230383875149773L;
 
     /** A text version of the tick value. */
@@ -83,10 +36,10 @@ public abstract class Tick implements Serializable, Cloneable {
         Args.nullNotPermitted(textAnchor, "textAnchor");
         Args.nullNotPermitted(rotationAnchor, "rotationAnchor");
         
-        this.text = text;
-        this.textAnchor = textAnchor;
+        this.text 			= text;
+        this.textAnchor 	= textAnchor;
         this.rotationAnchor = rotationAnchor;
-        this.angle = angle;
+        this.angle 			= angle;
     }
 
     /**
@@ -95,7 +48,7 @@ public abstract class Tick implements Serializable, Cloneable {
      * @return A string (possibly {@code null});
      */
     public String getText() {
-        return this.text;
+        return text;
     }
 
     /**
@@ -104,7 +57,7 @@ public abstract class Tick implements Serializable, Cloneable {
      * @return The text anchor (never {@code null}).
      */
     public TextAnchor getTextAnchor() {
-        return this.textAnchor;
+        return textAnchor;
     }
 
     /**
@@ -123,9 +76,25 @@ public abstract class Tick implements Serializable, Cloneable {
      * @return The angle.
      */
     public double getAngle() {
-        return this.angle;
+        return angle;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this tick for equality with an arbitrary object.
      *

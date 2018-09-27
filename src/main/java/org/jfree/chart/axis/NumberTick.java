@@ -41,14 +41,17 @@
 
 package org.jfree.chart.axis;
 
+import java.math.BigDecimal;
+
 import org.jfree.chart.ui.TextAnchor;
 
 /**
  * A numerical tick.
  */
 public class NumberTick extends ValueTick {
-
-    /** The number. */
+	private static final long serialVersionUID = -798290653645215428L;
+	
+	/** The number. */
     private Number number;
 
     /**
@@ -61,13 +64,16 @@ public class NumberTick extends ValueTick {
      * @param rotationAnchor  defines the rotation point relative to the text.
      * @param angle  the rotation angle (in radians).
      */
-    public NumberTick(Number number, String label,
-                      TextAnchor textAnchor,
-                      TextAnchor rotationAnchor, double angle) {
-
+    public NumberTick(
+    	Number number,
+    	String label,
+    	TextAnchor textAnchor,
+    	TextAnchor rotationAnchor,
+    	double angle)
+    {
         super(number.doubleValue(), label, textAnchor, rotationAnchor, angle);
+        
         this.number = number;
-
     }
 
     /**
@@ -83,13 +89,18 @@ public class NumberTick extends ValueTick {
      *
      * @since 1.0.7
      */
-    public NumberTick(TickType tickType, double value, String label,
-                      TextAnchor textAnchor,
-                      TextAnchor rotationAnchor, double angle) {
-
+    public NumberTick(
+    	TickType tickType,
+    	double value,
+    	String label,
+    	TextAnchor textAnchor,
+    	TextAnchor rotationAnchor,
+    	double angle)
+    {
         super(tickType, value, label, textAnchor, rotationAnchor, angle);
-        this.number = new Double(value);
-
+        
+        this.number = 	//new BigDecimal(value).doubleValue();
+        				new Double(value);
     }
 
     /**
@@ -98,7 +109,7 @@ public class NumberTick extends ValueTick {
      * @return The number.
      */
     public Number getNumber() {
-        return this.number;
+        return number;
     }
 
 }

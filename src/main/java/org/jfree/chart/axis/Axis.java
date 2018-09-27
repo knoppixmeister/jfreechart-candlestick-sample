@@ -1286,12 +1286,18 @@ public abstract class Axis implements Cloneable, Serializable {
             double labelx = state.getCursor() - insets.getRight() - labelBounds.getWidth() / 2.0;
             double labely = labelLocationY(labelLocation, dataArea);
             TextAnchor anchor = labelAnchorV(labelLocation);
-            TextUtils.drawRotatedString(label, g2, (float) labelx,
-                    (float) labely, anchor, getLabelAngle() - Math.PI / 2.0, 
-                    anchor);
+            TextUtils.drawRotatedString(
+            	label,
+            	g2,
+            	(float) labelx,
+            	(float) labely,
+            	anchor,
+            	getLabelAngle() - Math.PI / 2.0, 
+            	anchor
+            );
             state.cursorLeft(insets.getLeft() + labelBounds.getWidth()  + insets.getRight());
         }
-        else if (edge == RectangleEdge.RIGHT) {
+        else if(edge == RectangleEdge.RIGHT) {
             AffineTransform t = AffineTransform.getRotateInstance(
                     getLabelAngle() + Math.PI / 2.0,
                     labelBounds.getCenterX(), labelBounds.getCenterY());
@@ -1299,8 +1305,8 @@ public abstract class Axis implements Cloneable, Serializable {
             labelBounds = rotatedLabelBounds.getBounds2D();
             double labelx = state.getCursor()
                             + insets.getLeft() + labelBounds.getWidth() / 2.0;
-            double labely = labelLocationY(this.labelLocation, dataArea);
-            TextAnchor anchor = labelAnchorV(this.labelLocation);
+            double labely = labelLocationY(labelLocation, dataArea);
+            TextAnchor anchor = labelAnchorV(labelLocation);
             TextUtils.drawRotatedString(label, g2, (float) labelx,
                     (float) labely, anchor, getLabelAngle() + Math.PI / 2.0, 
                     anchor);

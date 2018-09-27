@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.text.NumberFormatter;
 
 import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
@@ -36,6 +38,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 
+import javafx.scene.chart.Chart;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -48,6 +51,8 @@ public class Test3 {
 	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
 
 	private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
+	
+	private static double oldPrice = 0;
 
 	public static void main(String[] args) {
 		socket = null;
@@ -107,6 +112,12 @@ public class Test3 {
         collection3.addSeries(series2);
         collection3.addSeries(series3);
 
+        ValueMarker priceLine = new ValueMarker();
+        priceLine.setLabelPaint(ChartColor.BLACK);
+        //priceLine.setLabelFont(priceLine.getLabelFont());
+        priceLine.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+        priceLine.setLabelTextAnchor(TextAnchor.BASELINE_RIGHT);
+        
         series.addChangeListener(new SeriesChangeListener() {
 			@Override
 			public void seriesChanged(SeriesChangeEvent event) {
@@ -123,6 +134,23 @@ public class Test3 {
 				}
 
 				series1.setNotify(true);
+
+				double currentPrice = ((OHLCItem)series.getDataItem(series.getItemCount()-1)).getCloseValue();
+				if(currentPrice > oldPrice) {
+					priceLine.setPaint(ChartColor.GREEN);
+					priceLine.setLabelPaint(ChartColor.BLACK);
+					priceLine.setLabelBackgroundColor(ChartColor.GREEN);
+				}
+				else {
+					priceLine.setPaint(ChartColor.DARK_RED);
+					priceLine.setLabelPaint(ChartColor.WHITE);
+					priceLine.setLabelBackgroundColor(ChartColor.LIGHT_RED);
+				}
+				
+				priceLine.setValue(currentPrice);
+				priceLine.setLabel(" "+currentPrice+" ");
+				
+				oldPrice = ((OHLCItem)series.getDataItem(series.getItemCount()-1)).getCloseValue();
 			}
         });
 
@@ -148,8 +176,15 @@ public class Test3 {
 		*/
 
         DateAxis dateAxis 		= new DateAxis();
+        
         NumberAxis priceAxis 	= new NumberAxis();
         priceAxis.setAutoRangeIncludesZero(false);
+        
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(8);
+        nf.setMinimumFractionDigits(5);
+        
+        priceAxis.setNumberFormatOverride(nf);
 
         CandlestickRenderer renderer = new CandlestickRenderer(
 			-1,	//candleWidth,
@@ -164,6 +199,8 @@ public class Test3 {
 			priceAxis,		//rangeAxis,
 			renderer		//renderer
 		);
+		
+		plot1.addRangeMarker(priceLine);
 	
 		plot1.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot1.setRangePannable(true);
@@ -274,7 +311,7 @@ public class Test3 {
 		combinedPlot.add(plot4, 1);
 
 		JFreeChart chart = new JFreeChart(combinedPlot);
-		chart.setPadding(new RectangleInsets(-7, -15, 0, 0));
+		chart.setPadding(new RectangleInsets(-7, -15, 0, -15));
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setDoubleBuffered(true);
@@ -613,7 +650,6 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
-		/*
 		System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
@@ -658,6 +694,5 @@ class BNWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("---------------------------------------------------------------------------------");
-		*/
 	}
 }

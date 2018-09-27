@@ -256,7 +256,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      * @see #setNumberFormatOverride(NumberFormat)
      */
     public NumberFormat getNumberFormatOverride() {
-        return this.numberFormatOverride;
+        return numberFormatOverride;
     }
 
     /**
@@ -268,7 +268,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      * @see #getNumberFormatOverride()
      */
     public void setNumberFormatOverride(NumberFormat formatter) {
-        this.numberFormatOverride = formatter;
+    	numberFormatOverride = formatter;
+    	
         notifyListeners(new AxisChangeEvent(this));
     }
 
@@ -780,7 +781,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     @Override
     public List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge) {
         List result = new java.util.ArrayList();
-        if (RectangleEdge.isTopOrBottom(edge)) {
+        if(RectangleEdge.isTopOrBottom(edge)) {
             result = refreshTicksHorizontal(g2, dataArea, edge);
         }
         else if(RectangleEdge.isLeftOrRight(edge)) {
@@ -908,20 +909,19 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             if(minorTickSpaces <= 0) minorTickSpaces = tu.getMinorTickCount();
 
             for(int minorTick = 1; minorTick < minorTickSpaces; minorTick++) {
-                double minorTickValue = lowestTickValue
-                        - size * minorTick / minorTickSpaces;
-                if (getRange().contains(minorTickValue)) {
+                double minorTickValue = lowestTickValue - size * minorTick / minorTickSpaces;
+                if(getRange().contains(minorTickValue)) {
                     result.add(new NumberTick(TickType.MINOR, minorTickValue,
                             "", TextAnchor.TOP_CENTER, TextAnchor.CENTER,
                             0.0));
                 }
             }
 
-            for (int i = 0; i < count; i++) {
+            for(int i = 0; i < count; i++) {
                 double currentTickValue = lowestTickValue + (i * size);
                 String tickLabel;
                 NumberFormat formatter = getNumberFormatOverride();
-                if (formatter != null) {
+                if(formatter != null) {
                     tickLabel = formatter.format(currentTickValue);
                 }
                 else {

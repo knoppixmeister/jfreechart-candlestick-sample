@@ -591,7 +591,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
                 }
                 else {
                     if(tick.getText() == null) continue;
-
+                    
                     TextUtils.drawRotatedString(
                     	tick.getText(),
                     	g2,

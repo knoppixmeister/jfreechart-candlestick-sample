@@ -19,6 +19,10 @@ public class ValueMarker extends Marker {
      *
      * @param value  the value.
      */
+    public ValueMarker() {
+		this(0);
+	}
+    
     public ValueMarker(double value) {
         super();
         
@@ -48,6 +52,7 @@ public class ValueMarker extends Marker {
      */
     public ValueMarker(double value, Paint paint, Stroke stroke, Paint outlinePaint, Stroke outlineStroke, float alpha) {
         super(paint, stroke, outlinePaint, outlineStroke, alpha);
+        
         this.value = value;
     }
 
@@ -59,7 +64,7 @@ public class ValueMarker extends Marker {
      * @see #setValue(double)
      */
     public double getValue() {
-        return this.value;
+        return value;
     }
 
     /**
@@ -78,6 +83,12 @@ public class ValueMarker extends Marker {
         notifyListeners(new MarkerChangeEvent(this));
     }
 
+    
+    
+    
+    
+    
+    
     /**
      * Tests this marker for equality with an arbitrary object.  This method
      * returns {@code true} if:
@@ -108,6 +119,7 @@ public class ValueMarker extends Marker {
         if (this.value != that.value) {
             return false;
         }
+        
         return true;
     }
 }

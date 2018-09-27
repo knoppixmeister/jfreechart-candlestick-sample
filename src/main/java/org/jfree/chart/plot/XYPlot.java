@@ -3263,6 +3263,7 @@ public class XYPlot extends Plot implements
      */
     public void drawRangeTickBands(Graphics2D g2, Rectangle2D dataArea, List ticks) {
         Paint bandPaint = getRangeTickBandPaint();
+        
         if(bandPaint != null) {
             boolean fillBand = false;
             ValueAxis axis = getRangeAxis();
@@ -3668,7 +3669,7 @@ public class XYPlot extends Plot implements
      * @param index  the renderer index.
      * @param layer  the layer (foreground or background).
      */
-    protected void drawRangeMarkers(Graphics2D g2, Rectangle2D dataArea, int index, Layer layer) {
+    protected void drawRangeMarkers(Graphics2D g2, Rectangle2D dataArea, int index, Layer layer) {  	
     	XYItemRenderer r = getRenderer(index);
         if(r == null) return;
 

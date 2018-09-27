@@ -32,7 +32,6 @@ import org.jfree.chart.util.SerialUtils;
  * version 1.0.3.
  */
 public abstract class Marker implements Cloneable, Serializable {
-    /** For serialization. */
     private static final long serialVersionUID = -734389651405327166L;
 
     /** The paint (null is not allowed). */
@@ -113,23 +112,23 @@ public abstract class Marker implements Cloneable, Serializable {
         Args.nullNotPermitted(paint, "paint");
         Args.nullNotPermitted(stroke, "stroke");
         
-        if (alpha < 0.0f || alpha > 1.0f) {
+        if(alpha < 0.0f || alpha > 1.0f) {
             throw new IllegalArgumentException("The 'alpha' value must be in the range 0.0f to 1.0f");
         }
 
-        this.paint = paint;
-        this.stroke = stroke;
-        this.outlinePaint = outlinePaint;
-        this.outlineStroke = outlineStroke;
-        this.alpha = alpha;
+        this.paint 			= paint;
+        this.stroke 		= stroke;
+        this.outlinePaint 	= outlinePaint;
+        this.outlineStroke 	= outlineStroke;
+        this.alpha 			= alpha;
 
-        this.labelFont = new Font("SansSerif", Font.PLAIN, 10);
-        this.labelPaint = Color.BLACK;
-        this.labelBackgroundColor = new Color(100, 100, 100, 100);
-        this.labelAnchor = RectangleAnchor.TOP_LEFT;
-        this.labelOffset = new RectangleInsets(3.0, 3.0, 3.0, 3.0);
-        this.labelOffsetType = LengthAdjustmentType.CONTRACT;
-        this.labelTextAnchor = TextAnchor.CENTER;
+        this.labelFont 				= new Font("SansSerif", Font.PLAIN, 10);
+        this.labelPaint 			= Color.BLACK;
+        this.labelBackgroundColor 	= new Color(100, 100, 100, 100);
+        this.labelAnchor 			= RectangleAnchor.TOP_LEFT;
+        this.labelOffset 			= new RectangleInsets(3.0, 3.0, 3.0, 3.0);
+        this.labelOffsetType 		= LengthAdjustmentType.CONTRACT;
+        this.labelTextAnchor 		= TextAnchor.CENTER;
 
         this.listenerList = new EventListenerList();
     }
@@ -142,7 +141,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setPaint(Paint)
      */
     public Paint getPaint() {
-        return this.paint;
+        return paint;
     }
 
     /**
@@ -221,7 +220,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setOutlineStroke(Stroke)
      */
     public Stroke getOutlineStroke() {
-        return this.outlineStroke;
+        return outlineStroke;
     }
 
     /**
@@ -246,7 +245,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setAlpha(float)
      */
     public float getAlpha() {
-        return this.alpha;
+        return alpha;
     }
 
     /**
@@ -267,6 +266,7 @@ public abstract class Marker implements Cloneable, Serializable {
         if(alpha < 0.0f || alpha > 1.0f) {
             throw new IllegalArgumentException("The 'alpha' value must be in the range 0.0f to 1.0f");
         }
+        
         this.alpha = alpha;
         
         notifyListeners(new MarkerChangeEvent(this));
@@ -332,7 +332,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #setLabelPaint(Paint)
      */
     public Paint getLabelPaint() {
-        return this.labelPaint;
+        return labelPaint;
     }
 
     /**
