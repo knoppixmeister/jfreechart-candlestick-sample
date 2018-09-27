@@ -19,7 +19,6 @@ import java.awt.Transparency;
 import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -55,8 +54,11 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.EventListenerList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jfree.chart.axis.Axis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.editor.ChartEditor;
 import org.jfree.chart.editor.ChartEditorManager;
+import org.jfree.chart.entity.AxisEntity;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.EntityCollection;
 import org.jfree.chart.event.ChartChangeEvent;
@@ -773,7 +775,7 @@ public class ChartPanel extends JPanel implements
      * @param height  The height.
      */
     public void setMaximumDrawHeight(int height) {
-        this.maximumDrawHeight = height;
+    	maximumDrawHeight = height;
     }
 
     /**
@@ -1224,8 +1226,8 @@ public class ChartPanel extends JPanel implements
      */
     public Point translateJava2DToScreen(Point2D java2DPoint) {
         Insets insets = getInsets();
-        int x = (int) (java2DPoint.getX() * this.scaleX + insets.left);
-        int y = (int) (java2DPoint.getY() * this.scaleY + insets.top);
+        int x = (int) (java2DPoint.getX() * scaleX + insets.left);
+        int y = (int) (java2DPoint.getY() * scaleY + insets.top);
         
         return new Point(x, y);
     }
@@ -1442,7 +1444,9 @@ public class ChartPanel extends JPanel implements
     @Override
     public void chartChanged(ChartChangeEvent event) {
     	refreshBuffer = true;
+    	
     	Plot plot = chart.getPlot();
+    	
     	if(plot instanceof Zoomable) {
             Zoomable z = (Zoomable) plot;
             orientation = z.getOrientation();
@@ -1483,7 +1487,7 @@ public class ChartPanel extends JPanel implements
 
         if(command.equals(PROPERTIES_COMMAND)) doEditChartProperties();
         else if(command.equals(COPY_COMMAND)) doCopy();
-        else if (command.equals(SAVE_AS_PNG_COMMAND)) {
+        else if(command.equals(SAVE_AS_PNG_COMMAND)) {
         	try {
                 doSaveAs();
             }
@@ -1607,14 +1611,21 @@ public class ChartPanel extends JPanel implements
         else {
 
         //if((mods & panMask) == panMask) {
+        	System.out.println("");
         	System.out.println("PAN_START");
 
         	//can we pan this plot?
         	if(plot instanceof Pannable) {
+        		System.out.println("IS_PANNABLE");
+        		
         		Pannable pannable = (Pannable) plot;
         		if(pannable.isDomainPannable() || pannable.isRangePannable()) {
+        			System.out.println("SMTH_RANGE_PANNABLE");
+        			
         			Rectangle2D screenDataArea = getScreenDataArea(e.getX(), e.getY());
 	        		if(screenDataArea != null && screenDataArea.contains(e.getPoint())) {
+	        			System.out.println("111111111");
+	        			
                     	panW	=	screenDataArea.getWidth();
                     	panH	=	screenDataArea.getHeight();
                     	panLast	=	e.getPoint();
@@ -1625,22 +1636,73 @@ public class ChartPanel extends JPanel implements
                     	setCursor(startMoveCursor);
                     }
                     else {
-                    	//System.out.println("222222");
+                    	System.out.println("222222");
 
-                    	if(screenDataArea == null) return;
+                    	System.out.println(getScreenDataArea());
+                    	
+                    	if(screenDataArea == null) {
+                    		System.out.println("NO_SCR_DATA_AREA");
+                    		//return;
+                    	}
 
-                    	setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+                    	//setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
                     	//setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
                     	
-                    	//System.out.println(	"PANNABLE: "+((Pannable) plot).isRangePannable()	);
+                    	System.out.println(	"_IS_RANGE_PANNABLE: "+((Pannable) plot).isRangePannable()	);
+                    	System.out.println(	"_IS_DOMAIN_PANNABLE: "+((Pannable) plot).isDomainPannable()	);
 
+                    	ChartEntity ce = getEntityForPoint(e.getX(), e.getY());
+                    	if(ce == null) {
+                    		System.out.println("CE = NULL");
+                    	}
+                    	else {
+                    		System.out.println("CE: "+ce);
+                    		
+                    		if(ce instanceof AxisEntity) {
+                    			System.out.println("CE_H: "+ce.getArea().getBounds2D().getHeight());
+                    			
+                    			Axis axs = ((AxisEntity)ce).getAxis();
+                    			System.out.println(axs);
+                    			
+                    			Plot pl = axs.getPlot();
+                    			if(pl instanceof XYPlot) {
+                    				System.out.println("IS_XY_PLOT");
+                    				
+                    				ValueAxis vax = ((XYPlot)pl).getRangeAxis();
+                    				if(vax != null && vax.equals(axs)) {
+                    					System.out.println("IS_RANGE_AXIS");
+                    					
+                    					setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+                    					
+                    					panRangeAxisLast 	= e.getPoint();
+                                		panDomainAxisLast 	= null;
+                                		panLast 			= null;
+                    				}
+                    				else {
+                    					System.out.println("NOT_RANGE_AXIS");
+                    					System.out.println("IS DOMAIN_AXIS");
+                    					
+                    					//TODO: add more checks that it is domain axis !!!
+                    					setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+                    					
+                    					panDomainAxisLast 	= e.getPoint();
+                                		panRangeAxisLast 	= null;
+                                		panLast 			= null;
+                    				}
+                    			}
+                    		}
+                    	}
+                    	
+                    	/*
                     	System.out.println(
                     		"X: "+e.getX()+
                     		"; SCDA_W: "+screenDataArea.getWidth() +
                     		"; FW: "+getWidth()
                     	);
                     	System.out.println("Y: "+e.getY()+"; SCDA_H: "+screenDataArea.getHeight() + "; FH: "+getHeight());
+                    	*/
                     	
+                    	/*
                     	if(	e.getX() > screenDataArea.getWidth() && e.getX() < getWidth() &&
                     		e.getY() < screenDataArea.getHeight())
                     	{
@@ -1668,10 +1730,11 @@ public class ChartPanel extends JPanel implements
                     		panRangeAxisLast = null;
                     		panLast = null;
                     	}
+                    	*/
+                    	
                     }
         		}
-
-        		//the actual panning occurs later in the mouseDragged() 
+        		else System.out.println("NOTHING_PANNABLE");
         	}
             else System.out.println("NO_PANN");
         }
@@ -1688,6 +1751,8 @@ public class ChartPanel extends JPanel implements
             }
         }
         */
+        
+        System.out.println("");
 	}
 
     /**
@@ -1736,7 +1801,7 @@ public class ChartPanel extends JPanel implements
 
             chart.getPlot().setNotify(false);
 
-            Pannable p = (Pannable)chart.getPlot();
+            Pannable p = (Pannable) chart.getPlot();
             if(p.getOrientation() == PlotOrientation.VERTICAL) {
             	//System.out.println("VERT_ORIENT. H_PERC: "+hPercent);
 
@@ -1772,22 +1837,16 @@ public class ChartPanel extends JPanel implements
  
     			System.out.println("DY: "+dy);
 
-    			if(dy > 0) {
-    				zoomable.zoomRangeAxes(
-    					1.05,
-    					plotRenderingInfo,
-    					null,
-    					false
-    				);
-    			}
-    			else {
-    				zoomable.zoomRangeAxes(
-    					0.95,
-        				plotRenderingInfo,
-        				null,
-        				false
-        			);
-    			}
+    			double factor = 1;
+    			if(dy > 0) factor = 1.05;
+    			else factor = 0.95;
+    			
+    			zoomable.zoomRangeAxes(
+					factor,
+    				plotRenderingInfo,
+    				panRangeAxisLast,
+    				false
+        		);
 
     			panRangeAxisLast = e.getPoint();
     		}
@@ -1800,22 +1859,16 @@ public class ChartPanel extends JPanel implements
     			double dx = e.getX()-panDomainAxisLast.getX();
     			if(dx == 0) return;
     			
-    			if(dx > 0) {
-    				zoomable.zoomDomainAxes(
-    					1.05 ,
-    					plotRenderingInfo,
-    					null,
-    					false
-    				);
-    			}
-    			else {
-    				zoomable.zoomDomainAxes(
-    					0.95,
-    					plotRenderingInfo,
-    					null,
-    					false
-    				);
-    			}
+    			double factor = 1;
+    			if(dx > 0) factor = 1.05;
+    			else factor = 0.95;
+    			
+    			zoomable.zoomDomainAxes(
+					factor,
+					plotRenderingInfo,
+					panDomainAxisLast,
+					false
+				);
 
     			panDomainAxisLast = e.getPoint();
     		}
@@ -1900,7 +1953,10 @@ public class ChartPanel extends JPanel implements
     public void mouseReleased(MouseEvent e) {
         //if we've been panning, we need to reset now that the mouse is 
         //released...
-
+    	System.out.println("M_RELEASED");
+    	
+    	setCursor(defaultCursor);
+    	
     	if(panLast != null || panRangeAxisLast != null || panDomainAxisLast != null) {
         	panLast = null;
 
@@ -1908,7 +1964,7 @@ public class ChartPanel extends JPanel implements
         	panRangeAxisLast = null;
 
         	//setCursor(Cursor.getDefaultCursor());
-        	setCursor(defaultCursor);
+        	//setCursor(defaultCursor);
         }
     	/*
         else if(panRangeAxisLast != null && panDomainAxisLast != null) {
@@ -2192,13 +2248,15 @@ public class ChartPanel extends JPanel implements
             // axes...
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
+            
             Zoomable z = (Zoomable) plot;
             z.zoomRangeAxes(
             	zoomOutFactor,
             	info.getPlotInfo(),
             	translateScreenToJava2D(new Point((int) x, (int) y)),
-            	this.zoomAroundAnchor
+            	zoomAroundAnchor
             );
+            
             plot.setNotify(savedNotify);
         }
     }
@@ -2416,8 +2474,7 @@ public class ChartPanel extends JPanel implements
     /**
      * Specifies the dismissal delay value for this chart panel.
      *
-     * @param delay the number of milliseconds to delay before taking away the
-     *              tooltip
+     * @param delay the number of milliseconds to delay before taking away the tooltip
      *
      * @see javax.swing.ToolTipManager#setDismissDelay(int)
      */
@@ -2532,9 +2589,17 @@ public class ChartPanel extends JPanel implements
         Insets insets = getInsets();
         int w = getWidth() - insets.left - insets.right;
         int h = getHeight() - insets.top - insets.bottom;
-        ChartTransferable selection = new ChartTransferable(this.chart, w, h,
-                getMinimumDrawWidth(), getMinimumDrawHeight(),
-                getMaximumDrawWidth(), getMaximumDrawHeight(), true);
+        ChartTransferable selection = new ChartTransferable(
+        	chart,
+        	w,
+        	h,
+        	getMinimumDrawWidth(),
+        	getMinimumDrawHeight(),
+        	getMaximumDrawWidth(),
+        	getMaximumDrawHeight(),
+        	true
+        );
+        
         systemClipboard.setContents(selection, null);
     }
 
@@ -2631,12 +2696,13 @@ public class ChartPanel extends JPanel implements
         if(g2 == null) {
             throw new IllegalStateException("JFreeSVG library is not present.");
         }
+        
         // we suppress shadow generation, because SVG is a vector format and
         // the shadow effect is applied via bitmap effects...
         g2.setRenderingHint(JFreeChart.KEY_SUPPRESS_SHADOW_GENERATION, true);
         String svg = null;
         Rectangle2D drawArea = new Rectangle2D.Double(0, 0, width, height);
-        this.chart.draw(g2, drawArea);
+        chart.draw(g2, drawArea);
         try {
             Method m = g2.getClass().getMethod("getSVGElement");
             svg = (String) m.invoke(g2);
@@ -2738,9 +2804,8 @@ public class ChartPanel extends JPanel implements
      * @param h  the chart height.
      */
     private void writeAsPDF(File file, int w, int h) {
-        if (!ChartUtils.isOrsonPDFAvailable()) {
-            throw new IllegalStateException(
-                    "OrsonPDF is not present on the classpath.");
+        if(!ChartUtils.isOrsonPDFAvailable()) {
+            throw new IllegalStateException("OrsonPDF is not present on the classpath.");
         }
         
         Args.nullNotPermitted(file, "file");
@@ -2760,9 +2825,11 @@ public class ChartPanel extends JPanel implements
             this.chart.draw(g2, drawArea);
             Method m3 = pdfDocClass.getMethod("writeToFile", File.class);
             m3.invoke(pdfDoc, file);
-        } catch (ClassNotFoundException ex) {
+        }
+        catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
-        } catch (InstantiationException ex) {
+        }
+        catch (InstantiationException ex) {
             throw new RuntimeException(ex);
         } catch (IllegalAccessException ex) {
             throw new RuntimeException(ex);
@@ -2772,7 +2839,8 @@ public class ChartPanel extends JPanel implements
             throw new RuntimeException(ex);
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException(ex);
-        } catch (InvocationTargetException ex) {
+        }
+        catch (InvocationTargetException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -2855,7 +2923,6 @@ public class ChartPanel extends JPanel implements
     @Override
     public EventListener[] getListeners(Class listenerType) {
         if(listenerType == ChartMouseListener.class) {
-            // fetch listeners from local storage
             return chartMouseListeners.getListeners(listenerType);
         }
         else return getListeners(listenerType);
@@ -3039,7 +3106,7 @@ public class ChartPanel extends JPanel implements
      * @param y  vertical position of the popup.
      */
     protected void displayPopupMenu(int x, int y) {
-        if(this.popup == null) return;
+        if(popup == null) return;
 
         // go through each zoom menu item and decide whether or not to
         // enable it...
@@ -3055,35 +3122,32 @@ public class ChartPanel extends JPanel implements
         if(zoomInDomainMenuItem != null) {
         	zoomInDomainMenuItem.setEnabled(isDomainZoomable);
         }
-        if (this.zoomOutDomainMenuItem != null) {
-            this.zoomOutDomainMenuItem.setEnabled(isDomainZoomable);
+        if(zoomOutDomainMenuItem != null) {
+        	zoomOutDomainMenuItem.setEnabled(isDomainZoomable);
         }
-        if (this.zoomResetDomainMenuItem != null) {
-            this.zoomResetDomainMenuItem.setEnabled(isDomainZoomable);
-        }
-
-        if (this.zoomInRangeMenuItem != null) {
-            this.zoomInRangeMenuItem.setEnabled(isRangeZoomable);
-        }
-        if (this.zoomOutRangeMenuItem != null) {
-            this.zoomOutRangeMenuItem.setEnabled(isRangeZoomable);
+        if(zoomResetDomainMenuItem != null) {
+        	zoomResetDomainMenuItem.setEnabled(isDomainZoomable);
         }
 
-        if (this.zoomResetRangeMenuItem != null) {
-            this.zoomResetRangeMenuItem.setEnabled(isRangeZoomable);
+        if(zoomInRangeMenuItem != null) {
+        	zoomInRangeMenuItem.setEnabled(isRangeZoomable);
+        }
+        if(zoomOutRangeMenuItem != null) {
+        	zoomOutRangeMenuItem.setEnabled(isRangeZoomable);
         }
 
-        if (this.zoomInBothMenuItem != null) {
-            this.zoomInBothMenuItem.setEnabled(isDomainZoomable
-                    && isRangeZoomable);
+        if(zoomResetRangeMenuItem != null) {
+        	zoomResetRangeMenuItem.setEnabled(isRangeZoomable);
         }
-        if (this.zoomOutBothMenuItem != null) {
-            this.zoomOutBothMenuItem.setEnabled(isDomainZoomable
-                    && isRangeZoomable);
+
+        if(zoomInBothMenuItem != null) {
+        	zoomInBothMenuItem.setEnabled(isDomainZoomable && isRangeZoomable);
         }
-        if (this.zoomResetBothMenuItem != null) {
-            this.zoomResetBothMenuItem.setEnabled(isDomainZoomable
-                    && isRangeZoomable);
+        if(zoomOutBothMenuItem != null) {
+        	zoomOutBothMenuItem.setEnabled(isDomainZoomable && isRangeZoomable);
+        }
+        if(zoomResetBothMenuItem != null) {
+        	zoomResetBothMenuItem.setEnabled(isDomainZoomable && isRangeZoomable);
         }
 
         popup.show(this, x, y);

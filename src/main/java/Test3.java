@@ -284,6 +284,7 @@ public class Test3 {
 		panel.setMouseWheelEnabled(true);
 		panel.setMouseZoomable(true);
 
+		/*
 		JButton b = new JButton("BTN");
 		b.setHorizontalAlignment(SwingConstants.RIGHT);
 		b.addActionListener(new ActionListener() {
@@ -293,11 +294,12 @@ public class Test3 {
 			}
 		});
 		panel.add(b);
+		*/
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.out.println("MS_RELEASED");
+				//System.out.println("MS_RELEASED");
 				
 				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
 				
@@ -491,8 +493,19 @@ public class Test3 {
 
 		JFrame fr = new JFrame();
 
-		fr.setBounds(10, 10, 1000, 600);
+		fr.setBounds(10, 10, 1300, 500);
 
+		panel.setMaximumDrawWidth(fr.getWidth());
+		panel.setMaximumDrawHeight(fr.getHeight());
+
+		fr.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				panel.setMaximumDrawWidth(fr.getWidth());
+				panel.setMaximumDrawHeight(fr.getHeight());
+			}
+		});
+		
 		fr.add(panel);
 
 		/*
@@ -600,6 +613,7 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
+		/*
 		System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
@@ -644,5 +658,6 @@ class BNWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("---------------------------------------------------------------------------------");
+		*/
 	}
 }

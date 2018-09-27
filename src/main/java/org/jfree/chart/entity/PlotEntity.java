@@ -58,10 +58,7 @@ import org.jfree.chart.util.SerialUtils;
  * @since 1.0.13
  */
 public class PlotEntity extends ChartEntity {
-
-    /** For serialization. */
     private static final long serialVersionUID = -4445994133561919083L;
-            //same as for ChartEntity!
 
     /** The plot. */
     private Plot plot;
@@ -98,10 +95,11 @@ public class PlotEntity extends ChartEntity {
      * @param urlText  the URL text for HTML image maps ({@code null}
      *                 permitted).
      */
-    public PlotEntity(Shape area, Plot plot, String toolTipText,
-            String urlText) {
+    public PlotEntity(Shape area, Plot plot, String toolTipText, String urlText) {
         super(area, toolTipText, urlText);
+        
         Args.nullNotPermitted(plot, "plot");
+        
         this.plot = plot;
     }
 

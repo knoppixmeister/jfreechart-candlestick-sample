@@ -1,44 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ----------------
- * AxisEntity.java
- * ----------------
- * (C) Copyright 2009-2016, by Object Refinery Limited and Contributors.
- *
- * Original Author:  Peter Kolb;
- * Contributor(s):   ;
- *
- * Changes:
- * --------
- * 15-Feb-2009 : Version 1 (PK);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.entity;
 
 import java.awt.Shape;
@@ -59,12 +18,8 @@ import org.jfree.chart.util.SerialUtils;
  * @since 1.0.13
  */
 public class AxisEntity extends ChartEntity {
-
-    /** For serialization. */
-    private static final long serialVersionUID = -4445994133561919083L;
-                  //same as for ChartEntity!
-
-    /** The axis for the entity. */
+	private static final long serialVersionUID = -2644885263263328037L;
+	
     private Axis axis;
 
     /**
@@ -74,7 +29,6 @@ public class AxisEntity extends ChartEntity {
      * @param axis  the axis ({@code null} not permitted).
      */
     public AxisEntity(Shape area, Axis axis) {
-        // defer argument checks...
         this(area, axis, null);
     }
 
@@ -99,10 +53,11 @@ public class AxisEntity extends ChartEntity {
      * @param urlText  the URL text for HTML image maps ({@code null}
      *                 permitted).
      */
-    public AxisEntity(Shape area, Axis axis, String toolTipText,
-            String urlText) {
+    public AxisEntity(Shape area, Axis axis, String toolTipText, String urlText) {
         super(area, toolTipText, urlText);
+        
         Args.nullNotPermitted(axis, "axis");
+        
         this.axis = axis;
     }
 
@@ -112,7 +67,7 @@ public class AxisEntity extends ChartEntity {
      * @return The axis (never {@code null}).
      */
     public Axis getAxis() {
-        return this.axis;
+        return axis;
     }
 
     /**
@@ -126,9 +81,18 @@ public class AxisEntity extends ChartEntity {
         StringBuilder sb = new StringBuilder("AxisEntity: ");
         sb.append("tooltip = ");
         sb.append(getToolTipText());
+        
         return sb.toString();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests the entity for equality with an arbitrary object.
      *
@@ -157,6 +121,7 @@ public class AxisEntity extends ChartEntity {
         if (!(this.axis.equals(that.axis))) {
             return false;
         }
+        
         return true;
     }
 
@@ -168,8 +133,10 @@ public class AxisEntity extends ChartEntity {
     @Override
     public int hashCode() {
         int result = 39;
+        
         result = HashUtils.hashCode(result, getToolTipText());
         result = HashUtils.hashCode(result, getURLText());
+        
         return result;
     }
 
@@ -206,10 +173,8 @@ public class AxisEntity extends ChartEntity {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        setArea(SerialUtils.readShape(stream));
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+    	stream.defaultReadObject();
+    	setArea(SerialUtils.readShape(stream));
     }
-
 }

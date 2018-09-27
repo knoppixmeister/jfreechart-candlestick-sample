@@ -1,94 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------
- * Axis.java
- * ---------
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Bill Kelemen;
- *                   Nicolas Brodu;
- *                   Peter Kolb (patches 1934255 and 2603321);
- *                   Andrew Mickish (patch 1870189);
- *
- * Changes
- * -------
- * 21-Aug-2001 : Added standard header, fixed DOS encoding problem (DG);
- * 18-Sep-2001 : Updated header (DG);
- * 07-Nov-2001 : Allow null axis labels (DG);
- *             : Added default font values (DG);
- * 13-Nov-2001 : Modified the setPlot() method to check compatibility between
- *               the axis and the plot (DG);
- * 30-Nov-2001 : Changed default font from "Arial" --> "SansSerif" (DG);
- * 06-Dec-2001 : Allow null in setPlot() method (BK);
- * 06-Mar-2002 : Added AxisConstants interface (DG);
- * 23-Apr-2002 : Added a visible property.  Moved drawVerticalString to
- *               RefineryUtilities.  Added fixedDimension property for use in
- *               combined plots (DG);
- * 25-Jun-2002 : Removed unnecessary imports (DG);
- * 05-Sep-2002 : Added attribute for tick mark paint (DG);
- * 18-Sep-2002 : Fixed errors reported by Checkstyle (DG);
- * 07-Nov-2002 : Added attributes to control the inside and outside length of
- *               the tick marks (DG);
- * 08-Nov-2002 : Moved to new package com.jrefinery.chart.axis (DG);
- * 18-Nov-2002 : Added axis location to refreshTicks() parameters (DG);
- * 15-Jan-2003 : Removed monolithic constructor (DG);
- * 17-Jan-2003 : Moved plot classes to separate package (DG);
- * 26-Mar-2003 : Implemented Serializable (DG);
- * 03-Jul-2003 : Modified reserveSpace method (DG);
- * 13-Aug-2003 : Implemented Cloneable (DG);
- * 11-Sep-2003 : Took care of listeners while cloning (NB);
- * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
- * 06-Nov-2003 : Modified refreshTicks() signature (DG);
- * 06-Jan-2004 : Added axis line attributes (DG);
- * 16-Mar-2004 : Added plot state to draw() method (DG);
- * 07-Apr-2004 : Modified text bounds calculation (DG);
- * 18-May-2004 : Eliminated AxisConstants.java (DG);
- * 30-Sep-2004 : Moved drawRotatedString() from RefineryUtilities -->
- *               TextUtilities (DG);
- * 04-Oct-2004 : Modified getLabelEnclosure() method to treat an empty String
- *               the same way as a null string - see bug 1026521 (DG);
- * 21-Apr-2005 : Replaced Insets with RectangleInsets (DG);
- * 26-Apr-2005 : Removed LOGGER (DG);
- * 01-Jun-2005 : Added hasListener() method for unit testing (DG);
- * 08-Jun-2005 : Fixed equals() method to handle GradientPaint (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 22-Aug-2006 : API doc updates (DG);
- * 06-Jun-2008 : Added setTickLabelInsets(RectangleInsets, boolean) (DG);
- * 25-Sep-2008 : Added minor tick support, see patch 1934255 by Peter Kolb (DG);
- * 26-Sep-2008 : Added fireChangeEvent() method (DG);
- * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
- * 02-Jul-2013 : Use ParamChecks (DG);
- * 01-Aug-2013 : Added attributedLabel override to support superscripts,
- *               subscripts and more (DG);
- * 29-Jul-2014 : Add hint to normalise stroke for axis line (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import java.awt.BasicStroke;
@@ -138,7 +47,6 @@ import org.jfree.chart.util.SerialUtils;
  * categories ({@link CategoryAxis}).
  */
 public abstract class Axis implements Cloneable, Serializable {
-
     /** For serialization. */
     private static final long serialVersionUID = 7719289504573298271L;
 
@@ -146,15 +54,13 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_AXIS_VISIBLE = true;
 
     /** The default axis label font. */
-    public static final Font DEFAULT_AXIS_LABEL_FONT = new Font(
-            "SansSerif", Font.PLAIN, 12);
+    public static final Font DEFAULT_AXIS_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
 
     /** The default axis label paint. */
     public static final Paint DEFAULT_AXIS_LABEL_PAINT = Color.BLACK;
 
     /** The default axis label insets. */
-    public static final RectangleInsets DEFAULT_AXIS_LABEL_INSETS
-            = new RectangleInsets(3.0, 3.0, 3.0, 3.0);
+    public static final RectangleInsets DEFAULT_AXIS_LABEL_INSETS = new RectangleInsets(3.0, 3.0, 3.0, 3.0);
 
     /** The default axis line paint. */
     public static final Paint DEFAULT_AXIS_LINE_PAINT = Color.GRAY;
@@ -166,15 +72,13 @@ public abstract class Axis implements Cloneable, Serializable {
     public static final boolean DEFAULT_TICK_LABELS_VISIBLE = true;
 
     /** The default tick label font. */
-    public static final Font DEFAULT_TICK_LABEL_FONT = new Font("SansSerif",
-            Font.PLAIN, 10);
+    public static final Font DEFAULT_TICK_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
     /** The default tick label paint. */
     public static final Paint DEFAULT_TICK_LABEL_PAINT = Color.BLACK;
 
     /** The default tick label insets. */
-    public static final RectangleInsets DEFAULT_TICK_LABEL_INSETS
-            = new RectangleInsets(2.0, 4.0, 2.0, 4.0);
+    public static final RectangleInsets DEFAULT_TICK_LABEL_INSETS = new RectangleInsets(2.0, 4.0, 2.0, 4.0);
 
     /** The default tick marks visible. */
     public static final boolean DEFAULT_TICK_MARKS_VISIBLE = true;
@@ -306,23 +210,22 @@ public abstract class Axis implements Cloneable, Serializable {
      * @param label  the axis label ({@code null} permitted).
      */
     protected Axis(String label) {
+        this.label 		= label;
+        visible 		= DEFAULT_AXIS_VISIBLE;
+        labelFont 		= DEFAULT_AXIS_LABEL_FONT;
+        labelPaint 		= DEFAULT_AXIS_LABEL_PAINT;
+        labelInsets 	= DEFAULT_AXIS_LABEL_INSETS;
+        labelAngle 		= 0.0;
+        labelLocation 	= AxisLabelLocation.MIDDLE;
 
-        this.label = label;
-        this.visible = DEFAULT_AXIS_VISIBLE;
-        this.labelFont = DEFAULT_AXIS_LABEL_FONT;
-        this.labelPaint = DEFAULT_AXIS_LABEL_PAINT;
-        this.labelInsets = DEFAULT_AXIS_LABEL_INSETS;
-        this.labelAngle = 0.0;
-        this.labelLocation = AxisLabelLocation.MIDDLE;
+        axisLineVisible = true;
+        axisLinePaint 	= DEFAULT_AXIS_LINE_PAINT;
+        axisLineStroke 	= DEFAULT_AXIS_LINE_STROKE;
 
-        this.axisLineVisible = true;
-        this.axisLinePaint = DEFAULT_AXIS_LINE_PAINT;
-        this.axisLineStroke = DEFAULT_AXIS_LINE_STROKE;
-
-        this.tickLabelsVisible = DEFAULT_TICK_LABELS_VISIBLE;
-        this.tickLabelFont = DEFAULT_TICK_LABEL_FONT;
-        this.tickLabelPaint = DEFAULT_TICK_LABEL_PAINT;
-        this.tickLabelInsets = DEFAULT_TICK_LABEL_INSETS;
+        tickLabelsVisible 	= DEFAULT_TICK_LABELS_VISIBLE;
+        tickLabelFont 		= DEFAULT_TICK_LABEL_FONT;
+        tickLabelPaint 		= DEFAULT_TICK_LABEL_PAINT;
+        tickLabelInsets 	= DEFAULT_TICK_LABEL_INSETS;
 
         this.tickMarksVisible = DEFAULT_TICK_MARKS_VISIBLE;
         this.tickMarkStroke = DEFAULT_TICK_MARK_STROKE;
@@ -334,9 +237,9 @@ public abstract class Axis implements Cloneable, Serializable {
         this.minorTickMarkInsideLength = 0.0f;
         this.minorTickMarkOutsideLength = 2.0f;
 
-        this.plot = null;
+        plot = null;
 
-        this.listenerList = new EventListenerList();
+        listenerList = new EventListenerList();
     }
 
     /**
@@ -348,7 +251,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setVisible(boolean)
      */
     public boolean isVisible() {
-        return this.visible;
+        return visible;
     }
 
     /**
@@ -360,8 +263,9 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #isVisible()
      */
     public void setVisible(boolean flag) {
-        if (flag != this.visible) {
-            this.visible = flag;
+        if(flag != visible) {
+        	visible = flag;
+        	
             fireChangeEvent();
         }
     }
@@ -376,7 +280,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setLabel(String)
      */
     public String getLabel() {
-        return this.label;
+        return label;
     }
 
     /**
@@ -391,6 +295,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabel(String label) {
         this.label = label;
+        
         fireChangeEvent();
     }
 
@@ -404,11 +309,10 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.16
      */
     public AttributedString getAttributedLabel() {
-        if (this.attributedLabel != null) {
-            return new AttributedString(this.attributedLabel.getIterator());
-        } else {
-            return null;
+        if(this.attributedLabel != null) {
+            return new AttributedString(attributedLabel.getIterator());
         }
+        else return null;
     }
     
     /**
@@ -434,11 +338,11 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.16
      */
     public void setAttributedLabel(AttributedString label) {
-        if (label != null) {
+        if(label != null) {
             this.attributedLabel = new AttributedString(label.getIterator());
-        } else {
-            this.attributedLabel = null;
         }
+        else attributedLabel = null;
+
         fireChangeEvent();
     }
     
@@ -453,11 +357,11 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.16
      */
     public AttributedString createAttributedLabel(String label) {
-        if (label == null) {
-            return null;
-        }
+        if(label == null) return null;
+
         AttributedString s = new AttributedString(label);
-        s.addAttributes(this.labelFont.getAttributes(), 0, label.length());
+        s.addAttributes(labelFont.getAttributes(), 0, label.length());
+        
         return s;
     }
     
@@ -469,7 +373,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setLabelFont(Font)
      */
     public Font getLabelFont() {
-        return this.labelFont;
+        return labelFont;
     }
 
     /**
@@ -482,8 +386,10 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelFont(Font font) {
         Args.nullNotPermitted(font, "font");
-        if (!this.labelFont.equals(font)) {
-            this.labelFont = font;
+        
+        if(!labelFont.equals(font)) {
+        	labelFont = font;
+        	
             fireChangeEvent();
         }
     }
@@ -496,7 +402,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setLabelPaint(Paint)
      */
     public Paint getLabelPaint() {
-        return this.labelPaint;
+        return labelPaint;
     }
 
     /**
@@ -509,7 +415,9 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.labelPaint = paint;
+        
+        labelPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -522,7 +430,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setLabelInsets(RectangleInsets)
      */
     public RectangleInsets getLabelInsets() {
-        return this.labelInsets;
+        return labelInsets;
     }
 
     /**
@@ -548,11 +456,11 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelInsets(RectangleInsets insets, boolean notify) {
         Args.nullNotPermitted(insets, "insets");
-        if (!insets.equals(this.labelInsets)) {
-            this.labelInsets = insets;
-            if (notify) {
-                fireChangeEvent();
-            }
+        
+        if(!insets.equals(labelInsets)) {
+        	labelInsets = insets;
+        	
+            if(notify) fireChangeEvent();
         }
     }
 
@@ -564,7 +472,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setLabelAngle(double)
      */
     public double getLabelAngle() {
-        return this.labelAngle;
+        return labelAngle;
     }
 
     /**
@@ -576,7 +484,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #getLabelAngle()
      */
     public void setLabelAngle(double angle) {
-        this.labelAngle = angle;
+    	labelAngle = angle;
+    	
         fireChangeEvent();
     }
     
@@ -589,7 +498,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.16
      */
     public AxisLabelLocation getLabelLocation() {
-        return this.labelLocation;
+        return labelLocation;
     }
     
     /**
@@ -601,9 +510,11 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.16
      */
     public void setLabelLocation(AxisLabelLocation location) {
-        Args.nullNotPermitted(location, "location");
-        this.labelLocation = location;
-        fireChangeEvent();
+    	Args.nullNotPermitted(location, "location");
+
+    	labelLocation = location;
+        
+    	fireChangeEvent();
     }
 
     /**
@@ -889,8 +800,9 @@ public abstract class Axis implements Cloneable, Serializable {
      *
      * @see #getTickMarkInsideLength()
      */
-    public void setTickMarkInsideLength(float length) {
-        this.tickMarkInsideLength = length;
+	public void setTickMarkInsideLength(float length) {
+		tickMarkInsideLength = length;
+        
         fireChangeEvent();
     }
 
@@ -903,7 +815,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickMarkOutsideLength(float)
      */
     public float getTickMarkOutsideLength() {
-        return this.tickMarkOutsideLength;
+        return tickMarkOutsideLength;
     }
 
     /**
@@ -915,7 +827,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #getTickMarkInsideLength()
      */
     public void setTickMarkOutsideLength(float length) {
-        this.tickMarkOutsideLength = length;
+    	tickMarkOutsideLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -927,7 +840,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickMarkStroke(Stroke)
      */
     public Stroke getTickMarkStroke() {
-        return this.tickMarkStroke;
+        return tickMarkStroke;
     }
 
     /**
@@ -940,8 +853,10 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
-        if (!this.tickMarkStroke.equals(stroke)) {
-            this.tickMarkStroke = stroke;
+        
+        if(!tickMarkStroke.equals(stroke)) {
+        	tickMarkStroke = stroke;
+        	
             fireChangeEvent();
         }
     }
@@ -954,7 +869,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setTickMarkPaint(Paint)
      */
     public Paint getTickMarkPaint() {
-        return this.tickMarkPaint;
+        return tickMarkPaint;
     }
 
     /**
@@ -967,7 +882,9 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
-        this.tickMarkPaint = paint;
+        
+        tickMarkPaint = paint;
+        
         fireChangeEvent();
     }
 
@@ -982,7 +899,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public float getMinorTickMarkInsideLength() {
-        return this.minorTickMarkInsideLength;
+        return minorTickMarkInsideLength;
     }
 
     /**
@@ -996,7 +913,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public void setMinorTickMarkInsideLength(float length) {
-        this.minorTickMarkInsideLength = length;
+    	minorTickMarkInsideLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -1011,7 +929,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public float getMinorTickMarkOutsideLength() {
-        return this.minorTickMarkOutsideLength;
+        return minorTickMarkOutsideLength;
     }
 
     /**
@@ -1025,7 +943,8 @@ public abstract class Axis implements Cloneable, Serializable {
      * @since 1.0.12
      */
     public void setMinorTickMarkOutsideLength(float length) {
-        this.minorTickMarkOutsideLength = length;
+    	minorTickMarkOutsideLength = length;
+    	
         fireChangeEvent();
     }
 
@@ -1038,7 +957,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * @see #setPlot(Plot)
      */
     public Plot getPlot() {
-        return this.plot;
+        return plot;
     }
 
     /**

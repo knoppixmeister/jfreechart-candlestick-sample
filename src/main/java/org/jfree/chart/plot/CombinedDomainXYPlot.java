@@ -308,7 +308,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
         else if(orientation == PlotOrientation.VERTICAL) usableSize = adjustedPlotArea.getHeight() - gap * (n - 1);
 
         for(int i = 0; i < n; i++) {
-            XYPlot plot = (XYPlot)subplots.get(i);
+            XYPlot plot = (XYPlot) subplots.get(i);
 
             // calculate sub-plot area
             if(orientation == PlotOrientation.HORIZONTAL) {
@@ -316,7 +316,7 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
                 subplotAreas[i] = new Rectangle2D.Double(x, y, w, adjustedPlotArea.getHeight());
                 x = x + w + gap;
             }
-            else if (orientation == PlotOrientation.VERTICAL) {
+            else if(orientation == PlotOrientation.VERTICAL) {
                 double h = usableSize * plot.getWeight() / totalWeight;
                 subplotAreas[i] = new Rectangle2D.Double(x, y, adjustedPlotArea.getWidth(), h);
                 y = y + h + gap;
@@ -427,9 +427,19 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public void zoomRangeAxes(double factor, PlotRenderingInfo state, Point2D source, boolean useAnchor) {
-        // delegate 'state' and 'source' argument checks...
-    	XYPlot subplot = findSubplot(state, source);
-        
+    	//System.out.println("SBPL_ZOOM_RANGE_AXS");
+    	
+    	//System.out.println("SBPL_CNT: "+state.getSubplotCount());
+    	//System.out.println("SBPL_INFO_0: "+		state.getSubplotInfo(0).getPlotArea().getWidth()		);
+    	
+    	XYPlot subplot = null;//findSubplot(state, source);
+    	for(int i=0; i<state.getSubplotCount(); i++) {
+    		if(state.getSubplotInfo(i).getPlotArea().contains(source)) {
+    			subplot = (XYPlot)subplots.get(i);
+    			break;
+    		}
+    	}
+
     	if(subplot != null) subplot.zoomRangeAxes(factor, state, source, useAnchor);
     	else {
             // if the source point doesn't fall within a subplot, we do the
@@ -507,14 +517,13 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
     	Args.nullNotPermitted(info, "info");
     	Args.nullNotPermitted(source, "source");
 
-    	XYPlot result = null;
     	int subplotIndex = info.getSubplotIndex(source);
     	
     	System.out.println("SBP_IDX: "+subplotIndex);
     	
-    	if(subplotIndex >= 0) result = (XYPlot) subplots.get(subplotIndex);
-
-    	return result;
+    	return	subplotIndex >= 0 ?
+    			(XYPlot) subplots.get(subplotIndex) :
+    			null;
 	}
 
     /**

@@ -55,7 +55,6 @@ import org.jfree.chart.util.Args;
  * The base class used to represent labeled ticks along an axis.
  */
 public abstract class Tick implements Serializable, Cloneable {
-
     /** For serialization. */
     private static final long serialVersionUID = 6668230383875149773L;
 
@@ -80,10 +79,10 @@ public abstract class Tick implements Serializable, Cloneable {
      *                        permitted).
      * @param angle  the angle.
      */
-    public Tick(String text, TextAnchor textAnchor, TextAnchor rotationAnchor,
-                double angle) {
+    public Tick(String text, TextAnchor textAnchor, TextAnchor rotationAnchor, double angle) {
         Args.nullNotPermitted(textAnchor, "textAnchor");
         Args.nullNotPermitted(rotationAnchor, "rotationAnchor");
+        
         this.text = text;
         this.textAnchor = textAnchor;
         this.rotationAnchor = rotationAnchor;
@@ -155,6 +154,7 @@ public abstract class Tick implements Serializable, Cloneable {
             }
             return true;
         }
+        
         return false;
     }
 
@@ -168,6 +168,7 @@ public abstract class Tick implements Serializable, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Tick clone = (Tick) super.clone();
+        
         return clone;
     }
 
@@ -178,6 +179,6 @@ public abstract class Tick implements Serializable, Cloneable {
      */
     @Override
     public String toString() {
-        return this.text;
+        return text;
     }
 }

@@ -1,54 +1,14 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * --------------
- * ValueTick.java
- * --------------
- * (C) Copyright 2003-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 07-Nov-2003 : Version 1 (DG);
- * 02-Aug-2007 : Added tick type attribute (DG);
- *
- */
-
 package org.jfree.chart.axis;
 
 import org.jfree.chart.ui.TextAnchor;
 
 /**
  * A value tick.
- */
+*/
 public abstract class ValueTick extends Tick {
+	private static final long serialVersionUID = -3095705612459729086L;
 
-    /** The value. */
+	/** The value. */
     private double value;
 
     /**
@@ -68,13 +28,16 @@ public abstract class ValueTick extends Tick {
      * @param rotationAnchor  defines the rotation point relative to the label.
      * @param angle  the rotation angle (in radians).
      */
-    public ValueTick(double value, String label,
-                     TextAnchor textAnchor, TextAnchor rotationAnchor,
-                     double angle) {
-
+    public ValueTick(
+    	double value,
+    	String label,
+    	TextAnchor textAnchor,
+    	TextAnchor rotationAnchor,
+    	double angle)
+    {
         this(TickType.MAJOR, value, label, textAnchor, rotationAnchor, angle);
+        
         this.value = value;
-
     }
 
     /**
@@ -91,13 +54,18 @@ public abstract class ValueTick extends Tick {
      *
      * @since 1.0.7
      */
-    public ValueTick(TickType tickType, double value, String label,
-                     TextAnchor textAnchor, TextAnchor rotationAnchor,
-                     double angle) {
-
+    public ValueTick(
+    	TickType tickType,
+    	double value,
+    	String label,
+    	TextAnchor textAnchor,
+    	TextAnchor rotationAnchor,
+    	double angle)
+    {
         super(label, textAnchor, rotationAnchor, angle);
-        this.value = value;
-        this.tickType = tickType;
+        
+        this.value 		= value;
+        this.tickType 	= tickType;
     }
 
     /**
@@ -106,7 +74,7 @@ public abstract class ValueTick extends Tick {
      * @return The value.
      */
     public double getValue() {
-        return this.value;
+        return value;
     }
 
     /**
@@ -117,9 +85,22 @@ public abstract class ValueTick extends Tick {
      * @since 1.0.7
      */
     public TickType getTickType() {
-        return this.tickType;
+        return tickType;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this tick for equality with an arbitrary object.
      *
@@ -136,13 +117,13 @@ public abstract class ValueTick extends Tick {
             return false;
         }
         ValueTick that = (ValueTick) obj;
-        if (this.value != that.value) {
+        if(this.value != that.value) {
             return false;
         }
-        if (!this.tickType.equals(that.tickType)) {
-            return false;
+        if(!this.tickType.equals(that.tickType)) {
+        	return false;
         }
+        
         return super.equals(obj);
     }
-
 }
