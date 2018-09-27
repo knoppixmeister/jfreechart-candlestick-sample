@@ -25,7 +25,7 @@ public class AO {
 		for(int key=0; key < ts5.getItemCount(); key++) {
 			result.add(
 				ts5.getDataItem(key).getPeriod(),
-				0
+				ts5.getDataItem(key).getValue().doubleValue() - ts34.getDataItem(key).getValue().doubleValue()
 			);
 		}
 		
