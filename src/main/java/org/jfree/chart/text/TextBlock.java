@@ -1,31 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- */
-
 package org.jfree.chart.text;
 
 import java.awt.Font;
@@ -48,7 +20,6 @@ import org.jfree.chart.util.ShapeUtils;
  * @see TextUtils#createTextBlock(String, Font, Paint)
  */
 public class TextBlock implements Serializable {
-
     /** For serialization. */
     private static final long serialVersionUID = -4333175719424385526L;
     
@@ -62,8 +33,8 @@ public class TextBlock implements Serializable {
      * Creates a new empty text block.
      */
     public TextBlock() {
-        this.lines = new java.util.ArrayList();
-        this.lineAlignment = HorizontalAlignment.CENTER;
+    	lines 			= new java.util.ArrayList();
+    	lineAlignment 	= HorizontalAlignment.CENTER;
     }
     
     /**
@@ -72,7 +43,7 @@ public class TextBlock implements Serializable {
      * @return The alignment (never {@code null}).
      */
     public HorizontalAlignment getLineAlignment() {
-        return this.lineAlignment;   
+        return lineAlignment;   
     }
     
     /**
@@ -81,10 +52,11 @@ public class TextBlock implements Serializable {
      * @param alignment  the alignment ({@code null} not permitted).
      */
     public void setLineAlignment(HorizontalAlignment alignment) {
-        if (alignment == null) {
+        if(alignment == null) {
             throw new IllegalArgumentException("Null 'alignment' argument.");
         }
-        this.lineAlignment = alignment;   
+        
+        lineAlignment = alignment;   
     }
     
     /**
@@ -104,7 +76,7 @@ public class TextBlock implements Serializable {
      * @param line  the line.
      */
     public void addLine(TextLine line) {
-        this.lines.add(line);    
+    	lines.add(line);    
     }
     
     /**
@@ -114,10 +86,11 @@ public class TextBlock implements Serializable {
      */
     public TextLine getLastLine() {
         TextLine last = null;
-        final int index = this.lines.size() - 1;
-        if (index >= 0) {
-            last = (TextLine) this.lines.get(index);
-        }
+        
+        final int index = lines.size() - 1;
+
+        if(index >= 0) last = (TextLine) lines.get(index);
+
         return last;
     }
     
@@ -127,7 +100,7 @@ public class TextBlock implements Serializable {
      * @return A list of {@link TextLine} objects.
      */
     public List getLines() {
-        return Collections.unmodifiableList(this.lines);
+        return Collections.unmodifiableList(lines);
     }
     
     /**
@@ -140,13 +113,15 @@ public class TextBlock implements Serializable {
     public Size2D calculateDimensions(Graphics2D g2) {
         double width = 0.0;
         double height = 0.0;
-        Iterator iterator = this.lines.iterator();
-        while (iterator.hasNext()) {
+        Iterator iterator = lines.iterator();
+        
+        while(iterator.hasNext()) {
             final TextLine line = (TextLine) iterator.next();
             final Size2D dimension = line.calculateDimensions(g2);
             width = Math.max(width, dimension.getWidth());
             height = height + dimension.getHeight();
         }
+        
         return new Size2D(width, height);
     }
     
@@ -163,17 +138,21 @@ public class TextBlock implements Serializable {
      * 
      * @return The bounds.
      */
-    public Shape calculateBounds(Graphics2D g2, float anchorX, float anchorY, 
-            TextBlockAnchor anchor, float rotateX, float rotateY, double angle) {
-        
+    public Shape calculateBounds(
+    	Graphics2D g2,
+    	float anchorX,
+    	float anchorY, 
+    	TextBlockAnchor anchor,
+    	float rotateX,
+    	float rotateY,
+    	double angle)
+    {
         Size2D d = calculateDimensions(g2);
         float[] offsets = calculateOffsets(anchor, d.getWidth(), d.getHeight());
-        Rectangle2D bounds = new Rectangle2D.Double(anchorX + offsets[0], 
-                anchorY + offsets[1], d.getWidth(), d.getHeight());
-        Shape rotatedBounds = ShapeUtils.rotateShape(bounds, angle, rotateX, 
-                rotateY);
-        return rotatedBounds;   
+        Rectangle2D bounds = new Rectangle2D.Double(anchorX + offsets[0],anchorY + offsets[1], d.getWidth(), d.getHeight());
+        Shape rotatedBounds = ShapeUtils.rotateShape(bounds, angle, rotateX, rotateY);
         
+        return rotatedBounds;   
     }
     
     /**
@@ -201,21 +180,18 @@ public class TextBlock implements Serializable {
      * @param rotateY  the x-coordinate for the rotation point.
      * @param angle  the rotation (in radians).
      */
-    public void draw(Graphics2D g2, float anchorX, float anchorY, 
-            TextBlockAnchor anchor, float rotateX, float rotateY, double angle) {
-    
+    public void draw(Graphics2D g2, float anchorX, float anchorY, TextBlockAnchor anchor, float rotateX, float rotateY, double angle) {
         Size2D d = calculateDimensions(g2);
-        float[] offsets = calculateOffsets(anchor, d.getWidth(), 
-                d.getHeight());
-        Iterator iterator = this.lines.iterator();
+        float[] offsets = calculateOffsets(anchor, d.getWidth(), d.getHeight());
+        Iterator iterator = lines.iterator();
         float yCursor = 0.0f;
-        while (iterator.hasNext()) {
+        
+        while(iterator.hasNext()) {
             TextLine line = (TextLine) iterator.next();
             Size2D dimension = line.calculateDimensions(g2);
             float lineOffset = 0.0f;
-            if (this.lineAlignment == HorizontalAlignment.CENTER) {
-                lineOffset = (float) (d.getWidth() - dimension.getWidth()) 
-                    / 2.0f;   
+            if(lineAlignment == HorizontalAlignment.CENTER) {
+                lineOffset = (float) (d.getWidth() - dimension.getWidth()) / 2.0f;   
             }
             else if (this.lineAlignment == HorizontalAlignment.RIGHT) {
                 lineOffset = (float) (d.getWidth() - dimension.getWidth());   
