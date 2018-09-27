@@ -1,44 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------------
- * ChartProgressEvent.java
- * -----------------------
- * (C) Copyright 2003-2010, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 14-Jan-2003 : Version 1 (DG);
- * 20-Jan-2010 : Fixed bug in constructor (DG);
- *
- */
-
 package org.jfree.chart.event;
 
 import org.jfree.chart.JFreeChart;
@@ -47,8 +6,9 @@ import org.jfree.chart.JFreeChart;
  * An event that contains information about the drawing progress of a chart.
  */
 public class ChartProgressEvent extends java.util.EventObject {
+	private static final long serialVersionUID = 5800361791544991191L;
 
-    /** Indicates drawing has started. */
+	/** Indicates drawing has started. */
     public static final int DRAWING_STARTED = 1;
 
     /** Indicates drawing has finished. */
@@ -72,12 +32,12 @@ public class ChartProgressEvent extends java.util.EventObject {
      * @param type  the type of event.
      * @param percent  the percentage of completion.
      */
-    public ChartProgressEvent(Object source, JFreeChart chart, int type,
-                              int percent) {
+    public ChartProgressEvent(Object source, JFreeChart chart, int type, int percent) {
         super(source);
-        this.chart = chart;
-        this.type = type;
-        this.percent = percent;
+        
+        this.chart 		= chart;
+        this.type 		= type;
+        this.percent 	= percent;
     }
 
     /**
@@ -86,7 +46,7 @@ public class ChartProgressEvent extends java.util.EventObject {
      * @return The chart that generated the change event.
      */
     public JFreeChart getChart() {
-        return this.chart;
+        return chart;
     }
 
     /**
@@ -104,7 +64,7 @@ public class ChartProgressEvent extends java.util.EventObject {
      * @return The event type.
      */
     public int getType() {
-        return this.type;
+        return type;
     }
 
     /**
@@ -122,7 +82,7 @@ public class ChartProgressEvent extends java.util.EventObject {
      * @return The percentage complete.
      */
     public int getPercent() {
-        return this.percent;
+        return percent;
     }
 
     /**
@@ -133,5 +93,4 @@ public class ChartProgressEvent extends java.util.EventObject {
     public void setPercent(int percent) {
         this.percent = percent;
     }
-
 }
