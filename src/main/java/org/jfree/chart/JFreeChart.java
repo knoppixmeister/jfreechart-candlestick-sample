@@ -1467,6 +1467,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
         if (this.notify != that.notify) {
             return false;
         }
+        
         return true;
     }
 
@@ -1499,9 +1500,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
         this.backgroundPaint = SerialUtils.readPaint(stream);
         this.progressListeners = new EventListenerList();
         this.changeListeners = new EventListenerList();
-        this.renderingHints = new RenderingHints(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        this.renderingHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         renderingHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         
         // register as a listener with sub-components...
@@ -1510,6 +1509,7 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
         for(int i = 0; i < getSubtitleCount(); i++) {
             getSubtitle(i).addChangeListener(this);
         }
+        
         plot.addChangeListener(this);
     }
 

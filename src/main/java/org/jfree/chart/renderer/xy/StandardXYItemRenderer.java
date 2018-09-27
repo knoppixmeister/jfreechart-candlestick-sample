@@ -219,9 +219,9 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer implements XY
      *
      * @return A boolean.
      */
-    public Boolean getSeriesShapesFilled(int series) {
-        return seriesShapesFilled.getBoolean(series);
-    }
+	public Boolean getSeriesShapesFilled(int series) {
+		return seriesShapesFilled.getBoolean(series);
+	}
 
     /**
      * Sets the 'shapes filled' flag for a series and sends a
@@ -235,7 +235,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer implements XY
     public void setSeriesShapesFilled(int series, Boolean flag) {
     	seriesShapesFilled.setBoolean(series, flag);
     	
-        fireChangeEvent();
+    	fireChangeEvent();
     }
 
     /**
@@ -476,6 +476,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer implements XY
                 if(getLegendItemURLGenerator() != null) {
                     urlText = getLegendItemURLGenerator().generateLabel(dataset, series);
                 }
+                
                 Shape shape = lookupLegendShape(series);
                 boolean shapeFilled = getItemShapeFilled(series, 0);
                 Paint paint = lookupSeriesPaint(series);

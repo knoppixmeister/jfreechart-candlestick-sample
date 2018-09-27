@@ -108,7 +108,7 @@ public class STOCH {
 			}
 			*/
 			
-			if(k_array.size() > sma_period) {
+			if(k_array.size() == sma_period) {
 				double sum = 0;
 				for(int i=0; i<k_array.size(); i++) {
 					sum += k_array.get(i);

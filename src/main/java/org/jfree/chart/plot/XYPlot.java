@@ -725,6 +725,7 @@ public class XYPlot extends Plot implements
         for(ValueAxis axis: domainAxes.values()) {
             if(axis != null) axis.removeChangeListener(this);
         }
+
         domainAxes.clear();
         
         fireChangeEvent();
@@ -839,9 +840,8 @@ public class XYPlot extends Plot implements
 
         // plot is likely registered as a listener with the existing axis...
         ValueAxis existing = getRangeAxis();
-        if(existing != null) {
-            existing.removeChangeListener(this);
-        }
+        if(existing != null) existing.removeChangeListener(this);
+        
         rangeAxes.put(0, axis);
         if(axis != null) {
             axis.configure();
@@ -859,7 +859,7 @@ public class XYPlot extends Plot implements
      * @see #setRangeAxisLocation(AxisLocation)
      */
     public AxisLocation getRangeAxisLocation() {
-        return (AxisLocation)rangeAxisLocations.get(0);
+        return (AxisLocation) rangeAxisLocations.get(0);
     }
 
     /**
@@ -912,14 +912,15 @@ public class XYPlot extends Plot implements
      * @see #setRangeAxis(int, ValueAxis)
      */
     public ValueAxis getRangeAxis(int index) {
-        ValueAxis result = this.rangeAxes.get(index);
-        if (result == null) {
+        ValueAxis result = rangeAxes.get(index);
+        if(result == null) {
             Plot parent = getParent();
-            if (parent instanceof XYPlot) {
+            if(parent instanceof XYPlot) {
                 XYPlot xy = (XYPlot) parent;
                 result = xy.getRangeAxis(index);
             }
         }
+        
         return result;
     }
 
@@ -999,6 +1000,7 @@ public class XYPlot extends Plot implements
         for(ValueAxis axis: rangeAxes.values()) {
             if(axis != null) axis.removeChangeListener(this);
         }
+        
         rangeAxes.clear();
         
         fireChangeEvent();
@@ -1065,7 +1067,9 @@ public class XYPlot extends Plot implements
         if(index == 0 && location == null) {
             throw new IllegalArgumentException("Null 'location' for index 0 not permitted.");
         }
+        
         rangeAxisLocations.put(index, location);
+        
         if(notify) fireChangeEvent();
     }
 

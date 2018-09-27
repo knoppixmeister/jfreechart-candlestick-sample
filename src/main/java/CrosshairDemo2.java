@@ -79,8 +79,9 @@ public class CrosshairDemo2 extends ApplicationFrame {
             //dashboard.setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
 
             model = new DemoTableModel(SERIES_COUNT);
-            for(int row=0; row < SERIES_COUNT; row++) {
+            for(int row=0; row<SERIES_COUNT; row++) {
                 XYPlot plot = (XYPlot) chart.getPlot();
+                
                 model.setValueAt(plot.getDataset(row).getSeriesKey(0), row, 0);
                 model.setValueAt(new Double("0.00"), row, 1);
                 model.setValueAt(new Double("0.00"), row, 2);
@@ -101,6 +102,7 @@ public class CrosshairDemo2 extends ApplicationFrame {
             table.getColumnModel().getColumn(6).setCellRenderer(renderer2);
             dashboard.add(new JScrollPane(table));
             content.add(dashboard, BorderLayout.SOUTH);
+            
             add(content);
         }
 
@@ -219,13 +221,15 @@ public class CrosshairDemo2 extends ApplicationFrame {
             XYDataset[] datasets = new XYDataset[SERIES_COUNT];
             for(int i = 0; i < SERIES_COUNT; i++) {
                 datasets[i] = createDataset(i, "Series " + i, 100.0 + i * 200.0, new Minute(), 200);
-                if(i == 0) plot.setDataset(datasets[i]);
-                else {
+                
+                //if(i == 0) plot.setDataset(datasets[i]);
+                //else {
+                	//plot.setDataset(datasets[i]);
                     plot.setDataset(i, datasets[i]);
                     plot.setRangeAxis(i, new NumberAxis("Axis " + (i + 1)));
                     plot.mapDatasetToRangeAxis(i, i);
                     plot.setRenderer(i, new XYLineAndShapeRenderer(true, false));
-                }
+                //}
             }
             
             //chart.addChangeListener(this);

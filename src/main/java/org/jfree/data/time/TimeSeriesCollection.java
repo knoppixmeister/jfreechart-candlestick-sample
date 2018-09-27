@@ -173,16 +173,17 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset implements X
      */
     public TimeSeriesCollection(TimeSeries series, TimeZone zone) {
         // FIXME:  need a locale as well as a timezone
-        if (zone == null) {
-            zone = TimeZone.getDefault();
-        }
-        this.workingCalendar = Calendar.getInstance(zone);
-        this.data = new ArrayList();
-        if (series != null) {
-            this.data.add(series);
+        if(zone == null) zone = TimeZone.getDefault();
+
+        workingCalendar = Calendar.getInstance(zone);
+        data = new ArrayList();
+        
+        if(series != null) {
+        	data.add(series);
             series.addChangeListener(this);
         }
-        this.xPosition = TimePeriodAnchor.START;
+        
+        xPosition = TimePeriodAnchor.START;
     }
 
     /**
@@ -415,7 +416,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset implements X
      */
     @Override
     public double getXValue(int series, int item) {
-        TimeSeries s = (TimeSeries) this.data.get(series);
+        TimeSeries s = (TimeSeries) data.get(series);
         RegularTimePeriod period = s.getTimePeriod(item);
         
         return getX(period);

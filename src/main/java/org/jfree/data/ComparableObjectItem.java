@@ -80,7 +80,6 @@ public class ComparableObjectItem implements Cloneable, Comparable, Serializable
             
             return x.compareTo(that.x);
         }
-
         // CASE 2 : Comparing to a general object
         // ---------------------------------------------
         else {

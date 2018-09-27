@@ -78,7 +78,7 @@ public class OHLCSeries extends ComparableObjectSeries {
 
         super.add(new OHLCItem(period, open, high, low, close, volume), true);
 	}
-	
+
 	public void add(RegularTimePeriod period, double open, double high, double low, double close, double volume, int position) {
     	if(getItemCount() > 0) {
     		OHLCItem item0 = (OHLCItem) getDataItem(0);

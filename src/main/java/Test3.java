@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector.Characteristics;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,12 +34,9 @@ import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.jfree.data.xy.XYDataset;
 import org.joda.time.DateTime;
-
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-
-import javafx.scene.chart.Chart;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -51,7 +49,7 @@ public class Test3 {
 	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
 
 	private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
-	
+
 	private static double oldPrice = 0;
 
 	public static void main(String[] args) {
@@ -117,7 +115,7 @@ public class Test3 {
         //priceLine.setLabelFont(priceLine.getLabelFont());
         priceLine.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
         priceLine.setLabelTextAnchor(TextAnchor.BASELINE_RIGHT);
-        
+
         series.addChangeListener(new SeriesChangeListener() {
 			@Override
 			public void seriesChanged(SeriesChangeEvent event) {
@@ -279,12 +277,49 @@ public class Test3 {
 
 	//----------------------------------------------------------------------------------------------------------------------
 
+		//TimeSeriesCollection tsc3 = new TimeSeriesCollection();
 		XYPlot plot3 = new XYPlot(
-			//dataset,
-			//domainAxis,
-			//rangeAxis,
-			//renderer
+			null,				//dataset,
+			null,				//domainAxis,
+			new NumberAxis(),	//rangeAxis,
+			null				//renderer
 		);
+		//new StandardXYItemRenderer()
+
+		IntervalMarker targetPlot3 = new IntervalMarker(20.0, 80.0);
+		targetPlot3.setPaint(ChartColor.LIGHT_GRAY);
+
+		//plot3.setRenderer(0, new StandardXYItemRenderer());
+		//plot3.setRenderer(1, new StandardXYItemRenderer());
+
+		//plot3.getRenderer().setSeriesPaint(0, new Color(255, 106, 0), true);
+		//plot3.getRenderer().setSeriesPaint(1, new Color(73, 133, 231), true);
+
+		plot3.addRangeMarker(targetPlot3, Layer.BACKGROUND);
+		plot3.setRangePannable(true);
+
+		plot3.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+
+		series.addChangeListener(new SeriesChangeListener() {
+			@Override
+			public void seriesChanged(SeriesChangeEvent event) {
+				TimeSeriesCollection tsc = STOCH.run(series, 34, 3);
+
+				//datasets[index] = new TimeSeriesCollection();
+				
+				plot3.setDataset(0, new TimeSeriesCollection(tsc.getSeries("Ks")));
+				plot3.setDataset(1, new TimeSeriesCollection(tsc.getSeries("SMAs")));
+				
+				plot3.setRenderer(0, new StandardXYItemRenderer());
+				plot3.setRenderer(1, new StandardXYItemRenderer());
+				
+				plot3.mapDatasetToRangeAxis(0, 0);
+				plot3.mapDatasetToRangeAxis(1, 0);
+				
+				plot3.getRenderer(0).setSeriesPaint(0, new Color(255, 106, 0), true);
+				plot3.getRenderer(1).setSeriesPaint(0, new Color(73, 133, 231), true);
+			}
+		});
 
 	//----------------------------------------------------------------------------------------------------------------------
 
@@ -594,7 +629,7 @@ class BNWebSocketListener extends WebSocketListener {
 		try {
 			System.out.println("START INITIAL FETCH OF CANDLES ....");
 			
-			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1m&limit=1000").build()).execute();
+			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1d&limit=1000").build()).execute();
 			if(!response.isSuccessful()) {
 				System.out.println("COULD NOT GET PAIR HISTORY CANDLES");
 				System.exit(1);
@@ -650,6 +685,7 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
+		/*
 		System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
@@ -694,5 +730,6 @@ class BNWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("---------------------------------------------------------------------------------");
+		*/
 	}
 }

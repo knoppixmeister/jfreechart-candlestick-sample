@@ -2745,6 +2745,17 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this renderer for equality with another object.
      *
@@ -2943,6 +2954,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         // itemLabelAnchorOffset
         // createEntityList
         // baseCreateEntities
+        
         return result;
     }
 
@@ -3054,6 +3066,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         clone.listenerList = new EventListenerList();
         clone.event = null;
+        
         return clone;
     }
 
@@ -3102,5 +3115,4 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         // provided...
         this.listenerList = new EventListenerList();
     }
-
 }
