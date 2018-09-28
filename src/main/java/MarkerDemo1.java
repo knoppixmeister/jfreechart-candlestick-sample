@@ -37,8 +37,9 @@ import org.jfree.ui.RefineryUtilities;
  * This demo shows the use of domain and range markers on a time series chart.
  */
 public class MarkerDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = -440560270355750547L;
 
-    /**
+	/**
      * Creates a new instance.
      *
      * @param title  the frame title.
@@ -131,11 +132,13 @@ public class MarkerDemo1 extends ApplicationFrame {
         Hour h = new Hour(2, new Day(22, 5, 2003));
         Minute m = new Minute(10, h);
         millis = m.getFirstMillisecond();
-        CircleDrawer cd = new CircleDrawer(Color.red, new BasicStroke(1.0f), null);
-        //XYAnnotation bestBid = new XYDrawableAnnotation(0.0, 6000.0, 11.0, 11.0, cd);
-        						//new XYDrawableAnnotation(millis, 163.0, 11, 11, cd);
-        //plot.addAnnotation(bestBid);
         
+        CircleDrawer cd = new CircleDrawer(Color.red, new BasicStroke(1.0f), null);
+        XYAnnotation bestBid = //new XYDrawableAnnotation(0.0, 6000.0, 11.0, 11.0, cd);
+        						new XYDrawableAnnotation(millis, 163.0, 11, 11, cd);
+        plot.addAnnotation(bestBid);
+        
+        /*
         XYPointerAnnotation pointer = new XYPointerAnnotation("Best Bid ___", millis, 163.0, 3.0 * Math.PI / 4.0);
         pointer.setBaseRadius(150.0);
         pointer.setTipRadius(0.0);
@@ -143,6 +146,7 @@ public class MarkerDemo1 extends ApplicationFrame {
         pointer.setPaint(Color.RED);
         pointer.setTextAnchor(org.jfree.chart.ui.TextAnchor.HALF_ASCENT_RIGHT);
         plot.addAnnotation(pointer);
+        */
 
         //ChartUtils.applyCurrentTheme(chart);
 

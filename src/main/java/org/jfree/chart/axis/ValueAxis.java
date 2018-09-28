@@ -1037,6 +1037,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      */
     public void setFixedAutoRange(double length) {
     	fixedAutoRange = length;
+    	
     	if(isAutoRange()) autoAdjustRange();
 
     	fireChangeEvent();

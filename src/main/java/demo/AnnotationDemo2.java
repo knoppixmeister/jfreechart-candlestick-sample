@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYPointerAnnotation;
 import org.jfree.chart.axis.NumberAxis;
@@ -27,13 +27,14 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.CompositeTitle;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
+
 
 /**
  * This demo shows annotations being added to a renderer, so as to use a
@@ -146,10 +147,9 @@ public class AnnotationDemo2 extends ApplicationFrame {
         plot.mapDatasetToRangeAxis(1, 1);
         XYLineAndShapeRenderer renderer
                 = (XYLineAndShapeRenderer) plot.getRenderer();
-        renderer.setBaseToolTipGenerator(
-                StandardXYToolTipGenerator.getTimeSeriesInstance());
-        renderer.setBaseShapesVisible(true);
-        renderer.setBaseShapesFilled(true);
+        //renderer.setBaseToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());
+        //renderer.setBaseShapesVisible(true);
+        //renderer.setBaseShapesFilled(true);
         XYPointerAnnotation annotation1 = new XYPointerAnnotation(
                 "Annotation 1 (2.0, 167.3)", 2.0, 167.3, -Math.PI / 4.0);
         annotation1.setTextAnchor(TextAnchor.BOTTOM_LEFT);
@@ -160,10 +160,8 @@ public class AnnotationDemo2 extends ApplicationFrame {
         XYLineAndShapeRenderer renderer2
                 = new XYLineAndShapeRenderer(true, true);
         renderer2.setSeriesPaint(0, Color.black);
-        renderer.setBaseToolTipGenerator(
-                StandardXYToolTipGenerator.getTimeSeriesInstance());
-        XYPointerAnnotation annotation2 = new XYPointerAnnotation(
-                "Annotation 2 (15.0, 613.2)", 15.0, 613.2, Math.PI / 2.0);
+        //renderer.setBaseToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());
+        XYPointerAnnotation annotation2 = new XYPointerAnnotation("Annotation 2 (15.0, 613.2)", 15.0, 613.2, Math.PI / 2.0);
         annotation2.setTextAnchor(TextAnchor.TOP_CENTER);
         renderer2.addAnnotation(annotation2);
         plot.setRenderer(1, renderer2);
@@ -178,9 +176,10 @@ public class AnnotationDemo2 extends ApplicationFrame {
         CompositeTitle legends = new CompositeTitle(container);
         legends.setFrame(new BlockBorder(Color.red));
         legends.setBackgroundPaint(Color.yellow);
-        legends.setPosition(RectangleEdge.BOTTOM);
+        //legends.setPosition(RectangleEdge.BOTTOM);
         chart.addSubtitle(legends);
-        ChartUtilities.applyCurrentTheme(chart);
+        ChartUtils.applyCurrentTheme(chart);
+        
         return chart;
     }
 

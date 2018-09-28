@@ -624,8 +624,8 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     public Title getSubtitle(int index) {
     	if((index < 0) || (index >= getSubtitleCount())) {
-            throw new IllegalArgumentException("Index out of range.");
-        }
+    		throw new IllegalArgumentException("Index out of range.");
+    	}
 
     	return subtitles.get(index);
     }

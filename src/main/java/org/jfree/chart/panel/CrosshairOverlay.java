@@ -198,6 +198,7 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
     	Rectangle2D dataArea = chartPanel.getScreenDataArea();
     	g2.clip(dataArea);
     	JFreeChart chart = chartPanel.getChart();
+    	
     	XYPlot plot = (XYPlot) chart.getPlot();
     	ValueAxis xAxis = plot.getDomainAxis();
     	RectangleEdge xAxisEdge = plot.getDomainAxisEdge();

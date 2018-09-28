@@ -1125,20 +1125,19 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.6
      */
     public Stroke lookupSeriesStroke(int series) {
-
-        Stroke result = getSeriesStroke(series);
-        if (result == null && this.autoPopulateSeriesStroke) {
-            DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
-                result = supplier.getNextStroke();
-                setSeriesStroke(series, result, false);
+    	Stroke result = getSeriesStroke(series);
+    	
+    	if(result == null && autoPopulateSeriesStroke) {
+    		DrawingSupplier supplier = getDrawingSupplier();
+            if(supplier != null) {
+            	result = supplier.getNextStroke();
+            	setSeriesStroke(series, result, false);
             }
         }
-        if (result == null) {
-            result = this.defaultStroke;
-        }
-        return result;
 
+        if(result == null) result = defaultStroke;
+
+        return result;
     }
 
     /**

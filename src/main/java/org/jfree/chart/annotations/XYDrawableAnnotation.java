@@ -19,10 +19,7 @@ import org.jfree.chart.util.PublicCloneable;
 /**
  * A general annotation that can be placed on an {@link XYPlot}.
  */
-public class XYDrawableAnnotation extends AbstractXYAnnotation
-        implements Cloneable, PublicCloneable, Serializable {
-
-    /** For serialization. */
+public class XYDrawableAnnotation extends AbstractXYAnnotation implements Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = -6540812859722691020L;
 
     /** The scaling factor. */
@@ -72,14 +69,16 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
      * @since 1.0.11
      */
     public XYDrawableAnnotation(double x, double y, double displayWidth, double displayHeight, double drawScaleFactor, Drawable drawable) {
-        super();
+    	super();
+        
         Args.nullNotPermitted(drawable, "drawable");
-        this.x = x;
-        this.y = y;
-        this.displayWidth = displayWidth;
-        this.displayHeight = displayHeight;
-        this.drawScaleFactor = drawScaleFactor;
-        this.drawable = drawable;
+        
+        this.x 					= x;
+        this.y 					= y;
+        this.displayWidth 		= displayWidth;
+        this.displayHeight 		= displayHeight;
+        this.drawScaleFactor 	= drawScaleFactor;
+        this.drawable 			= drawable;
 
     }
 
@@ -96,46 +95,51 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
      *              entity information.
      */
     @Override
-    public void draw(Graphics2D g2, XYPlot plot, Rectangle2D dataArea,
-                     ValueAxis domainAxis, ValueAxis rangeAxis,
-                     int rendererIndex,
-                     PlotRenderingInfo info)
+    public void draw(
+    	Graphics2D g2,
+    	XYPlot plot,
+    	Rectangle2D dataArea,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	int rendererIndex,
+    	PlotRenderingInfo info)
     {
         PlotOrientation orientation = plot.getOrientation();
-        RectangleEdge domainEdge = Plot.resolveDomainAxisLocation(
-                plot.getDomainAxisLocation(), orientation);
-        RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(
-                plot.getRangeAxisLocation(), orientation);
-        float j2DX = (float) domainAxis.valueToJava2D(this.x, dataArea,
-                domainEdge);
-        float j2DY = (float) rangeAxis.valueToJava2D(this.y, dataArea,
-                rangeEdge);
+        RectangleEdge domainEdge = Plot.resolveDomainAxisLocation(plot.getDomainAxisLocation(), orientation);
+        RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(plot.getRangeAxisLocation(), orientation);
+        float j2DX = (float) domainAxis.valueToJava2D(x, dataArea, domainEdge);
+        float j2DY = (float) rangeAxis.valueToJava2D(y, dataArea, rangeEdge);
         Rectangle2D displayArea = new Rectangle2D.Double(
-                j2DX - this.displayWidth / 2.0,
-                j2DY - this.displayHeight / 2.0, this.displayWidth,
-                this.displayHeight);
+        	j2DX - displayWidth / 2.0,
+        	j2DY - displayHeight / 2.0,
+        	displayWidth,
+        	displayHeight
+        );
 
         // here we change the AffineTransform so we can draw the annotation
         // to a larger area and scale it down into the display area
         // afterwards, the original transform is restored
         AffineTransform savedTransform = g2.getTransform();
-        Rectangle2D drawArea = new Rectangle2D.Double(0.0, 0.0,
-                this.displayWidth * this.drawScaleFactor,
-                this.displayHeight * this.drawScaleFactor);
+        Rectangle2D drawArea = new Rectangle2D.Double(0.0, 0.0, displayWidth * drawScaleFactor, displayHeight * drawScaleFactor);
 
-        g2.scale(1 / this.drawScaleFactor, 1 / this.drawScaleFactor);
-        g2.translate((j2DX - this.displayWidth / 2.0) * this.drawScaleFactor,
-                (j2DY - this.displayHeight / 2.0) * this.drawScaleFactor);
-        this.drawable.draw(g2, drawArea);
+        g2.scale(1 / drawScaleFactor, 1 / drawScaleFactor);
+        g2.translate((j2DX - displayWidth / 2.0) * drawScaleFactor, (j2DY - displayHeight / 2.0) * drawScaleFactor);
+        drawable.draw(g2, drawArea);
         g2.setTransform(savedTransform);
         String toolTip = getToolTipText();
         String url = getURL();
-        if (toolTip != null || url != null) {
-            addEntity(info, displayArea, rendererIndex, toolTip, url);
-        }
-
+        
+        if(toolTip != null || url != null) addEntity(info, displayArea, rendererIndex, toolTip, url);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this annotation for equality with an arbitrary object.
      *
@@ -145,7 +149,6 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
      */
     @Override
     public boolean equals(Object obj) {
-
         if (obj == this) { // simple case
             return true;
         }
@@ -175,9 +178,9 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
         if (!ObjectUtils.equal(this.drawable, that.drawable)) {
             return false;
         }
+        
         // seem to be the same...
         return true;
-
     }
 
     /**
@@ -197,6 +200,7 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
         result = 29 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(this.displayHeight);
         result = 29 * result + (int) (temp ^ (temp >>> 32));
+        
         return result;
     }
 
@@ -211,5 +215,4 @@ public class XYDrawableAnnotation extends AbstractXYAnnotation
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

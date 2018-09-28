@@ -17,19 +17,19 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
 
 /**
  * A demo showing chart annotations, in this case several instances of
@@ -209,7 +209,8 @@ public class AnnotationDemo1 extends ApplicationFrame {
         plot.addAnnotation(annotation);
 
         // ensure the theme is applied to the extras
-        ChartUtilities.applyCurrentTheme(chart);
+        ChartUtils.applyCurrentTheme(chart);
+        
         return chart;
     }
 
@@ -222,6 +223,7 @@ public class AnnotationDemo1 extends ApplicationFrame {
         JFreeChart chart = createChart(createDataset());
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
+        
         return panel;
     }
 
@@ -232,12 +234,10 @@ public class AnnotationDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        AnnotationDemo1 demo = new AnnotationDemo1(
-                "JFreeChart: AnnotationDemo1.java");
+        AnnotationDemo1 demo = new AnnotationDemo1("");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }
 

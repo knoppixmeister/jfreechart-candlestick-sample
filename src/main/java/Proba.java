@@ -1,24 +1,17 @@
-import org.jfree.data.time.FixedMillisecond;
-import org.jfree.data.time.ohlc.OHLCItem;
-import org.jfree.data.time.ohlc.OHLCSeries;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Proba {
 	public static void main(String[] args) {
-		OHLCSeries series = new OHLCSeries("1");
 		
-		System.out.println(	series.getNotify()	);
 		
-		series.add(
-			new OHLCItem(
-				new FixedMillisecond(System.currentTimeMillis()),//period,
-				0,//open,
-				0,//high,
-				0,//low,
-				0//close
-			),
-			0
-		);
+		DateTime dt = new DateTime(2018, 9, 29, 1, 54);
+
 		
-		System.out.println(series.getItemCount());
+	    System.out.println("DT: "+(dt.getMillis())+"; SYS: "+System.currentTimeMillis());
 	}
 }

@@ -4,6 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Rectangle2D;
+import java.math.BigDecimal;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -97,7 +99,19 @@ public class Test2 {
 		*/
 
 		DateAxis dateAxis = new DateAxis();
-		dateAxis.setFixedAutoRange(60000);
+		dateAxis.setFixedAutoRange(90000);
+
+		dateAxis.setPositiveArrowVisible(true);
+		dateAxis.setNegativeArrowVisible(true);
+		dateAxis.setUpArrow(new Rectangle2D.Double(10, 10, 20, 20));
+
+		series.addChangeListener(new SeriesChangeListener() {
+			@Override
+			public void seriesChanged(SeriesChangeEvent event) {
+				
+				System.out.println(	"DA_AB: "+	new BigDecimal(dateAxis.getUpperBound()).longValue());
+			}
+		});
 
 		NumberAxis priceAxis = new NumberAxis();
 		//priceAxis.setLowerBound(3000);
@@ -196,7 +210,7 @@ public class Test2 {
 
 				if(event.getType() != ChartProgressEvent.DRAWING_FINISHED) return;
 				
-				System.out.println("LLL: "+	panel.getChart().getXYPlot().getDomainCrosshairValue()	);
+				//System.out.println("LLL: "+	panel.getChart().getXYPlot().getDomainCrosshairValue()	);
 			}
 		});
 		panel.addMouseListener(new MouseListener() {
@@ -253,7 +267,9 @@ public class Test2 {
 				Random r = new Random();
 
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(1000);
+					
+					series.setNotify(false);
 					
 					for(int i=0; i<200; i++) {
 						series.add(
@@ -262,10 +278,13 @@ public class Test2 {
 								5000,	//open,
 								8000,	//high,
 								4000,	//low,
-								7000	//close
+								7000,	//close,
+								1000	//volume
 							)
 						);
 					}
+					
+					series.setNotify(true);
 				}
 				catch (Exception e) {
 					// TODO: handle exception

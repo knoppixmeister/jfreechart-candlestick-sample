@@ -1,10 +1,3 @@
-/* ----------------
- * MarkerDemo1.java
- * ----------------
- * (C) Copyright 2003-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.awt.BasicStroke;
@@ -13,9 +6,10 @@ import java.awt.Font;
 
 import javax.swing.JPanel;
 
+import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
@@ -28,6 +22,10 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.ui.LengthAdjustmentType;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
 import org.jfree.data.time.Minute;
@@ -35,18 +33,15 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.LengthAdjustmentType;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
 
 /**
  * This demo shows the use of domain and range markers on a time series chart.
  */
 public class MarkerDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = -3958060610730413199L;
 
-    /**
+	/**
      * Creates a new instance.
      *
      * @param title  the frame title.
@@ -54,7 +49,7 @@ public class MarkerDemo1 extends ApplicationFrame {
     public MarkerDemo1(String title) {
         super(title);
         ChartPanel chartPanel = (ChartPanel) createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
         chartPanel.setDomainZoomable(true);
         chartPanel.setRangeZoomable(true);
         setContentPane(chartPanel);
@@ -68,26 +63,25 @@ public class MarkerDemo1 extends ApplicationFrame {
      * @return A configured chart.
      */
     private static JFreeChart createChart(XYDataset data) {
-
         JFreeChart chart = ChartFactory.createScatterPlot(
             "Marker Demo 1",
             "X",
             "Y",
             data,
             PlotOrientation.VERTICAL,
-            true,
+            false,
             true,
             false
         );
-        LegendTitle legend = (LegendTitle) chart.getSubtitle(0);
-        legend.setPosition(RectangleEdge.RIGHT);
+        
+        //LegendTitle legend = (LegendTitle) chart.getSubtitle(0);
+        //legend.setPosition(RectangleEdge.RIGHT);
 
         // customise...
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
-        plot.getRenderer().setBaseToolTipGenerator(
-                StandardXYToolTipGenerator.getTimeSeriesInstance());
+        plot.getRenderer().setDefaultToolTipGenerator(StandardXYToolTipGenerator.getTimeSeriesInstance());
 
         // set axis margins to allow space for marker labels...
         DateAxis domainAxis = new DateAxis("Time");
@@ -98,7 +92,6 @@ public class MarkerDemo1 extends ApplicationFrame {
         rangeAxis.setUpperMargin(0.30);
         rangeAxis.setLowerMargin(0.50);
         
-
         // add a labelled marker for the bid start price...
         Marker start = new ValueMarker(200.0);
         start.setLabelOffsetType(LengthAdjustmentType.EXPAND);
@@ -141,24 +134,23 @@ public class MarkerDemo1 extends ApplicationFrame {
         Hour h = new Hour(2, new Day(22, 5, 2003));
         Minute m = new Minute(10, h);
         millis = m.getFirstMillisecond();
-        CircleDrawer cd = new CircleDrawer(Color.red, new BasicStroke(1.0f),
-                null);
-        XYAnnotation bestBid = new XYDrawableAnnotation(
-                millis, 163.0, 11, 11, cd);
+
+        CircleDrawer cd = new CircleDrawer(ChartColor.RED, new BasicStroke(3.0f), Color.GREEN);
+        XYAnnotation bestBid = new XYDrawableAnnotation(millis, 163.0, 11, 11, cd);
         plot.addAnnotation(bestBid);
-        XYPointerAnnotation pointer = new XYPointerAnnotation(
-                "Best Bid", millis, 163.0, 3.0 * Math.PI / 4.0);
+        
+        XYPointerAnnotation pointer = new XYPointerAnnotation("Best Bid", millis, 163.0, 3.0 * Math.PI / 4.0);
         pointer.setBaseRadius(35.0);
         pointer.setTipRadius(10.0);
         pointer.setFont(new Font("SansSerif", Font.PLAIN, 9));
         pointer.setPaint(Color.blue);
         pointer.setTextAnchor(TextAnchor.HALF_ASCENT_RIGHT);
-        plot.addAnnotation(pointer);
+        
+        //plot.addAnnotation(pointer);
 
-        ChartUtilities.applyCurrentTheme(chart);
+        //ChartUtilities.applyCurrentTheme(chart);
 
         return chart;
-
     }
 
     /**
@@ -170,6 +162,7 @@ public class MarkerDemo1 extends ApplicationFrame {
         TimeSeriesCollection result = new TimeSeriesCollection();
         result.addSeries(createSupplier1Bids());
         result.addSeries(createSupplier2Bids());
+        
         return result;
     }
 
@@ -179,8 +172,8 @@ public class MarkerDemo1 extends ApplicationFrame {
      * @return A sample data series.
      */
     private static TimeSeries createSupplier1Bids() {
-
         Hour hour = new Hour(1, new Day(22, 5, 2003));
+        
         TimeSeries series1 = new TimeSeries("Supplier 1");
         series1.add(new Minute(13, hour), 200.0);
         series1.add(new Minute(14, hour), 195.0);
@@ -188,8 +181,8 @@ public class MarkerDemo1 extends ApplicationFrame {
         series1.add(new Minute(46, hour), 188.0);
         series1.add(new Minute(47, hour), 185.0);
         series1.add(new Minute(52, hour), 180.0);
+        
         return series1;
-
     }
 
     /**
@@ -207,6 +200,7 @@ public class MarkerDemo1 extends ApplicationFrame {
         series2.add(new Minute(6, hour2), 168.0);
         series2.add(new Minute(9, hour2), 165.0);
         series2.add(new Minute(10, hour2), 163.0);
+        
         return series2;
     }
 
@@ -219,6 +213,7 @@ public class MarkerDemo1 extends ApplicationFrame {
         JFreeChart chart = createChart(createDataset());
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
+        
         return panel;
     }
 
@@ -228,12 +223,10 @@ public class MarkerDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        MarkerDemo1 demo = new MarkerDemo1(
-                "JFreeChart: MarkerDemo1.java");
+        MarkerDemo1 demo = new MarkerDemo1("");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }
 

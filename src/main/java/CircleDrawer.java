@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.*;
-import org.jfree.ui.Drawable;
+
+import org.jfree.chart.ui.Drawable;
 
 /**
  * An implementation of the {@link Drawable} interface, to illustrate the use
@@ -39,14 +40,14 @@ public class CircleDrawer implements Drawable {
     public void draw(Graphics2D g2, Rectangle2D area) {
         Ellipse2D ellipse = new Ellipse2D.Double(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 
-        if(this.fillPaint != null) {
-        	g2.setPaint(this.fillPaint);
+        if(fillPaint != null) {
+        	g2.setPaint(fillPaint);
         	g2.fill(ellipse);
         }
 
         if(outlinePaint != null && outlineStroke != null) {
-        	g2.setPaint(this.outlinePaint);
-        	g2.setStroke(this.outlineStroke);
+        	g2.setPaint(outlinePaint);
+        	g2.setStroke(outlineStroke);
         	g2.draw(ellipse);
         }
 
