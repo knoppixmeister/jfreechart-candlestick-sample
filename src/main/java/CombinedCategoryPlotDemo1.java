@@ -19,8 +19,9 @@ import org.jfree.ui.RefineryUtilities;
  * A demo for the {@link CombinedCategoryPlot} class.
  */
 public class CombinedCategoryPlotDemo1 extends ApplicationFrame {
+	private static final long serialVersionUID = 2706063520877324924L;
 
-    /**
+	/**
      * Creates a new demo instance.
      *
      * @param title  the frame title.
