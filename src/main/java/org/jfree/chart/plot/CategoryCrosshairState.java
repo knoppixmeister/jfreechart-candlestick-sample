@@ -1,43 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------------------
- * CategoryCrosshairState.java
- * ---------------------------
- * (C) Copyright 2008, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 26-Jun-2008 : Version 1 (DG);
- *
- */
-
 package org.jfree.chart.plot;
 
 import java.awt.geom.Point2D;
@@ -52,9 +12,8 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
  * crosshair location.
  *
  * @since 1.0.11
- */
+*/
 public class CategoryCrosshairState extends CrosshairState {
-
     /**
      * The row key for the crosshair point.
      */
@@ -69,8 +28,8 @@ public class CategoryCrosshairState extends CrosshairState {
      * Creates a new instance.
      */
     public CategoryCrosshairState() {
-        this.rowKey = null;
-        this.columnKey = null;
+    	rowKey = null;
+    	columnKey = null;
     }
 
     /**
@@ -79,7 +38,7 @@ public class CategoryCrosshairState extends CrosshairState {
      * @return The row key.
      */
     public Comparable getRowKey() {
-        return this.rowKey;
+        return rowKey;
     }
 
     /**
@@ -88,7 +47,7 @@ public class CategoryCrosshairState extends CrosshairState {
      * @param key  the row key.
      */
     public void setRowKey(Comparable key) {
-        this.rowKey = key;
+    	rowKey = key;
     }
 
     /**
@@ -97,7 +56,7 @@ public class CategoryCrosshairState extends CrosshairState {
      * @return The column key.
      */
     public Comparable getColumnKey() {
-        return this.columnKey;
+        return columnKey;
     }
 
     /**
@@ -106,7 +65,7 @@ public class CategoryCrosshairState extends CrosshairState {
      * @param key  the key.
      */
     public void setColumnKey(Comparable key) {
-        this.columnKey = key;
+    	columnKey = key;
     }
 
     /**
@@ -121,25 +80,32 @@ public class CategoryCrosshairState extends CrosshairState {
      * @param transY  y translated into Java2D space.
      * @param orientation  the plot orientation.
      */
-    public void updateCrosshairPoint(Comparable rowKey, Comparable columnKey,
-            double value, int datasetIndex, double transX, double transY,
-            PlotOrientation orientation) {
-
+    public void updateCrosshairPoint(
+    	Comparable rowKey,
+    	Comparable columnKey,
+		double value,
+		int datasetIndex,
+		double transX,
+		double transY,
+		PlotOrientation orientation)
+    {
         Point2D anchor = getAnchor();
-        if (anchor != null) {
+        
+        if(anchor != null) {
             double xx = anchor.getX();
             double yy = anchor.getY();
-            if (orientation == PlotOrientation.HORIZONTAL) {
+            
+            if(orientation == PlotOrientation.HORIZONTAL) {
                 double temp = yy;
                 yy = xx;
                 xx = temp;
             }
-            double d = (transX - xx) * (transX - xx)
-                    + (transY - yy) * (transY - yy);
+            double d = (transX - xx) * (transX - xx) + (transY - yy) * (transY - yy);
 
-            if (d < getCrosshairDistance()) {
-                this.rowKey = rowKey;
-                this.columnKey = columnKey;
+            if(d < getCrosshairDistance()) {
+            	rowKey = rowKey;
+            	columnKey = columnKey;
+            	
                 setCrosshairY(value);
                 setDatasetIndex(datasetIndex);
                 setCrosshairDistance(d);
@@ -158,24 +124,23 @@ public class CategoryCrosshairState extends CrosshairState {
      * @param transX  the translated x-value.
      * @param orientation  the plot orientation.
      */
-    public void updateCrosshairX(Comparable rowKey, Comparable columnKey,
-            int datasetIndex, double transX, PlotOrientation orientation) {
-
+    public void updateCrosshairX(Comparable rowKey, Comparable columnKey, int datasetIndex, double transX, PlotOrientation orientation)
+    {
         Point2D anchor = getAnchor();
         if (anchor != null) {
             double anchorX = anchor.getX();
             if (orientation == PlotOrientation.HORIZONTAL) {
                 anchorX = anchor.getY();
             }
+            
             double d = Math.abs(transX - anchorX);
-            if (d < getCrosshairDistance()) {
+            
+            if(d < getCrosshairDistance()) {
                 this.rowKey = rowKey;
                 this.columnKey = columnKey;
                 setDatasetIndex(datasetIndex);
                 setCrosshairDistance(d);
             }
         }
-
     }
-
 }
