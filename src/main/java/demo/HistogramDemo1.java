@@ -51,11 +51,13 @@ public class HistogramDemo1 extends ApplicationFrame {
         }
         dataset.addSeries("H1", values, 100, 2.0, 8.0);
         
+        /*
         values = new double[1000];
         for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 7;
         }
         dataset.addSeries("H2", values, 100, 4.0, 10.0);
+        */
         
         return dataset;
     }
@@ -73,7 +75,7 @@ public class HistogramDemo1 extends ApplicationFrame {
             null,
             null,
             dataset,
-            PlotOrientation.HORIZONTAL,
+            PlotOrientation.VERTICAL,
             false,
             true,
             false
@@ -82,7 +84,7 @@ public class HistogramDemo1 extends ApplicationFrame {
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
-        plot.setForegroundAlpha(0.85f);
+        //plot.setForegroundAlpha(0.5f);
         
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

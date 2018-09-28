@@ -133,7 +133,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
          * @return The base value.
          */
         public double getG2Base() {
-            return this.g2Base;
+            return g2Base;
         }
 
         /**
@@ -142,7 +142,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
          * @param value  the value.
          */
         public void setG2Base(double value) {
-            this.g2Base = value;
+        	g2Base = value;
         }
     }
 
@@ -235,17 +235,17 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
     public XYBarRenderer(double margin) {
         super();
         
-        this.margin = margin;
-        this.base = 0.0;
-        this.useYInterval = false;
-        this.gradientPaintTransformer = new StandardGradientPaintTransformer();
-        this.drawBarOutline = false;
-        this.legendBar = new Rectangle2D.Double(-3.0, -5.0, 6.0, 10.0);
-        this.barPainter = getDefaultBarPainter();
-        this.shadowsVisible = getDefaultShadowsVisible();
-        this.shadowXOffset = 4.0;
-        this.shadowYOffset = 4.0;
-        this.barAlignmentFactor = -1.0;
+        this.margin 					= margin;
+        this.base 						= 0.0;
+        this.useYInterval 				= false;
+        this.gradientPaintTransformer 	= new StandardGradientPaintTransformer();
+        this.drawBarOutline 			= false;
+        this.legendBar 					= new Rectangle2D.Double(-3.0, -5.0, 6.0, 10.0);
+        this.barPainter 				= getDefaultBarPainter();
+        this.shadowsVisible 			= getDefaultShadowsVisible();
+        this.shadowXOffset 				= 4.0;
+        this.shadowYOffset 				= 4.0;
+        this.barAlignmentFactor 		= -1.0;
     }
 
     /**
@@ -256,7 +256,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @see #setBase(double)
      */
     public double getBase() {
-        return this.base;
+        return base;
     }
 
     /**
@@ -529,7 +529,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.11
      */
     public double getShadowXOffset() {
-        return this.shadowXOffset;
+        return shadowXOffset;
     }
 
     /**
@@ -541,7 +541,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.11
      */
     public void setShadowXOffset(double offset) {
-        this.shadowXOffset = offset;
+    	shadowXOffset = offset;
+        
         fireChangeEvent();
     }
 
@@ -553,7 +554,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.11
      */
     public double getShadowYOffset() {
-        return this.shadowYOffset;
+        return shadowYOffset;
     }
 
     /**
@@ -565,7 +566,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.11
      */
     public void setShadowYOffset(double offset) {
-        this.shadowYOffset = offset;
+    	shadowYOffset = offset;
+        
         fireChangeEvent();
     }
 
@@ -577,7 +579,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.13
      */
     public double getBarAlignmentFactor() {
-        return this.barAlignmentFactor;
+        return barAlignmentFactor;
     }
 
     /**
@@ -590,7 +592,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @since 1.0.13
      */
     public void setBarAlignmentFactor(double factor) {
-        this.barAlignmentFactor = factor;
+    	barAlignmentFactor = factor;
+    	
         fireChangeEvent();
     }
 
@@ -610,16 +613,18 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @return A state object.
      */
     @Override
-    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
-            XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
-
+    public XYItemRendererState initialise(
+    	Graphics2D g2,
+    	Rectangle2D dataArea,
+    	XYPlot plot,
+    	XYDataset dataset,
+    	PlotRenderingInfo info)
+    {
         XYBarRendererState state = new XYBarRendererState(info);
-        ValueAxis rangeAxis = plot.getRangeAxisForDataset(plot.indexOf(
-                dataset));
-        state.setG2Base(rangeAxis.valueToJava2D(this.base, dataArea,
-                plot.getRangeAxisEdge()));
+        ValueAxis rangeAxis = plot.getRangeAxisForDataset(plot.indexOf(dataset));
+        state.setG2Base(rangeAxis.valueToJava2D(base, dataArea, plot.getRangeAxisEdge()));
+        
         return state;
-
     }
 
     /**
@@ -634,51 +639,47 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
     @Override
     public LegendItem getLegendItem(int datasetIndex, int series) {
         XYPlot xyplot = getPlot();
-        if (xyplot == null) {
-            return null;
-        }
+        if(xyplot == null) return null;
+
         XYDataset dataset = xyplot.getDataset(datasetIndex);
-        if (dataset == null) {
-            return null;
-        }
+        if(dataset == null) return null;
+
         LegendItem result;
         XYSeriesLabelGenerator lg = getLegendItemLabelGenerator();
         String label = lg.generateLabel(dataset, series);
         String description = label;
         String toolTipText = null;
-        if (getLegendItemToolTipGenerator() != null) {
-            toolTipText = getLegendItemToolTipGenerator().generateLabel(
-                    dataset, series);
+        
+        if(getLegendItemToolTipGenerator() != null) {
+            toolTipText = getLegendItemToolTipGenerator().generateLabel(dataset, series);
         }
         String urlText = null;
-        if (getLegendItemURLGenerator() != null) {
-            urlText = getLegendItemURLGenerator().generateLabel(dataset, 
-                    series);
+        if(getLegendItemURLGenerator() != null) {
+            urlText = getLegendItemURLGenerator().generateLabel(dataset, series);
         }
+        
         Shape shape = this.legendBar;
         Paint paint = lookupSeriesPaint(series);
         Paint outlinePaint = lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
-        if (this.drawBarOutline) {
-            result = new LegendItem(label, description, toolTipText,
-                    urlText, shape, paint, outlineStroke, outlinePaint);
+        if(drawBarOutline) {
+            result = new LegendItem(label, description, toolTipText, urlText, shape, paint, outlineStroke, outlinePaint);
         }
         else {
-            result = new LegendItem(label, description, toolTipText, urlText, 
-                    shape, paint);
+            result = new LegendItem(label, description, toolTipText, urlText, shape, paint);
         }
         result.setLabelFont(lookupLegendTextFont(series));
         Paint labelPaint = lookupLegendTextPaint(series);
-        if (labelPaint != null) {
-            result.setLabelPaint(labelPaint);
-        }
+        if(labelPaint != null) result.setLabelPaint(labelPaint);
+
         result.setDataset(dataset);
         result.setDatasetIndex(datasetIndex);
         result.setSeriesKey(dataset.getSeriesKey(series));
         result.setSeriesIndex(series);
-        if (getGradientPaintTransformer() != null) {
+        if(getGradientPaintTransformer() != null) {
             result.setFillPaintTransformer(getGradientPaintTransformer());
         }
+        
         return result;
     }
 
@@ -701,82 +702,79 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      * @param pass  the pass index.
      */
     @Override
-    public void drawItem(Graphics2D g2, XYItemRendererState state,
-            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
-            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
-            int series, int item, CrosshairState crosshairState, int pass) {
+    public void drawItem(
+    	Graphics2D g2,
+    	XYItemRendererState state,
+    	Rectangle2D dataArea,
+    	PlotRenderingInfo info,
+    	XYPlot plot,
+    	ValueAxis domainAxis,
+    	ValueAxis rangeAxis,
+    	XYDataset dataset,
+    	int series,
+    	int item,
+    	CrosshairState crosshairState,
+    	int pass)
+    {
+        if(!getItemVisible(series, item)) return;
 
-        if (!getItemVisible(series, item)) {
-            return;
-        }
         IntervalXYDataset intervalDataset = (IntervalXYDataset) dataset;
 
         double value0;
         double value1;
-        if (this.useYInterval) {
+        
+        if(useYInterval) {
             value0 = intervalDataset.getStartYValue(series, item);
             value1 = intervalDataset.getEndYValue(series, item);
-        } else {
-            value0 = this.base;
+        }
+        else {
+            value0 = base;
             value1 = intervalDataset.getYValue(series, item);
         }
-        if (Double.isNaN(value0) || Double.isNaN(value1)) {
-            return;
+        
+        if(Double.isNaN(value0) || Double.isNaN(value1)) return;
+
+        if(value0 <= value1) {
+            if(!rangeAxis.getRange().intersects(value0, value1)) return;
         }
-        if (value0 <= value1) {
-            if (!rangeAxis.getRange().intersects(value0, value1)) {
-                return;
-            }
-        } else {
-            if (!rangeAxis.getRange().intersects(value1, value0)) {
-                return;
-            }
+        else {
+            if(!rangeAxis.getRange().intersects(value1, value0)) return;
         }
 
-        double translatedValue0 = rangeAxis.valueToJava2D(value0, dataArea,
-                plot.getRangeAxisEdge());
-        double translatedValue1 = rangeAxis.valueToJava2D(value1, dataArea,
-                plot.getRangeAxisEdge());
+        double translatedValue0 = rangeAxis.valueToJava2D(value0, dataArea, plot.getRangeAxisEdge());
+        double translatedValue1 = rangeAxis.valueToJava2D(value1, dataArea, plot.getRangeAxisEdge());
         double bottom = Math.min(translatedValue0, translatedValue1);
         double top = Math.max(translatedValue0, translatedValue1);
 
         double startX = intervalDataset.getStartXValue(series, item);
-        if (Double.isNaN(startX)) {
-            return;
-        }
+        if(Double.isNaN(startX)) return;
+
         double endX = intervalDataset.getEndXValue(series, item);
-        if (Double.isNaN(endX)) {
-            return;
+        if(Double.isNaN(endX)) return;
+
+        if(startX <= endX) {
+            if(!domainAxis.getRange().intersects(startX, endX)) return;
         }
-        if (startX <= endX) {
-            if (!domainAxis.getRange().intersects(startX, endX)) {
-                return;
-            }
-        } else {
-            if (!domainAxis.getRange().intersects(endX, startX)) {
-                return;
-            }
+        else {
+        	if(!domainAxis.getRange().intersects(endX, startX)) return;
         }
 
         // is there an alignment adjustment to be made?
-        if (this.barAlignmentFactor >= 0.0 && this.barAlignmentFactor <= 1.0) {
+        if(barAlignmentFactor >= 0.0 && barAlignmentFactor <= 1.0) {
             double x = intervalDataset.getXValue(series, item);
             double interval = endX - startX;
-            startX = x - interval * this.barAlignmentFactor;
+            startX = x - interval * barAlignmentFactor;
             endX = startX + interval;
         }
 
         RectangleEdge location = plot.getDomainAxisEdge();
-        double translatedStartX = domainAxis.valueToJava2D(startX, dataArea,
-                location);
-        double translatedEndX = domainAxis.valueToJava2D(endX, dataArea,
-                location);
+        double translatedStartX = domainAxis.valueToJava2D(startX, dataArea, location);
+        double translatedEndX = domainAxis.valueToJava2D(endX, dataArea, location);
 
-        double translatedWidth = Math.max(1, Math.abs(translatedEndX
-                - translatedStartX));
+        double translatedWidth = Math.max(1, Math.abs(translatedEndX - translatedStartX));
 
         double left = Math.min(translatedStartX, translatedEndX);
-        if (getMargin() > 0.0) {
+        if(getMargin() > 0.0) {
             double cut = translatedWidth * getMargin();
             translatedWidth = translatedWidth - cut;
             left = left + cut / 2;
@@ -784,30 +782,31 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
 
         Rectangle2D bar = null;
         PlotOrientation orientation = plot.getOrientation();
-        if (orientation.isHorizontal()) {
+        if(orientation.isHorizontal()) {
             // clip left and right bounds to data area
             bottom = Math.max(bottom, dataArea.getMinX());
             top = Math.min(top, dataArea.getMaxX());
-            bar = new Rectangle2D.Double(
-                bottom, left, top - bottom, translatedWidth);
-        } else if (orientation.isVertical()) {
+            bar = new Rectangle2D.Double(bottom, left, top - bottom, translatedWidth);
+        }
+        else if(orientation.isVertical()) {
             // clip top and bottom bounds to data area
             bottom = Math.max(bottom, dataArea.getMinY());
             top = Math.min(top, dataArea.getMaxY());
-            bar = new Rectangle2D.Double(left, bottom, translatedWidth,
-                    top - bottom);
+            bar = new Rectangle2D.Double(left, bottom, translatedWidth, top - bottom);
         }
 
         boolean positive = (value1 > 0.0);
         boolean inverted = rangeAxis.isInverted();
         RectangleEdge barBase;
-        if (orientation.isHorizontal()) {
+        
+        if(orientation.isHorizontal()) {
             if (positive && inverted || !positive && !inverted) {
                 barBase = RectangleEdge.RIGHT;
             } else {
                 barBase = RectangleEdge.LEFT;
             }
-        } else {
+        }
+        else {
             if (positive && !inverted || !positive && inverted) {
                 barBase = RectangleEdge.BOTTOM;
             } else {
@@ -815,40 +814,34 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
             }
         }
         
-        if (state.getElementHinting()) {
+        if(state.getElementHinting()) {
             beginElementGroup(g2, dataset.getSeriesKey(series), item);
         }
-        if (getShadowsVisible()) {
-            this.barPainter.paintBarShadow(g2, this, series, item, bar, barBase,
-                !this.useYInterval);
+        
+        if(getShadowsVisible()) {
+        	barPainter.paintBarShadow(g2, this, series, item, bar, barBase, !useYInterval);
         }
-        this.barPainter.paintBar(g2, this, series, item, bar, barBase);
-        if (state.getElementHinting()) {
-            endElementGroup(g2);
-        }
+        
+        barPainter.paintBar(g2, this, series, item, bar, barBase);
+        if(state.getElementHinting()) endElementGroup(g2);
 
-        if (isItemLabelVisible(series, item)) {
-            XYItemLabelGenerator generator = getItemLabelGenerator(series,
-                    item);
-            drawItemLabel(g2, dataset, series, item, plot, generator, bar,
-                    value1 < 0.0);
+        if(isItemLabelVisible(series, item)) {
+            XYItemLabelGenerator generator = getItemLabelGenerator(series, item);
+            drawItemLabel(g2, dataset, series, item, plot, generator, bar, value1 < 0.0);
         }
 
         // update the crosshair point
         double x1 = (startX + endX) / 2.0;
         double y1 = dataset.getYValue(series, item);
         double transX1 = domainAxis.valueToJava2D(x1, dataArea, location);
-        double transY1 = rangeAxis.valueToJava2D(y1, dataArea,
-                plot.getRangeAxisEdge());
+        double transY1 = rangeAxis.valueToJava2D(y1, dataArea, plot.getRangeAxisEdge());
         int datasetIndex = plot.indexOf(dataset);
-        updateCrosshairValues(crosshairState, x1, y1, datasetIndex,
-                transX1, transY1, plot.getOrientation());
+        updateCrosshairValues(crosshairState, x1, y1, datasetIndex, transX1, transY1, plot.getOrientation());
 
         EntityCollection entities = state.getEntityCollection();
-        if (entities != null) {
+        if(entities != null) {
             addEntity(entities, bar, dataset, series, item, 0.0, 0.0);
         }
-
     }
 
     /**
@@ -937,9 +930,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      *
      * @return The anchor point.
      */
-    private Point2D calculateLabelAnchorPoint(ItemLabelAnchor anchor,
-            Rectangle2D bar, PlotOrientation orientation) {
-
+    private Point2D calculateLabelAnchorPoint(ItemLabelAnchor anchor, Rectangle2D bar, PlotOrientation orientation) {
         Point2D result = null;
         double offset = getItemLabelAnchorOffset();
         double x0 = bar.getX() - offset;
@@ -1035,7 +1026,6 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
         }
 
         return result;
-
     }
 
     /**
@@ -1088,7 +1078,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
      */
     @Override
     public Range findRangeBounds(XYDataset dataset) {
-        return findRangeBounds(dataset, this.useYInterval);
+        return findRangeBounds(dataset, useYInterval);
     }
 
     /**
@@ -1101,11 +1091,12 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
     @Override
     public Object clone() throws CloneNotSupportedException {
         XYBarRenderer result = (XYBarRenderer) super.clone();
-        if (this.gradientPaintTransformer != null) {
+        if(this.gradientPaintTransformer != null) {
             result.gradientPaintTransformer = (GradientPaintTransformer)
                 ObjectUtils.clone(this.gradientPaintTransformer);
         }
         result.legendBar = ShapeUtils.clone(this.legendBar);
+        
         return result;
     }
 

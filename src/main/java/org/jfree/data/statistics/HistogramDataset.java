@@ -32,8 +32,8 @@ public class HistogramDataset extends AbstractIntervalXYDataset implements Inter
      * {@link HistogramType}.FREQUENCY.
      */
     public HistogramDataset() {
-        this.list = new ArrayList();
-        this.type = HistogramType.FREQUENCY;
+    	list = new ArrayList();
+    	type = HistogramType.FREQUENCY;
     }
 
     /**
@@ -317,19 +317,17 @@ public class HistogramDataset extends AbstractIntervalXYDataset implements Inter
         double total = getTotal(series);
         double binWidth = getBinWidth(series);
 
-        if (this.type == HistogramType.FREQUENCY) {
+        if(type == HistogramType.FREQUENCY) {
             return new Double(bin.getCount());
         }
-        else if (this.type == HistogramType.RELATIVE_FREQUENCY) {
+        else if(type == HistogramType.RELATIVE_FREQUENCY) {
             return new Double(bin.getCount() / total);
         }
-        else if (this.type == HistogramType.SCALE_AREA_TO_1) {
+        else if(type == HistogramType.SCALE_AREA_TO_1) {
             return new Double(bin.getCount() / (binWidth * total));
         }
-        else { // pretty sure this shouldn't ever happen
-            throw new IllegalStateException();
-        }
-    }
+        else throw new IllegalStateException();
+	}
 
     /**
      * Returns the start value for a bin.

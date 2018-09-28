@@ -47,6 +47,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         if(t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
         }
+        
         g2.setPaint(itemPaint);
         g2.fill(bar);
 
@@ -61,7 +62,6 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
                 g2.draw(bar);
             }
         }
-
     }
 
     /**
@@ -115,14 +115,15 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         double x1 = bar.getMaxX();
         double y0 = bar.getMinY();
         double y1 = bar.getMaxY();
-        if (base == RectangleEdge.TOP) {
+        
+        if(base == RectangleEdge.TOP) {
             x0 += xOffset;
             x1 += xOffset;
             if(!pegShadow) y0 += yOffset;
 
             y1 += yOffset;
         }
-        else if (base == RectangleEdge.BOTTOM) {
+        else if(base == RectangleEdge.BOTTOM) {
             x0 += xOffset;
             x1 += xOffset;
             y0 += yOffset;
@@ -177,6 +178,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         if (!(obj instanceof StandardXYBarPainter)) {
             return false;
         }
+        
         return true;
     }
 
@@ -189,7 +191,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
     public int hashCode() {
         int hash = 37;
         // no fields to compute...
+        
         return hash;
     }
-
 }

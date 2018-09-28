@@ -30,7 +30,7 @@ public class SMA {
 			if(key >= period) {
 				sum = 0;
 				
-				for(int i = key-(period-1); i<key; i++) {
+				for(int i = key-(period-1); i <= key; i++) {
 					sum += ((OHLCItem) data.getDataItem(key)).getCloseValue();
 				}
 				

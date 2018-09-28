@@ -667,7 +667,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 setSeriesPaint(series, seriesPaint, false);
             }
         }
-        if(seriesPaint == null) seriesPaint = this.defaultPaint;
+        if(seriesPaint == null) seriesPaint = defaultPaint;
 
         return seriesPaint;
     }

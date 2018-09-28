@@ -22,10 +22,10 @@ public class AO {
 		TimeSeries ts5 = SMA.run(ser, 5);
 		TimeSeries ts34 = SMA.run(ser, 34);
 		
-		for(int key=0; key < ts5.getItemCount(); key++) {
+		for(int key=0; key < ts34.getItemCount(); key++) {
 			result.add(
-				ts5.getDataItem(key).getPeriod(),
-				ts5.getDataItem(key).getValue().doubleValue() - ts34.getDataItem(key).getValue().doubleValue()
+				ts34.getDataItem(key).getPeriod(),
+				ts34.getDataItem(key).getValue().doubleValue() - ts5.getDataItem(key).getValue().doubleValue() 
 			);
 		}
 		

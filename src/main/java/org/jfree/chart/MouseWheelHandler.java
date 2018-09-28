@@ -65,10 +65,12 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
             Zoomable zoomable = (Zoomable)plot;
             handleZoomable(zoomable, e);
     	}
+    	/*
     	else if(plot != null &&	plot instanceof PiePlot) {
             PiePlot pp = (PiePlot) plot;
             pp.handleMouseWheelRotation(e.getWheelRotation());
     	}
+    	*/
 	}
 
 	/**
@@ -86,6 +88,7 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
         if(!plotRenderingInfo.getDataArea().contains(p)) return;
 
         Plot plot = (Plot)zoomable;
+        
         // do not notify while zooming each axis
         boolean notifyState = plot.isNotify();
         plot.setNotify(false);

@@ -304,9 +304,7 @@ public class Test3 {
 			@Override
 			public void seriesChanged(SeriesChangeEvent event) {
 				TimeSeriesCollection tsc = STOCH.run(series, 34, 3);
-
-				//datasets[index] = new TimeSeriesCollection();
-				
+			
 				plot3.setDataset(0, new TimeSeriesCollection(tsc.getSeries("Ks")));
 				plot3.setDataset(1, new TimeSeriesCollection(tsc.getSeries("SMAs")));
 				
@@ -324,12 +322,36 @@ public class Test3 {
 	//----------------------------------------------------------------------------------------------------------------------
 
 		XYPlot plot4 = new XYPlot(
-			//dataset,
-			//domainAxis,
-			//rangeAxis,
-			//renderer
+			null,				//dataset,
+			null,				//domainAxis,
+			new NumberAxis(),	//rangeAxis,
+			null				//renderer
 		);
+		plot4.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+		plot4.setRangePannable(true);
 
+		series.addChangeListener(new SeriesChangeListener() {
+			@Override
+			public void seriesChanged(SeriesChangeEvent event) {
+				TimeSeriesCollection tsc = new TimeSeriesCollection();
+
+				TimeSeries ts =	AO.run(series, 34, 5);
+
+				tsc.addSeries(ts);
+
+				plot4.setDataset(tsc);
+				
+				XYBarRenderer hstgr = new XYBarRenderer();
+				
+				hstgr.setBarPainter(new StandardXYBarPainter());
+				hstgr.setShadowVisible(false);
+				
+				plot4.setRenderer(hstgr);
+			}
+		});
+
+	//--------------------------------------------------------------------------------------------------------------------------
+		
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(-9);
 
@@ -602,7 +624,7 @@ public class Test3 {
 											.build();
 		socket = client.newWebSocket(
 			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
-									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1m")
+									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
 									.build(),
 			//new BFWebSocketListener(collection)
 			new BNWebSocketListener(collection)
@@ -629,7 +651,7 @@ class BNWebSocketListener extends WebSocketListener {
 		try {
 			System.out.println("START INITIAL FETCH OF CANDLES ....");
 			
-			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1d&limit=1000").build()).execute();
+			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1h&limit=1000").build()).execute();
 			if(!response.isSuccessful()) {
 				System.out.println("COULD NOT GET PAIR HISTORY CANDLES");
 				System.exit(1);
