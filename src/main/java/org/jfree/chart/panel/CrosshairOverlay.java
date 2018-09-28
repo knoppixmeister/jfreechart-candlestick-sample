@@ -122,13 +122,13 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
      * @param crosshair  the crosshair ({@code null} not permitted).
      */
     public void addRangeCrosshair(Crosshair crosshair) {
-        Args.nullNotPermitted(crosshair, "crosshair");
-        
-        yCrosshairs.add(crosshair);
-        crosshair.addPropertyChangeListener(this);
-        
-        fireOverlayChanged();
-    }
+    	Args.nullNotPermitted(crosshair, "crosshair");
+
+    	yCrosshairs.add(crosshair);
+    	crosshair.addPropertyChangeListener(this);
+
+    	fireOverlayChanged();
+	}
 
     /**
      * Removes a range axis crosshair and sends an {@link OverlayChangeEvent}

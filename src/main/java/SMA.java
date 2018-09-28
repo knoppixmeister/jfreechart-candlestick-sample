@@ -7,17 +7,19 @@ public class SMA {
 		TimeSeries result = new TimeSeries("");
 
 		/*
-		 * //loop data
-		foreach($data as $key => $row){
-			
+		 * 
+		//loop data
+		foreach($data as $key => $row) {
 			//Add logic here
-			if ($key >= $period){
+			if($key >= $period) {
 				$sum = 0;
-				for ($i = $key - ($period-1); $i <= $key; $i ++)
+				
+				for($i = $key - ($period-1); $i <= $key; $i++) {
 					$sum += $data[$i]['close'];
-			
+				}
+
 				$sma = $sum / $period;
-			
+
 				//add sma field and value
 				$data[$key]['val'] = $sma;
 			}
@@ -44,6 +46,23 @@ public class SMA {
 	}
 
 	public static TimeSeries run(TimeSeries data, int period) {
-		return null;
+		TimeSeries result = new TimeSeries("");
+		
+		double sum = 0, sma = 0;
+		for(int key=0; key < data.getItemCount(); key++) {
+			if(key >= period) {
+				sum = 0;
+				
+				for(int i = key-(period-1); i <= key; i++) {
+					sum +=	data.getDataItem(key).getValue().doubleValue();
+				}
+				
+				sma = sum / period;
+				
+				result.add(data.getDataItem(key).getPeriod(), sma);
+			}
+		}
+		
+		return result;
 	}
 }

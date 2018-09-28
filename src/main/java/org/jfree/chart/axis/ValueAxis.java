@@ -1578,6 +1578,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
         if (this.minorTickCount != that.minorTickCount) {
             return false;
         }
+        
         return super.equals(obj);
     }
 
@@ -1591,10 +1592,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
-        ValueAxis clone = (ValueAxis) super.clone();
-        
-        return clone;
-    }
+    	return (ValueAxis) super.clone();
+	}
 
     /**
      * Provides serialization support.

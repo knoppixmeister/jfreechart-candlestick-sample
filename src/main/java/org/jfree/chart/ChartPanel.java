@@ -2126,9 +2126,12 @@ public class ChartPanel extends JPanel implements
         // one notification happens even though we update multiple
         // axes...
         boolean savedNotify = plot.isNotify();
+        
         plot.setNotify(false);
+        
         zoomInDomain(x, y);
         zoomInRange(x, y);
+        
         plot.setNotify(savedNotify);
 	}
 
@@ -2178,13 +2181,14 @@ public class ChartPanel extends JPanel implements
 
     		boolean savedNotify = plot.isNotify();
     		plot.setNotify(false);
-    		Zoomable z = (Zoomable)plot;
-            z.zoomRangeAxes(
+
+            ((Zoomable)plot).zoomRangeAxes(
             	zoomInFactor,
             	info.getPlotInfo(),
             	translateScreenToJava2D(new Point((int)x, (int)y)),
             	zoomAroundAnchor
             );
+            
             plot.setNotify(savedNotify);
         }
     }

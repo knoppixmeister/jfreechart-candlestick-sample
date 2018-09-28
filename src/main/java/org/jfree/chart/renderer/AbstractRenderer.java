@@ -2661,15 +2661,13 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                     x - 2.0 * ADJ * this.itemLabelAnchorOffset,
                     y - 2.0 * OPP * this.itemLabelAnchorOffset);
         }
-        else if (anchor == ItemLabelAnchor.OUTSIDE11) {
-            result = new Point2D.Double(
-                x - 2.0 * OPP * this.itemLabelAnchorOffset,
-                y - 2.0 * ADJ * this.itemLabelAnchorOffset);
+        else if(anchor == ItemLabelAnchor.OUTSIDE11) {
+            result = new Point2D.Double(x - 2.0 * OPP * itemLabelAnchorOffset, y - 2.0 * ADJ * itemLabelAnchorOffset);
         }
-        else if (anchor == ItemLabelAnchor.OUTSIDE12) {
-            result = new Point2D.Double(x,
-                    y - 2.0 * this.itemLabelAnchorOffset);
+        else if(anchor == ItemLabelAnchor.OUTSIDE12) {
+            result = new Point2D.Double(x, y - 2.0 * itemLabelAnchorOffset);
         }
+        
         return result;
     }
 
@@ -2682,7 +2680,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void addChangeListener(RendererChangeListener listener) {
         Args.nullNotPermitted(listener, "listener");
-        this.listenerList.add(RendererChangeListener.class, listener);
+        
+        listenerList.add(RendererChangeListener.class, listener);
     }
 
     /**
@@ -2695,7 +2694,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void removeChangeListener(RendererChangeListener listener) {
         Args.nullNotPermitted(listener, "listener");
-        this.listenerList.remove(RendererChangeListener.class, listener);
+        
+        listenerList.remove(RendererChangeListener.class, listener);
     }
 
     /**
@@ -2708,7 +2708,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return A boolean.
      */
     public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(this.listenerList.getListenerList());
+        List list = Arrays.asList(listenerList.getListenerList());
+        
         return list.contains(listener);
     }
 
@@ -2738,10 +2739,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void notifyListeners(RendererChangeEvent event) {
         Object[] ls = this.listenerList.getListenerList();
-        for (int i = ls.length - 2; i >= 0; i -= 2) {
-            if (ls[i] == RendererChangeListener.class) {
-                ((RendererChangeListener) ls[i + 1]).rendererChanged(event);
-            }
+        for(int i = ls.length - 2; i >= 0; i -= 2) {
+            if(ls[i] == RendererChangeListener.class) ((RendererChangeListener) ls[i + 1]).rendererChanged(event);
         }
     }
 

@@ -44,15 +44,23 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class Test3 {
+	public static final String PAIR 	= "ETHBTC";
+	public static final String INTERVAL = "1h";
+
 	private static WebSocket socket;
 	private static OkHttpClient client;
 	private static OHLCSeriesCollection collection = new OHLCSeriesCollection();
 
-	private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
+	//private static Queue<Long> dataFetchTimes = new ConcurrentLinkedQueue<>();
 
 	private static double oldPrice = 0;
 
+	public static double zoom = 0;
+	
 	public static void main(String[] args) {
+		JFrame fr = new JFrame();
+		fr.setBounds(10, 10, 1300, 500);
+
 		socket = null;
 
 		/*
@@ -147,7 +155,9 @@ public class Test3 {
 				
 				priceLine.setValue(currentPrice);
 				priceLine.setLabel(" "+currentPrice+" ");
-				
+
+				fr.setTitle(Test3.PAIR+" / "+Test3.INTERVAL.toUpperCase()+" = "+currentPrice);
+
 				oldPrice = ((OHLCItem)series.getDataItem(series.getItemCount()-1)).getCloseValue();
 			}
         });
@@ -185,9 +195,9 @@ public class Test3 {
         priceAxis.setNumberFormatOverride(nf);
 
         CandlestickRenderer renderer = new CandlestickRenderer(
-			-1,	//candleWidth,
-			true,										//drawVolume,
-			null										//toolTipGenerator
+			CandlestickRenderer.WIDTHMETHOD_INTERVALDATA,	//candleWidth,
+			true,											//drawVolume,
+			null											//toolTipGenerator
 		);
         renderer.setVolumePaint(ChartColor.BLACK);
 
@@ -321,11 +331,15 @@ public class Test3 {
 
 	//----------------------------------------------------------------------------------------------------------------------
 
+		XYBarRenderer hstgr = new XYBarRenderer();
+		hstgr.setBarPainter(new StandardXYBarPainter());
+		hstgr.setShadowVisible(false);
+		
 		XYPlot plot4 = new XYPlot(
 			null,				//dataset,
 			null,				//domainAxis,
 			new NumberAxis(),	//rangeAxis,
-			null				//renderer
+			hstgr				//renderer
 		);
 		plot4.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 		plot4.setRangePannable(true);
@@ -335,18 +349,11 @@ public class Test3 {
 			public void seriesChanged(SeriesChangeEvent event) {
 				TimeSeriesCollection tsc = new TimeSeriesCollection();
 
-				TimeSeries ts =	AO.run(series, 34, 5);
+				TimeSeries ts =	AO.run(series);
 
 				tsc.addSeries(ts);
 
 				plot4.setDataset(tsc);
-				
-				XYBarRenderer hstgr = new XYBarRenderer();
-				
-				hstgr.setBarPainter(new StandardXYBarPainter());
-				hstgr.setShadowVisible(false);
-				
-				plot4.setRenderer(hstgr);
 			}
 		});
 
@@ -397,7 +404,7 @@ public class Test3 {
 				
 				Rectangle2D dataArea = panel.getScreenDataArea(e.getX(), e.getY());
 				
-				System.out.println(						combinedPlot.getDomainAxisEdge()	);
+				System.out.println(		combinedPlot.getDomainAxisEdge()	);
 
 				System.out.println("DATA_AREA: "+dataArea);
 				
@@ -577,20 +584,43 @@ public class Test3 {
 		panel.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				System.out.println("MW: "+e.getWheelRotation()	);
+				System.out.println("MW: "+	e.getWheelRotation()	);
 
-				//((XYPlot)((CombinedDomainXYPlot)panel.getChart().getPlot()).getSubplots().get(0)).getDataR
+				//((XYPlot)((CombinedDomainXYPlot)panel.getChart().getPlot()).getSubplots().get(0)).getData
+				
+				zoom += e.getWheelRotation();
+				
+				/*
+				if(zoom <= -15) {
+					if(e.getWheelRotation() < 0) {
+						renderer.setCandleWidth(renderer.getCandleWidth()+1);
+					}
+					else renderer.setCandleWidth(renderer.getCandleWidth()-1);
+				}
+				*/
+				
+				System.out.println("ZOOM_VAL: "+zoom);
 			}
 		});
 
 		panel.getChart().removeLegend();
 
-		JFrame fr = new JFrame();
-
-		fr.setBounds(10, 10, 1300, 500);
-
 		panel.setMaximumDrawWidth(fr.getWidth());
 		panel.setMaximumDrawHeight(fr.getHeight());
+
+		//CrosshairOverlay chov = new CrosshairOverlay();
+		
+		//CustomOverlay co = new CustomOverlay();
+		
+		//Crosshair chRange;
+		
+		//chov.addRangeCrosshair();
+		//chov.addDomainCrosshair(new Crosshair());
+		
+		//chov.getRangeCrosshairs().get(0).setVisible(true);
+		
+		//panel.addOverlay(chov);
+		//panel.addOverlay(new CustomOverlay());
 
 		fr.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -599,7 +629,7 @@ public class Test3 {
 				panel.setMaximumDrawHeight(fr.getHeight());
 			}
 		});
-		
+
 		fr.add(panel);
 
 		/*
@@ -624,7 +654,7 @@ public class Test3 {
 											.build();
 		socket = client.newWebSocket(
 			new Request.Builder()//.url("wss://api.bitfinex.com/ws/2")
-									.url("wss://stream.binance.com:9443/stream?streams=ethbtc@kline_1h")
+									.url("wss://stream.binance.com:9443/stream?streams="+Test3.PAIR.toLowerCase()+"@kline_"+Test3.INTERVAL)
 									.build(),
 			//new BFWebSocketListener(collection)
 			new BNWebSocketListener(collection)
@@ -650,8 +680,8 @@ class BNWebSocketListener extends WebSocketListener {
 
 		try {
 			System.out.println("START INITIAL FETCH OF CANDLES ....");
-			
-			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol=ETHBTC&interval=1h&limit=1000").build()).execute();
+
+			response = client.newCall(new Request.Builder().url("https://api.binance.com/api/v1/klines?symbol="+Test3.PAIR.toUpperCase()+"&interval="+Test3.INTERVAL+"&limit=1000").build()).execute();
 			if(!response.isSuccessful()) {
 				System.out.println("COULD NOT GET PAIR HISTORY CANDLES");
 				System.exit(1);

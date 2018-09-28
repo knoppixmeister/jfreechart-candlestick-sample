@@ -40,14 +40,12 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
      * @param base  indicates which side of the rectangle is the base of the
      *              bar.
      */
-    @Override
-    public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row, int column, RectangularShape bar, RectangleEdge base) {
-        Paint itemPaint = renderer.getItemPaint(row, column);
+	@Override
+	public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row, int column, RectangularShape bar, RectangleEdge base) {
+    	Paint itemPaint = renderer.getItemPaint(row, column);
         GradientPaintTransformer t = renderer.getGradientPaintTransformer();
-        if(t != null && itemPaint instanceof GradientPaint) {
-            itemPaint = t.transform((GradientPaint) itemPaint, bar);
-        }
-        
+        if(t != null && itemPaint instanceof GradientPaint) itemPaint = t.transform((GradientPaint) itemPaint, bar);
+
         g2.setPaint(itemPaint);
         g2.fill(bar);
 
@@ -88,7 +86,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
     {
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-        Paint itemPaint = renderer.getItemPaint(row, column);
+    	Paint itemPaint = renderer.getItemPaint(row, column);
         if(itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
             if(c.getAlpha() == 0) return;
@@ -97,7 +95,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         RectangularShape shadow = createShadow(bar, renderer.getShadowXOffset(), renderer.getShadowYOffset(), base, pegShadow);
         g2.setPaint(Color.gray);
         g2.fill(shadow);
-    }
+	}
 
     /**
      * Creates a shadow for the bar.
@@ -115,7 +113,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         double x1 = bar.getMaxX();
         double y0 = bar.getMinY();
         double y1 = bar.getMaxY();
-        
+
         if(base == RectangleEdge.TOP) {
             x0 += xOffset;
             x1 += xOffset;
@@ -143,7 +141,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
             y0 += yOffset;
             y1 += yOffset;
         }
-        
+
         return new Rectangle2D.Double(x0, y0, (x1 - x0), (y1 - y0));
     }
 

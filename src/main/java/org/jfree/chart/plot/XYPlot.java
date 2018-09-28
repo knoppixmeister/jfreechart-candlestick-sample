@@ -2176,12 +2176,13 @@ public class XYPlot extends Plot implements
      * @see #addDomainMarker(int, Marker, Layer)
      */
     public void clearDomainMarkers() {
-        if (this.backgroundDomainMarkers != null) {
-            Set<Integer> keys = this.backgroundDomainMarkers.keySet();
-            for (Integer key : keys) {
+        if(backgroundDomainMarkers != null) {
+            Set<Integer> keys = backgroundDomainMarkers.keySet();
+            for(Integer key : keys) {
                 clearDomainMarkers(key);
             }
-            this.backgroundDomainMarkers.clear();
+            
+            backgroundDomainMarkers.clear();
         }
         if (this.foregroundDomainMarkers != null) {
             Set<Integer> keys = this.foregroundDomainMarkers.keySet();

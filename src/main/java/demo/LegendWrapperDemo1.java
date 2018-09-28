@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.block.BlockContainer;
@@ -21,11 +21,11 @@ import org.jfree.chart.block.BorderArrangement;
 import org.jfree.chart.block.LabelBlock;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.ui.HorizontalAlignment;
+import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
 
 /**
@@ -33,7 +33,6 @@ import org.jfree.ui.RefineryUtilities;
  * a {@link LegendTitle}.
  */
 public class LegendWrapperDemo1 extends ApplicationFrame {
-
     /**
      * Default constructor.
      *
@@ -41,6 +40,7 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
      */
     public LegendWrapperDemo1(String title) {
         super(title);
+        
         setContentPane(createDemoPanel());
     }
 
@@ -57,6 +57,7 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
         dataset.setValue("Four", new Double(17.5));
         dataset.setValue("Five", new Double(11.0));
         dataset.setValue("Six", new Double(19.4));
+        
         return dataset;
     }
 
@@ -68,7 +69,6 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
      * @return a chart.
      */
     private static JFreeChart createChart(PieDataset dataset) {
-
         JFreeChart chart = ChartFactory.createPieChart(
             "Legend Wrapper Demo 1",  // chart title
             dataset,             // data
@@ -88,8 +88,7 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
         BlockContainer wrapper = new BlockContainer(new BorderArrangement());
         wrapper.setFrame(new BlockBorder(1.0, 1.0, 1.0, 1.0));
 
-        LabelBlock title = new LabelBlock("Legend Items:",
-                new Font("SansSerif", Font.BOLD, 12));
+        LabelBlock title = new LabelBlock("Legend Items:", new Font("SansSerif", Font.BOLD, 12));
         title.setPadding(5, 5, 5, 5);
         wrapper.add(title, RectangleEdge.TOP);
 
@@ -110,10 +109,9 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
         legend.setHorizontalAlignment(HorizontalAlignment.LEFT);
         chart.addSubtitle(legend);
 
-        ChartUtilities.applyCurrentTheme(chart);
+        //ChartUtils.applyCurrentTheme(chart);
 
         return chart;
-
     }
 
     /**
@@ -123,6 +121,7 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart(createDataset());
+        
         return new ChartPanel(chart);
     }
 
@@ -132,11 +131,9 @@ public class LegendWrapperDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        LegendWrapperDemo1 demo = new LegendWrapperDemo1(
-                "JFreeChart: LegendWrapperDemo1.java");
+        LegendWrapperDemo1 demo = new LegendWrapperDemo1("JFreeChart: LegendWrapperDemo1.java");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }

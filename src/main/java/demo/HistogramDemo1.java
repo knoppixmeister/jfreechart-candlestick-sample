@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -32,6 +33,7 @@ public class HistogramDemo1 extends ApplicationFrame {
         
         JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
+   
         setContentPane(chartPanel);
     }
 
@@ -75,7 +77,7 @@ public class HistogramDemo1 extends ApplicationFrame {
             null,
             null,
             dataset,
-            PlotOrientation.VERTICAL,
+            PlotOrientation.HORIZONTAL,
             false,
             true,
             false
@@ -85,6 +87,9 @@ public class HistogramDemo1 extends ApplicationFrame {
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         //plot.setForegroundAlpha(0.5f);
+        
+        plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+        plot.getDomainAxis().setInverted(false);
         
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -108,6 +113,7 @@ public class HistogramDemo1 extends ApplicationFrame {
         JFreeChart chart = createChart(createDataset());
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
+        panel.setMouseZoomable(true);
         
         return panel;
     }

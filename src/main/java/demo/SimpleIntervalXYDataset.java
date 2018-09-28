@@ -1,10 +1,3 @@
-/* ----------------------------
- * SimpleIntervalXYDataset.java
- * ----------------------------
- * (C) Copyright 2002-2005, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import org.jfree.data.general.DatasetChangeListener;
@@ -14,10 +7,10 @@ import org.jfree.data.xy.IntervalXYDataset;
 /**
  * A quick and dirty sample dataset.
  */
-public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset 
-                                     implements IntervalXYDataset {
+public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset implements IntervalXYDataset {
+	private static final long serialVersionUID = 5314996356341100387L;
 
-    /** The start values. */
+	/** The start values. */
     private Double[] xStart = new Double[3];
     
     /** The end values. */
@@ -30,8 +23,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * Creates a new dataset.
      */
     public SimpleIntervalXYDataset() {
-
-        this.xStart[0] = new Double(0.0);
+    	xStart[0] = new Double(0.0);
         this.xStart[1] = new Double(2.0);
         this.xStart[2] = new Double(3.5);
 
@@ -72,7 +64,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return the number of items within a series.
      */
     public int getItemCount(int series) {
-        return 3;
+        return xStart.length;
     }
 
     /**
@@ -87,7 +79,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return  the x-value for an item within a series.
      */
     public Number getX(int series, int item) {
-        return this.xStart[item];
+        return xStart[item];
     }
 
     /**
@@ -99,7 +91,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return the y-value for an item within a series.
      */
     public Number getY(int series, int item) {
-        return this.yValues[item];
+        return yValues[item];
     }
 
     /**
@@ -111,7 +103,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return The value.
      */
     public Number getStartX(int series, int item) {
-        return this.xStart[item];
+        return xStart[item];
     }
 
     /**
@@ -123,7 +115,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return the end x value.
      */
     public Number getEndX(int series, int item) {
-        return this.xEnd[item];
+        return xEnd[item];
     }
 
     /**
@@ -135,7 +127,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return The value.
      */
     public Number getStartY(int series, int item) {
-        return this.yValues[item];
+        return yValues[item];
     }
 
     /**
@@ -147,7 +139,7 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @return The value.
      */
     public Number getEndY(int series, int item) {
-        return this.yValues[item];
+        return yValues[item];
     }
 
     /**
@@ -156,7 +148,6 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @param listener  the object to register.
      */
     public void addChangeListener(DatasetChangeListener listener) {
-        // ignored
     }
 
     /**
@@ -165,7 +156,5 @@ public class SimpleIntervalXYDataset extends AbstractIntervalXYDataset
      * @param listener  the object to deregister.
      */
     public void removeChangeListener(DatasetChangeListener listener) {
-        // ignored
     }
-
 }

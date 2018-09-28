@@ -326,6 +326,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         RectangleAnchor old = labelAnchor;
         
         labelAnchor = anchor;
+        
         pcs.firePropertyChange("labelAnchor", old, anchor);
     }
 
@@ -456,7 +457,9 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
      */
     public void setLabelBackgroundPaint(Paint paint) {
         Paint old = labelBackgroundPaint;
+        
         labelBackgroundPaint = paint;
+        
         pcs.firePropertyChange("labelBackgroundPaint", old, paint);
     }
 
@@ -513,6 +516,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
         
         Paint old = labelOutlinePaint;
         labelOutlinePaint = paint;
+        
         pcs.firePropertyChange("labelOutlinePaint", old, paint);
     }
 
@@ -541,6 +545,7 @@ public class Crosshair implements Cloneable, PublicCloneable, Serializable {
 
     	Stroke old = labelOutlineStroke;
     	labelOutlineStroke = stroke;
+    	
     	pcs.firePropertyChange("labelOutlineStroke", old, stroke);
     }
 

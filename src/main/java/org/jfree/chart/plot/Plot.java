@@ -951,17 +951,17 @@ public abstract class Plot implements AxisChangeListener, DatasetChangeListener,
 
     	if(backgroundPaint == null) return;
 
-    	Paint p = this.backgroundPaint;
+    	Paint p = backgroundPaint;
     	if(p instanceof GradientPaint) {
-            GradientPaint gp = (GradientPaint) p;
-            if(orientation == PlotOrientation.VERTICAL) {
-                p = new GradientPaint((float) area.getCenterX(), (float) area.getMaxY(), gp.getColor1(), (float) area.getCenterX(), (float) area.getMinY(), gp.getColor2());
+    		GradientPaint gp = (GradientPaint) p;
+    		if(orientation == PlotOrientation.VERTICAL) {
+    			p = new GradientPaint((float) area.getCenterX(), (float) area.getMaxY(), gp.getColor1(), (float) area.getCenterX(), (float) area.getMinY(), gp.getColor2());
             }
             else if(orientation == PlotOrientation.HORIZONTAL) {
                 p = new GradientPaint((float) area.getMinX(), (float) area.getCenterY(), gp.getColor1(), (float) area.getMaxX(), (float) area.getCenterY(), gp.getColor2());
             }
     	}
-
+    	
     	Composite originalComposite = g2.getComposite();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, backgroundAlpha));
         g2.setPaint(p);

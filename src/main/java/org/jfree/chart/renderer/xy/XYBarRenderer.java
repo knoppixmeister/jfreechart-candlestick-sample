@@ -235,17 +235,17 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
     public XYBarRenderer(double margin) {
         super();
         
-        this.margin 					= margin;
-        this.base 						= 0.0;
-        this.useYInterval 				= false;
-        this.gradientPaintTransformer 	= new StandardGradientPaintTransformer();
-        this.drawBarOutline 			= false;
-        this.legendBar 					= new Rectangle2D.Double(-3.0, -5.0, 6.0, 10.0);
-        this.barPainter 				= getDefaultBarPainter();
-        this.shadowsVisible 			= getDefaultShadowsVisible();
-        this.shadowXOffset 				= 4.0;
-        this.shadowYOffset 				= 4.0;
-        this.barAlignmentFactor 		= -1.0;
+        this.margin 				= margin;
+        base 						= 0.0;
+        useYInterval 				= false;
+        gradientPaintTransformer 	= new StandardGradientPaintTransformer();
+        drawBarOutline 				= false;
+        legendBar 					= new Rectangle2D.Double(-3.0, -5.0, 6.0, 10.0);
+        barPainter 					= getDefaultBarPainter();
+        shadowsVisible 				= getDefaultShadowsVisible();
+        shadowXOffset 				= 4.0;
+        shadowYOffset 				= 4.0;
+        barAlignmentFactor 			= -1.0;
     }
 
     /**
@@ -800,27 +800,17 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
         RectangleEdge barBase;
         
         if(orientation.isHorizontal()) {
-            if (positive && inverted || !positive && !inverted) {
-                barBase = RectangleEdge.RIGHT;
-            } else {
-                barBase = RectangleEdge.LEFT;
-            }
+            if(positive && inverted || !positive && !inverted) barBase = RectangleEdge.RIGHT;
+            else barBase = RectangleEdge.LEFT;
         }
         else {
-            if (positive && !inverted || !positive && inverted) {
-                barBase = RectangleEdge.BOTTOM;
-            } else {
-                barBase = RectangleEdge.TOP;
-            }
+            if(positive && !inverted || !positive && inverted) barBase = RectangleEdge.BOTTOM;
+            else barBase = RectangleEdge.TOP;
         }
+
+        if(state.getElementHinting()) beginElementGroup(g2, dataset.getSeriesKey(series), item);
         
-        if(state.getElementHinting()) {
-            beginElementGroup(g2, dataset.getSeriesKey(series), item);
-        }
-        
-        if(getShadowsVisible()) {
-        	barPainter.paintBarShadow(g2, this, series, item, bar, barBase, !useYInterval);
-        }
+        if(getShadowsVisible()) barPainter.paintBarShadow(g2, this, series, item, bar, barBase, !useYInterval);
         
         barPainter.paintBar(g2, this, series, item, bar, barBase);
         if(state.getElementHinting()) endElementGroup(g2);
@@ -839,9 +829,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer implements XYItemRende
         updateCrosshairValues(crosshairState, x1, y1, datasetIndex, transX1, transY1, plot.getOrientation());
 
         EntityCollection entities = state.getEntityCollection();
-        if(entities != null) {
-            addEntity(entities, bar, dataset, series, item, 0.0, 0.0);
-        }
+        if(entities != null) addEntity(entities, bar, dataset, series, item, 0.0, 0.0);
     }
 
     /**
