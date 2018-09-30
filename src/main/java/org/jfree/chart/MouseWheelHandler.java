@@ -13,7 +13,9 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
 
 	private ChartPanel chartPanel;
 
-	double zoomFactor = 0;
+	private double zoomFactor = 0;
+
+	private int currentZoomValue = 0;
 
     /**
      * Creates a new instance for the specified chart panel.
@@ -55,7 +57,15 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {    
     	System.out.println("MOUSE_WHEEL_ROLLED");
-    	
+
+    	/*
+    	currentZoomValue += e.getWheelRotation();
+    	if(currentZoomValue < -32) {
+    		currentZoomValue = -32;
+    		return;
+    	}
+    	*/
+
     	JFreeChart chart = chartPanel.getChart();
     	if(chart == null) return;
 
@@ -65,6 +75,11 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
             Zoomable zoomable = (Zoomable)plot;
             handleZoomable(zoomable, e);
     	}
+    	else {
+    		System.err.println("PLEASE USE PIE PLOT");
+    		System.exit(0);
+    	}
+
     	/*
     	else if(plot != null &&	plot instanceof PiePlot) {
             PiePlot pp = (PiePlot) plot;
@@ -88,7 +103,7 @@ class MouseWheelHandler implements MouseWheelListener, Serializable {
         if(!plotRenderingInfo.getDataArea().contains(p)) return;
 
         Plot plot = (Plot)zoomable;
-        
+
         // do not notify while zooming each axis
         boolean notifyState = plot.isNotify();
         plot.setNotify(false);

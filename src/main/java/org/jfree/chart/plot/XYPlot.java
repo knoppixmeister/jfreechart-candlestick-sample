@@ -2628,12 +2628,12 @@ public class XYPlot extends Plot implements
      * @since 1.0.10
      */
     public void addAnnotation(XYAnnotation annotation, boolean notify) {
-        Args.nullNotPermitted(annotation, "annotation");
-        
-        annotations.add(annotation);
-        annotation.addChangeListener(this);
-        
-        if(notify) fireChangeEvent();
+    	Args.nullNotPermitted(annotation, "annotation");
+
+    	annotations.add(annotation);
+    	annotation.addChangeListener(this);
+
+    	if(notify) fireChangeEvent();
     }
 
     /**

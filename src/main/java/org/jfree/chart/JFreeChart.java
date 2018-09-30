@@ -403,11 +403,11 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      *
      * @see #getBorderStroke()
      */
-    public void setBorderStroke(Stroke stroke) {
+	public void setBorderStroke(Stroke stroke) {
     	borderStroke = stroke;
-    	
-        fireChartChanged();
-    }
+
+    	fireChartChanged();
+	}
 
     /**
      * Returns the paint used to draw the chart border (if visible).
@@ -658,8 +658,8 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      */
     public void addSubtitle(int index, Title subtitle) {
     	if(index < 0 || index > getSubtitleCount()) {
-            throw new IllegalArgumentException("The 'index' argument is out of range.");
-        }
+    		throw new IllegalArgumentException("The 'index' argument is out of range.");
+    	}
         
         Args.nullNotPermitted(subtitle, "subtitle");
         
@@ -969,9 +969,9 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
      * @see #isNotify()
      */
     public void setNotify(boolean notify) {
-        this.notify = notify;
-        // if the flag is being set to true, there may be queued up changes...
-        if(notify) notifyListeners(new ChartChangeEvent(this));
+    	this.notify = notify;
+        
+    	if(notify) notifyListeners(new ChartChangeEvent(this));
 	}
 
     /**
@@ -1017,9 +1017,9 @@ public class JFreeChart implements Drawable, TitleChangeListener, PlotChangeList
 
     	if(elementHinting) {
             HashMap<String, String> m = new HashMap<String, String>();
-            if(this.id != null) m.put("id", this.id);
+            if(id != null) m.put("id", id);
 
-            m.put("ref", "JFREECHART_TOP_LEVEL");            
+            m.put("ref", "JFREECHART_TOP_LEVEL");
             g2.setRenderingHint(ChartHints.KEY_BEGIN_ELEMENT, m);            
     	}
 

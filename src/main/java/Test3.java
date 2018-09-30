@@ -1,8 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -25,10 +32,12 @@ import org.jfree.chart.*;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.axis.*;
+import org.jfree.chart.labels.CrosshairLabelGenerator;
 import org.jfree.chart.panel.CrosshairOverlay;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.chart.ui.*;
+import org.jfree.chart.util.Args;
 import org.jfree.data.general.SeriesChangeEvent;
 import org.jfree.data.general.SeriesChangeListener;
 import org.jfree.data.statistics.HistogramDataset;
@@ -48,6 +57,30 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
+class DateDomainCrossharLabelGenerator3 implements CrosshairLabelGenerator {
+	public String labelTextFormat;
+
+	public DateDomainCrossharLabelGenerator3() {
+		this(" {0} ");
+	}
+
+	public DateDomainCrossharLabelGenerator3(String labelTextFormat) {
+		this.labelTextFormat = labelTextFormat;
+	}
+
+	@Override
+	public String generateLabel(Crosshair crosshair) {
+		Args.nullNotPermitted(crosshair, "crosshair");
+
+		if(crosshair.getValue() == 0) return "";
+		
+		return MessageFormat.format(
+			labelTextFormat,
+			DateTimeFormat.forPattern("dd-MM-YYYY HH:mm").print(new DateTime(Long.parseLong(((long)crosshair.getValue())+"")))
+		);
+	}
+}
+
 public class Test3 {
 	public static final String PAIR 	= "ETHBTC";
 	public static final String INTERVAL = "1h";
@@ -63,13 +96,14 @@ public class Test3 {
 	public static double zoom = 0;
 	
 	public static DateAxis dateAxis;
+
+	private static boolean chOverlayVisible = false;
 	
 	public static void main(String[] args) {
 		JFrame fr = new JFrame();
 		fr.setBounds(10, 10, 1300, 500);
 
 		socket = null;
-
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -88,27 +122,21 @@ public class Test3 {
 			e1.printStackTrace();
 		}
 
+	//------------------------------------------------------------------------------------------------------------------
 
 		CrosshairOverlay chOverlay = new CrosshairOverlay();
 
-		Crosshair crosshair1 = new Crosshair(0);
-		crosshair1.setPaint(Color.BLACK);
+		Crosshair domainCrosshair = new Crosshair(0);
+		domainCrosshair.setPaint(ChartColor.BLACK);
 
-		crosshair1.setLabelVisible(true);
-		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-		crosshair1.setLabelBackgroundPaint(ChartColor.DARK_GRAY);
+		domainCrosshair.setLabelVisible(true);
+		domainCrosshair.setLabelPaint(ChartColor.WHITE);
+		domainCrosshair.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+		domainCrosshair.setLabelBackgroundPaint(ChartColor.DARK_GRAY);
+		
+		domainCrosshair.setLabelGenerator(new DateDomainCrossharLabelGenerator3());
 
-		/*
-		Crosshair crosshair2 = new Crosshair(0);
-		crosshair1.setPaint(Color.BLACK);
-
-		crosshair1.setLabelVisible(true);
-		crosshair1.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-		crosshair1.setLabelBackgroundPaint(Color.CYAN);
-		*/
-
-		chOverlay.addDomainCrosshair(crosshair1);
-		//chOverlay.addRangeCrosshair(crosshair2);
+		chOverlay.addDomainCrosshair(domainCrosshair);
 
 	//--------------------------------------------------------------------------------------------
 
@@ -182,7 +210,7 @@ public class Test3 {
         priceAxis.setNumberFormatOverride(nf);
 
         CandlestickRenderer renderer = new CandlestickRenderer(
-			CandlestickRenderer.WIDTHMETHOD_INTERVALDATA,	//candleWidth,
+			-1,	//candleWidth,
 			true,											//drawVolume,
 			null											//toolTipGenerator
 		);
@@ -218,15 +246,14 @@ public class Test3 {
             values[i] = generator.nextGaussian() + 5;
         }
         dataset.addSeries("H1", values, 100, 2.0, 8.0);
-		
+
         XYBarRenderer xyRenderer = new XYBarRenderer();
+        xyRenderer.setDefaultPaint(ChartColor.RED);
         xyRenderer.setBarPainter(new StandardXYBarPainter());
         xyRenderer.setShadowVisible(false);
-        
+
         //plot1.setDataset(1, dataset);
         //plot1.setRenderer(1, xyRenderer);
-		
-		
 
         series.addChangeListener(new SeriesChangeListener() {
 			@Override
@@ -244,10 +271,12 @@ public class Test3 {
 				TimeSeries ts5 = SMA.run(series, 5);
 				TimeSeries ts34 = SMA.run(series, 34);
 				
+				/*
 				System.out.println("");
 				System.out.println("TS_5_VAL: "+ts5.getDataItem(ts5.getItemCount()-1).getValue()		);
 				System.out.println("TS_34_VAL: "+ts34.getDataItem(ts34.getItemCount()-1).getValue()		);
 				System.out.println("");
+				*/
 				
 				plot1.setDataset(1, new TimeSeriesCollection(ts5));
 				plot1.setRenderer(1, sma5Renderer);
@@ -257,11 +286,9 @@ public class Test3 {
 				StandardXYItemRenderer st34Renderer = new StandardXYItemRenderer();
 				st34Renderer.setSeriesPaint(0, new Color(0, 0, 255));
 				st34Renderer.setSeriesStroke(0, new BasicStroke(3));
-				
+
 				plot1.setDataset(2, new TimeSeriesCollection(ts34));
 				plot1.setRenderer(2, st34Renderer);
-				
-				System.out.println("JJJJJJJJJJJJJJJJJJJJJJJJ");
 			}
 		});
         
@@ -277,9 +304,9 @@ public class Test3 {
 			new StandardXYItemRenderer()
 		);
 		//plot2.setBackgroundPaint(ChartColor.DARK_RED);
-		plot2.setRangeCrosshairVisible(true);
-		plot2.setRangeCrosshairLockedOnData(false);
-		plot2.setDomainCrosshairVisible(true);
+		//plot2.setRangeCrosshairVisible(true);
+		//plot2.setRangeCrosshairLockedOnData(false);
+		//plot2.setDomainCrosshairVisible(true);
 		//plot2.setRangeZeroBaselineVisible(true);
 		//plot2.setRangeGridlinePaint(new Color(142, 21, 153));
 
@@ -352,9 +379,10 @@ public class Test3 {
 	//----------------------------------------------------------------------------------------------------------------------
 
 		XYBarRenderer hstgr = new XYBarRenderer();
+		hstgr.setSeriesPaint(0, ChartColor.RED);
 		hstgr.setBarPainter(new StandardXYBarPainter());
 		hstgr.setShadowVisible(false);
-		
+
 		XYPlot plot4 = new XYPlot(
 			null,				//dataset,
 			null,				//domainAxis,
@@ -378,6 +406,29 @@ public class Test3 {
 		});
 
 	//--------------------------------------------------------------------------------------------------------------------------
+
+		XYPlot plot5 = new XYPlot(
+			null,
+			null,
+			new NumberAxis(),
+			new StandardXYItemRenderer()
+		);
+		plot5.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+		plot5.setRangePannable(true);
+
+		series.addChangeListener(new SeriesChangeListener() {
+			@Override
+			public void seriesChanged(SeriesChangeEvent event) {
+				TimeSeries ts = ATR.run(series, 14);
+
+				plot5.setDataset(new TimeSeriesCollection(ts));
+				//plot5.setRenderer();
+
+				plot5.getRenderer(0).setSeriesPaint(0, new Color(255, 106, 0), true);
+			}
+		});
+
+	//--------------------------------------------------------------------------------------------------------------------------
 		
 		CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot(dateAxis);
 		combinedPlot.setGap(-9);
@@ -393,16 +444,19 @@ public class Test3 {
 		combinedPlot.add(plot2, 1);
 		combinedPlot.add(plot3, 1);
 		combinedPlot.add(plot4, 1);
+		combinedPlot.add(plot5, 1);
 
 		System.out.println(	"RA: "+combinedPlot.getRangeAxis()	);
 
 		JFreeChart chart = new JFreeChart(combinedPlot);
+		chart.setAntiAlias(true);
 		chart.setPadding(new RectangleInsets(-7, -15, 0, -15));
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setDoubleBuffered(true);
 
 		panel.addOverlay(chOverlay);
+		Test3.chOverlayVisible = true;
 
 		panel.setMouseWheelEnabled(true);
 		panel.setMouseZoomable(true);
@@ -413,15 +467,54 @@ public class Test3 {
 		b.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("MMMM");
+				System.out.println("TRY TO REMOVE OVERLAY");
+				
+				if(Test3.chOverlayVisible) {
+					System.out.println("AAAA");
+					
+					panel.removeOverlay(chOverlay);
+					Test3.chOverlayVisible = false;
+				}
+				else {
+					panel.addOverlay(chOverlay);
+					Test3.chOverlayVisible = true;
+				}
 			}
 		});
 		panel.add(b);
-		*/
+		 */
 
-	    TriangleDrawer td = new TriangleDrawer(null, null, null);
-	    XYAnnotation tr = new XYDrawableAnnotation(new DateTime(2018, 9, 28, 16, 00).getMillis(), 0.0336, 10, 10, td);
-	    plot1.addAnnotation(tr);
+		try {
+			XYAnnotation tr;
+
+			if(!new File("file.ser").exists()) {
+				TriangleDrawer td = new TriangleDrawer(null, null, null);
+				tr = new XYDrawableAnnotation(new DateTime(2018, 9, 28, 16, 00).getMillis(), 0.0336, 10, 10, td);
+				plot1.addAnnotation(tr);
+
+				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file.ser"));
+
+				oos.writeObject(tr);
+				oos.flush();
+				oos.close();
+			}
+			else {
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.ser"));
+
+				tr = (XYAnnotation) ois.readObject();
+				plot1.addAnnotation(tr);
+
+				ois.close();
+			}
+		}
+		catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		catch(Exception e1) {
+			e1.printStackTrace();
+		}
+
+		//panel.getChartRenderingInfo().getEntityCollection().get
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
@@ -602,6 +695,8 @@ public class Test3 {
 					*/
 					
 					//combinedPlot.setDomainCrosshairValue(x);
+					
+					domainCrosshair.setValue(x);
 				}
 				//else System.out.println("NO DATA AREA");
 			}
@@ -633,6 +728,17 @@ public class Test3 {
 			}
 		});
 
+		panel.addChartMouseListener(new ChartMouseListener() {
+			@Override
+			public void chartMouseMoved(ChartMouseEvent event) {
+				//System.out.println("ENTITY: "+event.getEntity());
+			}
+
+			@Override
+			public void chartMouseClicked(ChartMouseEvent event) {				
+			}
+		});
+
 		panel.getChart().removeLegend();
 
 		panel.setMaximumDrawWidth(fr.getWidth());
@@ -649,7 +755,7 @@ public class Test3 {
 		
 		//chov.getRangeCrosshairs().get(0).setVisible(true);
 		
-		//panel.addOverlay(chov);
+		panel.addOverlay(chOverlay);
 		//panel.addOverlay(new CustomOverlay());
 
 		fr.addComponentListener(new ComponentAdapter() {
@@ -766,7 +872,7 @@ class BNWebSocketListener extends WebSocketListener {
 
 	@Override
 	public void onMessage(WebSocket socket, String text) {
-		System.out.println("BN_ON_MESSAGE. "+text);
+		//System.out.println("BN_ON_MESSAGE. "+text);
 
 		if(!text.contains("kline") || collection.getSeriesCount() == 0) return;
 		
@@ -777,14 +883,14 @@ class BNWebSocketListener extends WebSocketListener {
 			long lastHistoryCandleTS = ((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getPeriod().getFirstMillisecond();
 
 			if(lastHistoryCandleTS == candleResult.data.k.t) {
-				System.out.println("UPD_CANDLE_PRICE");
+				//System.out.println("UPD_CANDLE_PRICE");
 
-				System.out.println(	"OLD_CL_VAL: "+	String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
+				//System.out.println(	"OLD_CL_VAL: "+	String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 
 				collection.getSeries(0).updatePrice(new BigDecimal(candleResult.data.k.c).doubleValue());
 				collection.getSeries(0).updataVolume(new BigDecimal(candleResult.data.k.v).doubleValue());
 
-				System.out.println(	"NEW_CL_VAL: "+ String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
+				//System.out.println(	"NEW_CL_VAL: "+ String.format("%f", new BigDecimal(((OHLCItem) collection.getSeries(0).getDataItem(collection.getSeries(0).getItemCount()-1)).getCloseValue()).doubleValue())	);
 			}
 			else if(candleResult.data.k.t  > lastHistoryCandleTS) {
 				System.out.println("ADD_NEW_CANDLE");
@@ -798,17 +904,11 @@ class BNWebSocketListener extends WebSocketListener {
 					Double.parseDouble(candleResult.data.k.v)									//volume
 				));
 			}
-			else {
-				System.out.println("");
-				System.out.println("NO_TODO");
-
-				//System.exit(0);
-			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		System.out.println("---------------------------------------------------------------------------------");
+		//System.out.println("---------------------------------------------------------------------------------");
 	}
 }

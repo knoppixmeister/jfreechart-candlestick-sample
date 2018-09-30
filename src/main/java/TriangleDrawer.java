@@ -7,9 +7,13 @@ import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
+
 import org.jfree.chart.ui.Drawable;
 
-public class TriangleDrawer implements Drawable {
+public class TriangleDrawer implements Drawable, Serializable {
+	private static final long serialVersionUID = 7366018824491608547L;
+	
 	private Paint 	outlinePaint;
     private Stroke 	outlineStroke;
     private Paint 	fillPaint;
@@ -22,7 +26,7 @@ public class TriangleDrawer implements Drawable {
 
 	@Override
 	public void draw(Graphics2D g2, Rectangle2D area) {
-		System.out.println("TRD");
+		//System.out.println("TRD");
 
 		//Ellipse2D ellipse = new Ellipse2D.Double(area.getX(), area.getY(), area.getWidth(), area.getHeight());
 

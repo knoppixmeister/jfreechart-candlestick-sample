@@ -246,6 +246,12 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
             fireChangeEvent();
         }
     }
+   
+    public void removeSubplot(int idx) {
+    	subplots.remove(idx);
+    	
+    	fireChangeEvent();
+    }
 
     /**
      * Returns the list of subplots.  The returned list may be empty, but is
@@ -369,12 +375,14 @@ public class CombinedDomainXYPlot extends XYPlot implements PlotChangeListener {
 
         // draw all the subplots
         for(int i = 0; i < subplots.size(); i++) {
-        	XYPlot plot = (XYPlot)subplots.get(i);
+        	XYPlot plot = (XYPlot) subplots.get(i);
+        	
         	PlotRenderingInfo subplotInfo = null;
             if(info != null) {
                 subplotInfo = new PlotRenderingInfo(info.getOwner());
                 info.addSubplotInfo(subplotInfo);
             }
+            
             plot.draw(g2, subplotAreas[i], anchor, parentState, subplotInfo);
         }
 

@@ -1,56 +1,10 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * ---------------
- * PlotEntity.java
- * ---------------
- * (C) Copyright 2009-2016, by Object Refinery Limited and Contributors.
- *
- * Original Author:  Peter Kolb;
- * Contributor(s):   ;
- *
- * Changes:
- * --------
- * 15-Feb-2009 : Version 1 (PK);
- * 02-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.entity;
 
 import java.awt.Shape;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
+import java.io.*;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.HashUtils;
-import org.jfree.chart.util.ObjectUtils;
-import org.jfree.chart.util.Args;
-import org.jfree.chart.util.SerialUtils;
+import org.jfree.chart.util.*;
 
 /**
  * A class that captures information about a plot.
@@ -81,10 +35,9 @@ public class PlotEntity extends ChartEntity {
      * @param plot  the plot ({@code null} not permitted).
      * @param toolTipText  the tool tip text ({@code null} permitted).
      */
-    public PlotEntity(Shape area, Plot plot, String toolTipText) {
-        // defer argument checks...
-        this(area, plot, toolTipText, null);
-    }
+	public PlotEntity(Shape area, Plot plot, String toolTipText) {
+		this(area, plot, toolTipText, null);
+	}
 
     /**
      * Creates a new plot entity.
@@ -109,7 +62,7 @@ public class PlotEntity extends ChartEntity {
      * @return The plot (never {@code null}).
      */
     public Plot getPlot() {
-        return this.plot;
+        return plot;
     }
 
     /**
@@ -123,9 +76,22 @@ public class PlotEntity extends ChartEntity {
         StringBuilder sb = new StringBuilder("PlotEntity: ");
         sb.append("tooltip = ");
         sb.append(getToolTipText());
+        
         return sb.toString();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests the entity for equality with an arbitrary object.
      *
@@ -154,6 +120,7 @@ public class PlotEntity extends ChartEntity {
         if (!(this.plot.equals(that.plot))) {
             return false;
         }
+        
         return true;
     }
 
@@ -165,8 +132,10 @@ public class PlotEntity extends ChartEntity {
     @Override
     public int hashCode() {
         int result = 39;
+        
         result = HashUtils.hashCode(result, getToolTipText());
         result = HashUtils.hashCode(result, getURLText());
+        
         return result;
     }
 
@@ -178,10 +147,10 @@ public class PlotEntity extends ChartEntity {
      * @throws CloneNotSupportedException if there is a problem cloning the
      *         entity.
      */
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+    	return super.clone();
+	}
 
     /**
      * Provides serialization support.
@@ -190,10 +159,10 @@ public class PlotEntity extends ChartEntity {
      *
      * @throws IOException  if there is an I/O error.
      */
-    private void writeObject(ObjectOutputStream stream) throws IOException {
-        stream.defaultWriteObject();
-        SerialUtils.writeShape(getArea(), stream);
-     }
+	private void writeObject(ObjectOutputStream stream) throws IOException {
+		stream.defaultWriteObject();
+		SerialUtils.writeShape(getArea(), stream);
+	}
 
     /**
      * Provides serialization support.
@@ -203,10 +172,8 @@ public class PlotEntity extends ChartEntity {
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		stream.defaultReadObject();
         setArea(SerialUtils.readShape(stream));
-    }
-
+	}
 }

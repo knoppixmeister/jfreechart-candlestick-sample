@@ -657,10 +657,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      *
      * @since 1.0.6
      */
-    public Paint lookupSeriesPaint(int series) {
-        Paint seriesPaint = getSeriesPaint(series);
-        
-        if(seriesPaint == null && autoPopulateSeriesPaint) {
+	public Paint lookupSeriesPaint(int series) {
+		Paint seriesPaint = getSeriesPaint(series);
+
+    	if(seriesPaint == null && autoPopulateSeriesPaint) {
             DrawingSupplier supplier = getDrawingSupplier();
             if(supplier != null) {
                 seriesPaint = supplier.getNextPaint();
@@ -710,6 +710,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setSeriesPaint(int series, Paint paint, boolean notify) {
     	paintList.setPaint(series, paint);
+    	
         if(notify) fireChangeEvent();
     }
 
@@ -723,6 +724,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void clearSeriesPaints(boolean notify) {
     	paintList.clear();
+    	
     	if(notify) fireChangeEvent();
     }
 
@@ -760,7 +762,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultPaint()
      */
     public void setDefaultPaint(Paint paint, boolean notify) {
-        this.defaultPaint = paint;
+    	defaultPaint = paint;
+        
         if(notify) fireChangeEvent();
     }
 
@@ -820,14 +823,15 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Paint lookupSeriesFillPaint(int series) {
         Paint seriesFillPaint = getSeriesFillPaint(series);
+        
         if(seriesFillPaint == null && autoPopulateSeriesFillPaint) {
             DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
+            if(supplier != null) {
                 seriesFillPaint = supplier.getNextFillPaint();
                 setSeriesFillPaint(series, seriesFillPaint, false);
             }
         }
-        if(seriesFillPaint == null) seriesFillPaint = this.defaultFillPaint;
+        if(seriesFillPaint == null) seriesFillPaint = defaultFillPaint;
 
         return seriesFillPaint;
     }
@@ -870,6 +874,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setSeriesFillPaint(int series, Paint paint, boolean notify) {
     	fillPaintList.setPaint(series, paint);
+    	
         if(notify) fireChangeEvent();
     }
 
@@ -908,10 +913,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultFillPaint(Paint paint, boolean notify) {
         Args.nullNotPermitted(paint, "paint");
-        this.defaultFillPaint = paint;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        defaultFillPaint = paint;
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -926,7 +931,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesFillPaint(boolean)
      */
     public boolean getAutoPopulateSeriesFillPaint() {
-        return this.autoPopulateSeriesFillPaint;
+        return autoPopulateSeriesFillPaint;
     }
 
     /**
@@ -941,7 +946,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesFillPaint()
      */
     public void setAutoPopulateSeriesFillPaint(boolean auto) {
-        this.autoPopulateSeriesFillPaint = auto;
+    	autoPopulateSeriesFillPaint = auto;
     }
 
     // OUTLINE PAINT //////////////////////////////////////////////////////////
@@ -974,9 +979,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Paint lookupSeriesOutlinePaint(int series) {
         Paint seriesOutlinePaint = getSeriesOutlinePaint(series);
-        if (seriesOutlinePaint == null && this.autoPopulateSeriesOutlinePaint) {
+        
+        if(seriesOutlinePaint == null && autoPopulateSeriesOutlinePaint) {
             DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
+            if(supplier != null) {
                 seriesOutlinePaint = supplier.getNextOutlinePaint();
                 setSeriesOutlinePaint(series, seriesOutlinePaint, false);
             }
@@ -1023,7 +1029,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesOutlinePaint(int)
      */
     public void setSeriesOutlinePaint(int series, Paint paint, boolean notify) {
-        this.outlinePaintList.setPaint(series, paint);
+    	outlinePaintList.setPaint(series, paint);
+        
         if(notify) fireChangeEvent();
     }
 
@@ -1035,7 +1042,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultOutlinePaint(Paint)
      */
     public Paint getDefaultOutlinePaint() {
-        return this.defaultOutlinePaint;
+        return defaultOutlinePaint;
     }
 
     /**
@@ -1062,10 +1069,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultOutlinePaint(Paint paint, boolean notify) {
         Args.nullNotPermitted(paint, "paint");
+        
         this.defaultOutlinePaint = paint;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1080,7 +1087,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesOutlinePaint(boolean)
      */
     public boolean getAutoPopulateSeriesOutlinePaint() {
-        return this.autoPopulateSeriesOutlinePaint;
+        return autoPopulateSeriesOutlinePaint;
     }
 
     /**
@@ -1095,7 +1102,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesOutlinePaint()
      */
     public void setAutoPopulateSeriesOutlinePaint(boolean auto) {
-        this.autoPopulateSeriesOutlinePaint = auto;
+    	autoPopulateSeriesOutlinePaint = auto;
     }
 
     // STROKE
@@ -1150,7 +1157,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesStroke(int, Stroke)
      */
     public Stroke getSeriesStroke(int series) {
-        return this.strokeList.getStroke(series);
+        return strokeList.getStroke(series);
     }
 
     /**
@@ -1177,10 +1184,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesStroke(int)
      */
     public void setSeriesStroke(int series, Stroke stroke, boolean notify) {
-        this.strokeList.setStroke(series, stroke);
-        if (notify) {
-            fireChangeEvent();
-        }
+    	strokeList.setStroke(series, stroke);
+    	
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1192,10 +1198,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void clearSeriesStrokes(boolean notify) {
-        this.strokeList.clear();
-        if (notify) {
-            fireChangeEvent();
-        }
+    	strokeList.clear();
+    	
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1206,7 +1211,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultStroke(Stroke)
      */
     public Stroke getDefaultStroke() {
-        return this.defaultStroke;
+        return defaultStroke;
     }
 
     /**
@@ -1233,10 +1238,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultStroke(Stroke stroke, boolean notify) {
         Args.nullNotPermitted(stroke, "stroke");
-        this.defaultStroke = stroke;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        defaultStroke = stroke;
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1250,7 +1255,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesStroke(boolean)
      */
     public boolean getAutoPopulateSeriesStroke() {
-        return this.autoPopulateSeriesStroke;
+        return autoPopulateSeriesStroke;
     }
 
     /**
@@ -1264,7 +1269,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesStroke()
      */
     public void setAutoPopulateSeriesStroke(boolean auto) {
-        this.autoPopulateSeriesStroke = auto;
+    	autoPopulateSeriesStroke = auto;
     }
 
     // OUTLINE STROKE
@@ -1294,20 +1299,19 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.6
      */
     public Stroke lookupSeriesOutlineStroke(int series) {
-
         Stroke result = getSeriesOutlineStroke(series);
-        if (result == null && this.autoPopulateSeriesOutlineStroke) {
+        
+        if(result == null && autoPopulateSeriesOutlineStroke) {
             DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
+            if(supplier != null) {
                 result = supplier.getNextOutlineStroke();
                 setSeriesOutlineStroke(series, result, false);
             }
         }
-        if (result == null) {
-            result = this.defaultOutlineStroke;
-        }
+        
+        if(result == null) result = defaultOutlineStroke;
+        
         return result;
-
     }
 
     /**
@@ -1320,7 +1324,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesOutlineStroke(int, Stroke)
      */
     public Stroke getSeriesOutlineStroke(int series) {
-        return this.outlineStrokeList.getStroke(series);
+        return outlineStrokeList.getStroke(series);
     }
 
     /**
@@ -1346,12 +1350,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      *
      * @see #getSeriesOutlineStroke(int)
      */
-    public void setSeriesOutlineStroke(int series, Stroke stroke,
-                                       boolean notify) {
-        this.outlineStrokeList.setStroke(series, stroke);
-        if (notify) {
-            fireChangeEvent();
-        }
+    public void setSeriesOutlineStroke(int series, Stroke stroke, boolean notify) {
+    	outlineStrokeList.setStroke(series, stroke);
+    	
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1362,7 +1364,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultOutlineStroke(Stroke)
      */
     public Stroke getDefaultOutlineStroke() {
-        return this.defaultOutlineStroke;
+        return defaultOutlineStroke;
     }
 
     /**
@@ -1389,10 +1391,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultOutlineStroke(Stroke stroke, boolean notify) {
         Args.nullNotPermitted(stroke, "stroke");
-        this.defaultOutlineStroke = stroke;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        defaultOutlineStroke = stroke;
+        
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1407,7 +1409,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesOutlineStroke(boolean)
      */
     public boolean getAutoPopulateSeriesOutlineStroke() {
-        return this.autoPopulateSeriesOutlineStroke;
+        return autoPopulateSeriesOutlineStroke;
     }
 
     /**
@@ -1422,7 +1424,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesOutlineStroke()
      */
     public void setAutoPopulateSeriesOutlineStroke(boolean auto) {
-        this.autoPopulateSeriesOutlineStroke = auto;
+    	autoPopulateSeriesOutlineStroke = auto;
     }
 
     // SHAPE
@@ -1453,20 +1455,19 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.6
      */
     public Shape lookupSeriesShape(int series) {
-
         Shape result = getSeriesShape(series);
-        if (result == null && this.autoPopulateSeriesShape) {
+        
+        if(result == null && autoPopulateSeriesShape) {
             DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
+            if(supplier != null) {
                 result = supplier.getNextShape();
                 setSeriesShape(series, result, false);
             }
         }
-        if (result == null) {
-            result = this.defaultShape;
-        }
+        
+        if(result == null) result = this.defaultShape;
+        
         return result;
-
     }
 
     /**
@@ -1506,10 +1507,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesShape(int)
      */
     public void setSeriesShape(int series, Shape shape, boolean notify) {
-        this.shapeList.setShape(series, shape);
-        if (notify) {
-            fireChangeEvent();
-        }
+    	shapeList.setShape(series, shape);
+    	
+        if(notify) fireChangeEvent();
     }
 
     /**
@@ -1520,7 +1520,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultShape(Shape)
      */
     public Shape getDefaultShape() {
-        return this.defaultShape;
+        return defaultShape;
     }
 
     /**
@@ -1547,10 +1547,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultShape(Shape shape, boolean notify) {
         Args.nullNotPermitted(shape, "shape");
-        this.defaultShape = shape;
-        if (notify) {
-            fireChangeEvent();
-        }
+        
+        defaultShape = shape;
+        
+        if(notify) fireChangeEvent();
     }
 
     /**

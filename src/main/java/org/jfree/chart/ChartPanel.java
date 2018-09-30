@@ -61,6 +61,7 @@ import org.jfree.chart.editor.ChartEditorManager;
 import org.jfree.chart.entity.AxisEntity;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.EntityCollection;
+import org.jfree.chart.entity.PlotEntity;
 import org.jfree.chart.event.ChartChangeEvent;
 import org.jfree.chart.event.ChartChangeListener;
 import org.jfree.chart.event.ChartProgressEvent;
@@ -68,6 +69,7 @@ import org.jfree.chart.event.ChartProgressListener;
 import org.jfree.chart.panel.Overlay;
 import org.jfree.chart.event.OverlayChangeEvent;
 import org.jfree.chart.event.OverlayChangeListener;
+import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.Pannable;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
@@ -77,6 +79,8 @@ import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.util.Args;
 import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.chart.util.SerialUtils;
+
+import javafx.scene.chart.NumberAxis;
 
 /**
  * A Swing GUI component for displaying a {@link JFreeChart} object.
@@ -576,9 +580,11 @@ public class ChartPanel extends JPanel implements
 	{
 		setChart(chart);
 
-		chartMouseListeners = new EventListenerList();
-        info = new ChartRenderingInfo();
+		chartMouseListeners		= new EventListenerList();
+        info 					= new ChartRenderingInfo();
+        
         setPreferredSize(new Dimension(width, height));
+        
         this.useBuffer = useBuffer;
         refreshBuffer = false;
         this.minimumDrawWidth 	= minimumDrawWidth;
@@ -1081,9 +1087,9 @@ public class ChartPanel extends JPanel implements
      *
      * @since 1.0.13
      */
-    public Paint getZoomOutlinePaint() {
-        return this.zoomOutlinePaint;
-    }
+	public Paint getZoomOutlinePaint() {
+		return zoomOutlinePaint;
+	}
 
     /**
      * Sets the zoom rectangle outline paint.
@@ -1095,9 +1101,9 @@ public class ChartPanel extends JPanel implements
      *
      * @since 1.0.13
      */
-    public void setZoomOutlinePaint(Paint paint) {
-        this.zoomOutlinePaint = paint;
-    }
+	public void setZoomOutlinePaint(Paint paint) {
+		zoomOutlinePaint = paint;
+	}
 
     /**
      * The mouse wheel handler.
@@ -1158,11 +1164,15 @@ public class ChartPanel extends JPanel implements
         Args.nullNotPermitted(overlay, "overlay");
         
         boolean removed = overlays.remove(overlay);
+        
         if(removed) {
+        	System.out.println("REMOVED");
+        	
             overlay.removeChangeListener(this);
             
             repaint();
         }
+        else System.out.println("COULD NOT REMOVE OVERLAy");
     }
 
     /**
@@ -1174,8 +1184,8 @@ public class ChartPanel extends JPanel implements
      */
     @Override
     public void overlayChanged(OverlayChangeEvent event) {
-        repaint();
-    }
+    	repaint();
+	}
 
     /**
      * Switches the display of tooltips for the panel on or off.  Note that
@@ -1208,9 +1218,8 @@ public class ChartPanel extends JPanel implements
                 ChartEntity entity = entities.getEntity(
                         (int) ((e.getX() - insets.left) / this.scaleX),
                         (int) ((e.getY() - insets.top) / this.scaleY));
-                if(entity != null) {
-                    result = entity.getToolTipText();
-                }
+                
+                if(entity != null) result = entity.getToolTipText();
             }
         }
         
@@ -1847,6 +1856,11 @@ public class ChartPanel extends JPanel implements
     				panRangeAxisLast,
     				false
         		);
+    			
+    			Plot pl	= getChart().getPlot();
+    			if(pl instanceof XYPlot) {
+    				((XYPlot)pl).setRangePannable(true);
+    			}
 
     			panRangeAxisLast = e.getPoint();
     		}
@@ -2050,9 +2064,73 @@ public class ChartPanel extends JPanel implements
 	public void mouseClicked(MouseEvent event) {
 		System.out.println("MS_CLK: CNT: "+event.getClickCount());
 
-		if(event.getClickCount() == 2) {
+		if(event.getClickCount() >= 2) {
+			/*
 			restoreAutoRangeBounds();
 			restoreAutoDomainBounds();
+			*/
+
+			ChartEntity ce = getEntityForPoint(event.getX(), event.getY());
+			
+			if(ce != null) {
+				if(ce instanceof PlotEntity) {
+					PlotEntity pe = (PlotEntity)ce;
+					
+					System.out.println("PE: "+pe.getPlot().getParent());
+					
+					CombinedDomainXYPlot cdxyp = (CombinedDomainXYPlot)pe.getPlot().getParent();
+					
+					if(cdxyp != null) {
+						//cdxyp.findSubplot(, source);
+						
+						PlotRenderingInfo pri =	getChartRenderingInfo().getPlotInfo();
+						
+						int idx = pri.getSubplotIndex(new Point(event.getX(), event.getY()));
+						
+						//System.out.println("SBP_IDX_1: "+idx);
+						
+						if(idx > -1) {
+							/*
+							for(int i=0; i<cdxyp.getSubplots().size(); i++) {
+								if(i != idx) cdxyp.removeSubplot(i);
+							}
+							for(int i=0; i<cdxyp.getSubplots().size(); i++) {
+								if(i != idx) cdxyp.removeSubplot(i);
+							}
+							*/
+						}
+
+						//cdxyp.findSubplot(pri, new Point(event.getX(), event.getY()));
+					}
+				}
+				else if(ce instanceof AxisEntity) {
+					System.out.println("IS_AXIS_ENTITY");
+					
+					Axis axs = ((AxisEntity) ce).getAxis();
+					
+					Plot pl = axs.getPlot();
+					
+					if(pl instanceof XYPlot) {
+						ValueAxis vax = ((XYPlot)pl).getRangeAxis();
+
+						if(vax != null && vax.equals(axs)) {
+							((XYPlot)pl).getRangeAxis().setAutoRange(true);
+							
+							((XYPlot)pl).setRangePannable(false);
+						}
+						else {
+							ValueAxis dax = ((XYPlot)pl).getDomainAxis();
+							
+							System.out.println("DAX: "+dax);
+							
+							if(dax != null && dax.equals(axs)) {
+								dax.setAutoRange(true);
+							}
+						}
+						
+					}
+				}
+			}
 		}
 
 		Insets insets = getInsets();
@@ -2208,8 +2286,10 @@ public class ChartPanel extends JPanel implements
         // axes...
         boolean savedNotify = plot.isNotify();
         plot.setNotify(false);
+        
         zoomOutDomain(x, y);
         zoomOutRange(x, y);
+        
         plot.setNotify(savedNotify);
     }
 
@@ -2223,14 +2303,17 @@ public class ChartPanel extends JPanel implements
      */
     public void zoomOutDomain(double x, double y) {
         Plot plot = chart.getPlot();
+        
         if(plot != null && plot instanceof Zoomable) {
             // here we tweak the notify flag on the plot so that only
             // one notification happens even though we update multiple
             // axes...
             boolean savedNotify = plot.isNotify();
             plot.setNotify(false);
+            
             Zoomable z = (Zoomable) plot;
             z.zoomDomainAxes(zoomOutFactor, info.getPlotInfo(), translateScreenToJava2D(new Point((int)x, (int)y)), zoomAroundAnchor);
+            
             plot.setNotify(savedNotify);
         }
 	}
@@ -2319,10 +2402,11 @@ public class ChartPanel extends JPanel implements
         // one notification happens even though we update multiple
         // axes...
         boolean savedNotify = plot.isNotify();
-        
         plot.setNotify(false);
+        
         restoreAutoDomainBounds();
         restoreAutoRangeBounds();
+        
         plot.setNotify(savedNotify);
     }
 
@@ -2344,6 +2428,7 @@ public class ChartPanel extends JPanel implements
             // we need to guard against this.zoomPoint being null
             Point2D zp = (zoomPoint != null ? zoomPoint : new Point());
             z.zoomDomainAxes(0.0, info.getPlotInfo(), zp);
+            
             plot.setNotify(savedNotify);
         }
     }
@@ -2366,6 +2451,7 @@ public class ChartPanel extends JPanel implements
             // we need to guard against this.zoomPoint being null
             Point2D zp = (zoomPoint != null ? zoomPoint : new Point());
             z.zoomRangeAxes(0.0, info.getPlotInfo(), zp);
+            
             plot.setNotify(savedNotify);
         }
     }
@@ -2471,9 +2557,9 @@ public class ChartPanel extends JPanel implements
      *
      * @see javax.swing.ToolTipManager#setReshowDelay(int)
      */
-    public void setReshowDelay(int delay) {
+	public void setReshowDelay(int delay) {
     	ownToolTipReshowDelay = delay;
-    }
+	}
 
     /**
      * Specifies the dismissal delay value for this chart panel.
@@ -2593,6 +2679,7 @@ public class ChartPanel extends JPanel implements
         Insets insets = getInsets();
         int w = getWidth() - insets.left - insets.right;
         int h = getHeight() - insets.top - insets.bottom;
+        
         ChartTransferable selection = new ChartTransferable(
         	chart,
         	w,
@@ -3191,8 +3278,9 @@ public class ChartPanel extends JPanel implements
      */
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        SerialUtils.writePaint(this.zoomFillPaint, stream);
-        SerialUtils.writePaint(this.zoomOutlinePaint, stream);
+        
+        SerialUtils.writePaint(zoomFillPaint, stream);
+        SerialUtils.writePaint(zoomOutlinePaint, stream);
     }
 
     /**
@@ -3203,20 +3291,16 @@ public class ChartPanel extends JPanel implements
      * @throws IOException  if there is an I/O error.
      * @throws ClassNotFoundException  if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        this.zoomFillPaint = SerialUtils.readPaint(stream);
-        this.zoomOutlinePaint = SerialUtils.readPaint(stream);
+	private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+		stream.defaultReadObject();
+
+        zoomFillPaint = SerialUtils.readPaint(stream);
+        zoomOutlinePaint = SerialUtils.readPaint(stream);
 
         // we create a new but empty chartMouseListeners list
-        this.chartMouseListeners = new EventListenerList();
+        chartMouseListeners = new EventListenerList();
 
         // register as a listener with sub-components...
-        if (this.chart != null) {
-            this.chart.addChangeListener(this);
-        }
-
-    }
-
+        if(chart != null) chart.addChangeListener(this);
+	}
 }
