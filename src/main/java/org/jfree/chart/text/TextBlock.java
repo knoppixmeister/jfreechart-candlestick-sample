@@ -181,11 +181,11 @@ public class TextBlock implements Serializable {
      * @param angle  the rotation (in radians).
      */
     public void draw(Graphics2D g2, float anchorX, float anchorY, TextBlockAnchor anchor, float rotateX, float rotateY, double angle) {
-        Size2D d = calculateDimensions(g2);
+    	Size2D d = calculateDimensions(g2);
         float[] offsets = calculateOffsets(anchor, d.getWidth(), d.getHeight());
         Iterator iterator = lines.iterator();
         float yCursor = 0.0f;
-        
+
         while(iterator.hasNext()) {
             TextLine line = (TextLine) iterator.next();
             Size2D dimension = line.calculateDimensions(g2);
@@ -193,15 +193,16 @@ public class TextBlock implements Serializable {
             if(lineAlignment == HorizontalAlignment.CENTER) {
                 lineOffset = (float) (d.getWidth() - dimension.getWidth()) / 2.0f;   
             }
-            else if (this.lineAlignment == HorizontalAlignment.RIGHT) {
+            else if(lineAlignment == HorizontalAlignment.RIGHT) {
                 lineOffset = (float) (d.getWidth() - dimension.getWidth());   
             }
-            line.draw(g2, anchorX + offsets[0] + lineOffset, 
-                    anchorY + offsets[1] + yCursor, TextAnchor.TOP_LEFT, 
-                    rotateX, rotateY, angle);
+            line.draw(
+            	g2,
+            	anchorX + offsets[0] + lineOffset, 
+            	anchorY + offsets[1] + yCursor, TextAnchor.TOP_LEFT, 
+            	rotateX, rotateY, angle);
             yCursor = yCursor + (float) dimension.getHeight();
-        }
-        
+        } 
     }
  
     /**
