@@ -327,8 +327,8 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                 float yy = (float) pt.getY();
                 TextAnchor alignPt = textAlignPtForLabelAnchorV(anchor);
                 Shape hotspot = TextUtils.calculateRotatedStringBounds(label, g2, xx, yy, alignPt, 0.0, TextAnchor.CENTER);
-                
-                if(!dataArea.contains(hotspot.getBounds2D())) {
+
+                if(hotspot != null && !dataArea.contains(hotspot.getBounds2D())) {
                     anchor = flipAnchorH(anchor);
                     pt = calculateLabelPoint(line, anchor, 5, 5);
                     xx = (float) pt.getX();
@@ -338,12 +338,12 @@ public class CrosshairOverlay extends AbstractOverlay implements Overlay, Proper
                 }
                 
                 g2.setPaint(crosshair.getLabelBackgroundPaint());
-                g2.fill(hotspot);
+                if(hotspot != null) g2.fill(hotspot);
                 
                 if(crosshair.isLabelOutlineVisible()) {
                     g2.setPaint(crosshair.getLabelOutlinePaint());
                     g2.setStroke(crosshair.getLabelOutlineStroke());
-                    g2.draw(hotspot);
+                    if(hotspot != null) g2.draw(hotspot);
                 }
                 
                 g2.setPaint(crosshair.getLabelPaint());
