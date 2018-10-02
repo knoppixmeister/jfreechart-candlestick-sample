@@ -142,8 +142,19 @@ public class OHLCSeries extends ComparableObjectSeries {
 	public void updataVolume(double newVolume) {
 		updateVolume(newVolume, getItemCount()-1);
 	}
-	
+
 	public void updateVolume(double newVolume, int index) {
+		((OHLCItem)getDataItem(index)).setVolume(newVolume);
+
+		fireSeriesChanged();
+	}
+
+	public void updatePriceVolume(double newPrice, double newVolume) {
+		updatePriceVolume(newPrice, newVolume, getItemCount()-1);
+	}
+
+	public void updatePriceVolume(double newPrice, double newVolume, int index) {
+		((OHLCItem)getDataItem(index)).updatePrice(newPrice);
 		((OHLCItem)getDataItem(index)).setVolume(newVolume);
 
 		fireSeriesChanged();
