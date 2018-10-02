@@ -6,7 +6,10 @@
 	</target>
 
 	<target name="compile" depends="clean">
-		<javac srcdir="src" destdir="build">
+		<javac srcdir="src" destdir="build" includeantruntime="true">
+			<exclude name="main/java/demo/**.java"/>
+			<exclude name="main/java/demo/imagemap/**.java"/>
+			<exclude name="main/java/demo/pdf/**.java"/>
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar"/>
