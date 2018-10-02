@@ -11,13 +11,13 @@ public class SMA {
 			if(key >= period) {
 				sum = 0;
 				sma = 0;
-				
+
 				for(int i = key-(period-1); i <= key; i++) {
 					sum += ((OHLCItem) data.getDataItem(i)).getCloseValue();
 				}
-				
+
 				sma = sum / period;
-				
+
 				result.add(((OHLCItem)data.getDataItem(key)).getPeriod(), sma);
 			}
 		}
