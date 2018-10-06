@@ -9,7 +9,9 @@ import org.jfree.chart.JFreeChart;
  * A panel that is used in the demo applications.
  */
 public class DemoPanel extends JPanel {
-    List charts;
+	private static final long serialVersionUID = -8322485526009477684L;
+
+	List charts;
 
     /**
      * Creates a new demo panel with the specified layout manager.
