@@ -101,7 +101,7 @@ public class Test3 {
 	
 	public static void main(String[] args) {
 		JFrame fr = new JFrame();
-		fr.setBounds(10, 10, 1300, 500);
+		fr.setBounds(0, 0, (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 500);
 
 		socket = null;
 
@@ -153,6 +153,8 @@ public class Test3 {
         collection3.addSeries(series2);
         collection3.addSeries(series3);
 
+   //-----------------------------------------------------------------------------------------------------------------
+
         ValueMarker priceLine = new ValueMarker();
         priceLine.setLabelPaint(ChartColor.BLACK);
         priceLine.setStroke(new BasicStroke(1.0f));
@@ -202,6 +204,8 @@ public class Test3 {
 
         NumberAxis priceAxis 	= new NumberAxis();
         priceAxis.setAutoRangeIncludesZero(false);
+        priceAxis.setNegativeArrowVisible(true);
+        priceAxis.setPositiveArrowVisible(true);
         
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(8);
