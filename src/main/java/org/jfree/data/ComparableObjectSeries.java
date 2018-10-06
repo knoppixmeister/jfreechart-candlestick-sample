@@ -177,13 +177,13 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
             
             if(index < 0) data.add(-index - 1, item);
             else {
-                if(this.allowDuplicateXValues) {
+                if(allowDuplicateXValues) {
                     // need to make sure we are adding *after* any duplicates
-                    int size = this.data.size();
-                    while(index < size && item.compareTo(this.data.get(index)) == 0) {
+                    int size = data.size();
+                    while(index < size && item.compareTo(data.get(index)) == 0) {
                         index++;
                     }
-                    
+
                     if(index < data.size()) data.add(index, item);
                     else data.add(item);
                 }
@@ -191,7 +191,7 @@ public class ComparableObjectSeries extends Series implements Cloneable, Seriali
             }
         }
         else {
-            if(!this.allowDuplicateXValues) {
+            if(!allowDuplicateXValues) {
                 // can't allow duplicate values, so we need to check whether
                 // there is an item with the given x-value already
                 int index = indexOf(item.getComparable());
