@@ -87,10 +87,7 @@ import org.jfree.data.category.CategoryDataset;
  *
  * @since 1.0.3
  */
-public class CategoryPointerAnnotation extends CategoryTextAnnotation
-        implements Cloneable, PublicCloneable, Serializable {
-
-    /** For serialization. */
+public class CategoryPointerAnnotation extends CategoryTextAnnotation implements Cloneable, PublicCloneable, Serializable {
     private static final long serialVersionUID = -4031161445009858551L;
 
     /** The default tip radius (in Java2D units). */

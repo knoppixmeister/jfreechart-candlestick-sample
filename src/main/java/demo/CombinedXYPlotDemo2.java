@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -44,13 +44,12 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      * @param title  the frame title.
      */
     public CombinedXYPlotDemo2(String title) {
-
         super(title);
+        
         JFreeChart chart = createCombinedChart();
         ChartPanel panel = new ChartPanel(chart, true, true, true, true, true);
         panel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(panel);
-
     }
 
     /**
@@ -59,40 +58,51 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      * @return the combined chart.
      */
     private static JFreeChart createCombinedChart() {
-
-        // create subplot 1...
         IntervalXYDataset data1 = createDataset1();
         XYItemRenderer renderer1 = new XYBarRenderer(0.20);
+        
+        /*
         renderer1.setBaseToolTipGenerator(new StandardXYToolTipGenerator(
                 StandardXYToolTipGenerator.DEFAULT_TOOL_TIP_FORMAT,
                 new SimpleDateFormat("d-MMM-yyyy"),
                 new DecimalFormat("0,000.0")));
-        XYPlot subplot1 = new XYPlot(data1, new DateAxis("Date"), null,
-                renderer1);
+         */
+
+        DateAxis dateAxis = new DateAxis("Date 1");
+        //dateAxis.setInverted(true);
+        
+        XYPlot subplot1 = new XYPlot(data1, dateAxis, null, renderer1);
+        //subplot1.getDomainAxis().setInverted(true);
+        //subplot1.getRangeAxis().setInverted(true);
 
         // create subplot 2...
         XYDataset data2 = createDataset2();
         XYItemRenderer renderer2 = new StandardXYItemRenderer();
+        
+        /*
         renderer2.setBaseToolTipGenerator(new StandardXYToolTipGenerator(
                 StandardXYToolTipGenerator.DEFAULT_TOOL_TIP_FORMAT,
                 new SimpleDateFormat("d-MMM-yyyy"),
                 new DecimalFormat("0,000.0")));
-        XYPlot subplot2 = new XYPlot(data2, new DateAxis("Date"), null,
-                renderer2);
+                */
+        XYPlot subplot2 = new XYPlot(data2, new DateAxis("Date"), null, renderer2);
 
         // create a parent plot...
         NumberAxis sharedAxis = new NumberAxis("Value");
         sharedAxis.setTickMarkInsideLength(3.0f);
         CombinedRangeXYPlot plot = new CombinedRangeXYPlot(sharedAxis);
 
+        //plot.getRangeAxis().setInverted(true);
+        //plot.getDomainAxis().setInverted(true);
+
         // add the subplots...
         plot.add(subplot1, 1);
         plot.add(subplot2, 1);
 
         // return a new chart containing the overlaid plot...
-        JFreeChart chart = new JFreeChart("Combined (Range) XY Plot",
-                JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-        ChartUtilities.applyCurrentTheme(chart);
+        JFreeChart chart = new JFreeChart("Combined (Range) XY Plot", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+        //ChartUtilities.applyCurrentTheme(chart);
+        
         return chart;
     }
 
@@ -102,7 +112,6 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      * @return Series 1.
      */
     private static IntervalXYDataset createDataset1() {
-
         // create dataset 1...
         TimeSeries series1 = new TimeSeries("Series 1");
         series1.add(new Day(1, MonthConstants.MARCH, 2002), 12353.3);
@@ -122,8 +131,8 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
         series1.add(new Day(15, MonthConstants.MARCH, 2002), 11235.2);
 
         TimeSeriesCollection collection = new TimeSeriesCollection(series1);
+        
         return collection;
-
     }
 
     /**
@@ -132,7 +141,6 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      * @return Series 2.
      */
     private static XYDataset createDataset2() {
-
         // create dataset 2...
         TimeSeries series2 = new TimeSeries("Series 2");
 
@@ -152,7 +160,6 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
         series2.add(new Day(16, MonthConstants.MARCH, 2002), 9595.9);
 
         return new TimeSeriesCollection(series2);
-
     }
 
     /**
@@ -162,6 +169,7 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createCombinedChart();
+        
         return new ChartPanel(chart);
     }
 
@@ -171,13 +179,9 @@ public class CombinedXYPlotDemo2 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-
-        CombinedXYPlotDemo2 demo = new CombinedXYPlotDemo2(
-                "JFreeChart: CombinedXYPlotDemo2.java");
+        CombinedXYPlotDemo2 demo = new CombinedXYPlotDemo2("JFreeChart: CombinedXYPlotDemo2.java");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
-
     }
-
 }

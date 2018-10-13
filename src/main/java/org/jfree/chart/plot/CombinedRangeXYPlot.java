@@ -178,7 +178,7 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      * @see #setGap(double)
      */
     public double getGap() {
-        return this.gap;
+        return gap;
     }
 
     /**
@@ -200,11 +200,10 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public boolean isDomainPannable() {
-        for (XYPlot subplot : this.subplots) {
-            if (subplot.isDomainPannable()) {
-                return true;
-            }
+        for(XYPlot subplot : subplots) {
+            if(subplot.isDomainPannable()) return true;
         }
+        
         return false;
     }
 
@@ -216,7 +215,7 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      */
     @Override
     public void setDomainPannable(boolean pannable) {
-        for (XYPlot subplot : this.subplots) {
+        for(XYPlot subplot : subplots) {
             subplot.setDomainPannable(pannable);
         }        
     }
@@ -246,8 +245,10 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      */
     public void add(XYPlot subplot, int weight) {
         Args.nullNotPermitted(subplot, "subplot");
-        if (weight <= 0) {
+        
+        if(weight <= 0) {
             String msg = "The 'weight' must be positive.";
+            
             throw new IllegalArgumentException(msg);
         }
 
@@ -257,10 +258,10 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
         subplot.setInsets(new RectangleInsets(0.0, 0.0, 0.0, 0.0));
         subplot.setRangeAxis(null);
         subplot.addChangeListener(this);
-        this.subplots.add(subplot);
+        subplots.add(subplot);
         configureRangeAxes();
+        
         fireChangeEvent();
-
     }
 
     /**
@@ -270,20 +271,23 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      */
     public void remove(XYPlot subplot) {
         Args.nullNotPermitted(subplot, "subplot");
+        
         int position = -1;
-        int size = this.subplots.size();
+        int size = subplots.size();
         int i = 0;
-        while (position == -1 && i < size) {
-            if (this.subplots.get(i) == subplot) {
-                position = i;
-            }
+        
+        while(position == -1 && i < size) {
+            if(subplots.get(i) == subplot) position = i;
+
             i++;
         }
-        if (position != -1) {
-            this.subplots.remove(position);
+        
+        if(position != -1) {
+        	subplots.remove(position);
             subplot.setParent(null);
             subplot.removeChangeListener(this);
             configureRangeAxes();
+            
             fireChangeEvent();
         }
     }
@@ -295,12 +299,8 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      * @return An unmodifiable list of subplots.
      */
     public List getSubplots() {
-        if (this.subplots != null) {
-            return Collections.unmodifiableList(this.subplots);
-        }
-        else {
-            return Collections.EMPTY_LIST;
-        }
+        if(subplots != null) return Collections.unmodifiableList(this.subplots);
+        else return Collections.EMPTY_LIST;
     }
 
     /**
@@ -312,15 +312,13 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      * @return The space required for the axes.
      */
     @Override
-    protected AxisSpace calculateAxisSpace(Graphics2D g2,
-                                           Rectangle2D plotArea) {
-
+    protected AxisSpace calculateAxisSpace(Graphics2D g2, Rectangle2D plotArea) {
         AxisSpace space = new AxisSpace();
         PlotOrientation orientation = getOrientation();
 
         // work out the space required by the domain axis...
         AxisSpace fixed = getFixedRangeAxisSpace();
-        if (fixed != null) {
+        if(fixed != null) {
             if (orientation == PlotOrientation.VERTICAL) {
                 space.setLeft(fixed.getLeft());
                 space.setRight(fixed.getRight());
@@ -332,58 +330,52 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
         }
         else {
             ValueAxis valueAxis = getRangeAxis();
-            RectangleEdge valueEdge = Plot.resolveRangeAxisLocation(
-                getRangeAxisLocation(), orientation
-            );
-            if (valueAxis != null) {
-                space = valueAxis.reserveSpace(g2, this, plotArea, valueEdge,
-                        space);
+            RectangleEdge valueEdge = Plot.resolveRangeAxisLocation(getRangeAxisLocation(), orientation);
+            if(valueAxis != null) {
+                space = valueAxis.reserveSpace(g2, this, plotArea, valueEdge, space);
             }
         }
 
         Rectangle2D adjustedPlotArea = space.shrink(plotArea, null);
         // work out the maximum height or width of the non-shared axes...
-        int n = this.subplots.size();
+        int n = subplots.size();
         int totalWeight = 0;
-        for (int i = 0; i < n; i++) {
-            XYPlot sub = (XYPlot) this.subplots.get(i);
+        for(int i = 0; i < n; i++) {
+            XYPlot sub = (XYPlot) subplots.get(i);
             totalWeight += sub.getWeight();
         }
 
         // calculate plotAreas of all sub-plots, maximum vertical/horizontal
         // axis width/height
-        this.subplotAreas = new Rectangle2D[n];
+        subplotAreas = new Rectangle2D[n];
         double x = adjustedPlotArea.getX();
         double y = adjustedPlotArea.getY();
         double usableSize = 0.0;
-        if (orientation == PlotOrientation.VERTICAL) {
-            usableSize = adjustedPlotArea.getWidth() - this.gap * (n - 1);
+        
+        if(orientation == PlotOrientation.VERTICAL) {
+            usableSize = adjustedPlotArea.getWidth() - gap * (n - 1);
         }
-        else if (orientation == PlotOrientation.HORIZONTAL) {
-            usableSize = adjustedPlotArea.getHeight() - this.gap * (n - 1);
+        else if(orientation == PlotOrientation.HORIZONTAL) {
+            usableSize = adjustedPlotArea.getHeight() - gap * (n - 1);
         }
 
-        for (int i = 0; i < n; i++) {
-            XYPlot plot = (XYPlot) this.subplots.get(i);
+        for(int i = 0; i < n; i++) {
+            XYPlot plot = (XYPlot) subplots.get(i);
 
             // calculate sub-plot area
             if (orientation == PlotOrientation.VERTICAL) {
                 double w = usableSize * plot.getWeight() / totalWeight;
-                this.subplotAreas[i] = new Rectangle2D.Double(x, y, w,
-                        adjustedPlotArea.getHeight());
-                x = x + w + this.gap;
+                subplotAreas[i] = new Rectangle2D.Double(x, y, w, adjustedPlotArea.getHeight());
+                x = x + w + gap;
             }
             else if (orientation == PlotOrientation.HORIZONTAL) {
                 double h = usableSize * plot.getWeight() / totalWeight;
-                this.subplotAreas[i] = new Rectangle2D.Double(x, y,
-                        adjustedPlotArea.getWidth(), h);
-                y = y + h + this.gap;
+                subplotAreas[i] = new Rectangle2D.Double(x, y, adjustedPlotArea.getWidth(), h);
+                y = y + h + gap;
             }
 
-            AxisSpace subSpace = plot.calculateDomainAxisSpace(g2,
-                    this.subplotAreas[i], null);
+            AxisSpace subSpace = plot.calculateDomainAxisSpace(g2, subplotAreas[i], null);
             space.ensureAtLeast(subSpace);
-
         }
 
         return space;
@@ -402,13 +394,9 @@ public class CombinedRangeXYPlot extends XYPlot implements PlotChangeListener {
      *              permitted).
      */
     @Override
-    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
-            PlotState parentState, PlotRenderingInfo info) {
-
+    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor, PlotState parentState, PlotRenderingInfo info) {
         // set up info collection...
-        if (info != null) {
-            info.setPlotArea(area);
-        }
+        if(info != null) info.setPlotArea(area);
 
         // adjust the drawing area for plot insets (if any)...
         RectangleInsets insets = getInsets();

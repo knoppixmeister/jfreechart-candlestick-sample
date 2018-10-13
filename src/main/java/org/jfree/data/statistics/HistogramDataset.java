@@ -33,6 +33,7 @@ public class HistogramDataset extends AbstractIntervalXYDataset implements Inter
      */
     public HistogramDataset() {
     	list = new ArrayList();
+    	
     	type = HistogramType.FREQUENCY;
     }
 

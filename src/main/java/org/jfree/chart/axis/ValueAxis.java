@@ -446,12 +446,13 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
 
         boolean drawUpOrRight = false;
         boolean drawDownOrLeft = false;
+
         if(positiveArrowVisible) {
             if(inverted) drawDownOrLeft = true;
             else drawUpOrRight = true;
         }
         
-        if(negativeArrowVisible) {
+        if(negativeArrowVisible) {      	
             if(inverted) drawUpOrRight = true;
             else drawDownOrLeft = true;
         }
@@ -462,7 +463,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, PublicCloneab
             Shape arrow = null;
             
             if(edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
-                x = dataArea.getMaxX();
+            	x = dataArea.getMaxX();
                 y = cursor;
                 arrow = rightArrow;
             }

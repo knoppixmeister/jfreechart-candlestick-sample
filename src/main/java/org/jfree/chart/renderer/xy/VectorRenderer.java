@@ -1,50 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -------------------
- * VectorRenderer.java
- * -------------------
- * (C) Copyright 2007-2016, by Object Refinery Limited.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 30-Jan-2007 : Version 1 (DG);
- * 24-May-2007 : Updated for method name changes (DG);
- * 25-May-2007 : Moved from experimental to the main source tree (DG);
- * 18-Feb-2008 : Fixed bug 1880114, arrows for horizontal plot
- *               orientation (DG);
- * 22-Apr-2008 : Implemented PublicCloneable (DG);
- * 26-Sep-2008 : Added chart entity support (tooltips etc) (DG);
- * 03-Jul-2013 : Use ParamChecks (DG);
- *
- */
-
 package org.jfree.chart.renderer.xy;
 
 import java.awt.Graphics2D;
@@ -76,10 +29,10 @@ import org.jfree.data.xy.XYDataset;
  *
  * @since 1.0.6
  */
-public class VectorRenderer extends AbstractXYItemRenderer
-        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+public class VectorRenderer extends AbstractXYItemRenderer implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+	private static final long serialVersionUID = -2424359537889919991L;
 
-    /** The length of the base. */
+	/** The length of the base. */
     private double baseLength = 0.10;
 
     /** The length of the head. */

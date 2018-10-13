@@ -47,20 +47,24 @@ public class HistogramDemo2 extends ApplicationFrame {
      */
     private static IntervalXYDataset createDataset() {
         SimpleHistogramDataset dataset = new SimpleHistogramDataset("Series 1");
-        SimpleHistogramBin bin1 = new SimpleHistogramBin(0.0, 1.0, true, false);
+        
+        SimpleHistogramBin bin1 = new SimpleHistogramBin(0.9, 1.0, true, false);
         SimpleHistogramBin bin2 = new SimpleHistogramBin(1.0, 2.0, true, false);
         SimpleHistogramBin bin3 = new SimpleHistogramBin(2.0, 3.0, true, false);
-        SimpleHistogramBin bin4 = new SimpleHistogramBin(3.0, 4.0, true, true);
+        SimpleHistogramBin bin4 = new SimpleHistogramBin(3.0, 3.5, true, true);
         // set the bin counts manually (an alternative is to use the
         // addObservation() or addObservations() methods)
+
         bin1.setItemCount(1);
-        bin2.setItemCount(10);
-        bin3.setItemCount(15);
+        bin2.setItemCount(1);
+        bin3.setItemCount(1);
         bin4.setItemCount(20);
+
         dataset.addBin(bin1);
         dataset.addBin(bin2);
         dataset.addBin(bin3);
         dataset.addBin(bin4);
+
         return dataset;
     }
 
@@ -111,11 +115,9 @@ public class HistogramDemo2 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        HistogramDemo2 demo = new HistogramDemo2(
-                "JFreeChart: HistogramDemo2.java");
+        HistogramDemo2 demo = new HistogramDemo2("");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }

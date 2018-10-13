@@ -29,11 +29,11 @@ public class HistogramDemo1 extends ApplicationFrame {
      * @param title  the frame title.
      */
     public HistogramDemo1(String title) {
-        super(title);
-        
-        JPanel chartPanel = createDemoPanel();
-        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
-   
+    	super(title);
+
+    	JPanel chartPanel = createDemoPanel();
+    	chartPanel.setPreferredSize(new java.awt.Dimension(1000, 570));
+ 
         setContentPane(chartPanel);
     }
 
@@ -43,15 +43,15 @@ public class HistogramDemo1 extends ApplicationFrame {
      * @return the dataset.
      */
     private static IntervalXYDataset createDataset() {
-        HistogramDataset dataset = new HistogramDataset();
-        
+    	HistogramDataset dataset = new HistogramDataset();
+
         double[] values = new double[1000];
         Random generator = new Random(12345678L);
         
         for(int i = 0; i < 1000; i++) {
             values[i] = generator.nextGaussian() + 5;
         }
-        dataset.addSeries("H1", values, 100, 2.0, 8.0);
+        dataset.addSeries("BIDS", values, 1000); //  2.0, 8.0
         
         /*
         values = new double[1000];
@@ -60,6 +60,7 @@ public class HistogramDemo1 extends ApplicationFrame {
         }
         dataset.addSeries("H2", values, 100, 4.0, 10.0);
         */
+        
         
         return dataset;
     }
@@ -79,17 +80,19 @@ public class HistogramDemo1 extends ApplicationFrame {
             dataset,
             PlotOrientation.HORIZONTAL,
             false,
-            true,
+            false,
             false
     	);
     	
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
-        plot.setRangePannable(true);
+        //plot.setRangePannable(true);
         //plot.setForegroundAlpha(0.5f);
         
         plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
-        plot.getDomainAxis().setInverted(false);
+        plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+        //plot.getDomainAxis().setInverted(true);
+        plot.getRangeAxis().setInverted(true);
         
         NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

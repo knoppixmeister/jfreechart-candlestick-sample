@@ -167,9 +167,9 @@ public class XYSeries extends Series implements Cloneable, Serializable {
      * @param allowDuplicateXValues  a flag that controls whether duplicate
      *                               x-values are allowed.
      */
-    public XYSeries(Comparable key, boolean autoSort,
-            boolean allowDuplicateXValues) {
+    public XYSeries(Comparable key, boolean autoSort, boolean allowDuplicateXValues) {
         super(key);
+        
         this.data = new java.util.ArrayList();
         this.autoSort = autoSort;
         this.allowDuplicateXValues = allowDuplicateXValues;

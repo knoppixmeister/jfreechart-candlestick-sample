@@ -1,52 +1,3 @@
-/* ===========================================================
- * JFreeChart : a free chart library for the Java(tm) platform
- * ===========================================================
- *
- * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
- *
- * Project Info:  http://www.jfree.org/jfreechart/index.html
- *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
- *
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
- * Other names may be trademarks of their respective owners.]
- *
- * -----------------
- * XYBarDataset.java
- * -----------------
- * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
- *
- * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   -;
- *
- * Changes
- * -------
- * 02-Mar-2004 : Version 1 (DG);
- * 05-May-2004 : Now extends AbstractIntervalXYDataset (DG);
- * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
- *               getYValue() (DG);
- * ------------- JFREECHART 1.0.x ---------------------------------------------
- * 25-Jan-2007 : Added some accessor methods, plus new equals() and clone()
- *               overrides (DG);
- * 30-Jan-2007 : Added method overrides to prevent unnecessary object
- *               creation (DG);
- * 22-Apr-2008 : Implemented PublicCloneable (DG);
- *
- */
-
 package org.jfree.data.xy;
 
 import org.jfree.chart.util.PublicCloneable;
@@ -57,10 +8,10 @@ import org.jfree.data.general.DatasetChangeListener;
  * A dataset wrapper class that converts a standard {@link XYDataset} into an
  * {@link IntervalXYDataset} suitable for use in creating XY bar charts.
  */
-public class XYBarDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, DatasetChangeListener, PublicCloneable {
+public class XYBarDataset extends AbstractIntervalXYDataset implements IntervalXYDataset, DatasetChangeListener, PublicCloneable {
+	private static final long serialVersionUID = 4289982151975114882L;
 
-    /** The underlying dataset. */
+	/** The underlying dataset. */
     private XYDataset underlying;
 
     /** The bar width. */
@@ -75,7 +26,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     public XYBarDataset(XYDataset underlying, double barWidth) {
         this.underlying = underlying;
-        this.underlying.addChangeListener(this);
+        underlying.addChangeListener(this);
         this.barWidth = barWidth;
     }
 
@@ -87,7 +38,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      * @since 1.0.4
      */
     public XYDataset getUnderlyingDataset() {
-        return this.underlying;
+        return underlying;
     }
 
     /**
@@ -99,7 +50,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      * @since 1.0.4
      */
     public double getBarWidth() {
-        return this.barWidth;
+        return barWidth;
     }
 
     /**
@@ -113,6 +64,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     public void setBarWidth(double barWidth) {
         this.barWidth = barWidth;
+        
         notifyListeners(new DatasetChangeEvent(this, this));
     }
 
@@ -123,7 +75,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public int getSeriesCount() {
-        return this.underlying.getSeriesCount();
+        return underlying.getSeriesCount();
     }
 
     /**
@@ -134,10 +86,10 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      *
      * @return The series key.
      */
-    @Override
-    public Comparable getSeriesKey(int series) {
-        return this.underlying.getSeriesKey(series);
-    }
+	@Override
+	public Comparable getSeriesKey(int series) {
+		return underlying.getSeriesKey(series);
+	}
 
     /**
      * Returns the number of items in a series.
@@ -148,7 +100,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public int getItemCount(int series) {
-        return this.underlying.getItemCount(series);
+        return underlying.getItemCount(series);
     }
 
     /**
@@ -163,7 +115,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Number getX(int series, int item) {
-        return this.underlying.getX(series, item);
+        return underlying.getX(series, item);
     }
 
     /**
@@ -178,7 +130,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public double getXValue(int series, int item) {
-        return this.underlying.getXValue(series, item);
+        return underlying.getXValue(series, item);
     }
 
     /**
@@ -193,7 +145,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Number getY(int series, int item) {
-        return this.underlying.getY(series, item);
+        return underlying.getY(series, item);
     }
 
     /**
@@ -208,7 +160,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public double getYValue(int series, int item) {
-        return this.underlying.getYValue(series, item);
+        return underlying.getYValue(series, item);
     }
 
     /**
@@ -222,10 +174,9 @@ public class XYBarDataset extends AbstractIntervalXYDataset
     @Override
     public Number getStartX(int series, int item) {
         Number result = null;
-        Number xnum = this.underlying.getX(series, item);
-        if (xnum != null) {
-             result = new Double(xnum.doubleValue() - this.barWidth / 2.0);
-        }
+        Number xnum = underlying.getX(series, item);
+        if(xnum != null) result = new Double(xnum.doubleValue() - barWidth / 2.0);
+        
         return result;
     }
 
@@ -242,7 +193,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public double getStartXValue(int series, int item) {
-        return getXValue(series, item) - this.barWidth / 2.0;
+        return getXValue(series, item) - barWidth / 2.0;
     }
 
     /**
@@ -256,10 +207,9 @@ public class XYBarDataset extends AbstractIntervalXYDataset
     @Override
     public Number getEndX(int series, int item) {
         Number result = null;
-        Number xnum = this.underlying.getX(series, item);
-        if (xnum != null) {
-             result = new Double(xnum.doubleValue() + this.barWidth / 2.0);
-        }
+        Number xnum = underlying.getX(series, item);
+        if(xnum != null) result = new Double(xnum.doubleValue() + barWidth / 2.0);
+        
         return result;
     }
 
@@ -276,7 +226,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public double getEndXValue(int series, int item) {
-        return getXValue(series, item) + this.barWidth / 2.0;
+        return getXValue(series, item) + barWidth / 2.0;
     }
 
     /**
@@ -289,7 +239,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Number getStartY(int series, int item) {
-        return this.underlying.getY(series, item);
+    	return underlying.getY(series, item);
     }
 
     /**
@@ -305,7 +255,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public double getStartYValue(int series, int item) {
-        return getYValue(series, item);
+    	return getYValue(series, item);
     }
 
     /**
@@ -318,7 +268,7 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Number getEndY(int series, int item) {
-        return this.underlying.getY(series, item);
+        return underlying.getY(series, item);
     }
 
     /**
@@ -347,6 +297,20 @@ public class XYBarDataset extends AbstractIntervalXYDataset
         notifyListeners(event);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Tests this dataset for equality with an arbitrary object.
      *
@@ -356,19 +320,15 @@ public class XYBarDataset extends AbstractIntervalXYDataset
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof XYBarDataset)) {
-            return false;
-        }
+        if(obj == this) return true;
+
+        if(!(obj instanceof XYBarDataset)) return false;
+
         XYBarDataset that = (XYBarDataset) obj;
-        if (!this.underlying.equals(that.underlying)) {
-            return false;
-        }
-        if (this.barWidth != that.barWidth) {
-            return false;
-        }
+        if(!underlying.equals(that.underlying)) return false;
+
+        if(barWidth != that.barWidth) return false;
+        
         return true;
     }
 
@@ -389,11 +349,12 @@ public class XYBarDataset extends AbstractIntervalXYDataset
     @Override
     public Object clone() throws CloneNotSupportedException {
         XYBarDataset clone = (XYBarDataset) super.clone();
-        if (this.underlying instanceof PublicCloneable) {
-            PublicCloneable pc = (PublicCloneable) this.underlying;
+        
+        if(underlying instanceof PublicCloneable) {
+            PublicCloneable pc = (PublicCloneable) underlying;
             clone.underlying = (XYDataset) pc.clone();
         }
+        
         return clone;
     }
-
 }

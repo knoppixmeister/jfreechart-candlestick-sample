@@ -1,21 +1,12 @@
-/* --------------------
- * XYBarChartDemo1.java
- * --------------------
- * (C) Copyright 2002-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickMarkPosition;
@@ -43,12 +34,11 @@ public class XYBarChartDemo1 extends ApplicationFrame {
      * @param title  the frame title.
      */
     public XYBarChartDemo1(String title) {
-
         super(title);
+        
         JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(chartPanel);
-
     }
 
     private static JFreeChart createChart(IntervalXYDataset dataset) {
@@ -73,7 +63,7 @@ public class XYBarChartDemo1 extends ApplicationFrame {
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         StandardXYToolTipGenerator generator = new StandardXYToolTipGenerator(
             "{1} = {2}", new SimpleDateFormat("yyyy"), new DecimalFormat("0"));
-        renderer.setBaseToolTipGenerator(generator);
+        //renderer.setBaseToolTipGenerator(generator);
         renderer.setMargin(0.10);
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
@@ -81,7 +71,7 @@ public class XYBarChartDemo1 extends ApplicationFrame {
         axis.setLowerMargin(0.01);
         axis.setUpperMargin(0.01);
 
-        ChartUtilities.applyCurrentTheme(chart);
+        //ChartUtilities.applyCurrentTheme(chart);
 
         return chart;
     }
@@ -92,8 +82,8 @@ public class XYBarChartDemo1 extends ApplicationFrame {
      * @return A dataset.
      */
     private static IntervalXYDataset createDataset() {
-
         TimeSeries t1 = new TimeSeries("Executions", "Year", "Count");
+        
         try {
             t1.add(new Year(1976), new Integer(0));
             t1.add(new Year(1977), new Integer(1));
@@ -125,14 +115,14 @@ public class XYBarChartDemo1 extends ApplicationFrame {
             t1.add(new Year(2003), new Integer(65));
             t1.add(new Year(2004), new Integer(59));
             t1.add(new Year(2005), new Integer(60));
-
         }
-        catch (Exception e) {
-            System.err.println(e.getMessage());
+        catch(Exception e) {
+            e.printStackTrace();
         }
+        
         TimeSeriesCollection tsc = new TimeSeriesCollection(t1);
+        
         return tsc;
-
     }
 
     /**
@@ -150,12 +140,9 @@ public class XYBarChartDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-
         XYBarChartDemo1 demo = new XYBarChartDemo1("State Executions - USA");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
-
     }
-
 }

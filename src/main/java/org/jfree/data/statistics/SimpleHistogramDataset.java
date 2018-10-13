@@ -62,11 +62,12 @@ import org.jfree.data.xy.IntervalXYDataset;
  *
  * @see HistogramDataset
  */
-public class SimpleHistogramDataset extends AbstractIntervalXYDataset
-        implements IntervalXYDataset, Cloneable, PublicCloneable,
-            Serializable {
-
-    /** For serialization. */
+public class SimpleHistogramDataset extends AbstractIntervalXYDataset implements 
+IntervalXYDataset,
+Cloneable,
+PublicCloneable,
+Serializable
+{
     private static final long serialVersionUID = 7997996479768018443L;
 
     /** The series key. */
@@ -89,6 +90,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     public SimpleHistogramDataset(Comparable key) {
         Args.nullNotPermitted(key, "key");
+        
         this.key = key;
         this.bins = new ArrayList();
         this.adjustForBinSize = true;
@@ -103,7 +105,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * @see #setAdjustForBinSize(boolean)
      */
     public boolean getAdjustForBinSize() {
-        return this.adjustForBinSize;
+        return adjustForBinSize;
     }
 
     /**
@@ -116,7 +118,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      * @see #getAdjustForBinSize()
      */
     public void setAdjustForBinSize(boolean adjust) {
-        this.adjustForBinSize = adjust;
+    	adjustForBinSize = adjust;
+    	
         notifyListeners(new DatasetChangeEvent(this, this));
     }
 
@@ -140,7 +143,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     @Override
     public Comparable getSeriesKey(int series) {
-        return this.key;
+        return key;
     }
 
     /**
@@ -163,7 +166,7 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     @Override
     public int getItemCount(int series) {
-        return this.bins.size();
+        return bins.size();
     }
 
     /**
@@ -176,16 +179,13 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
      */
     public void addBin(SimpleHistogramBin bin) {
         // check that the new bin doesn't overlap with any existing bin
-        Iterator iterator = this.bins.iterator();
-        while (iterator.hasNext()) {
-            SimpleHistogramBin existingBin
-                    = (SimpleHistogramBin) iterator.next();
-            if (bin.overlapsWith(existingBin)) {
-                throw new RuntimeException("Overlapping bin");
-            }
+        Iterator iterator = bins.iterator();
+        while(iterator.hasNext()) {
+            SimpleHistogramBin existingBin = (SimpleHistogramBin) iterator.next();
+            if(bin.overlapsWith(existingBin)) throw new RuntimeException("Overlapping bin");
         }
-        this.bins.add(bin);
-        Collections.sort(this.bins);
+        bins.add(bin);
+        Collections.sort(bins);
     }
 
     /**
@@ -210,7 +210,8 @@ public class SimpleHistogramDataset extends AbstractIntervalXYDataset
     public void addObservation(double value, boolean notify) {
         boolean placed = false;
         Iterator iterator = this.bins.iterator();
-        while (iterator.hasNext() && !placed) {
+        
+        while(iterator.hasNext() && !placed) {
             SimpleHistogramBin bin = (SimpleHistogramBin) iterator.next();
             if (bin.accepts(value)) {
                 bin.setItemCount(bin.getItemCount() + 1);

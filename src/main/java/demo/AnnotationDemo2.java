@@ -154,7 +154,7 @@ public class AnnotationDemo2 extends ApplicationFrame {
                 "Annotation 1 (2.0, 167.3)", 2.0, 167.3, -Math.PI / 4.0);
         annotation1.setTextAnchor(TextAnchor.BOTTOM_LEFT);
         annotation1.setPaint(Color.red);
-        annotation1.setArrowPaint(Color.red);
+        annotation1.setArrowPaint(Color.GREEN);
         renderer.addAnnotation(annotation1);
 
         XYLineAndShapeRenderer renderer2

@@ -1,10 +1,3 @@
-/* -------------------
- * LineChartDemo2.java
- * -------------------
- * (C) Copyright 2002-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import javax.swing.JPanel;
@@ -30,14 +23,16 @@ import org.jfree.ui.RefineryUtilities;
  * DO NOT MAKE CHANGES WITHOUT UPDATING THE GUIDE ALSO!!
  */
 public class LineChartDemo2 extends ApplicationFrame {
+	private static final long serialVersionUID = -5241624353130713118L;
 
-    /**
+	/**
      * Creates a new demo.
      *
      * @param title  the frame title.
      */
     public LineChartDemo2(String title) {
         super(title);
+        
         JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(chartPanel);
@@ -49,7 +44,6 @@ public class LineChartDemo2 extends ApplicationFrame {
      * @return a sample dataset.
      */
     private static XYDataset createDataset() {
-
         XYSeries series1 = new XYSeries("First");
         series1.add(1.0, 1.0);
         series1.add(2.0, 4.0);
@@ -97,7 +91,6 @@ public class LineChartDemo2 extends ApplicationFrame {
      * @return a chart.
      */
     private static JFreeChart createChart(XYDataset dataset) {
-
         // create the chart...
         JFreeChart chart = ChartFactory.createXYLineChart(
             "Line Chart Demo 2",      // chart title
@@ -114,10 +107,9 @@ public class LineChartDemo2 extends ApplicationFrame {
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
-        XYLineAndShapeRenderer renderer
-                = (XYLineAndShapeRenderer) plot.getRenderer();
-        renderer.setBaseShapesVisible(true);
-        renderer.setBaseShapesFilled(true);
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
+        //renderer.setBaseShapesVisible(true);
+        //renderer.setBaseShapesFilled(true);
 
         // change the auto tick unit selection to integer units only...
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -135,6 +127,7 @@ public class LineChartDemo2 extends ApplicationFrame {
         JFreeChart chart = createChart(createDataset());
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
+        
         return panel;
     }
 
@@ -144,11 +137,8 @@ public class LineChartDemo2 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        LineChartDemo2 demo = new LineChartDemo2(
-                "JFreeChart: LineChartDemo2.java");
+        LineChartDemo2 demo = new LineChartDemo2("JFreeChart: LineChartDemo2.java");
         demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }

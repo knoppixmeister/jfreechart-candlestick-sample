@@ -1,10 +1,3 @@
-/* ---------------------------
- * CombinedTimeSeriesDemo.java
- * ---------------------------
- * (C) Copyright 2002-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.text.DecimalFormat;
@@ -15,7 +8,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -144,9 +137,11 @@ public class CombinedTimeSeriesDemo1 extends ApplicationFrame {
         TimeSeriesCollection dataset3 = new TimeSeriesCollection(series3);
 
         XYItemRenderer renderer1 = new XYBarRenderer(0.20);
+        /*
         renderer1.setBaseToolTipGenerator(new StandardXYToolTipGenerator(
                 "{0} ({1}, {2})", new SimpleDateFormat("yyyy"),
                 new DecimalFormat("0.00")));
+                */
         XYPlot plot1 = new XYPlot(
             dataset1,
             new DateAxis("Date"),
@@ -184,7 +179,7 @@ public class CombinedTimeSeriesDemo1 extends ApplicationFrame {
             combinedPlot,
             true  // legend
         );
-        ChartUtilities.applyCurrentTheme(chart);
+        //ChartUtilities.applyCurrentTheme(chart);
         // add the chart to a panel...
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));

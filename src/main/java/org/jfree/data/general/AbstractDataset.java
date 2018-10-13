@@ -154,7 +154,7 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
     protected void notifyListeners(DatasetChangeEvent event) {
         Object[] listeners = listenerList.getListenerList();
 
-        for(int i = listeners.length - 2; i >= 0; i -= 2) {
+        for(int i = listeners.length-2; i >= 0; i -= 2) {
             if(listeners[i] == DatasetChangeListener.class) ((DatasetChangeListener) listeners[i + 1]).datasetChanged(event);
         }
     }
@@ -236,13 +236,10 @@ public abstract class AbstractDataset implements Dataset, Cloneable, Serializabl
      * @throws IOException if there is an I/O problem.
      * @throws ClassNotFoundException if there is a problem loading a class.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.listenerList = new EventListenerList();
+        listenerList = new EventListenerList();
         stream.registerValidation(this, 10);  // see comments about priority of
                                               // 10 in validateObject()
     }
-
-    
 }

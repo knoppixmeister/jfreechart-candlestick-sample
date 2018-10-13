@@ -1,10 +1,3 @@
-/* -----------------------
- * SurveyResultsDemo3.java
- * -----------------------
- * (C) Copyright 2003, 2004, 2006, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import java.awt.Color;
@@ -26,15 +19,15 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.text.TextBlockAnchor;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.text.TextBlockAnchor;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
 
 /**
  * A chart showing...
@@ -90,7 +83,7 @@ public class SurveyResultsDemo3 extends ApplicationFrame {
         chart.setBackgroundPaint(Color.white);
         chart.getPlot().setOutlinePaint(null);
         TextTitle title = new TextTitle("Figure 6 | Overall SEO Rating");
-        title.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        //title.setHorizontalAlignment(HorizontalAlignment.LEFT);
         title.setBackgroundPaint(Color.red);
         title.setPaint(Color.white);
         
@@ -109,8 +102,8 @@ public class SurveyResultsDemo3 extends ApplicationFrame {
         domainAxis.addSubLabel("Lg.", "(10)");
         domainAxis.addSubLabel("All", "(10)");
         CategoryLabelPositions p = domainAxis.getCategoryLabelPositions();
-        CategoryLabelPosition left = new CategoryLabelPosition(
-                RectangleAnchor.LEFT, TextBlockAnchor.CENTER_LEFT);
+        
+        CategoryLabelPosition left = new CategoryLabelPosition(RectangleAnchor.LEFT, TextBlockAnchor.CENTER_LEFT);
         domainAxis.setCategoryLabelPositions(CategoryLabelPositions.replaceLeftPosition(p, left));
         plot.setDomainAxis(domainAxis);
         
@@ -118,15 +111,12 @@ public class SurveyResultsDemo3 extends ApplicationFrame {
         renderer.setSeriesPaint(0, new Color(0x9C, 0xA4, 0x4A));
         renderer.setDrawBarOutline(false);
         
-        StandardCategoryItemLabelGenerator generator 
-                = new StandardCategoryItemLabelGenerator("{2}", 
-                        new DecimalFormat("0.00"));
-        renderer.setBaseItemLabelGenerator(generator);
-        renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelFont(new Font("SansSerif", Font.PLAIN, 18));
-        ItemLabelPosition position = new ItemLabelPosition(
-                ItemLabelAnchor.INSIDE3, TextAnchor.CENTER_RIGHT);
-        renderer.setBasePositiveItemLabelPosition(position);
+        StandardCategoryItemLabelGenerator generator = new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0.00"));
+        //renderer.setBaseItemLabelGenerator(generator);
+        //renderer.setBaseItemLabelsVisible(true);
+        //renderer.setBaseItemLabelFont(new Font("SansSerif", Font.PLAIN, 18));
+        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.INSIDE3, TextAnchor.CENTER_RIGHT);
+        //renderer.setBasePositiveItemLabelPosition(position);
         renderer.setPositiveItemLabelPositionFallback(new ItemLabelPosition());
         
         return chart;

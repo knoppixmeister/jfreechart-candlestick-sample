@@ -1,10 +1,3 @@
-/* --------------------
- * BarChart3DDemo2.java
- * --------------------
- * (C) Copyright 2002-2009, by Object Refinery Limited.
- *
- */
-
 package demo;
 
 import javax.swing.JPanel;
@@ -18,13 +11,10 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.CategoryLabelWidthType;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.text.TextBlockAnchor;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
+
 
 /**
  * A simple demonstration application showing how to create a horizontal 3D bar
@@ -102,7 +92,6 @@ public class BarChart3DDemo2 extends ApplicationFrame {
                 CategoryLabelPositions.replaceLeftPosition(p, left));
 
         return chart;
-
     }
 
     /**
@@ -126,7 +115,7 @@ public class BarChart3DDemo2 extends ApplicationFrame {
         BarChart3DDemo2 demo = new BarChart3DDemo2(
                 "JFreeChart: BarChart3DDemo2.java");
         demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
+        //RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
 

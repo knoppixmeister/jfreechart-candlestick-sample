@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -46,7 +46,6 @@ import org.jfree.ui.RefineryUtilities;
  * two subplots.
  */
 public class CombinedXYPlotDemo1 extends ApplicationFrame {
-
     /**
      * Constructs a new demonstration application.
      *
@@ -54,6 +53,7 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
      */
     public CombinedXYPlotDemo1(String title) {
         super(title);
+        
         JPanel panel = createDemoPanel();
         panel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(panel);
@@ -65,15 +65,15 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
      * @return The chart.
      */
     private static JFreeChart createCombinedChart() {
-
         // create plot ...
         IntervalXYDataset data1 = createDataset1();
         XYItemRenderer renderer1 = new XYLineAndShapeRenderer(true, false);
+        /*
         renderer1.setBaseToolTipGenerator(new StandardXYToolTipGenerator(
                 StandardXYToolTipGenerator.DEFAULT_TOOL_TIP_FORMAT,
                 new SimpleDateFormat("d-MMM-yyyy"), new DecimalFormat("0.00")));
-        renderer1.setSeriesStroke(0, new BasicStroke(4.0f,
-                BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
+         */
+        renderer1.setSeriesStroke(0, new BasicStroke(4.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
         renderer1.setSeriesPaint(0, Color.blue);
 
         DateAxis domainAxis = new DateAxis("Year");
@@ -90,22 +90,21 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
         XYBarRenderer renderer2 = new XYBarRenderer() {
             public Paint getItemPaint(int series, int item) {
                 XYDataset dataset = getPlot().getDataset();
-                if (dataset.getYValue(series, item) >= 0.0) {
-                    return Color.red;
-                }
-                else {
-                    return Color.green;
-                }
+                if(dataset.getYValue(series, item) >= 0.0) return Color.RED;
+                else return Color.GREEN;
             }
         };
+
         renderer2.setSeriesPaint(0, Color.red);
         renderer2.setDrawBarOutline(false);
+
+        /*
         renderer2.setBaseToolTipGenerator(new StandardXYToolTipGenerator(
                 StandardXYToolTipGenerator.DEFAULT_TOOL_TIP_FORMAT,
                 new SimpleDateFormat("d-MMM-yyyy"), new DecimalFormat("0.00")));
-
-        XYPlot plot2 = new XYPlot(data2, null, new NumberAxis("$billion"),
-                renderer2);
+		*/
+        
+        XYPlot plot2 = new XYPlot(data2, null, new NumberAxis("$billion"), renderer2);
         plot2.setBackgroundPaint(Color.lightGray);
         plot2.setDomainGridlinePaint(Color.white);
         plot2.setRangeGridlinePaint(Color.white);
@@ -124,14 +123,15 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
         TextTitle source = new TextTitle(
                 "Source: http://www.publicdebt.treas.gov/opd/opdhisms.htm",
                 new Font("Dialog", Font.PLAIN, 10));
-        source.setPosition(RectangleEdge.BOTTOM);
-        source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+        //source.setPosition(RectangleEdge.BOTTOM);
+        //source.setHorizontalAlignment(HorizontalAlignment.RIGHT);
         chart.addSubtitle(source);
         LegendTitle legend = new LegendTitle(cplot);
         chart.addSubtitle(legend);
-        ChartUtilities.applyCurrentTheme(chart);
+        //ChartUtilities.applyCurrentTheme(chart);
         renderer2.setBarPainter(new StandardXYBarPainter());
         renderer2.setShadowVisible(false);
+        
         return chart;
     }
 
@@ -144,9 +144,9 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
      * @return The dataset.
      */
     private static IntervalXYDataset createDataset1() {
-
         // create dataset 1...
         TimeSeries series1 = new TimeSeries("Public Debt Outstanding");
+        
         series1.add(new Month(1, 1990), 2974.584);
         series1.add(new Month(2, 1990), 2994.354);
         series1.add(new Month(3, 1990), 3051.956);
@@ -352,8 +352,8 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
         series1.add(new Month(11, 2006), 8633.246);
         series1.add(new Month(12, 2006), 8680.224);
         series1.add(new Month(1, 2007), 8707.561);
+        
         return new TimeSeriesCollection(series1);
-
     }
 
     /**
@@ -574,8 +574,8 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
         series1.add(new Month(12, 2006), 509.810);
         series1.add(new Month(1, 2007), 511.491);
         dataset.addSeries(series1);
+        
         return dataset;
-
     }
 
     /**
@@ -585,6 +585,7 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createCombinedChart();
+        
         return new ChartPanel(chart);
     }
 
@@ -594,11 +595,9 @@ public class CombinedXYPlotDemo1 extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        CombinedXYPlotDemo1 demo = new CombinedXYPlotDemo1(
-                "JFreeChart : CombinedXYPlotDemo1.java");
+        CombinedXYPlotDemo1 demo = new CombinedXYPlotDemo1("JFreeChart : CombinedXYPlotDemo1.java");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }
-
 }

@@ -27,7 +27,6 @@ import org.jfree.ui.RefineryUtilities;
  * A demonstration of the {@link XYBarDataset} wrapper class.
  */
 public class XYBarChartDemo4 extends ApplicationFrame {
-
     /**
      * Constructs the demo application.
      *
@@ -35,6 +34,7 @@ public class XYBarChartDemo4 extends ApplicationFrame {
      */
     public XYBarChartDemo4(String title) {
         super(title);
+        
         JPanel chartPanel = createDemoPanel();
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 300));
         setContentPane(chartPanel);
@@ -47,7 +47,7 @@ public class XYBarChartDemo4 extends ApplicationFrame {
             false,
             "Y",
             dataset,
-            PlotOrientation.VERTICAL,
+            PlotOrientation.HORIZONTAL,
             true,
             false,
             false
@@ -56,9 +56,14 @@ public class XYBarChartDemo4 extends ApplicationFrame {
         // then customise it a little...
         XYPlot plot = (XYPlot) chart.getPlot();
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+
+        //plot.getDomainAxis().setInverted(true);
+        //plot.getRangeAxis().setInverted(true);
+
         domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
+        
         return chart;
     }
 
@@ -72,9 +77,11 @@ public class XYBarChartDemo4 extends ApplicationFrame {
         XYSeries series = new XYSeries("Series 1");
         series.add(1.0, 5.0);
         series.add(2.0, 70.8);
-        series.add(3.0, 48.3);
+        series.add(300, 48.3);
+        
         XYSeriesCollection collection = new XYSeriesCollection();
         collection.addSeries(series);
+        
         return new XYBarDataset(collection, 0.9);
     }
 
