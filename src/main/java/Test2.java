@@ -155,7 +155,7 @@ public class Test2 {
 			priceAxis,		//rangeAxis,
 			candlestickRenderer	//renderer
 		);
-		
+		//plot.setBackgroundPaint(ChartColor.WHITE);
 		
 
 		plot.setNoDataMessage("Waiting for data ...");
@@ -188,15 +188,15 @@ public class Test2 {
 		//chart.getXYPlot().setDomainCrosshairVisible(true);
 		//chart.getXYPlot().setDomainCrosshairLockedOnData(false);
 		//chart.getXYPlot().setRangeCrosshairVisible(true);
-		
-		chart.removeLegend();
-		
-		ChartPanel panel = new ChartPanel(chart);
-		
-		panel.setMouseWheelEnabled(true);
-		panel.setMouseZoomable(true);
 
-		panel.addMouseWheelListener(new MouseWheelListener() {
+		chart.removeLegend();
+		//chart.setBackgroundPaint(ChartColor.WHITE);
+
+		ChartPanel panel = new ChartPanel(chart);
+
+		panel.setMouseWheelEnabled(true)
+		.setMouseZoomable(true)
+		.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				System.out.println(e.getWheelRotation());

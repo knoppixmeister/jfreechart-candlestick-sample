@@ -82,8 +82,8 @@ class DateDomainCrossharLabelGenerator3 implements CrosshairLabelGenerator {
 }
 
 public class Test3 {
-	public static final String PAIR 	= "ETHBTC";
-	public static final String INTERVAL = "1h";
+	public static final String PAIR 	= "POWRBTC";
+	public static final String INTERVAL = "15m";
 
 	private static WebSocket socket;
 	private static OkHttpClient client;
@@ -94,11 +94,11 @@ public class Test3 {
 	private static double oldPrice = 0;
 
 	public static double zoom = 0;
-	
+
 	public static DateAxis dateAxis;
 
 	private static boolean chOverlayVisible = false;
-	
+
 	public static void main(String[] args) {
 		JFrame fr = new JFrame();
 		fr.setBounds(0, 0, (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 500);
@@ -455,6 +455,7 @@ public class Test3 {
 		JFreeChart chart = new JFreeChart(combinedPlot);
 		chart.setAntiAlias(true);
 		chart.setPadding(new RectangleInsets(-7, -15, 0, -15));
+		chart.setBackgroundPaint(ChartColor.WHITE);
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setDoubleBuffered(true);
